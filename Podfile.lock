@@ -1,0 +1,68 @@
+PODS:
+  - Alamofire (4.8.1)
+  - GPUImage (0.1.7)
+  - HandyJSON (4.2.1)
+  - IQKeyboardManagerSwift (6.2.0)
+  - MBProgressHUD (1.1.0)
+  - MJRefresh (3.1.15.7)
+  - Moya (12.0.1):
+    - Moya/Core (= 12.0.1)
+  - Moya/Core (12.0.1):
+    - Alamofire (~> 4.1)
+    - Result (~> 4.0)
+  - Result (4.1.0)
+  - SDWebImage (4.4.4):
+    - SDWebImage/Core (= 4.4.4)
+  - SDWebImage/Core (4.4.4)
+  - SnapKit (4.0.1)
+  - YCMenuView (1.1.0)
+  - YYText (1.0.7)
+  - ZLPhotoBrowser (2.7.7):
+    - GPUImage
+    - SDWebImage
+
+DEPENDENCIES:
+  - HandyJSON (~> 4.2.0-beta1)
+  - IQKeyboardManagerSwift (~> 6.2.0)
+  - MBProgressHUD (~> 1.1.0)
+  - MJRefresh (~> 3.1.15.7)
+  - Moya (~> 12.0.0-beta.1)
+  - SnapKit (~> 4.0.0)
+  - YCMenuView (~> 1.1.0)
+  - YYText (~> 1.0.7)
+  - ZLPhotoBrowser (~> 2.7.7)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - GPUImage
+    - HandyJSON
+    - IQKeyboardManagerSwift
+    - MBProgressHUD
+    - MJRefresh
+    - Moya
+    - Result
+    - SDWebImage
+    - SnapKit
+    - YCMenuView
+    - YYText
+    - ZLPhotoBrowser
+
+SPEC CHECKSUMS:
+  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
+  GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
+  HandyJSON: d0c5fc80204f29056d59d3e5c4587fa0b16b60a8
+  IQKeyboardManagerSwift: b07ccf9d8cafe993dcd6cb794eb4ba34611a0c4e
+  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
+  Moya: cf730b3cd9e005401ef37a85143aa141a12fd38f
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
+  SDWebImage: c00ec18ab25d10e5ffac109b0f78d1b4341c9691
+  SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
+  YCMenuView: 1514dd2600e8a541bc1bf0f415e6a58a36ba562d
+  YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
+  ZLPhotoBrowser: ef9d5cdc9fdc8ce029fd0e41223e8eb8a642918f
+
+PODFILE CHECKSUM: 997d8fd770284a6176cdd5a97ea434f43c86f663
+
+COCOAPODS: 1.5.3

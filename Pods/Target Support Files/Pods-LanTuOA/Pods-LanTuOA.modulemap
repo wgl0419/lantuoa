@@ -1,0 +1,6 @@
+framework module Pods_LanTuOA {
+  umbrella header "Pods-LanTuOA-umbrella.h"
+
+  export *
+  module * { export * }
+}
