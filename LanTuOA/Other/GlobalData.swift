@@ -49,8 +49,7 @@ let blackColor = UIColor(hex: "#222222")
 // MARK: - 服务器地址
 
 /// 服务器地址(正式)
-let serverAddressURL = "lidudev.danjuantec.com"
+//let serverAddressURL = ""
 
 /// 测试服务器
-//let serverAddressURL = "192.168.1.111:9001"
-//let serverAddressURL = "192.168.1.135:9001"
+let serverAddressURL = "192.168.1.135:9102"

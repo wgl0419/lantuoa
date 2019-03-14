@@ -60,10 +60,10 @@ extension AppDelegate {
 //            let nav = MainNavigationController(rootViewController: vc)
 //            window?.rootViewController = nav
 //        } else { // 登录过
-            let vcs = [NoticeHomeController(), NoticeHomeController(), NoticeHomeController(), NoticeHomeController()]
-            let seleImageNames = ["menu_calc_highlight", "menu_list_highlight", "menu_notice_highlight", "menu_my_highlight"]
-            let imageNames = ["menu_calc_normal", "menu_list_normal", "menu_notice_normal", "menu_my_normal"]
-            let titles = ["项目报价", "项目列表", "通知", "我"]
+            let vcs = [HomePageController(), VisitHomeController(), ProjectHomeController(), WrokHomeController(), MeHomeController()]
+            let seleImageNames = ["menu_calc_highlight", "menu_list_highlight", "menu_notice_highlight", "menu_my_highlight", "menu_my_highlight"]
+            let imageNames = ["menu_calc_normal", "menu_list_normal", "menu_notice_normal", "menu_my_normal", "menu_my_normal"]
+            let titles = ["首页", "拜访", "项目", "工作", "我"]
             let bar = UITabBarController()
             for index in 0..<vcs.count {
                 let vc = vcs[index]
