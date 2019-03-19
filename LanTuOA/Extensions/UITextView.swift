@@ -8,39 +8,7 @@
 
 import UIKit
 
-//class PTextView: UITextView {
-//    //存储属性，存放placeHolder内容
-//    var placeHolder: String? = "" {
-//        //属性观察者
-//        didSet {
-//            if self.text == "" {
-//                self.text = placeHolder
-//                self.textColor = .lightGray
-//            }
-//        }
-//    }
-//
-//
-//    //监听事件，根据文本框内容改变文字及颜色
-//    override func becomeFirstResponder() -> Bool {
-//        if self.text == placeHolder||self.text == "" {
-//            self.text = ""
-//            self.textColor = .black
-//        }
-//        return super.becomeFirstResponder()
-//    }
-//
-//    override func resignFirstResponder() -> Bool {
-//        text = self.text.replacingOccurrences(of: " ", with: "")
-//        if text == "" {
-//            self.text = placeHolder
-//            self.textColor = .lightGray
-//        }
-//        return super.resignFirstResponder()
-//    }
-//}
-
-var placeHolderKey = 1121089799101 // place的 ASCII 转十进制
+var placeHolderKey = 1121089799 // place的 ASCII 转十进制 （1121089799101） 溢出 去掉后3位
 
 extension UITextView {
     /// 提示文本

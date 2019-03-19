@@ -52,9 +52,6 @@ class HomePageHeaderView: UIView {
                 make.width.height.equalTo(16)
                 make.left.equalTo(self).offset(15)
             })
-            .taxi.config({ (imageView) in
-                imageView.image = UIImage(named: "")
-            })
         
         titleLabel = UILabel().taxi.adhere(toSuperView: self) // 标题
             .taxi.layout(snapKitMaker: { (make) in

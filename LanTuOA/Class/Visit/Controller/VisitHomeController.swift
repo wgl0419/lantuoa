@@ -35,6 +35,7 @@ class VisitHomeController: UIViewController {
         navigationItem.title = "拜访"
         let nav = navigationController as! MainNavigationController
         nav.setNavConfigure(type: .dark, color: UIColor(hex: "#2E4695"), isShadow: false)
+        nav.backBtn.isHidden = false
     }
     
     /// 初始化子控件
@@ -103,9 +104,10 @@ class VisitHomeController: UIViewController {
                 btn.setTitleColor(.white, for: .normal)
                 btn.backgroundColor = UIColor(hex: "#FF7744")
                 btn.titleLabel?.font = UIFont.medium(size: 12)
-                btn.setImage(UIImage(named: ""), for: .normal)
+                btn.setImage(UIImage(named: "fillVisit"), for: .normal)
+                btn.setImage(UIImage(named: "fillVisit"), for: .highlighted)
                 btn.addTarget(self, action: #selector(btnClick), for: .touchUpInside)
-                btn.setSpacing()
+                btn.setSpacing(spacing: 5)
             })
     }
     
@@ -121,7 +123,8 @@ class VisitHomeController: UIViewController {
     // MARK: - 按钮点击
     /// 填写拜访按钮
     @objc private func btnClick() {
-        
+        let vc = NewlyBuildVisitController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

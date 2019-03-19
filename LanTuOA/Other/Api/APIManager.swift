@@ -24,15 +24,18 @@ enum APIManager {
     case customerList(String, Int, String, Int, Int) // 客户基本信息列表 (name:客户名称  type:1.公司客户2.待开发客户3.开发中客户 industry:行业id  page:页码  limit:一页几条数据)
     case customerContactSave(Int, String, String, String) // 新增客户联系人 （customerId:客户id   name:客户姓名  phone:手机号  position:职位）
     case customerContactUpdate(Int, String, String, String) // 修改客户联系人信息 （customerId:客户id   name:客户姓名  phone:手机号  position:职位）
+    case customerListStatistics(String, Int, Int?, Int, Int) // 客户统计信息列表 （name:客户名称  type:客户类型，1.公司客户，2.待开发客户，3.开发中客户  industry：行业id（保留）  page:页码  limit:一页几条数据）
     
     
     // MARK: - 项目
     case projectSave(String, Int, Int, Int) // 新增项目 （name:项目名称  customerId:客户id  manageUser:管理人id  isLock:是否锁定，1锁定，0否）
     case projectUpdate(String, Int, Int, Int) // 编辑项目 （name:项目名称  customerId:客户id  manageUser:管理人id  isLock:是否锁定，1锁定，0否）
-    case projectOffline(Int) // 下线项目 (id:项目id)
+    case projectOffline(Int, Int) // 上/下线项目 (id:项目id   offline:1设为下线，2设为上限)
     case projectMenberList(Int) // 项目成员列表 （projectId:项目id）
     case projectMemberAdd(Int, String) // 新增项目成员  （projectId:项目id  users:用户id，英文半角逗号分隔）
     case projectMemberDelete(Int, String) // 删除项目成员  （projectId:项目id  users:用户id，英文半角逗号分隔）
+    case projectListStatistics(String, Int, Int, Int, Int?) // 项目统计列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据  manageUser:管理人Id)
+    case projectList(String, Int?, Int, Int) // 项目信息列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据)
     
     
     // MARK: - 拜访
@@ -55,11 +58,12 @@ extension APIManager: TargetType {
             
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"
-        case .customerContactList: return "api/customer/contact/list"
+        case .customerContactList: return "/api/customer/contact/list"
         case .customerContactDetail(let id): return "/api/customer/contact/detail/\(id)"
         case .customerList: return "/api/customer/list"
         case .customerContactSave: return "/api/customer/contact/save"
         case .customerContactUpdate: return "/api/customer/contact/update"
+        case .customerListStatistics: return "/api/customer/list/statistics"
             
         case .projectSave: return "/api/project/save"
         case .projectUpdate: return "/api/project/update"
@@ -67,6 +71,9 @@ extension APIManager: TargetType {
         case .projectMenberList: return "/api/project/menber/list"
         case .projectMemberAdd: return "/api/project/member/add"
         case .projectMemberDelete: return "/api/project/member/delete"
+        case .projectListStatistics: return "/api/project/list/statistics"
+        case .projectList: return "/api/project/list"
+
             
         case .visitSave: return "/api/visit/save"
         case .visitList: return "/api/visit/list"
@@ -105,21 +112,35 @@ extension APIManager: TargetType {
             params = ["customerId": customerId, "name": name, "phone": phone, "position": position]
         case let .customerContactUpdate(customerId, name, phone, position): // 修改客户联系人信息
             params = ["customerId": customerId, "name": name, "phone": phone, "position": position]
+        case let .customerListStatistics(name, type, industry, page, limit): // 客户统计信息列表
+            params = ["name": name, "type": type, "page": page, "limit": limit]
+            if industry != nil {
+                params["industry"] = industry
+            }
             
             
         case let .projectSave(name, customerId, manageUser, isLock): // 新增项目
             params = ["name": name, "customerId": customerId, "manageUser": manageUser, "isLock": isLock]
         case let .projectUpdate(name, customerId, manageUser, isLock): // 修改项目
             params = ["name": name, "customerId": customerId, "manageUser": manageUser, "isLock": isLock]
-        case .projectOffline(let id): // 下线项目
-            params = ["id": id]
+        case let .projectOffline(id, offline): // 下线项目
+            params = ["id": id, "offline": offline]
         case .projectMenberList(let projectId): // 项目成员列表
             params = ["projectId": projectId]
         case let .projectMemberAdd(projectId, users): // 新增项目成员
             params = ["projectId": projectId, "users": users]
         case let .projectMemberDelete(projectId, users): // 删除项目成员
             params = ["projectId": projectId, "users": users]
-            
+        case let .projectListStatistics(name, customerId, page, limit, manageUser): // 项目统计列表
+            params = ["name": name, "customerId": customerId, "page": page, "limit": limit]
+            if manageUser != nil {
+                params["manageUser"] = manageUser!
+            }
+        case let .projectList(name, customerId, page, limit): // 项目统计列表
+            params = ["name": name, "page": page, "limit": limit]
+            if customerId != nil {
+                params["customerId"] = customerId!
+            }
             
         case let .visitSave(customerId, projectId, type, content, result, visitTime): // 新增拜访
             params = ["customerId": customerId, "projectId": projectId, "type": type, "content": content, "result": result, "visitTime": visitTime]

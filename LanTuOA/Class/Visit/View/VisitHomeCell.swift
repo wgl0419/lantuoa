@@ -77,13 +77,11 @@ class VisitHomeCell: UITableViewCell {
         
         _ = UIImageView().taxi.adhere(toSuperView: whiteView) // 箭头
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalTo(4)
-                make.height.equalTo(8)
                 make.centerY.equalToSuperview()
                 make.right.equalToSuperview().offset(-15)
             })
             .taxi.config({ (imageView) in
-                imageView.backgroundColor = .gray
+                imageView.image = UIImage(named: "arrow")
             })
         
         let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “拜访人”

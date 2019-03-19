@@ -25,6 +25,7 @@ class HomePageController: UIViewController {
         navigationItem.title = "蓝图OA"
         let nav = navigationController as! MainNavigationController
         nav.setNavConfigure(type: .dark, color: UIColor(hex: "#2E4695"), isShadow: false)
+        nav.backBtn.isHidden = false
     }
     
     /// 初始化子控件

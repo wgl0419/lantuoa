@@ -22,5 +22,9 @@ pod 'YCMenuView', '~> 1.1.0'
 pod 'ZLPhotoBrowser', '~> 2.7.7'
 ############    text处理   ############
 pod 'YYText', '~> 1.0.7'
+############    百度地图   ############
+pod 'BMKLocationKit'
+############     日历    ############
+pod 'FSCalendar'
 end
 

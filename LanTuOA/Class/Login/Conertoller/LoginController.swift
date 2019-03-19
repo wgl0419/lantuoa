@@ -187,10 +187,10 @@ class LoginController: UIViewController {
     
     /// 跳转主界面
     private func postMainController() {
-        let vcs = [HomePageController(), VisitHomeController(), ProjectHomeController(), WrokHomeController(), MeHomeController()]
+        let vcs = [HomePageController(), VisitHomeController(), CustomerHomeController(), WrokHomeController(), MeHomeController()]
         let seleImageNames = ["menu_calc_highlight", "menu_list_highlight", "menu_notice_highlight", "menu_my_highlight", "menu_my_highlight"]
         let imageNames = ["menu_calc_normal", "menu_list_normal", "menu_notice_normal", "menu_my_normal", "menu_my_normal"]
-        let titles = ["首页", "拜访", "项目", "工作", "我"]
+        let titles = ["首页", "拜访", "客户", "工作", "我"]
         let bar = UITabBarController()
         for index in 0..<vcs.count {
             let vc = vcs[index]
@@ -200,7 +200,7 @@ class LoginController: UIViewController {
             item?.selectedImage = UIImage(named: seleImageNames[index])?.withRenderingMode(.alwaysOriginal)
             item?.image = UIImage(named: imageNames[index])?.withRenderingMode(.alwaysOriginal)
             item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#999999")], for: .normal)
-            item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#333333")], for: .selected)
+            item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2E4695")], for: .selected)
             bar.addChild(nav)
         }
         self.view.window?.rootViewController = bar
@@ -214,6 +214,7 @@ class LoginController: UIViewController {
         let accountStr = accountTextField.text ?? ""
         _ = APIService.shared.getData(.login(accountStr, pwdStr), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
+            UserInfo.share.setToken(result.data?.token ?? "")
             self.postMainController()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "登录失败")

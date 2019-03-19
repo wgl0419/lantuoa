@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1801AE90223F28C40027A5DB /* ProjectLlistStatisticsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801AE8F223F28C40027A5DB /* ProjectLlistStatisticsModel.swift */; };
+		1801AE92223F2FE60027A5DB /* CustomerListStatisticsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801AE91223F2FE60027A5DB /* CustomerListStatisticsModel.swift */; };
+		1801AE94223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801AE93223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift */; };
+		18026DE3223B894D00993B66 /* ProjectHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18026DE2223B894D00993B66 /* ProjectHomeCell.swift */; };
+		18026DEA223B8DB300993B66 /* CustomerHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18026DE9223B8DB300993B66 /* CustomerHomeController.swift */; };
+		18026DED223B8EAC00993B66 /* CustomerHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18026DEC223B8EAC00993B66 /* CustomerHomeCell.swift */; };
+		18026DEF223B9F7E00993B66 /* NewlyBuildVisitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18026DEE223B9F7E00993B66 /* NewlyBuildVisitController.swift */; };
+		18026DF1223BA3B300993B66 /* NewlyBuildVisitSeleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18026DF0223BA3B300993B66 /* NewlyBuildVisitSeleCell.swift */; };
+		180273E5223B5A410033E083 /* ProjectListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180273E4223B5A410033E083 /* ProjectListCell.swift */; };
+		180273E7223B7ACC0033E083 /* WrokHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180273E6223B7ACC0033E083 /* WrokHomeCell.swift */; };
 		180B76FD2239DFCC0096403B /* VisitHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B76FC2239DFCC0096403B /* VisitHomeCell.swift */; };
 		180B77012239F8770096403B /* ProjectSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B77002239F8770096403B /* ProjectSegmentView.swift */; };
 		180B7707223A21D50096403B /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B7706223A21D50096403B /* LoginController.swift */; };
@@ -34,6 +44,9 @@
 		1810EC93222F5F5300CF6488 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC92222F5F5300CF6488 /* MainNavigationController.swift */; };
 		1810EC95222F5F6F00CF6488 /* GlobalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC94222F5F6F00CF6488 /* GlobalData.swift */; };
 		1810EC97222F5F9500CF6488 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC96222F5F9500CF6488 /* UserInfo.swift */; };
+		1811AA90224075010073A794 /* SeleVisitModelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1811AA8F224075010073A794 /* SeleVisitModelCell.swift */; };
+		1811AA92224089BA0073A794 /* SeleVisitTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1811AA91224089BA0073A794 /* SeleVisitTimeView.swift */; };
+		1811AA942240E30D0073A794 /* ProjectListStatisticsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1811AA932240E30D0073A794 /* ProjectListStatisticsModel.swift */; };
 		181788462238A7D60015DC30 /* HomePageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788452238A7D60015DC30 /* HomePageController.swift */; };
 		181788482238AB5C0015DC30 /* VisitHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788472238AB5C0015DC30 /* VisitHomeController.swift */; };
 		1817884A2238ABA90015DC30 /* ProjectHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788492238ABA90015DC30 /* ProjectHomeController.swift */; };
@@ -44,11 +57,26 @@
 		181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788532238E5F60015DC30 /* HomePageVisitCell.swift */; };
 		1830BE6322373C0D00ADC03A /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1830BE6222373C0D00ADC03A /* APIService.swift */; };
 		1830BE6522373C4200ADC03A /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1830BE6422373C4200ADC03A /* APIManager.swift */; };
+		18A7C967223F438E000B4007 /* NewlyBuildVisitSeleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C966223F438E000B4007 /* NewlyBuildVisitSeleController.swift */; };
+		18A7C969223F7552000B4007 /* CustomerContactListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C968223F7552000B4007 /* CustomerContactListModel.swift */; };
+		18A7C96B223F7BA7000B4007 /* ProjectListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C96A223F7BA7000B4007 /* ProjectListModel.swift */; };
+		18A7C96D223F7E1B000B4007 /* NewlyBuildSeleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C96C223F7E1B000B4007 /* NewlyBuildSeleCell.swift */; };
+		18A7C96F223F9828000B4007 /* SeleVisitModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C96E223F9828000B4007 /* SeleVisitModelView.swift */; };
 		20086A34FD370732D57E936F /* Pods_LanTuOA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731155E08D0F4362D82C88E7 /* Pods_LanTuOA.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0E003D983006C53E47A888DA /* Pods-LanTuOA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanTuOA.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LanTuOA/Pods-LanTuOA.debug.xcconfig"; sourceTree = "<group>"; };
+		1801AE8F223F28C40027A5DB /* ProjectLlistStatisticsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectLlistStatisticsModel.swift; sourceTree = "<group>"; };
+		1801AE91223F2FE60027A5DB /* CustomerListStatisticsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerListStatisticsModel.swift; sourceTree = "<group>"; };
+		1801AE93223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildVisitTextViewCell.swift; sourceTree = "<group>"; };
+		18026DE2223B894D00993B66 /* ProjectHomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectHomeCell.swift; sourceTree = "<group>"; };
+		18026DE9223B8DB300993B66 /* CustomerHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerHomeController.swift; sourceTree = "<group>"; };
+		18026DEC223B8EAC00993B66 /* CustomerHomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerHomeCell.swift; sourceTree = "<group>"; };
+		18026DEE223B9F7E00993B66 /* NewlyBuildVisitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildVisitController.swift; sourceTree = "<group>"; };
+		18026DF0223BA3B300993B66 /* NewlyBuildVisitSeleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildVisitSeleCell.swift; sourceTree = "<group>"; };
+		180273E4223B5A410033E083 /* ProjectListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListCell.swift; sourceTree = "<group>"; };
+		180273E6223B7ACC0033E083 /* WrokHomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrokHomeCell.swift; sourceTree = "<group>"; };
 		180B76FC2239DFCC0096403B /* VisitHomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitHomeCell.swift; sourceTree = "<group>"; };
 		180B77002239F8770096403B /* ProjectSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectSegmentView.swift; sourceTree = "<group>"; };
 		180B7706223A21D50096403B /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -79,6 +107,9 @@
 		1810EC94222F5F6F00CF6488 /* GlobalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalData.swift; sourceTree = "<group>"; };
 		1810EC96222F5F9500CF6488 /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		1810EC98222F5FE000CF6488 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		1811AA8F224075010073A794 /* SeleVisitModelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeleVisitModelCell.swift; sourceTree = "<group>"; };
+		1811AA91224089BA0073A794 /* SeleVisitTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeleVisitTimeView.swift; sourceTree = "<group>"; };
+		1811AA932240E30D0073A794 /* ProjectListStatisticsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListStatisticsModel.swift; sourceTree = "<group>"; };
 		181788452238A7D60015DC30 /* HomePageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageController.swift; sourceTree = "<group>"; };
 		181788472238AB5C0015DC30 /* VisitHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitHomeController.swift; sourceTree = "<group>"; };
 		181788492238ABA90015DC30 /* ProjectHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectHomeController.swift; sourceTree = "<group>"; };
@@ -89,6 +120,11 @@
 		181788532238E5F60015DC30 /* HomePageVisitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageVisitCell.swift; sourceTree = "<group>"; };
 		1830BE6222373C0D00ADC03A /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		1830BE6422373C4200ADC03A /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		18A7C966223F438E000B4007 /* NewlyBuildVisitSeleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildVisitSeleController.swift; sourceTree = "<group>"; };
+		18A7C968223F7552000B4007 /* CustomerContactListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerContactListModel.swift; sourceTree = "<group>"; };
+		18A7C96A223F7BA7000B4007 /* ProjectListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListModel.swift; sourceTree = "<group>"; };
+		18A7C96C223F7E1B000B4007 /* NewlyBuildSeleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildSeleCell.swift; sourceTree = "<group>"; };
+		18A7C96E223F9828000B4007 /* SeleVisitModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeleVisitModelView.swift; sourceTree = "<group>"; };
 		731155E08D0F4362D82C88E7 /* Pods_LanTuOA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LanTuOA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB24B3DA4D604F5B5FD3373A /* Pods-LanTuOA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanTuOA.release.xcconfig"; path = "Pods/Target Support Files/Pods-LanTuOA/Pods-LanTuOA.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -105,6 +141,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18026DE4223B8D7800993B66 /* Customer */ = {
+			isa = PBXGroup;
+			children = (
+				18026DE7223B8D8F00993B66 /* Model */,
+				18026DE6223B8D8A00993B66 /* View */,
+				18026DE5223B8D7F00993B66 /* Conteroller */,
+			);
+			path = Customer;
+			sourceTree = "<group>";
+		};
+		18026DE5223B8D7F00993B66 /* Conteroller */ = {
+			isa = PBXGroup;
+			children = (
+				18026DE9223B8DB300993B66 /* CustomerHomeController.swift */,
+			);
+			path = Conteroller;
+			sourceTree = "<group>";
+		};
+		18026DE6223B8D8A00993B66 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				18026DEC223B8EAC00993B66 /* CustomerHomeCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		18026DE7223B8D8F00993B66 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1801AE91223F2FE60027A5DB /* CustomerListStatisticsModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		180B7702223A21950096403B /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -173,6 +243,7 @@
 		1810EC5D222F5B7C00CF6488 /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				18026DE4223B8D7800993B66 /* Customer */,
 				180B7702223A21950096403B /* Login */,
 				1830BE6A2237A79C00ADC03A /* Me */,
 				1830BE692237A78F00ADC03A /* Wrok */,
@@ -343,6 +414,7 @@
 		1830BE6F2237A80700ADC03A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				180273E6223B7ACC0033E083 /* WrokHomeCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -373,6 +445,8 @@
 		1830BE732237A80F00ADC03A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				1801AE8F223F28C40027A5DB /* ProjectLlistStatisticsModel.swift */,
+				1811AA932240E30D0073A794 /* ProjectListStatisticsModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -380,6 +454,8 @@
 		1830BE742237A80F00ADC03A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				180273E4223B5A410033E083 /* ProjectListCell.swift */,
+				18026DE2223B894D00993B66 /* ProjectHomeCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -389,6 +465,12 @@
 			children = (
 				180B77002239F8770096403B /* ProjectSegmentView.swift */,
 				180B76FC2239DFCC0096403B /* VisitHomeCell.swift */,
+				18026DF0223BA3B300993B66 /* NewlyBuildVisitSeleCell.swift */,
+				1801AE93223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift */,
+				18A7C96C223F7E1B000B4007 /* NewlyBuildSeleCell.swift */,
+				18A7C96E223F9828000B4007 /* SeleVisitModelView.swift */,
+				1811AA8F224075010073A794 /* SeleVisitModelCell.swift */,
+				1811AA91224089BA0073A794 /* SeleVisitTimeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -396,6 +478,8 @@
 		1830BE762237A81800ADC03A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				18A7C968223F7552000B4007 /* CustomerContactListModel.swift */,
+				18A7C96A223F7BA7000B4007 /* ProjectListModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -404,6 +488,8 @@
 			isa = PBXGroup;
 			children = (
 				181788472238AB5C0015DC30 /* VisitHomeController.swift */,
+				18026DEE223B9F7E00993B66 /* NewlyBuildVisitController.swift */,
+				18A7C966223F438E000B4007 /* NewlyBuildVisitSeleController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -526,6 +612,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-LanTuOA/Pods-LanTuOA-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/FSCalendar/FSCalendar.framework",
 				"${BUILT_PRODUCTS_DIR}/GPUImage/GPUImage.framework",
 				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
@@ -542,6 +629,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FSCalendar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GPUImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
@@ -587,22 +675,31 @@
 			files = (
 				181788482238AB5C0015DC30 /* VisitHomeController.swift in Sources */,
 				1830BE6522373C4200ADC03A /* APIManager.swift in Sources */,
+				1801AE92223F2FE60027A5DB /* CustomerListStatisticsModel.swift in Sources */,
 				1810EC74222F5D4100CF6488 /* UiView.swift in Sources */,
 				1810EC7B222F5D4100CF6488 /* String.swift in Sources */,
+				18A7C96B223F7BA7000B4007 /* ProjectListModel.swift in Sources */,
+				18026DE3223B894D00993B66 /* ProjectHomeCell.swift in Sources */,
 				1810EC7A222F5D4100CF6488 /* Dictionary.swift in Sources */,
 				1810EC77222F5D4100CF6488 /* UIColor.swift in Sources */,
+				1811AA90224075010073A794 /* SeleVisitModelCell.swift in Sources */,
 				180B76FD2239DFCC0096403B /* VisitHomeCell.swift in Sources */,
+				18026DEF223B9F7E00993B66 /* NewlyBuildVisitController.swift in Sources */,
 				181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */,
+				1801AE94223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift in Sources */,
 				1810EC75222F5D4100CF6488 /* Array.swift in Sources */,
 				1810EC78222F5D4100CF6488 /* UITabBar.swift in Sources */,
 				1810EC76222F5D4100CF6488 /* NamespaceWrappable.swift in Sources */,
 				180B7707223A21D50096403B /* LoginController.swift in Sources */,
+				1801AE90223F28C40027A5DB /* ProjectLlistStatisticsModel.swift in Sources */,
 				1810EC73222F5D4100CF6488 /* Date.swift in Sources */,
 				1817884C2238ABE40015DC30 /* WrokHomeController.swift in Sources */,
+				180273E5223B5A410033E083 /* ProjectListCell.swift in Sources */,
 				1810EC80222F5D4100CF6488 /* UITextView.swift in Sources */,
 				180B7709223A34EC0096403B /* LoginModel.swift in Sources */,
 				181788462238A7D60015DC30 /* HomePageController.swift in Sources */,
 				1810EC8E222F5F2F00CF6488 /* UIBarButtonItemFixSpace.swift in Sources */,
+				18026DED223B8EAC00993B66 /* CustomerHomeCell.swift in Sources */,
 				1810EC8F222F5F2F00CF6488 /* UIBarButtonItemExtension.swift in Sources */,
 				1810EC4C222F597C00CF6488 /* AppDelegate.swift in Sources */,
 				1810EC7F222F5D4100CF6488 /* MBProgressHUD.swift in Sources */,
@@ -610,16 +707,25 @@
 				1810EC79222F5D4100CF6488 /* NSMutableAttributedString.swift in Sources */,
 				1810EC90222F5F2F00CF6488 /* DispatchQueueExtension.swift in Sources */,
 				181788502238D73F0015DC30 /* HomePageNoticeCell.swift in Sources */,
+				18026DF1223BA3B300993B66 /* NewlyBuildVisitSeleCell.swift in Sources */,
 				180B77012239F8770096403B /* ProjectSegmentView.swift in Sources */,
 				1810EC93222F5F5300CF6488 /* MainNavigationController.swift in Sources */,
+				18026DEA223B8DB300993B66 /* CustomerHomeController.swift in Sources */,
 				1830BE6322373C0D00ADC03A /* APIService.swift in Sources */,
+				18A7C967223F438E000B4007 /* NewlyBuildVisitSeleController.swift in Sources */,
 				1810EC95222F5F6F00CF6488 /* GlobalData.swift in Sources */,
+				18A7C96D223F7E1B000B4007 /* NewlyBuildSeleCell.swift in Sources */,
+				18A7C969223F7552000B4007 /* CustomerContactListModel.swift in Sources */,
 				1810EC7D222F5D4100CF6488 /* UIImage.swift in Sources */,
 				1817884A2238ABA90015DC30 /* ProjectHomeController.swift in Sources */,
+				180273E7223B7ACC0033E083 /* WrokHomeCell.swift in Sources */,
 				1810EC97222F5F9500CF6488 /* UserInfo.swift in Sources */,
 				1810EC7C222F5D4100CF6488 /* UIButton.swift in Sources */,
+				1811AA92224089BA0073A794 /* SeleVisitTimeView.swift in Sources */,
 				181788522238E0B00015DC30 /* HomePageHeaderView.swift in Sources */,
 				1817884E2238ADC00015DC30 /* MeHomeController.swift in Sources */,
+				18A7C96F223F9828000B4007 /* SeleVisitModelView.swift in Sources */,
+				1811AA942240E30D0073A794 /* ProjectListStatisticsModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
