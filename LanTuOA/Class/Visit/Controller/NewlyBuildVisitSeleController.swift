@@ -145,7 +145,7 @@ class NewlyBuildVisitSeleController: UIViewController {
                     tableView.mj_footer.isHidden = true
                 })
                 tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
-                    self?.getData(isMore: false)
+                    self?.getData(isMore: true)
                     tableView.mj_header.isHidden = true
                 })
             })
@@ -177,8 +177,8 @@ class NewlyBuildVisitSeleController: UIViewController {
     
     /// 点亮确认按钮
     private func determineHandle() {
-        determineBtn.isEnabled = true
-        determineBtn.backgroundColor = UIColor(hex: "#2E4695")
+        determineBtn.isEnabled = seleIndexArray.count > 0
+        determineBtn.backgroundColor = seleIndexArray.count > 0 ? UIColor(hex: "#2E4695") : UIColor(hex: "#CCCCCC")
     }
     
     // MARK: - Api
@@ -188,7 +188,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     private func customerListStatistics(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.customerListStatistics("", 1, 0, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerListStatistics("", 1, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -307,7 +307,10 @@ class NewlyBuildVisitSeleController: UIViewController {
     
     /// 点击确认
     @objc private func determineClick() {
-        
+        if seleBlock != nil {
+            seleBlock!(seleArray)
+        }
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -362,16 +365,21 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
             }
             if isSele {
                 seleArray.remove(at: row)
+                seleIndexArray.remove(at: row)
             } else {
                 let id = visitorData[row].id
                 let str = visitorData[row].name ?? ""
                 seleArray.append((id, str))
+                seleIndexArray.append(row)
             }
             tableView.reloadRows(at: [indexPath], with: .fade)
         } else { // 不可多选 （客户、项目、所在位置）
             var seleIndex = -1
             if seleArray.count > 0 { // 防止报错
                 seleIndex = seleIndexArray.first ?? -1
+            } else { // 没有点击过 初始化数据
+                seleArray.append((-1, ""))
+                seleIndexArray.append(-1)
             }
             if seleIndex == row { // 点击已经选中的cell
                 return
@@ -388,11 +396,13 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
                     name = projectData[indexPath.row].name ?? ""
                 }
                 seleArray[0] = (id, name)
+                seleIndexArray[0] = row
             }
             tableView.reloadRows(at: [indexPath], with: .fade)
             if seleIndex != -1 {
                 tableView.reloadRows(at: [IndexPath(row: seleIndex, section: 0)], with: .fade)
             }
         }
+        determineHandle()
     }
 }

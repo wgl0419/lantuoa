@@ -10,6 +10,19 @@ import UIKit
 
 class VisitHomeCell: UITableViewCell {
 
+    /// 数据
+    var data: VisitListData? {
+        didSet {
+            if let data = data {
+                titleLabel.text = data.projectName
+                visitNameLabel.text = data.createUserName // TODO: 后期会换
+                initiateLabel.text = data.createUserName
+                stateLabel.text = data.result
+                let timeStr = Date(timeIntervalSince1970: TimeInterval(data.visitTime)).yearTimeStr()
+                timeLabel.text = timeStr
+            }
+        }
+    }
     
     /// 标题
     private var titleLabel: UILabel!

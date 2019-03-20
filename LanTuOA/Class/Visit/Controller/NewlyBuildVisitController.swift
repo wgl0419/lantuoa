@@ -17,13 +17,19 @@ class NewlyBuildVisitController: UIViewController {
     private var confirmBtn: UIButton!
     
     /// 标题
-    private let titleArray = ["客户", "拜访人", "项目", "拜访方式", "拜访时间", "内容", "结果", "所在位置"]
+//    private let titleArray = ["客户", "拜访人", "项目", "拜访方式", "拜访时间", "内容", "结果", "所在位置"]
+    private let titleArray = ["客户", "拜访人", "项目", "拜访方式", "拜访时间", "内容", "结果"]
     /// 提示
-    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请输入拜访结果", "请选择"]
+//    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请输入拜访结果", "请选择"]
+    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请输入拜访结果"]
     /// 选中id
-    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1, -1]
+//    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1, -1]
+    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1]
+    /// 拜访人id数组
+    private var contactArray = [Int]()
     /// 选中内容
-    private var seleStrArray = ["", "", "", "", "", "", "", ""]
+//    private var seleStrArray = ["", "", "", "", "", "", "", ""]
+    private var seleStrArray = ["", "", "", "", "", "", ""]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +85,18 @@ class NewlyBuildVisitController: UIViewController {
     private func seleCustomerHandle() {
         let vc = NewlyBuildVisitSeleController()
         vc.type = .customer
+        vc.seleBlock = { [weak self] (customerArray) in
+            self?.seleIdArray[0] = customerArray.first?.0 ?? -1
+            self?.seleStrArray[0] = customerArray.first?.1 ?? ""
+            // 重置数据 -> 防止出现选择拜访人、项目后 修改客户
+            self?.seleIdArray[1] = -1
+            self?.seleStrArray[1] = ""
+            self?.seleStrArray[2] = ""
+            self?.contactArray = []
+            
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 0, section: 1), IndexPath(row: 0, section: 2)], with: .fade)
+            self?.confirmHandle()
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -97,38 +115,89 @@ class NewlyBuildVisitController: UIViewController {
         } else {
             vc.type = .project(customerId)
         }
+        
+        vc.seleBlock = { [weak self] (customerArray) in
+            if section == 1 {
+                self?.contactArray = []
+                var customerStr = ""
+                for model in customerArray {
+                    self?.contactArray.append(model.0)
+                    customerStr.append("、\(model.1)")
+                }
+                if customerStr.count > 0 { customerStr.remove(at: customerStr.startIndex) }
+                self?.seleStrArray[section] = customerStr
+            } else {
+                self?.seleIdArray[section] = customerArray.first?.0 ?? -1
+                self?.seleStrArray[section] = customerArray.first?.1 ?? ""
+            }
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .fade)
+            self?.confirmHandle()
+        }
+        
         navigationController?.pushViewController(vc, animated: true)
     }
     
     /// 选择拜访方式
     private func seleModelHandle() {
         let view = SeleVisitModelView()
-        view.didBlock = { [weak self] (modelStr) in
-            self?.seleStrArray[3] = modelStr
+        view.didBlock = { [weak self] (seleIndex) in
+            self?.seleIdArray[3] = seleIndex + 1
+            self?.seleStrArray[3] = ["面谈", "电话", "网络聊天", "取消"][seleIndex]
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
+            self?.confirmHandle()
         }
         view.show()
     }
     
+    /// 选择时间处理
     private func seleTimeHandle() {
         let view = SeleVisitTimeView()
         view.seleBlock = { [weak self] (timeStr) in
             self?.seleStrArray[4] = timeStr
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 4)], with: .fade)
+            self?.confirmHandle()
         }
         view.show()
+    }
+    
+    /// 点亮确认按钮
+    private func confirmHandle() {
+        var isCompleted = true
+        for str in seleStrArray {
+            if str.count == 0 {
+                isCompleted = false
+                break
+            }
+        }
+        confirmBtn.isEnabled = isCompleted
+        confirmBtn.backgroundColor = isCompleted ? UIColor(hex: "#2E4695") : UIColor(hex: "#CCCCCC")
     }
     
     // MARK: - 按钮点击
     /// 点击确认
     @objc private func confirmClick() {
+        MBProgressHUD.showWait("")
+        let customerId = seleIdArray[0]
+        let projectId = seleIdArray[2]
+        let type = seleIdArray[3]
+        let content = seleStrArray[5]
+        let result = seleStrArray[6]
         
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        let visitTime = formatter.date(from: seleStrArray[4])?.timeIntervalSince1970 ?? Date().timeIntervalSince1970
+        _ = APIService.shared.getData(.visitSave(customerId, projectId, type, content, result, Int(visitTime), contactArray), t: LoginModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            self.navigationController?.popViewController(animated: true)
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "提交失败，请重新提交")
+        })
     }
 }
 
 extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 8
+        return titleArray.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -147,6 +216,7 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
             cell.data = (titleArray[section], placeholderArray[section])
             cell.textBlock = { [weak self] (str) in
                 self?.seleStrArray[section] = str
+                self?.confirmHandle()
             }
             return cell
         }

@@ -57,6 +57,7 @@
 		181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788532238E5F60015DC30 /* HomePageVisitCell.swift */; };
 		1830BE6322373C0D00ADC03A /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1830BE6222373C0D00ADC03A /* APIService.swift */; };
 		1830BE6522373C4200ADC03A /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1830BE6422373C4200ADC03A /* APIManager.swift */; };
+		1833DD3A2241D9F600730FB9 /* VisitListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833DD392241D9F600730FB9 /* VisitListModel.swift */; };
 		18A7C967223F438E000B4007 /* NewlyBuildVisitSeleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C966223F438E000B4007 /* NewlyBuildVisitSeleController.swift */; };
 		18A7C969223F7552000B4007 /* CustomerContactListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C968223F7552000B4007 /* CustomerContactListModel.swift */; };
 		18A7C96B223F7BA7000B4007 /* ProjectListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C96A223F7BA7000B4007 /* ProjectListModel.swift */; };
@@ -120,6 +121,7 @@
 		181788532238E5F60015DC30 /* HomePageVisitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageVisitCell.swift; sourceTree = "<group>"; };
 		1830BE6222373C0D00ADC03A /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		1830BE6422373C4200ADC03A /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		1833DD392241D9F600730FB9 /* VisitListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitListModel.swift; sourceTree = "<group>"; };
 		18A7C966223F438E000B4007 /* NewlyBuildVisitSeleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildVisitSeleController.swift; sourceTree = "<group>"; };
 		18A7C968223F7552000B4007 /* CustomerContactListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerContactListModel.swift; sourceTree = "<group>"; };
 		18A7C96A223F7BA7000B4007 /* ProjectListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListModel.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 			children = (
 				18A7C968223F7552000B4007 /* CustomerContactListModel.swift */,
 				18A7C96A223F7BA7000B4007 /* ProjectListModel.swift */,
+				1833DD392241D9F600730FB9 /* VisitListModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -720,6 +723,7 @@
 				1817884A2238ABA90015DC30 /* ProjectHomeController.swift in Sources */,
 				180273E7223B7ACC0033E083 /* WrokHomeCell.swift in Sources */,
 				1810EC97222F5F9500CF6488 /* UserInfo.swift in Sources */,
+				1833DD3A2241D9F600730FB9 /* VisitListModel.swift in Sources */,
 				1810EC7C222F5D4100CF6488 /* UIButton.swift in Sources */,
 				1811AA92224089BA0073A794 /* SeleVisitTimeView.swift in Sources */,
 				181788522238E0B00015DC30 /* HomePageHeaderView.swift in Sources */,

@@ -7,6 +7,8 @@
 //  我的拜访 首页  控制器
 
 import UIKit
+import MJRefresh
+import MBProgressHUD
 
 class VisitHomeController: UIViewController {
 
@@ -18,15 +20,19 @@ class VisitHomeController: UIViewController {
     private var searchBar: UISearchBar!
     
     
-    
+    /// 列表数据
+    private var data = [VisitListData]()
     /// 记录输入次数  -> 用于减少计算次数
     private var inputCout = 0
+    /// 页码
+    private var page = 1
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNav()
         initSubViews()
+        visitList(isMore: false)
     }
     
     // MARK: - 自定义私有方法
@@ -89,6 +95,14 @@ class VisitHomeController: UIViewController {
                 tableView.estimatedRowHeight = 50
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
                 tableView.register(VisitHomeCell.self, forCellReuseIdentifier: "VisitHomeCell")
+                tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
+                    self?.visitList(isMore: false)
+                    tableView.mj_footer.isHidden = true
+                })
+                tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
+                    self?.visitList(isMore: true)
+                    tableView.mj_header.isHidden = true
+                })
             })
         
         _ = UIButton().taxi.adhere(toSuperView: view)
@@ -119,6 +133,46 @@ class VisitHomeController: UIViewController {
             
         }
     }
+    
+    // MARK: - Api
+    /// 获取拜访列表
+    ///
+    /// - Parameter isMore: 是否获取更多
+    private func visitList(isMore: Bool) {
+        MBProgressHUD.showWait("")
+        let newPage = isMore ? page + 1 : 1
+        _ = APIService.shared.getData(.visitList("", nil, nil, 2, newPage, 10), t: VisitListModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            if isMore {
+                for model in result.data {
+                    self.data.append(model)
+                }
+                self.tableView.mj_footer.endRefreshing()
+                self.tableView.mj_header.isHidden = false
+                self.page += 1
+            } else {
+                self.page = 1
+                self.data = result.data
+                self.tableView.mj_header.endRefreshing()
+                self.tableView.mj_footer.isHidden = false
+            }
+            if result.data.count == 0 {
+                self.tableView.mj_footer.endRefreshingWithNoMoreData()
+            } else {
+                self.tableView.mj_footer.resetNoMoreData()
+            }
+            self.tableView.reloadData()
+        }, errorHandle: { (error) in
+            if isMore {
+                self.tableView.mj_footer.endRefreshing()
+                self.tableView.mj_header.isHidden = false
+            } else {
+                self.tableView.mj_header.endRefreshing()
+                self.tableView.mj_footer.isHidden = false
+            }
+            MBProgressHUD.showError(error ?? "获取失败")
+        })
+    }
 
     // MARK: - 按钮点击
     /// 填写拜访按钮
@@ -130,11 +184,12 @@ class VisitHomeController: UIViewController {
 
 extension VisitHomeController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return data.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "VisitHomeCell", for: indexPath) as! VisitHomeCell
+        cell.data = data[indexPath.row]
         return cell
     }
     

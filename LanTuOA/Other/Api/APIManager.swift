@@ -39,8 +39,8 @@ enum APIManager {
     
     
     // MARK: - 拜访
-    case visitSave(Int, Int, Int, String, String, Int) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级)
-    case visitList(String, Int, Int, Int, Int, Int) // 拜访查询 (name:关键词，客户名称/项目名称  startTime:开始时间，秒级  endTime:结束时间，秒级  queryType:1.全部，2.只看自己，3.工作组，4.接手  page:页码  limit:一页几条数据)
+    case visitSave(Int, Int, Int, String, String, Int, Array<Int>) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级   contact:拜访人id数组)
+    case visitList(String, Int?, Int?, Int, Int, Int) // 拜访查询 (name:关键词，客户名称/项目名称  startTime:开始时间，秒级  endTime:结束时间，秒级  queryType:1.全部，2.只看自己，3.工作组，4.接手  page:页码  limit:一页几条数据)
     
     case x // MARK: 补位 -> 暂时代替一些没有使用的类型
 }
@@ -142,10 +142,16 @@ extension APIManager: TargetType {
                 params["customerId"] = customerId!
             }
             
-        case let .visitSave(customerId, projectId, type, content, result, visitTime): // 新增拜访
-            params = ["customerId": customerId, "projectId": projectId, "type": type, "content": content, "result": result, "visitTime": visitTime]
+        case let .visitSave(customerId, projectId, type, content, result, visitTime, contact): // 新增拜访
+            params = ["customerId": customerId, "projectId": projectId, "type": type, "content": content, "result": result, "visitTime": visitTime, "contact": contact]
         case let .visitList(name, startTime, endTime, queryType, page, limit): // 拜访查询
-            params = ["name": name, "startTime": startTime, "endTime": endTime, "queryType": queryType, "page": page, "limit": limit]
+            params = ["name": name, "queryType": queryType, "page": page, "limit": limit]
+            if startTime != nil {
+                params["startTime"] = startTime!
+            }
+            if endTime != nil {
+                params["endTime"] = endTime!
+            }
             
         default: params = [:] // 退出登录,获取个人信息,客户联系人修改历史
         }

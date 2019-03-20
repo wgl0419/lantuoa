@@ -11,7 +11,7 @@ import UIKit
 class SeleVisitModelView: UIView {
 
     /// 点击结果回调
-    var didBlock: ((String) -> ())?
+    var didBlock: ((Int) -> ())?
     
     /// 灰色背景view
     private var grayView: UIView!
@@ -113,7 +113,7 @@ extension SeleVisitModelView: UITableViewDelegate, UITableViewDataSource {
         let row = indexPath.row
         if row != 3 {
             if didBlock != nil {
-                didBlock!(contentStrArray[row])
+                didBlock!(row)
             }
         }
         hidden()
