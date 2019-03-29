@@ -53,7 +53,7 @@ class NewlyBuildVisitTextViewCell: UITableViewCell {
         let interval = UITextView().textContainer.lineFragmentPadding // 间隔 -> 保持输入框内容和标题对齐
         textView = UITextView().taxi.adhere(toSuperView: contentView) // 输入框
             .taxi.layout(snapKitMaker: { (make) in
-                make.height.equalTo(110)
+                make.height.equalTo(110).priority(800)
                 make.left.equalToSuperview().offset(15 - interval)
                 make.top.equalTo(titleLabel.snp.bottom).offset(10 - interval)
                 make.bottom.right.equalToSuperview().offset(-15)

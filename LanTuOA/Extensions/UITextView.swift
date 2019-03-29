@@ -4,7 +4,7 @@
 //
 //  Created by HYH on 2019/2/21.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//
+//  仅仅适用左对齐
 
 import UIKit
 
@@ -20,15 +20,18 @@ extension UITextView {
         get {
             let label = objc_getAssociatedObject(self, &placeHolderKey)
             if !(label is UILabel) {
-                self.placeHolderLabel = UILabel().taxi.adhere(toSuperView: self)
+                let top = self.textContainerInset.top
+                let lineFragmentPadding = self.textContainer.lineFragmentPadding
+                self.placeHolderLabel = UILabel().taxi.adhere(toSuperView: self.superview!)
                     .taxi.layout(snapKitMaker: { (make) in
-                        make.top.equalTo(self).offset(self.textContainerInset.top)
-                        make.left.equalTo(self).offset(self.textContainer.lineFragmentPadding)
-                        make.right.equalTo(self).offset(-self.textContainer.lineFragmentPadding)
+                        make.top.equalTo(self).offset(top)
+                        make.left.equalTo(self).offset(lineFragmentPadding)
+                        make.right.equalTo(self).offset(-lineFragmentPadding)
                     })
                     .taxi.config({ (label) in
+                        label.textAlignment = textAlignment
                         label.textColor = .lightGray
-                        label.font = self.font
+                        label.font = font
                     })
             }
             

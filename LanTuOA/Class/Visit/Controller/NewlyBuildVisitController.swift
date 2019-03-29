@@ -10,6 +10,9 @@ import UIKit
 import MBProgressHUD
 
 class NewlyBuildVisitController: UIViewController {
+    
+    /// 添加成功回调
+    var addBlock: (() -> ())?
 
     /// 主要tableview
     private var tableView: UITableView!
@@ -139,10 +142,10 @@ class NewlyBuildVisitController: UIViewController {
     
     /// 选择拜访方式
     private func seleModelHandle() {
-        let view = SeleVisitModelView()
+        let view = SeleVisitModelView(title: "选择拜访方式", content: ["面谈", "电话", "网络聊天"])
         view.didBlock = { [weak self] (seleIndex) in
             self?.seleIdArray[3] = seleIndex + 1
-            self?.seleStrArray[3] = ["面谈", "电话", "网络聊天", "取消"][seleIndex]
+            self?.seleStrArray[3] = ["面谈", "电话", "网络聊天"][seleIndex]
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
             self?.confirmHandle()
         }
@@ -188,6 +191,9 @@ class NewlyBuildVisitController: UIViewController {
         let visitTime = formatter.date(from: seleStrArray[4])?.timeIntervalSince1970 ?? Date().timeIntervalSince1970
         _ = APIService.shared.getData(.visitSave(customerId, projectId, type, content, result, Int(visitTime), contactArray), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
+            if self.addBlock != nil {
+                self.addBlock!()
+            }
             self.navigationController?.popViewController(animated: true)
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "提交失败，请重新提交")

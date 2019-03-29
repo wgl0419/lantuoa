@@ -47,10 +47,14 @@ class NewlyBuildVisitSeleController: UIViewController {
     private var page = 1
     /// 客户id (拜访人，项目使用)
     private var customerId = -1
+    /// 记录输入次数  -> 用于减少计算次数
+    private var inputCout = 0
     /// 客户数据
     private var customerData = [CustomerListStatisticsData]()
     /// 拜访人数据
     private var visitorData = [CustomerContactListData]()
+    /// 拜访人数据 -> 保存源数据
+    private var oldVisitorData = [CustomerContactListData]()
     /// 项目数据
     private var projectData = [ProjectListData]()
     /// 拜访位置数据
@@ -60,6 +64,7 @@ class NewlyBuildVisitSeleController: UIViewController {
         super.viewDidLoad()
         setNav()
         initSubViews()
+        getData(isMore: false) // 获取一页数据
     }
 
     // MARK: - 自定义私有方法
@@ -84,14 +89,13 @@ class NewlyBuildVisitSeleController: UIViewController {
             rightStr = "新增项目"
             searchStr = "项目名称"
         }
-        getData(isMore: false) // 获取一页数据
         title = titleStr
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightStr,
-                                                                titleColor: .white,
-                                                                titleFont: UIFont.medium(size: 15),
-                                                                titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
-                                                                target: self,
-                                                                action: #selector(rightClick))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightStr,
+                                                            titleColor: .white,
+                                                            titleFont: UIFont.medium(size: 15),
+                                                            titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
+                                                            target: self,
+                                                            action: #selector(rightClick))
     }
     
     /// 初始化子控件
@@ -105,7 +109,7 @@ class NewlyBuildVisitSeleController: UIViewController {
             })
             .taxi.config({ (searchBar) in
                 searchBar.sizeToFit()
-//                searchBar.delegate = self
+                searchBar.delegate = self
                 searchBar.backgroundColor = .clear
                 searchBar.searchBarStyle = .minimal
                 searchBar.placeholder = searchStr
@@ -181,6 +185,17 @@ class NewlyBuildVisitSeleController: UIViewController {
         determineBtn.backgroundColor = seleIndexArray.count > 0 ? UIColor(hex: "#2E4695") : UIColor(hex: "#CCCCCC")
     }
     
+    /// 区分出搜索的内容
+    ///
+    /// - Parameter number: 记录的输入次数
+    @objc private func distinguishSearch(number: NSNumber) {
+        if Int(truncating: number) == inputCout { // 次数相同 说明停止输入
+            seleArray = []
+            seleIndexArray = []
+            getData(isMore: false)
+        }
+    }
+    
     // MARK: - Api
     /// 获取客户列表
     ///
@@ -188,7 +203,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     private func customerListStatistics(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.customerListStatistics("", 1, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerListStatistics(searchBar.text ?? "", 1, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -224,40 +239,55 @@ class NewlyBuildVisitSeleController: UIViewController {
     /// 获取客户联系人列表
     ///
     /// - Parameter isMore: 是否是加载更多
-    private func customerContactList(isMore: Bool) {
+    private func customerContactList(isMore: Bool) { // 自行编写搜索
         MBProgressHUD.showWait("")
-        let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.customerContactList(customerId, newPage, 10), t: CustomerContactListModel.self, successHandle: { (result) in
-            MBProgressHUD.dismiss()
-            if isMore {
-                for model in result.data {
-                    self.visitorData.append(model)
+        let searchStr = searchBar.text ?? ""
+        if searchStr.count != 0 {
+            var newModel = [CustomerContactListData]()
+            for model in oldVisitorData {
+                let name = model.name ?? ""
+                if name.contains(searchStr) {
+                    newModel.append(model)
                 }
-                self.tableView.mj_footer.endRefreshing()
-                self.tableView.mj_header.isHidden = false
-                self.page += 1
-            } else {
-                self.page = 1
-                self.visitorData = result.data
-                self.tableView.mj_header.endRefreshing()
-                self.tableView.mj_footer.isHidden = false
             }
-            if newPage == result.max_page {
+            visitorData = newModel
+            tableView.reloadData()
+            MBProgressHUD.dismiss()
+        } else {
+            let newPage = isMore ? page + 1 : 1
+            _ = APIService.shared.getData(.customerContactList(customerId, newPage, 99999), t: CustomerContactListModel.self, successHandle: { (result) in
+                MBProgressHUD.dismiss()
+                if isMore {
+                    for model in result.data {
+                        self.visitorData.append(model)
+                    }
+                    self.tableView.mj_footer.endRefreshing()
+                    self.tableView.mj_header.isHidden = false
+                    self.page += 1
+                } else {
+                    self.page = 1
+                    self.visitorData = result.data
+                    self.tableView.mj_header.endRefreshing()
+                    self.tableView.mj_footer.isHidden = false
+                }
+                //            if newPage == result.max_page {
                 self.tableView.mj_footer.endRefreshingWithNoMoreData()
-            } else {
-                self.tableView.mj_footer.resetNoMoreData()
-            }
-            self.tableView.reloadData()
-        }, errorHandle: { (error) in
-            if isMore {
-                self.tableView.mj_footer.endRefreshing()
-                self.tableView.mj_header.isHidden = false
-            } else {
-                self.tableView.mj_header.endRefreshing()
-                self.tableView.mj_footer.isHidden = false
-            }
-            MBProgressHUD.showError(error ?? "获取失败")
-        })
+                //            } else {
+                //                self.tableView.mj_footer.resetNoMoreData()
+                //            }
+                self.tableView.reloadData()
+                self.oldVisitorData = self.visitorData
+            }, errorHandle: { (error) in
+                if isMore {
+                    self.tableView.mj_footer.endRefreshing()
+                    self.tableView.mj_header.isHidden = false
+                } else {
+                    self.tableView.mj_header.endRefreshing()
+                    self.tableView.mj_footer.isHidden = false
+                }
+                MBProgressHUD.showError(error ?? "获取失败")
+            })
+        }
     }
     
     /// 获取项目列表
@@ -266,7 +296,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     private func projectList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.projectList("", customerId, newPage, 10), t: ProjectListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.projectList(searchBar.text ?? "", customerId, newPage, 10), t: ProjectListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -302,7 +332,28 @@ class NewlyBuildVisitSeleController: UIViewController {
     // MARK: - 按钮点击
     /// 点击导航栏右按钮
     @objc private func rightClick() {
-        
+        switch type {
+        case .customer:
+            let ejectView = AddCustomerEjectView()
+            ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
+                self?.customerListStatistics(isMore: false)
+            }
+            ejectView.show()
+        case .visitor(let id):
+            let ejectView = AddVisitorEjectView()
+            ejectView.customerId = id
+            ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
+                self?.customerContactList(isMore: false)
+            }
+            ejectView.show()
+        case .project(let id):
+            let ejectView = AddProjectEjectView()
+            ejectView.customerId = id
+            ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
+                self?.projectList(isMore: false)
+            }
+            ejectView.show()
+        }
     }
     
     /// 点击确认
@@ -356,16 +407,17 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
         if isMultiple { // 可多选 (必定是选择拜访人)
-            var isSele = false // 是否已经选择过
-            for index in seleIndexArray {
-                if row == index {
-                    isSele = true
+            var seleIndex = -1 // 是否已经选择过
+            for index in 0..<seleIndexArray.count {
+                let seleRow = seleIndexArray[index]
+                if row == seleRow {
+                    seleIndex = index
                     break
                 }
             }
-            if isSele {
-                seleArray.remove(at: row)
-                seleIndexArray.remove(at: row)
+            if seleIndex != -1 {
+                seleArray.remove(at: seleIndex)
+                seleIndexArray.remove(at: seleIndex)
             } else {
                 let id = visitorData[row].id
                 let str = visitorData[row].name ?? ""
@@ -404,5 +456,17 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
             }
         }
         determineHandle()
+    }
+}
+
+extension NewlyBuildVisitSeleController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        inputCout += 1
+        let count = NSNumber(value: inputCout)
+        self.perform(#selector(distinguishSearch(number:)), with: count, afterDelay: 0.3)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        UIApplication.shared.keyWindow?.endEditing(true)
     }
 }

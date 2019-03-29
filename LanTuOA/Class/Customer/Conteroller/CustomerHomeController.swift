@@ -14,6 +14,8 @@ class CustomerHomeController: UIViewController {
 
     /// 主要tableview
     private var tableView: UITableView!
+    /// 搜索框
+    private var searchBar: UISearchBar!
     
     /// 数据
     private var data = [CustomerListStatisticsData]()
@@ -21,6 +23,9 @@ class CustomerHomeController: UIViewController {
     private var page = 1
     /// 是否还有下一页数据
     private var isUpdate = true
+    /// 记录输入次数  -> 用于减少计算次数
+    private var inputCout = 0
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,16 +39,46 @@ class CustomerHomeController: UIViewController {
     private func setNav() {
         navigationItem.title = "客户"
         let nav = navigationController as! MainNavigationController
-        nav.setNavConfigure(type: .dark, color: UIColor(hex: "#2E4695"), isShadow: false)
         nav.backBtn.isHidden = false
+        nav.setNavConfigure(type: .dark, color: UIColor(hex: "#2E4695"), isShadow: false)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新增客户",
+                                                            titleColor: .white,
+                                                            titleFont: UIFont.medium(size: 15),
+                                                            titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
+                                                            target: self,
+                                                            action: #selector(rightClick))
     }
     
     /// 初始化子控件
     private func initSubViews() {
         
+        let barView = UIView().taxi.adhere(toSuperView: view) // bar背景view
+            .taxi.layout { (make) in
+                make.top.left.right.equalTo(view)
+            }
+            .taxi.config { (view) in
+                view.backgroundColor = .white
+        }
+        
+        searchBar = UISearchBar().taxi.adhere(toSuperView: barView)
+            .taxi.layout(snapKitMaker: { (make) in
+                make.bottom.equalTo(barView)
+                make.top.left.equalTo(barView).offset(10)
+                make.right.equalTo(barView).offset(-15)
+            })
+            .taxi.config({ (searchBar) in
+                searchBar.sizeToFit()
+                searchBar.delegate = self
+                searchBar.backgroundColor = .clear
+                searchBar.searchBarStyle = .minimal
+                searchBar.placeholder = "项目名称/客户名称"
+                searchBar.returnKeyType = .done
+            })
+        
         tableView = UITableView().taxi.adhere(toSuperView: view) // 主要tableview
             .taxi.layout(snapKitMaker: { (make) in
-                make.edges.equalToSuperview()
+                make.left.right.bottom.equalToSuperview()
+                make.top.equalTo(barView.snp.bottom)
             })
             .taxi.config({ (tableView) in
                 tableView.delegate = self
@@ -63,6 +98,15 @@ class CustomerHomeController: UIViewController {
             })
     }
     
+    /// 区分出搜索的内容
+    ///
+    /// - Parameter number: 记录的输入次数
+    @objc private func distinguishSearch(number: NSNumber) {
+        if Int(truncating: number) == inputCout { // 次数相同 说明停止输入
+            customerListStatistics(isMore: false)
+        }
+    }
+    
     // MARK: - Api
     /// 获取项目统计列表
     ///
@@ -70,7 +114,7 @@ class CustomerHomeController: UIViewController {
     private func customerListStatistics(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.customerListStatistics("", 1, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerListStatistics("", 0, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -102,6 +146,16 @@ class CustomerHomeController: UIViewController {
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }
+    
+    // MARK: - 按钮点击
+    /// 点击右按钮
+    @objc private func rightClick() {
+        let ejectView = AddCustomerEjectView()
+        ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
+            self?.customerListStatistics(isMore: false)
+        }
+        ejectView.show()
+    }
 }
 
 extension CustomerHomeController: UITableViewDelegate, UITableViewDataSource {
@@ -111,6 +165,10 @@ extension CustomerHomeController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerHomeCell", for: indexPath) as! CustomerHomeCell
+        cell.editBlock = { [weak self] in
+            let vc = CustomerEditController()
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
         cell.data = data[indexPath.row]
         return cell
     }
@@ -120,5 +178,17 @@ extension CustomerHomeController: UITableViewDelegate, UITableViewDataSource {
         vc.customerId = data[indexPath.row].id
         vc.customerName = data[indexPath.row].name ?? ""
         navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension CustomerHomeController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        inputCout += 1
+        let count = NSNumber(value: inputCout)
+        self.perform(#selector(distinguishSearch(number:)), with: count, afterDelay: 0.3)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        UIApplication.shared.keyWindow?.endEditing(true)
     }
 }

@@ -39,15 +39,18 @@ class ProjectListCell: UITableViewCell {
                 moonVisitLabel.attributedText = moonVisit
                 
                 
-                if data.isLock == 1 { //TODO:未知1是不是锁定  暂定为锁定
+                if data.isLock == 1 { //TODO: 未知1是不是锁定  暂定为锁定
                     followView.backgroundColor = UIColor(hex: "#FF7744")
                     stateConstraint.deactivate()
                     ascriptionConstraint.activate()
-                    ascriptionLabel.text = "参与人员"
+                    ascriptionLabel.text = "后端没有给数据"
+                    ascription.text = "参与人员："
                 } else {
                     followView.backgroundColor = UIColor(hex: "#5FB9A1")
                     stateConstraint.activate()
                     ascriptionConstraint.deactivate()
+                    ascriptionLabel.text = ""
+                    ascription.text = ""
                 }
             }
         }
@@ -69,6 +72,8 @@ class ProjectListCell: UITableViewCell {
     private var timeLabel: UILabel!
     /// 状态
     private var stateLabel: UILabel!
+    /// "锁定人："
+    private var ascription: UILabel!
     /// 锁定人
     private var ascriptionLabel: UILabel!
     /// 一周跟进人数
@@ -202,10 +207,9 @@ class ProjectListCell: UITableViewCell {
         setTitle(title: state, content: stateLabel, lastLabel: time, isLast: true)
         state.text = "最新拜访状态："
         
-        let ascription = UILabel().taxi.adhere(toSuperView: arrowView) // "锁定人"
+        ascription = UILabel().taxi.adhere(toSuperView: arrowView) // "锁定人"
         ascriptionLabel = UILabel().taxi.adhere(toSuperView: arrowView) // 锁定人
         setTitle(title: ascription, content: ascriptionLabel, lastLabel: state, isLast: true)
-        ascription.text = "参与人员："
         
         stateConstraint.deactivate()
         ascriptionConstraint.activate()
@@ -271,7 +275,7 @@ class ProjectListCell: UITableViewCell {
                 make.left.equalToSuperview().offset(15)
             })
             .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E5E5E5")
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
             })
         
         _ = UILabel().taxi.adhere(toSuperView: whiteView)

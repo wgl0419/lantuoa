@@ -81,7 +81,7 @@ class HomePageHeaderView: UIView {
                 make.height.equalTo(1)
             })
             .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E5E5E5")
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
             })
     }
     

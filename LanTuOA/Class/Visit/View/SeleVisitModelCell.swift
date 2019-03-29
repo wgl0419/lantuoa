@@ -38,7 +38,7 @@ class SeleVisitModelCell: UITableViewCell {
         contentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 内容
             .taxi.layout(snapKitMaker: { (make) in
                 make.edges.equalToSuperview()
-                make.height.equalTo(56).priority(800)
+                make.height.equalTo(55).priority(800)
             })
             .taxi.config({ (label) in
                 label.textAlignment = .center

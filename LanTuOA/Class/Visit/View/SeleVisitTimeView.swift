@@ -132,8 +132,10 @@ class SeleVisitTimeView: UIView {
             })
             .taxi.config({ (scrollView) in
                 scrollView.bounces = false
+                scrollView.delegate = self
                 scrollView.isPagingEnabled = true
                 scrollView.backgroundColor = .white
+                scrollView.showsHorizontalScrollIndicator = false
             })
         
         calendar = FSCalendar().taxi.adhere(toSuperView: scrollView) // 日历
@@ -143,16 +145,18 @@ class SeleVisitTimeView: UIView {
                 make.bottom.equalToSuperview().offset(-5)
             })
             .taxi.config({ (calendar) in
-                calendar.select(Date())
                 calendar.dataSource = self
                 calendar.delegate = self
                 calendar.backgroundColor = UIColor.white
                 let locale = Locale(identifier: "zh_CN")
                 calendar.locale = locale
                 calendar.headerHeight = 0
-                calendar.appearance.borderRadius = 0
+                calendar.appearance.borderRadius = 1
+                calendar.appearance.weekdayTextColor = blackColor
                 calendar.appearance.caseOptions = .weekdayUsesSingleUpperCase
+                calendar.select(Date())
             })
+        
         
         datePicker = UIDatePicker().taxi.adhere(toSuperView: scrollView) // 时间选择器
             .taxi.layout(snapKitMaker: { (make) in
@@ -187,11 +191,10 @@ class SeleVisitTimeView: UIView {
                 make.width.equalToSuperview().dividedBy(2).priority(800)
             })
             .taxi.config({ (btn) in
-                btn.isEnabled = false
                 btn.backgroundColor = .white
                 btn.setTitle("确定", for: .normal)
                 btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-                btn.setTitleColor(UIColor(hex: "#999999"), for: .normal)
+                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
                 btn.addTarget(self, action: #selector(determineClick), for: .touchUpInside)
             })
         
@@ -202,7 +205,7 @@ class SeleVisitTimeView: UIView {
                 make.left.right.equalToSuperview()
             })
             .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E5E5E5")
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
             })
         
         _ = UIView().taxi.adhere(toSuperView: grayView) // 分割线
@@ -212,7 +215,7 @@ class SeleVisitTimeView: UIView {
                 make.top.bottom.left.equalTo(determineBtn)
             })
             .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E5E5E5")
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
             })
     }
     
@@ -226,26 +229,28 @@ class SeleVisitTimeView: UIView {
     /// 点击 “年月日”
     @objc private func dayClick() {
         if timeConstraint.isActive {
-            dayBtn.isSelected = true
-            dayConstraint.activate()
-            timeBtn.isSelected = false
-            timeConstraint.deactivate()
-            determineBtn.isEnabled = false
-            determineBtn.setTitleColor(UIColor(hex: "#999999"), for: .normal)
-            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            UIView.animate(withDuration: 0.25) {
+                self.dayBtn.isSelected = true
+                self.dayConstraint.activate()
+                self.timeBtn.isSelected = false
+                self.timeConstraint.deactivate()
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+                self.layoutIfNeeded()
+            }
         }
     }
     
     /// 点击“时分”
     @objc private func timeClick() {
         if dayConstraint.isActive {
-            timeBtn.isSelected = true
-            timeConstraint.activate()
-            dayBtn.isSelected = false
-            dayConstraint.deactivate()
-            determineBtn.isEnabled = true
-            determineBtn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
-            scrollView.setContentOffset(CGPoint(x: scrollView.width, y: 0), animated: true)
+            UIView.animate(withDuration: 0.25) {
+                self.timeBtn.isSelected = true
+                self.timeConstraint.activate()
+                self.dayBtn.isSelected = false
+                self.dayConstraint.deactivate()
+                self.scrollView.setContentOffset(CGPoint(x: self.scrollView.width, y: 0), animated: true)
+                self.layoutIfNeeded()
+            }
         }
     }
     
@@ -273,5 +278,38 @@ extension SeleVisitTimeView: FSCalendarDataSource, FSCalendarDelegate {
         }
         let dayStr = date.customTimeStr(customStr: "yyyy-MM-dd")
         dayBtn.setTitle(dayStr, for: .normal)
+    }
+    
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
+    
+}
+
+extension SeleVisitTimeView: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { // 监听快速滑动，惯性慢慢停止
+        let scrollToScrollStop = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+        if scrollToScrollStop {
+            let page = Int(scrollView.contentOffset.x / scrollView.width)
+            if page == 0 {
+                dayClick()
+            } else {
+                timeClick()
+            }
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { // 手指控制直接停止
+        if !decelerate {
+            let dragToDragStop = scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+            if dragToDragStop {
+                let page = Int(scrollView.contentOffset.x / scrollView.width)
+                if page == 0 {
+                    dayClick()
+                } else {
+                    timeClick()
+                }
+            }
+        }
     }
 }

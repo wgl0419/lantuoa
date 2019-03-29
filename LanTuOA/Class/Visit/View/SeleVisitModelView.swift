@@ -19,15 +19,17 @@ class SeleVisitModelView: UIView {
     private var tableView: UITableView!
     
     /// 内容数组
-    private let contentStrArray = ["面谈", "电话", "网络聊天", "取消"]
+    private var contentStrArray = [String]()
+    /// 标题
+    private var titleStr = ""
     
-    override init(frame: CGRect) {
-        super.init(frame: ScreenBounds)
+    
+    convenience init(title: String, content: [String]) {
+        self.init(frame: ScreenBounds)
+        titleStr = title
+        contentStrArray = content
+        contentStrArray.append("取消")
         initSubViews()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     // MAKR: - 自定义公有方法
@@ -69,7 +71,7 @@ class SeleVisitModelView: UIView {
         
         tableView = UITableView().taxi.adhere(toSuperView: grayView) // 主要显示tableview
             .taxi.layout(snapKitMaker: { (make) in
-                make.height.equalTo(4 * 56 + 1)
+                make.height.equalTo(275) // 默认5行 -> 55 * 5
                 make.top.equalToSuperview().offset(50)
                 make.bottom.left.right.equalToSuperview()
             })
@@ -82,13 +84,19 @@ class SeleVisitModelView: UIView {
                 tableView.register(SeleVisitModelCell.self, forCellReuseIdentifier: "SeleVisitModelCell")
             })
         
+        layoutIfNeeded()
+        let contentHeight = tableView.contentSize.height
+        tableView.snp.updateConstraints { (make) in
+            make.height.equalTo(contentHeight > 385 ? 400 : contentHeight)
+        }
+        
         _ = UILabel().taxi.adhere(toSuperView: grayView) // "选择拜访方式"
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.left.right.equalToSuperview()
                 make.height.equalTo(50)
             })
             .taxi.config({ (label) in
-                label.text = "选择拜访方式"
+                label.text = titleStr
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.medium(size: 16)
@@ -104,14 +112,14 @@ extension SeleVisitModelView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SeleVisitModelCell", for: indexPath) as! SeleVisitModelCell
         let row = indexPath.row
-        cell.data = (contentStrArray[row], row == 3 ? UIColor(hex: "#6B83D1") : blackColor)
+        cell.data = (contentStrArray[row], row == contentStrArray.count - 1 ? UIColor(hex: "#6B83D1") : blackColor)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
-        if row != 3 {
+        if row != contentStrArray.count - 1 {
             if didBlock != nil {
                 didBlock!(row)
             }

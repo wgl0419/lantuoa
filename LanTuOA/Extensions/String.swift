@@ -118,4 +118,16 @@ extension String {
             else { return nil }
         return from ..< to
     }
+    
+    /// 获取时间戳(秒级)
+    ///
+    /// - Parameter customStr: 时间格式
+    /// - Returns: 时间戳(秒级)
+    func getTimeStamp(customStr: String) -> Int {
+        let format = DateFormatter()
+        format.dateFormat = customStr
+        let timeDate = format.date(from: self)
+        let timeStamp = Int(timeDate?.timeIntervalSince1970 ?? 0)
+        return timeStamp
+    }
 }

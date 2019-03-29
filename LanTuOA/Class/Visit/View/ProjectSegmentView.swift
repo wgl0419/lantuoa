@@ -59,7 +59,7 @@ class ProjectSegmentView: UIView {
                     btn.titleLabel?.font = UIFont.medium(size: 12)
                     btn.layer.borderColor = UIColor(hex: "#D5D5D5").cgColor
                     btn.setTitleColor(UIColor(hex: "#787E82"), for: .normal)
-                    btn.addTarget(self, action: #selector(btnClick(but:)), for: .touchUpInside)
+                    btn.addTarget(self, action: #selector(btnClick(btn:)), for: .touchUpInside)
             }
             lastBtn = btn
             /**************** 分割线 ****************/
@@ -100,9 +100,9 @@ class ProjectSegmentView: UIView {
     
     // MARK: - 按钮点击
     /// 点击按钮
-    @objc private func btnClick(but: UIButton) {
-        btnChange(btn: but)
-        delegate?.changeScrollView(page: but.tag - 100)
+    @objc private func btnClick(btn: UIButton) {
+        btnChange(btn: btn)
+        delegate?.changeScrollView(page: btn.tag - 100)
     }
 }
 

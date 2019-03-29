@@ -10,6 +10,14 @@ import UIKit
 
 class MeHomeController: UIViewController {
 
+    /// 显示数据的tableviwe
+    private var tableView: UITableView!
+    
+    /// 标题
+    private let titleArray = [["", "我的审批", "工作申请", "离职申请", "工作交接"], ["部门管理", "角色管理"], ["设置"]]
+    /// 图标
+//    private let
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setNav()
@@ -26,7 +34,77 @@ class MeHomeController: UIViewController {
     
     /// 初始化子控件
     private func initSubViews() {
-        
+        tableView = UITableView().taxi.adhere(toSuperView: view) // 主要显示数据的tableview
+            .taxi.layout(snapKitMaker: { (make) in
+                make.edges.equalToSuperview()
+            })
+            .taxi.config({ (tableView) in
+                tableView.delegate = self
+                tableView.dataSource = self
+                tableView.estimatedRowHeight = 45
+                tableView.tableFooterView = UIView()
+                tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                tableView.register(MeHomeCell.self, forCellReuseIdentifier: "MeHomeCell")
+                tableView.register(MeHomeHeaderCell.self, forCellReuseIdentifier: "MeHomeHeaderCell")
+            })
     }
+}
 
+extension MeHomeController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return titleArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return titleArray[section].count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let row = indexPath.row
+        let section = indexPath.section
+        if row == 0 && section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MeHomeHeaderCell", for: indexPath) as! MeHomeHeaderCell
+            cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MeHomeCell", for: indexPath) as! MeHomeCell
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
+            cell.data = (titleArray[section][row], titleArray[section][row], true)
+            cell.accessoryType = .disclosureIndicator
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section != 0 {
+            return 10
+        } else {
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let row = indexPath.row
+        let section = indexPath.section
+        var vc: UIViewController!
+        if section == 0 {
+            switch row {
+            case 1:
+                vc = ToExamineController()
+            case 2:
+                vc = ApplyController()
+            case 3:
+                return
+            case 4:
+                vc = JobHandoverController()
+            default: break
+            }
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        if section == 2 {
+            let vc = SetUpController()
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }

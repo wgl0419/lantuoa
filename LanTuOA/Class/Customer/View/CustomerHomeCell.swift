@@ -20,6 +20,13 @@ class CustomerHomeCell: UITableViewCell {
                 titleAttriMuStr.changeFont(str: industryStr, font: UIFont.medium(size: 12))
                 titleLabel.attributedText = titleAttriMuStr
                 
+                let customerTypeStr = data.type == 1 ? "公司" : data.type == 2 ? "普通" : "开发中"
+                let width = customerTypeStr.getTextSize(font: UIFont.medium(size: 10), maxSize: CGSize(width: ScreenWidth, height: ScreenHeight)).width
+                customerTypeBtn.snp.updateConstraints { (make) in
+                    make.width.equalTo(width + 10)
+                }
+                customerTypeBtn.setTitle(customerTypeStr, for: .normal)
+                
                 let allAttriMuStr = setAttriMuStr(contentStr: "在线  \(data.onlineProjectNum)", highlightStr: "在线", highlightColor:  UIColor(hex: "#999999"))
                 allLabel.attributedText = allAttriMuStr
                 
@@ -67,6 +74,8 @@ class CustomerHomeCell: UITableViewCell {
     private var unlockLabel: UILabel!
     /// 标题
     private var titleLabel: UILabel!
+    /// 客户类型
+    private var customerTypeBtn : UIButton!
     /// 最新拜访人
     private var visitLabel: UILabel!
     /// 最新拜访时间
@@ -130,9 +139,50 @@ class CustomerHomeCell: UITableViewCell {
                 make.right.equalToSuperview().offset(-70)
             })
             .taxi.config({ (label) in
-                label.text = "南宁出租车后车门广告"
-                label.textColor = blackColor
+                label.text = " "
+                label.textColor = UIColor(hex: "#2E4695")
                 label.font = UIFont.boldSystemFont(ofSize: 16)
+            })
+        
+        _ = UIView().taxi.adhere(toSuperView: arrowView) // 蓝色线条
+            .taxi.layout(snapKitMaker: { (make) in
+                make.width.equalTo(2)
+                make.height.equalTo(15)
+                make.left.equalToSuperview()
+                make.centerY.equalTo(titleLabel)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#2E4695")
+            })
+        
+        let customerType = UILabel().taxi.adhere(toSuperView: arrowView) // “客户类型”
+            .taxi.layout { (make) in
+                make.left.equalToSuperview().offset(15)
+                make.top.equalTo(titleLabel.snp.bottom).offset(5)
+        }
+            .taxi.config { (label) in
+                label.text = "客户类型："
+                label.font = UIFont.medium(size: 12)
+                label.textColor = UIColor(hex: "#999999")
+        }
+        
+        customerTypeBtn = UIButton().taxi.adhere(toSuperView: arrowView) // 客户类型按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.width.equalTo(33)
+                make.height.equalTo(18)
+                make.centerY.equalTo(customerType)
+                make.left.equalTo(customerType.snp.right)
+            })
+            .taxi.config({ (btn) in
+                btn.isEnabled = false
+                btn.layer.borderWidth = 1
+                btn.layer.cornerRadius = 4
+                btn.layer.masksToBounds = true
+                btn.layer.borderColor = UIColor(hex: "#5FB9A1").cgColor
+                
+                btn.backgroundColor = UIColor(hex: "#E4F0ED")
+                btn.titleLabel?.font = UIFont.medium(size: 10)
+                btn.setTitleColor(UIColor(hex: "#2F9B7F"), for: .normal)
             })
         
         _ = UIImageView().taxi.adhere(toSuperView: arrowView) // 箭头
@@ -164,7 +214,7 @@ class CustomerHomeCell: UITableViewCell {
         let project = UILabel().taxi.adhere(toSuperView: arrowView) // "项目"
             .taxi.layout { (make) in
                 make.left.equalToSuperview().offset(15)
-                make.top.equalTo(titleLabel.snp.bottom).offset(5)
+                make.top.equalTo(customerType.snp.bottom).offset(5)
         }
             .taxi.config { (label) in
                 label.text = "项目："
@@ -285,7 +335,7 @@ class CustomerHomeCell: UITableViewCell {
                 make.left.equalToSuperview().offset(15)
             })
             .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E5E5E5")
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
             })
         
         _ = UILabel().taxi.adhere(toSuperView: whiteView)

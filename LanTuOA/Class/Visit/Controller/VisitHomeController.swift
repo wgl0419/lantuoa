@@ -14,6 +14,8 @@ class VisitHomeController: UIViewController {
 
     /// tableview
     private var tableView: UITableView!
+    /// 筛选按钮
+    private var screenBtn: UIButton!
     /// 选择器
     private var segmentView: ProjectSegmentView!
     /// 搜索框
@@ -26,6 +28,12 @@ class VisitHomeController: UIViewController {
     private var inputCout = 0
     /// 页码
     private var page = 1
+    /// 选择类型
+    private var visitType = 0
+    /// 开始时间戳
+    private var startTimeStamp: Int!
+    /// 结束时间戳
+    private var endTimeStamp: Int!
     
     
     override func viewDidLoad() {
@@ -52,14 +60,15 @@ class VisitHomeController: UIViewController {
                 make.top.left.right.equalTo(view)
         }
             .taxi.config { (view) in
-                
+                view.backgroundColor = .white
         }
         
         searchBar = UISearchBar().taxi.adhere(toSuperView: barView)
             .taxi.layout(snapKitMaker: { (make) in
-                make.bottom.equalTo(barView)
-                make.top.left.equalTo(barView).offset(10)
-                make.right.equalTo(barView).offset(-15)
+                make.top.equalToSuperview().offset(5)
+                make.left.equalTo(barView).offset(10)
+                make.bottom.equalToSuperview().offset(-5)
+                make.right.equalTo(barView).offset(-55)
             })
             .taxi.config({ (searchBar) in
                 searchBar.sizeToFit()
@@ -70,22 +79,24 @@ class VisitHomeController: UIViewController {
                 searchBar.returnKeyType = .done
             })
         
-        
-        segmentView = ProjectSegmentView(title: ["全部", "我发起的", "我接手的", "工作组"])
-            .taxi.adhere(toSuperView: view)
+        screenBtn = UIButton().taxi.adhere(toSuperView: barView) // 筛选按钮
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(barView.snp.bottom)
-                make.left.right.equalTo(view)
-                make.height.equalTo(50)
+                make.bottom.right.equalToSuperview()
+                make.top.equalToSuperview().offset(5)
+                make.width.equalTo(barView.snp.height)
             })
-            .taxi.config({ (segmentView) in
-                segmentView.delegate = self
-                segmentView.changeBtn(page: 0)
+            .taxi.config({ (btn) in
+                btn.setTitle("筛选", for: .normal)
+                btn.setTitleColor(blackColor, for: .normal)
+                btn.titleLabel?.font = UIFont.medium(size: 10)
+                btn.setImage(UIImage(named: "screen"), for: .normal)
+                btn.addTarget(self, action: #selector(screenClick), for: .touchUpInside)
             })
+        screenBtn.setSpacing()
         
         tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(segmentView.snp.bottom)
+                make.top.equalTo(barView.snp.bottom)
                 make.left.right.bottom.equalTo(view)
             })
             .taxi.config({ (tableView) in
@@ -130,7 +141,7 @@ class VisitHomeController: UIViewController {
     /// - Parameter number: 记录的输入次数
     @objc private func distinguishSearch(number: NSNumber) {
         if Int(truncating: number) == inputCout { // 次数相同 说明停止输入
-            
+            visitList(isMore: false)
         }
     }
     
@@ -141,7 +152,7 @@ class VisitHomeController: UIViewController {
     private func visitList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.visitList("", nil, nil, 2, newPage, 10), t: VisitListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.visitList(searchBar.text ?? "", nil, nil, 2, newPage, 10, nil, nil), t: VisitListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -178,7 +189,23 @@ class VisitHomeController: UIViewController {
     /// 填写拜访按钮
     @objc private func btnClick() {
         let vc = NewlyBuildVisitController()
+        vc.addBlock = { [weak self] in
+            self?.visitList(isMore: false)
+        }
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /// 点击筛选
+    @objc private func screenClick() {
+        let showView = VisitSeleTimeView()
+        showView.setDefault(start: startTimeStamp, end: endTimeStamp, sele: visitType)
+        showView.confirmBlock = { [weak self] (start, end, index) in
+            self?.startTimeStamp = start
+            self?.endTimeStamp = end
+            self?.visitType = index
+            // TODO: 调用接口
+        }
+        showView.show()
     }
 }
 
