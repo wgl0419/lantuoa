@@ -167,7 +167,7 @@ class AddProjectEjectView: UIView {
         let yOffset = endKeyboardRect.origin.y > inputMaxY ? 0 : endKeyboardRect.origin.y - inputMaxY
         UIView.animate(withDuration: TimeInterval(duration)) {
             self.grayView.snp.updateConstraints { (make) in
-                make.centerY.equalToSuperview().offset(yOffset == 0 ? 0 : yOffset + self.deviationHeight)
+                make.centerY.equalTo(self).offset(yOffset == 0 ? 0 : yOffset + self.deviationHeight)
                 self.deviationHeight = yOffset
             }
         }
@@ -222,7 +222,6 @@ extension AddProjectEjectView: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerTextViewCell", for: indexPath) as! CustomerTextViewCell
         cell.data = (titleArray[row], placeholderArray[row])
         cell.tableView = tableView
-        cell.indexPath = indexPath
         if row == 1 { // 地址可输入3行
             cell.limitRow = 3
         }

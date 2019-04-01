@@ -1,26 +1,42 @@
 //
-//  AddCustomerEjectView.swift
+//  EditProjectEjectView.swift
 //  LanTuOA
 //
-//  Created by HYH on 2019/3/22.
+//  Created by HYH on 2019/4/1.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  新增客户  弹出视图
+//  编辑项目  弹出视图
 
 import UIKit
 import MBProgressHUD
 import IQKeyboardManagerSwift
 
-class AddCustomerEjectView: UIView {
+class EditProjectEjectView: UIView {
     
-    /// 添加回调
-    var addBlock: (() -> ())?
-    /// 修改的数据
-    var modifyData: (String, [String])? {
+    /// 修改成功回调 (地址名称   管理人名称  管理人id)
+    var eidtBlock: ((String, String, Int) -> ())?
+    /// 跳转选择管理人回调
+    var pushBlock: (() -> ())?
+    /// 源数据 (项目数据  内容)
+    var projectData: ProjectListStatisticsData? {
         didSet {
-            if let data = modifyData {
-                titleLabel.text = data.0
-                seleStrArray = data.1
+            if let data = projectData {
+                projectId = data.id
+                manageId = data.manageUser
+                seleStrArray = [data.address ?? "", data.manageUserName ?? ""]
+                if seleStrArray[1] == "无" { // 去掉无数据
+                    seleStrArray[1] = ""
+                }
                 tableView.reloadData()
+            }
+        }
+    }
+    /// 管理人id
+    var manage: (Int, String)? {
+        didSet {
+            if let data = manage {
+                manageId = data.0
+                seleStrArray[1] = data.1
+                tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
             }
         }
     }
@@ -33,16 +49,19 @@ class AddCustomerEjectView: UIView {
     private var tableView: UITableView!
     /// 确认按钮
     private var confirmBtn: UIButton!
+    /// 项目id
+    private var projectId: Int!
+    /// 管理人id
+    private var manageId: Int!
+    
     
     
     /// 标题
-    var titleStr = "新增客户"
-    /// 标题
-    private let titleArray = ["客户名称", "客户类型", "所属行业", "公司地址", "公司全名"]
+    private let titleArray = ["项目地址", "项目管理人"]
     /// 提示
-    private let placeholderArray = ["请输入", "请选择", "请选择", "请输入", "请输入"]
+    private let placeholderArray = ["请输入", "请选择"]
     /// 选中内容
-    private var seleStrArray = ["", "", "", "", ""]
+    private var seleStrArray = ["", ""]
     /// 记录当前偏移的高度
     private var deviationHeight: CGFloat = 0
     /// 客户类型
@@ -109,7 +128,7 @@ class AddCustomerEjectView: UIView {
                 make.top.left.right.equalToSuperview()
             })
             .taxi.config({ (label) in
-                label.text = titleStr
+                label.text = "修改项目信息"
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
@@ -190,49 +209,21 @@ class AddCustomerEjectView: UIView {
                 self.deviationHeight = yOffset
             }
         }
-        
     }
     
     // MARK: - Api
-    /// 新增客户
-    private func customerSave() {
+    /// 编辑客户
+    private func projectUpdate() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.customerSave(seleStrArray[0], seleStrArray[4], seleStrArray[3], customerType, customerIndustryId), t: LoginModel.self, successHandle: { (result) in
-            MBProgressHUD.showSuccess("新增客户成功")
-            if self.addBlock != nil {
-                self.addBlock!()
+        _ = APIService.shared.getData(.projectUpdate(nil, projectId, manageId, nil, seleStrArray[0]), t: LoginModel.self, successHandle: { (result) in
+            if self.eidtBlock != nil {
+                self.eidtBlock!(self.seleStrArray[0], self.seleStrArray[1], self.projectId)
             }
+            MBProgressHUD.dismiss()
             self.hidden()
         }, errorHandle: { (error) in
-            MBProgressHUD.showError(error ?? "新增客户失败")
+            MBProgressHUD.showError(error ?? "")
         })
-    }
-    
-    /// 获取行业列表
-    private func customerIndustryList() {
-        if customerIndustryData.count == 0 {
-            MBProgressHUD.showWait("")
-            _ = APIService.shared.getData(.customerIndustryList(), t: CustomerIndustryListModel.self, successHandle: { (result) in
-                MBProgressHUD.dismiss()
-                self.customerIndustryData = result.data
-                self.customerIndustryList()
-            }, errorHandle: { (error) in
-                MBProgressHUD.showError(error ?? "获取行业列表失败")
-            })
-        } else {
-            var contentStrArray = [String]()
-            for model in customerIndustryData {
-                contentStrArray.append(model.name ?? "")
-            }
-            let view = SeleVisitModelView(title: "选择行业类型", content: contentStrArray)
-            view.didBlock = { [weak self] (seleIndex) in
-                self?.seleStrArray[2] = contentStrArray[seleIndex]
-                self?.customerIndustryId = self?.customerIndustryData[seleIndex].id ?? 0
-                self?.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
-            }
-            view.show()
-        }
-        
     }
     
     // MARK: - 按钮点击
@@ -251,14 +242,14 @@ class AddCustomerEjectView: UIView {
             }
         }
         if isCan {
-            customerSave()
+            projectUpdate()
         } else {
             MBProgressHUD.showError("请先完成内容的输入")
         }
     }
 }
 
-extension AddCustomerEjectView: UITableViewDelegate, UITableViewDataSource {
+extension EditProjectEjectView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return titleArray.count
     }
@@ -272,15 +263,12 @@ extension AddCustomerEjectView: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerTextViewCell", for: indexPath) as! CustomerTextViewCell
-            cell.data = (titleArray[row], placeholderArray[row])
-            cell.contentStr = seleStrArray[row]
+            cell.limitRow = 3 // 地址可输入3行
             cell.tableView = tableView
-            if row == 3 { // 地址可输入3行
-                cell.limitRow = 3
-            } else if row == 4 { // 公司全称可输入2行
-                cell.limitRow = 2
-            }
+            cell.contentStr = seleStrArray[row]
+            cell.data = (titleArray[row], placeholderArray[row])
             cell.stopBlock = { [weak self] (str) in
+                self?.layoutIfNeeded()
                 self?.seleStrArray[row] = str
                 tableView.snp.updateConstraints { (make) in
                     make.height.equalTo(tableView.contentSize.height)
@@ -292,19 +280,11 @@ extension AddCustomerEjectView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         let row = indexPath.row
-        if row == 1 { // 客户类型
-            let contentArray = ["公司客户", "普通客户", "开发中客户"]
-            let view = SeleVisitModelView(title: "选择客户类型", content: contentArray)
-            view.didBlock = { [weak self] (seleIndex) in
-                self?.customerType = seleIndex + 1
-                self?.seleStrArray[1] = contentArray[seleIndex]
-                tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
+        if row == 1 { // 客户类型 -> 回调通知跳转选择管理人 控制器
+            if pushBlock != nil {
+                pushBlock!()
             }
-            view.show()
-        } else if row == 2 { // 所属行业
-            customerIndustryList()
         }
     }
 }

@@ -85,8 +85,8 @@ class NewlyBuildVisitSeleCell: UITableViewCell {
                 label.isHidden = true
                 label.numberOfLines = 0
                 label.textAlignment = .right
+                label.textColor = blackColor
                 label.lineBreakMode = .byCharWrapping
-                label.textColor = UIColor(hex: "#666666")
                 label.font = UIFont.boldSystemFont(ofSize: 16)
         }
         

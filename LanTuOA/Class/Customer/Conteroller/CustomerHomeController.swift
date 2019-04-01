@@ -114,7 +114,7 @@ class CustomerHomeController: UIViewController {
     private func customerListStatistics(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.customerListStatistics("", 0, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerListStatistics("", nil, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

@@ -175,6 +175,10 @@ extension ProjectHomeController: UITableViewDelegate, UITableViewDataSource {
         let vc = ProjectDetailsController()
         vc.lockState = 1
         vc.projectData = data[indexPath.row]
+        vc.editBlock = { [weak self] (model) in
+            self?.data[indexPath.row] = model
+            tableView.reloadRows(at: [indexPath], with: .fade)
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
 }

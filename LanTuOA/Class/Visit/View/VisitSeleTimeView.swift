@@ -289,13 +289,13 @@ class VisitSeleTimeView: UIView {
     @objc private func confirmClick() {
         if confirmBlock != nil {
             var startTimeStamp: Int! // 开始时间戳
-            let startStr = startBtn.titleLabel?.text ?? ""
+            let startStr = startBtn.title(for: .normal) ?? ""
             if startStr.count > 0 {
                 startTimeStamp = startStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm")
             }
             
             var endTimeStamp: Int! // 结束时间戳
-            let endStr = endBtn.titleLabel?.text ?? ""
+            let endStr = endBtn.title(for: .normal) ?? ""
             if endStr.count > 0 {
                 endTimeStamp = endStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm")
             }

@@ -152,7 +152,7 @@ class VisitHomeController: UIViewController {
     private func visitList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.visitList(searchBar.text ?? "", nil, nil, 2, newPage, 10, nil, nil), t: VisitListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.visitList(searchBar.text ?? "", startTimeStamp, endTimeStamp, visitType + 1, newPage, 10, nil, nil), t: VisitListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -204,6 +204,7 @@ class VisitHomeController: UIViewController {
             self?.endTimeStamp = end
             self?.visitType = index
             // TODO: 调用接口
+            self?.visitList(isMore: false)
         }
         showView.show()
     }

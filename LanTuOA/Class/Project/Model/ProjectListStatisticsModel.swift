@@ -44,4 +44,5 @@ struct ProjectListStatisticsData: HandyJSON {
     var isLock: Int = 0
     var customerName: String?
     var weekVisitNum: Int = 0
+    var manageUserName: String?
 }

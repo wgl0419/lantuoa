@@ -16,17 +16,20 @@ class ProjectDetailsHeaderView: UIView {
                 projectNameLabel.text = projectData.name
                 customerNameLabel.text = projectData.customerName
                 addressLabel.text = projectData.address
-                manageLabel.text = "后端未给数据"
-                if type == 0 {
+                manageLabel.text = projectData.manageUserName
+                if type == 2 {
                     lockImageView.image = UIImage()
                     lockLabel.text = ""
                 } else {
                     lockImageView.image = projectData.isLock == 1 ? UIImage(named: "project_lock") : UIImage(named: "project_unlock")
+                    lockLabel.textColor = projectData.isLock == 1 ? UIColor(hex: "#2E4695") : UIColor(hex: "#999999")
                     lockLabel.text = projectData.isLock == 1 ? "已锁定" : "未锁定"
                 }
             }
         }
     }
+    /// 点击修改回调
+    var modifyBlock: (() -> ())?
     
     /// 项目名称
     private var projectNameLabel: UILabel!
@@ -104,38 +107,37 @@ class ProjectDetailsHeaderView: UIView {
                 view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
             })
         
-        if lockState != 2 { // 有锁定状态
-            lockImageView = UIImageView().taxi.adhere(toSuperView: self) // 锁定图标
-                .taxi.layout(snapKitMaker: { (make) in
-                    make.width.equalTo(18)
-                    make.height.equalTo(21)
-                    make.centerY.equalTo(projectNameLabel)
-                    make.right.equalToSuperview().offset(-27)
-                })
-
-            lockLabel = UILabel().taxi.adhere(toSuperView: self) // 锁定文本
-                .taxi.layout(snapKitMaker: { (make) in
-                    make.centerX.equalTo(lockImageView)
-                    make.top.equalTo(lockImageView.snp.bottom).offset(3)
-                })
-                .taxi.config({ (label) in
-                    label.font = UIFont.medium(size: 10)
-                    label.textColor = UIColor(hex: "#2E4695")
-                })
-
-            modifyBtn = UIButton().taxi.adhere(toSuperView: self) // 修改按钮
-                .taxi.layout(snapKitMaker: { (make) in
-                    make.top.equalTo(addressLabel.snp.bottom)
-                    make.right.equalToSuperview().offset(-5)
-                    make.width.equalTo(58)
-                })
-                .taxi.config({ (btn) in
-                    btn.setTitle("修改", for: .normal)
-                    btn.titleLabel?.font = UIFont.medium(size: 14)
-                    btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
-                    btn.addTarget(self, action: #selector(modifyClick), for: .touchUpInside)
-                })
-        }
+        lockImageView = UIImageView().taxi.adhere(toSuperView: self) // 锁定图标
+            .taxi.layout(snapKitMaker: { (make) in
+                make.width.equalTo(18)
+                make.height.equalTo(21)
+                make.centerY.equalTo(projectNameLabel)
+                make.right.equalToSuperview().offset(-27)
+            })
+        
+        lockLabel = UILabel().taxi.adhere(toSuperView: self) // 锁定文本
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerX.equalTo(lockImageView)
+                make.top.equalTo(lockImageView.snp.bottom).offset(3)
+            })
+            .taxi.config({ (label) in
+                label.font = UIFont.medium(size: 10)
+                label.textColor = UIColor(hex: "#2E4695")
+            })
+        
+        modifyBtn = UIButton().taxi.adhere(toSuperView: self) // 修改按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.right.equalToSuperview().offset(-5)
+                make.top.equalTo(manage.snp.bottom)
+                make.width.equalTo(58)
+            })
+            .taxi.config({ (btn) in
+                btn.setTitle(" 修改", for: .normal)
+                btn.titleLabel?.font = UIFont.medium(size: 14)
+                btn.setImage(UIImage(named: "edit"), for: .normal)
+                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+                btn.addTarget(self, action: #selector(modifyClick), for: .touchUpInside)
+            })
     }
     
     /// 设置标题和内容
@@ -173,6 +175,8 @@ class ProjectDetailsHeaderView: UIView {
     
     // MARK: - 按钮点击
     @objc private func modifyClick() {
-        
+        if modifyBlock != nil {
+            modifyBlock!()
+        }
     }
 }

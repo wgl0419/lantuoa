@@ -25,10 +25,30 @@ class CustomerTextViewCell: UITableViewCell {
         }
     }
     
+    /// 富文本数据(标题+提示文本)
+    var attriData: (NSMutableAttributedString, String)? {
+        didSet {
+            if let data = attriData {
+                titleLabel.attributedText = data.0
+                textView.placeHolderLabel?.text = data.1
+                textView.placeHolderLabel?.font = UIFont.medium(size: 14)
+                textView.placeHolderLabel?.textColor = UIColor(hex: "#CACACA")
+            }
+        }
+    }
+    /// 内容
+    var contentStr: String? {
+        didSet {
+            if let str = contentStr {
+                textView.text = str
+                textView.placeHolderLabel?.isHidden = str.count > 0
+                self.perform(#selector(textViewDidChange(_:)), with: textView, afterDelay: 0)
+            }
+        }
+    }
+    
     /// 父tableview
     var tableView: UITableView!
-    /// 位置
-    var indexPath: IndexPath!
     /// 限制的行数
     var limitRow: CGFloat = 1
     
@@ -63,13 +83,13 @@ class CustomerTextViewCell: UITableViewCell {
         
         self.layoutIfNeeded()
         let top = UITextView().textContainerInset.top
-        textView = UITextView().taxi.adhere(toSuperView: contentView) //输入框
+        textView = UITextView().taxi.adhere(toSuperView: contentView) // 输入框
             .taxi.layout(snapKitMaker: { (make) in
-                make.bottom.equalToSuperview()
                 make.left.equalToSuperview().offset(100)
                 make.right.equalToSuperview().offset(-30)
+                make.bottom.equalToSuperview().offset(-top)
                 make.top.equalToSuperview().offset(15 - top)
-                make.height.equalTo(titleLabel.height + top * 2).priority(800)
+                make.height.equalTo(titleLabel.height).priority(800)
             })
             .taxi.config({ (textView) in
                 textView.delegate = self

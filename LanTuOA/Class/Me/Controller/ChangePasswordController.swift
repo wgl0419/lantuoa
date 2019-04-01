@@ -137,7 +137,6 @@ extension ChangePasswordController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerTextViewCell", for: indexPath) as! CustomerTextViewCell
         cell.data = (titleArray[section][row], placeholderArray[section][row])
         cell.tableView = tableView
-        cell.indexPath = indexPath
         cell.stopBlock = { [weak self] (str) in
             self?.contentStrArray[section][row] = str
         }

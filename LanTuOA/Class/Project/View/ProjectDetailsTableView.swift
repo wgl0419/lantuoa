@@ -24,7 +24,9 @@ class ProjectDetailsTableView: UITableView {
     
     /// 滚动回调
     var scrollBlock: ((CGFloat) -> ())?
-    /// 锁定状态 （0：未锁定   1：锁定   ）
+    /// 添加回调 （参与人员 和 工作组）
+    var addBlock: (() -> ())?
+    /// 锁定状态 （0：未锁定   1：锁定）
     var lockState = 1
     
     /// cell类型
@@ -39,6 +41,8 @@ class ProjectDetailsTableView: UITableView {
     private var memberData = [ProjectMemberListData]()
     /// 拜访历史
     private var visitData = [VisitListData]()
+    /// 工作组
+    private var groupData = [WorkGroupListData]()
     /// 第一次加载
     private var isFirst = true
     
@@ -48,8 +52,10 @@ class ProjectDetailsTableView: UITableView {
             isFirst = false
             if cellStyle == .history {
                 visitList(isMore: false)
-            } else {
+            } else if cellStyle == .personnel {
                 projectMemberList()
+            } else {
+                workGroupList()
             }
         }
     }
@@ -68,12 +74,24 @@ class ProjectDetailsTableView: UITableView {
         delegate = self
         dataSource = self
         estimatedRowHeight = 50
+        separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        if cellStyle == .history || cellStyle == .workingGroup { // 添加底部安全区的白色背景 -> 防止出现尾视图在内容之上的问题
+            _ = UIView().taxi.adhere(toSuperView: self)
+                .taxi.layout(snapKitMaker: { (make) in
+                    make.left.right.bottom.equalToSuperview()
+                    make.height.equalTo(SafeH)
+                })
+                .taxi.config({ (view) in
+                    view.backgroundColor = .white
+                })
+        }
         contentInset = UIEdgeInsets(top: offsetY + 40, left: 0, bottom: 0, right: 0)
         setContentOffset(CGPoint(x: 0, y: -offsetY - 40), animated: false)
         setTableFooterView()
         
         register(ProjectDetailsPersonnelCell.self, forCellReuseIdentifier: "ProjectDetailsPersonnelCell")
         register(ProjectDetailsVisitCell.self, forCellReuseIdentifier: "ProjectDetailsVisitCell")
+        register(WrokHomeCell.self, forCellReuseIdentifier: "WrokHomeCell")
         
         
         mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
@@ -95,7 +113,7 @@ class ProjectDetailsTableView: UITableView {
     }
     
     /// 设置尾视图
-    @objc private func setTableFooterView() {
+    @objc func setTableFooterView() {
         self.layoutIfNeeded()
         let old = self.tableFooterView?.height ?? 0
         let footerHeight = ScreenHeight - NavigationH - self.contentSize.height - 40 - SafeH + old
@@ -164,11 +182,29 @@ class ProjectDetailsTableView: UITableView {
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }
+    
+    /// 获取项目工作组
+    private func workGroupList() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.workGroupList(1, 9999, projectId), t: WorkGroupListModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            self.setTableFooterView()
+        }, errorHandle: { (error) in
+            
+        })
+    }
+    
+    // MARK: - 按钮点击
+    @objc private func addClick() {
+        if addBlock != nil {
+            addBlock!()
+        }
+    }
 }
 
 extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cellStyle == .personnel ? memberData.count : cellStyle == .history ? visitData.count : visitData.count
+        return cellStyle == .personnel ? memberData.count : cellStyle == .history ? visitData.count : groupData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -178,21 +214,61 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             cell.lockState = lockState
             cell.data = memberData[row]
             return cell
-        } else {
+        } else if cellStyle == .history {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectDetailsVisitCell", for: indexPath) as! ProjectDetailsVisitCell
             cell.data = visitData[row]
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "WrokHomeCell", for: indexPath) as! WrokHomeCell
+            cell.data = groupData[row]
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 30
+        if cellStyle == .personnel && lockState == 1 || cellStyle == .workingGroup {
+            return 40
+        } else {
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 20))
-        view.backgroundColor = .red
-        return view
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 40))
+        _ = UIButton().taxi.adhere(toSuperView: footerView)
+            .taxi.layout(snapKitMaker: { (make) in
+                make.edges.equalToSuperview()
+            })
+            .taxi.config({ (btn) in
+                var str =  " 添加参与人员"
+                if cellStyle == .workingGroup {
+                    str = " 新增工作组"
+                }
+                btn.setTitle(str, for: .normal)
+                btn.titleLabel?.font = UIFont.medium(size: 14)
+                btn.setImage(UIImage(named: "add"), for: .normal)
+                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+                btn.addTarget(self, action: #selector(addClick), for: .touchUpInside)
+            })
+        
+        for index in 0..<2 { // 添加分割线
+            _ = UIView().taxi.adhere(toSuperView: footerView)
+                .taxi.layout(snapKitMaker: { (make) in
+                    make.height.equalTo(1)
+                    make.left.equalToSuperview().offset(15)
+                    make.right.equalToSuperview().offset(-15)
+                    if index == 0 {
+                        make.top.equalToSuperview()
+                    } else {
+                        make.bottom.equalToSuperview()
+                    }
+                })
+                .taxi.config({ (view) in
+                    view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+                })
+        }
+        
+        return footerView
     }
 }
 

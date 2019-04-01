@@ -46,7 +46,6 @@ class ProjectDetailsCollectionCell: UICollectionViewCell {
     // MARK: - 自定义初始化方法
     /// 初始化子控件
     private func initSubViews(style: ProjectDetailsTableView.CellStyle, offsetY: CGFloat, projectId: Int) {
-        let y = offsetY > 0 ? 0 : offsetY
         tableView = ProjectDetailsTableView(style: style, height: headerHeight, projectId: projectId) // 显示数据的tableview
             .taxi.adhere(toSuperView: contentView)
             .taxi.layout(snapKitMaker: { (make) in

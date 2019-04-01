@@ -192,6 +192,7 @@ class NewlyBuildVisitSeleController: UIViewController {
         if Int(truncating: number) == inputCout { // 次数相同 说明停止输入
             seleArray = []
             seleIndexArray = []
+            determineHandle()
             getData(isMore: false)
         }
     }

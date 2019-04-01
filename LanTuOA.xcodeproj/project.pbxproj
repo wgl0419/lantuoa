@@ -91,6 +91,10 @@
 		181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788532238E5F60015DC30 /* HomePageVisitCell.swift */; };
 		1830BE6322373C0D00ADC03A /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1830BE6222373C0D00ADC03A /* APIService.swift */; };
 		1830BE6522373C4200ADC03A /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1830BE6422373C4200ADC03A /* APIManager.swift */; };
+		183383012251B4650053F2BF /* WorkGroupListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183383002251B4650053F2BF /* WorkGroupListModel.swift */; };
+		183383032251E10C0053F2BF /* EditProjectEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183383022251E10C0053F2BF /* EditProjectEjectView.swift */; };
+		183383072251EF190053F2BF /* ProjectManageSeleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183383062251EF190053F2BF /* ProjectManageSeleController.swift */; };
+		183383092251F1270053F2BF /* UsersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183383082251F1270053F2BF /* UsersModel.swift */; };
 		1833DD3A2241D9F600730FB9 /* VisitListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833DD392241D9F600730FB9 /* VisitListModel.swift */; };
 		1833DD3C2241E8C800730FB9 /* ProjectDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833DD3B2241E8C800730FB9 /* ProjectDetailsController.swift */; };
 		1833DD3E2241F27700730FB9 /* ProjectDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833DD3D2241F27700730FB9 /* ProjectDetailsHeaderView.swift */; };
@@ -191,6 +195,10 @@
 		181788532238E5F60015DC30 /* HomePageVisitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageVisitCell.swift; sourceTree = "<group>"; };
 		1830BE6222373C0D00ADC03A /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		1830BE6422373C4200ADC03A /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		183383002251B4650053F2BF /* WorkGroupListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkGroupListModel.swift; sourceTree = "<group>"; };
+		183383022251E10C0053F2BF /* EditProjectEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectEjectView.swift; sourceTree = "<group>"; };
+		183383062251EF190053F2BF /* ProjectManageSeleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectManageSeleController.swift; sourceTree = "<group>"; };
+		183383082251F1270053F2BF /* UsersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersModel.swift; sourceTree = "<group>"; };
 		1833DD392241D9F600730FB9 /* VisitListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitListModel.swift; sourceTree = "<group>"; };
 		1833DD3B2241E8C800730FB9 /* ProjectDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsController.swift; sourceTree = "<group>"; };
 		1833DD3D2241F27700730FB9 /* ProjectDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsHeaderView.swift; sourceTree = "<group>"; };
@@ -571,6 +579,7 @@
 			children = (
 				181788492238ABA90015DC30 /* ProjectHomeController.swift */,
 				1833DD3B2241E8C800730FB9 /* ProjectDetailsController.swift */,
+				183383062251EF190053F2BF /* ProjectManageSeleController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -581,6 +590,8 @@
 				1801AE8F223F28C40027A5DB /* ProjectLlistStatisticsModel.swift */,
 				1811AA932240E30D0073A794 /* ProjectListStatisticsModel.swift */,
 				1802335B2244710B0064A50E /* ProjectMemberListModel.swift */,
+				183383002251B4650053F2BF /* WorkGroupListModel.swift */,
+				183383082251F1270053F2BF /* UsersModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -597,6 +608,7 @@
 				1806FBDE22436E06005A4A77 /* ProjectDetailsCollectionCell.swift */,
 				1802335F2244900D0064A50E /* ProjectDetailsVisitCell.swift */,
 				180115362248CFD000EA551F /* AddProjectEjectView.swift */,
+				183383022251E10C0053F2BF /* EditProjectEjectView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -840,6 +852,7 @@
 				1810EC75222F5D4100CF6488 /* Array.swift in Sources */,
 				1810EC78222F5D4100CF6488 /* UITabBar.swift in Sources */,
 				1810EC76222F5D4100CF6488 /* NamespaceWrappable.swift in Sources */,
+				183383012251B4650053F2BF /* WorkGroupListModel.swift in Sources */,
 				18050D6F224B5B2D00C9DB9A /* HandoverStaffSeleController.swift in Sources */,
 				1804E1FB224A1CB8006AB973 /* CustomerEditDetailsCell.swift in Sources */,
 				180B7707223A21D50096403B /* LoginController.swift in Sources */,
@@ -852,13 +865,16 @@
 				1810EC73222F5D4100CF6488 /* Date.swift in Sources */,
 				1806FBDF22436E06005A4A77 /* ProjectDetailsCollectionCell.swift in Sources */,
 				1802335C2244710B0064A50E /* ProjectMemberListModel.swift in Sources */,
+				183383072251EF190053F2BF /* ProjectManageSeleController.swift in Sources */,
 				1817884C2238ABE40015DC30 /* WrokHomeController.swift in Sources */,
 				180273E5223B5A410033E083 /* ProjectListCell.swift in Sources */,
 				1804E1FF224A2ACC006AB973 /* ChangePasswordController.swift in Sources */,
 				1810EC80222F5D4100CF6488 /* UITextView.swift in Sources */,
+				183383092251F1270053F2BF /* UsersModel.swift in Sources */,
 				1806FBD92243305A005A4A77 /* ProjectDetailsTableView.swift in Sources */,
 				180B7709223A34EC0096403B /* LoginModel.swift in Sources */,
 				181788462238A7D60015DC30 /* HomePageController.swift in Sources */,
+				183383032251E10C0053F2BF /* EditProjectEjectView.swift in Sources */,
 				1810EC8E222F5F2F00CF6488 /* UIBarButtonItemFixSpace.swift in Sources */,
 				180115332248BE3C00EA551F /* CustomerTextViewCell.swift in Sources */,
 				18026DED223B8EAC00993B66 /* CustomerHomeCell.swift in Sources */,

@@ -9,6 +9,18 @@
 import UIKit
 
 class WrokHomeCell: UITableViewCell {
+    
+    /// 数据
+    var data: WorkGroupListData? {
+        didSet {
+            if let data = data {
+//                ImageView.image = UIImage(named: "")
+                nameLabel.text = data.name
+                projectLabel.text = data.projectName
+                memberLabel.text = data.members
+            }
+        }
+    }
 
     /// 图标
     private var ImageView: UIImageView!

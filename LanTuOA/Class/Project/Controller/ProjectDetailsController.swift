@@ -7,9 +7,12 @@
 //  项目详情 控制器
 
 import UIKit
+import MBProgressHUD
 
 class ProjectDetailsController: UIViewController {
 
+    /// 数据修改
+    var editBlock: ((ProjectListStatisticsData) -> ())?
     /// 锁定状态 （1：显示锁图标  2：无状态）
     var lockState = 1
     /// 项目id
@@ -32,17 +35,17 @@ class ProjectDetailsController: UIViewController {
     /// 记录上一次scrollView滚动的位置
     private var offsetX: CGFloat = 0
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNav()
         initSubViews()
     }
     
     // MARK: - 自定义私有方法
     /// 设置导航栏
-    private func setNav() {
+    private func setNav(_ titleStr: String) {
         title = "项目详情"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "解锁项目",
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: titleStr,
                                                             titleColor: .white,
                                                             titleFont: UIFont.medium(size: 15),
                                                             titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
@@ -66,7 +69,6 @@ class ProjectDetailsController: UIViewController {
                 scrollView.isPagingEnabled = true
             })
         
-        
         headerView = ProjectDetailsHeaderView(state: lockState)
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
@@ -75,11 +77,37 @@ class ProjectDetailsController: UIViewController {
             .taxi.config({ (view) in
                 let lock = lockState == 1 ? projectData.isLock : 2
                 view.data = (projectData, lock)
+                view.modifyBlock = { // 点击修改
+                    let ejectView = EditProjectEjectView()
+                    ejectView.projectData = self.projectData
+                    ejectView.pushBlock = { [weak self] in
+                        ejectView.isHidden = true
+                        let vc = ProjectManageSeleController()
+                        vc.backBlock = { (id, name) in
+                            ejectView.isHidden = false
+                            if id != nil {
+                                ejectView.manage = (id!, name!)
+                            }
+                        }
+                        self?.navigationController?.pushViewController(vc, animated: true)
+                    }
+                    ejectView.eidtBlock = { (address, manageName, manageId) in
+                        self.projectData.address = address
+                        self.projectData.manageUser = manageId
+                        self.projectData.manageUserName = manageName
+                        view.data = (self.projectData, lock)
+                        self.block()
+                    }
+                    ejectView.show()
+                }
             })
         
         headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
         headerHeight = headerView.height // 并保存
         
+        if lockState != 2 {
+            setNav(projectData.isLock == 0 ? "锁定项目" : "解锁项目")
+        }
         let titleArray = lockState == 2 ? ["历史拜访"] : ["参与人员", "历史拜访", "工作组"]
         segment = ProjectDetailsSegmentedView(title: titleArray)
             .taxi.adhere(toSuperView: view)
@@ -110,7 +138,7 @@ class ProjectDetailsController: UIViewController {
                     }
             }
                 .taxi.config { (tableView) in
-                    tableView.lockState = lockState
+                    tableView.lockState = projectData.isLock
                     tableView.scrollBlock = { (offsetY) in
                         let changeY = offsetY < -self.headerHeight - 40 ? 0 : offsetY >= -40 ? -self.headerHeight : -self.headerHeight - offsetY - 40
                         self.headerView.snp.updateConstraints({ (make) in
@@ -144,13 +172,42 @@ class ProjectDetailsController: UIViewController {
     
     /// 刷新数据 -> 修改锁定状态时调用
     private func reloadData() {
-        
+        setNav(projectData.isLock == 0 ? "锁定项目" : "解锁项目")
+        for tableView in tableViewArray {
+            tableView.lockState = projectData.isLock
+            tableView.setTableFooterView()
+            tableView.reloadData()
+        }
+        let lock = lockState == 1 ? projectData.isLock : 2
+        headerView.data = (projectData, lock)
+    }
+    
+    /// 数据回调
+    private func block() {
+        if editBlock != nil {
+            editBlock!(projectData)
+        }
+    }
+    
+    // MARK: - Api
+    /// 修改项目
+    private func projectUpdate(isLock: Int) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.projectUpdate(nil, projectData.id, isLock, nil, nil), t: LoginModel.self, successHandle: { (result) in
+            self.projectData.isLock = isLock
+            self.reloadData()
+            self.block()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "")
+        })
     }
     
     // MARK: - 按钮点击
     /// 点击新增项目
     @objc private func rightClick() {
-        
+        let isLock = projectData.isLock == 0 ? 1 : 0
+        projectUpdate(isLock: isLock)
     }
 }
 
