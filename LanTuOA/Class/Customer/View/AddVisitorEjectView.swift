@@ -16,9 +16,23 @@ class AddVisitorEjectView: UIView {
     var addBlock: (() -> ())?
     /// 客户id
     var customerId = -1
+    /// 修改的数据 (标题  内容  联系人id)
+    var modifyData: (String, [String], Int)? {
+        didSet {
+            if let data = modifyData {
+                titleLabel.text = data.0
+                seleStrArray = data.1
+                contactId = data.2
+                tableView.reloadData()
+                isModify = true
+            }
+        }
+    }
     
     /// 灰色背景view
     private var grayView: UIView!
+    /// 标题
+    private var titleLabel: UILabel!
     /// 显示填写的tableview
     private var tableView: UITableView!
     /// 确认按钮
@@ -32,6 +46,10 @@ class AddVisitorEjectView: UIView {
     private var seleStrArray = ["", "", ""]
     /// 记录当前偏移的高度
     private var deviationHeight: CGFloat = 0
+    /// 是否是修改
+    private var isModify = false
+    /// 联系人id
+    private var contactId = 1
     
     
     override init(frame: CGRect) {
@@ -82,17 +100,17 @@ class AddVisitorEjectView: UIView {
                 view.backgroundColor = UIColor(hex: "#F1F1F1")
             })
         
-        let titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // “新增拜访人”
-            .taxi.layout { (make) in
+        titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // 标题
+            .taxi.layout(snapKitMaker: { (make) in
                 make.height.equalTo(55)
                 make.top.left.right.equalToSuperview()
-            }
-            .taxi.config { (label) in
+            })
+            .taxi.config({ (label) in
                 label.text = "新增拜访人"
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
-        }
+            })
         
         tableView = UITableView().taxi.adhere(toSuperView: grayView) // tableview
             .taxi.layout(snapKitMaker: { (make) in
@@ -135,10 +153,13 @@ class AddVisitorEjectView: UIView {
             })
         
         layoutIfNeeded()
+        perform(#selector(setTableViewHeight), with: nil, afterDelay: 0)
+    }
+    
+    @objc private func setTableViewHeight() {
         tableView.snp.updateConstraints { (make) in
             make.height.equalTo(tableView.contentSize.height)
         }
-        
     }
     
     
@@ -186,6 +207,20 @@ class AddVisitorEjectView: UIView {
         })
     }
     
+    // MAKR: - Api
+    /// 修改客户联系人信息
+    private func customerContactUpdate() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.customerContactUpdate(seleStrArray[1], seleStrArray[2], contactId), t: LoginModel.self, successHandle: { (result) in
+            MBProgressHUD.showSuccess("修改成功")
+            if self.addBlock != nil {
+                self.addBlock!()
+            }
+            self.hidden()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "修改失败")
+        })
+    }
     
     // MARK: - 按钮点击
     /// 点击取消
@@ -207,6 +242,8 @@ class AddVisitorEjectView: UIView {
             MBProgressHUD.showError("请先完成内容的输入")
         } else if seleStrArray[1].isRegexMobile() {
             MBProgressHUD.showError("请填写正确的手机号码")
+        } else if isModify {
+            customerContactUpdate()
         } else {
             customerContactSave()
         }
@@ -221,7 +258,9 @@ extension AddVisitorEjectView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerTextViewCell", for: indexPath) as! CustomerTextViewCell
+        cell.isEdit = !(isModify && row == 0)
         cell.data = (titleArray[row], placeholderArray[row])
+        cell.contentStr = seleStrArray[row]
         cell.tableView = tableView
         cell.stopBlock = { [weak self] (str) in
             self?.seleStrArray[row] = str

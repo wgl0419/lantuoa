@@ -33,6 +33,7 @@ class WrokHomeCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        accessoryType = .disclosureIndicator
         initSubViews()
     }
     
@@ -66,29 +67,53 @@ class WrokHomeCell: UITableViewCell {
                 label.font = UIFont.medium(size: 12)
             })
         
+        let project = UILabel().taxi.adhere(toSuperView: contentView) // "项目"
+            .taxi.layout { (make) in
+                make.top.equalTo(nameLabel.snp.bottom).offset(3)
+                make.left.equalTo(nameLabel)
+        }
+            .taxi.config { (label) in
+                label.text = "项目："
+                label.font = UIFont.medium(size: 10)
+                label.textColor = UIColor(hex: "#999999")
+        }
+        
         projectLabel = UILabel().taxi.adhere(toSuperView: contentView) // 项目
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.equalTo(nameLabel)
-                make.right.equalToSuperview().offset(-5)
-                make.top.equalTo(nameLabel.snp.bottom).offset(3)
+                make.right.lessThanOrEqualToSuperview()
+                make.left.equalTo(project.snp.right)
+                make.top.equalTo(project)
             })
             .taxi.config({ (label) in
-                label.text = "项目：南宁出租车后车门广告"
-                label.font = UIFont.medium(size: 12)
-                label.textColor = UIColor(hex: "#999999")
+                label.numberOfLines = 0
+                label.textColor = blackColor
+                label.font = UIFont.medium(size: 10)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
+        
+        let member = UILabel().taxi.adhere(toSuperView: contentView) // ”成员“
+            .taxi.layout { (make) in
+                make.top.equalTo(project.snp.bottom).offset(3)
+                make.left.equalTo(nameLabel)
+        }
+            .taxi.config { (label) in
+                label.text = "成员："
+                label.font = UIFont.medium(size: 10)
+                label.textColor = UIColor(hex: "#999999")
+        }
         
         memberLabel = UILabel().taxi.adhere(toSuperView: contentView) // 成员
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.equalTo(nameLabel)
-                make.right.equalToSuperview().offset(-5)
                 make.bottom.equalToSuperview().offset(-15)
-                make.top.equalTo(projectLabel.snp.bottom).offset(3)
+                make.right.lessThanOrEqualToSuperview()
+                make.left.equalTo(member.snp.right)
+                make.top.equalTo(member)
             })
             .taxi.config({ (label) in
-                label.text = "成员：周天华、覃甲"
-                label.font = UIFont.medium(size: 12)
-                label.textColor = UIColor(hex: "#999999")
+                label.numberOfLines = 0
+                label.textColor = blackColor
+                label.font = UIFont.medium(size: 10)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
     }
 }

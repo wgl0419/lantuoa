@@ -107,14 +107,15 @@ class CustomerHomeController: UIViewController {
         }
     }
     
-    // MARK: - Api
     /// 获取项目统计列表
     ///
-    /// - Parameter isMore: 是否上拉
-    private func customerListStatistics(isMore: Bool) {
-        MBProgressHUD.showWait("")
+    /// - Parameters:
+    ///   - isMore: 是否上拉
+    ///   - show: 是否显示hud
+    private func customerListStatistics(isMore: Bool, show: Bool = true) {
+        if show { MBProgressHUD.showWait("") }
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.customerListStatistics("", nil, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerListStatistics(searchBar.text ?? "", nil, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -143,7 +144,7 @@ class CustomerHomeController: UIViewController {
                 self.tableView.mj_header.endRefreshing()
                 self.tableView.mj_footer.isHidden = false
             }
-            MBProgressHUD.showError(error ?? "获取失败")
+            if show { MBProgressHUD.showError(error ?? "获取失败") }
         })
     }
     
@@ -167,6 +168,10 @@ extension CustomerHomeController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerHomeCell", for: indexPath) as! CustomerHomeCell
         cell.editBlock = { [weak self] in
             let vc = CustomerEditController()
+            vc.customerData = self?.data[indexPath.row]
+            vc.editBlock = { [weak self] in
+                self?.customerListStatistics(isMore: false, show: false)
+            }
             self?.navigationController?.pushViewController(vc, animated: true)
         }
         cell.data = data[indexPath.row]

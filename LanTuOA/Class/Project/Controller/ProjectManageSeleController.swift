@@ -13,7 +13,9 @@ import MBProgressHUD
 class ProjectManageSeleController: UIViewController {
 
     /// 返回回调 (用户id  用户名称)
-    var backBlock: ((Int?, String?) -> ())?
+    var backBlock: (([Int], [String]) -> ())?
+    /// 是否可以多选
+    var isMultiple = false
     
     /// 确认按钮
     private var determineBtn: UIButton!
@@ -27,7 +29,7 @@ class ProjectManageSeleController: UIViewController {
     /// 记录输入次数  -> 用于减少计算次数
     private var inputCout = 0
     /// 选择内容 (位置：row   id  名称)
-    private var seleContent = (-1, -1, "")
+    private var seleContentArray = [(Int, Int, String)]()
     /// 数据
     private var data = [UsersData]()
     
@@ -40,7 +42,6 @@ class ProjectManageSeleController: UIViewController {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        title = "选择主管"
         view.backgroundColor = .white
         
         searchBar = UISearchBar().taxi.adhere(toSuperView: view) // 搜索框
@@ -108,14 +109,14 @@ class ProjectManageSeleController: UIViewController {
     
     deinit {
         if backBlock != nil {
-            backBlock!(nil, nil)
+            backBlock!([], [])
         }
     }
     
     /// 点亮确认按钮
     private func determineHandle() {
-        determineBtn.isEnabled = seleContent.0 != -1
-        determineBtn.backgroundColor = seleContent.0 != -1 ? UIColor(hex: "#2E4695") : UIColor(hex: "#CCCCCC")
+        determineBtn.isEnabled = seleContentArray.count > 0
+        determineBtn.backgroundColor = seleContentArray.count > 0 ? UIColor(hex: "#2E4695") : UIColor(hex: "#CCCCCC")
     }
     
     /// 区分出搜索的内容
@@ -123,7 +124,7 @@ class ProjectManageSeleController: UIViewController {
     /// - Parameter number: 记录的输入次数
     @objc private func distinguishSearch(number: NSNumber) {
         if Int(truncating: number) == inputCout { // 次数相同 说明停止输入
-            seleContent = (-1, -1, "")
+            seleContentArray = []
             users(isMore: false)
             determineHandle()
         }
@@ -134,7 +135,7 @@ class ProjectManageSeleController: UIViewController {
     private func users(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.users(1, 10, searchBar.text ?? "", 1), t: UsersModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.users(newPage, 10, searchBar.text ?? "", 1), t: UsersModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -171,7 +172,13 @@ class ProjectManageSeleController: UIViewController {
     /// 点击确定
     @objc private func determineClick() {
         if backBlock != nil {
-            backBlock!(seleContent.1, seleContent.2)
+            var idArray = [Int]()
+            var contentStrArray = [String]()
+            for seleContent in seleContentArray {
+                idArray.append(seleContent.1)
+                contentStrArray.append(seleContent.2)
+            }
+            backBlock!(idArray, contentStrArray)
         }
         navigationController?.popViewController(animated: true)
     }
@@ -184,7 +191,21 @@ extension ProjectManageSeleController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildSeleCell", for: indexPath) as! NewlyBuildSeleCell
-        cell.data = (data[indexPath.row].realname ?? "", seleContent.0 == indexPath.row)
+        if isMultiple {
+            var isSele = false
+            for seleContent in seleContentArray {
+                let index = seleContent.0
+                if index == indexPath.row {
+                    isSele = true
+                    break
+                }
+            }
+            cell.data = (data[indexPath.row].realname ?? "", isSele)
+        } else {
+            let seleIndex = seleContentArray.first?.0 ?? -1
+            cell.data = (data[indexPath.row].realname ?? "", seleIndex == indexPath.row)
+        }
+        
         return cell
     }
     
@@ -192,18 +213,44 @@ extension ProjectManageSeleController: UITableViewDelegate, UITableViewDataSourc
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
         var seleIndex = -1
-        if seleContent.0 != seleIndex { // 点击过
-            seleIndex = seleContent.0
-        }
-        if seleIndex == row { // 点击的是选中cell
-            return
-        } else {
-            seleContent = (row, data[row].id, data[row].realname ?? "")
-            tableView.reloadRows(at: [indexPath], with: .fade)
-            if seleIndex != -1 {
-                tableView.reloadRows(at: [IndexPath(row: seleIndex, section: 0)], with: .fade)
+        if isMultiple {
+            for index in 0..<seleContentArray.count {
+                let seleRow = seleContentArray[index].0
+                if row == seleRow {
+                    seleIndex = index
+                    break
+                }
             }
+            if seleIndex != -1 {
+                seleContentArray.remove(at: seleIndex)
+            } else {
+                let seleContent = (row, data[row].id, data[row].realname ?? "")
+                seleContentArray.append(seleContent)
+            }
+            tableView.reloadRows(at: [indexPath], with: .fade)
             determineHandle()
+        } else {
+            var seleContent = (-1, -1, "")
+            if seleContentArray.count > 0 {
+                seleContent = seleContentArray.first!
+            } else {
+                seleContentArray.append(seleContent) // 初始化第一个数据
+            }
+            
+            if seleContent.0 != seleIndex { // 点击过
+                seleIndex = seleContent.0
+            }
+            if seleIndex == row { // 点击的是选中cell
+                return
+            } else {
+                seleContent = (row, data[row].id, data[row].realname ?? "")
+                seleContentArray[0] = seleContent
+                tableView.reloadRows(at: [indexPath], with: .fade)
+                if seleIndex != -1 {
+                    tableView.reloadRows(at: [IndexPath(row: seleIndex, section: 0)], with: .fade)
+                }
+                determineHandle()
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ class VisitHomeCell: UITableViewCell {
         didSet {
             if let data = data {
                 titleLabel.text = data.projectName
-                visitNameLabel.text = data.createUserName // TODO: 后期会换
+                visitNameLabel.text = "后端没有给数据" // TODO: 后端没有给数据
                 initiateLabel.text = data.createUserName
                 stateLabel.text = data.result
                 let timeStr = Date(timeIntervalSince1970: TimeInterval(data.visitTime)).yearTimeStr()
@@ -129,7 +129,6 @@ class VisitHomeCell: UITableViewCell {
         title.taxi.layout { (make) in
             make.left.equalToSuperview().offset(15)
             make.top.equalTo(lastLabel.snp.bottom).offset(5)
-            make.right.lessThanOrEqualTo(content).offset(-8)
             if isLast {
                 make.bottom.equalToSuperview().offset(-13)
             }
@@ -137,6 +136,7 @@ class VisitHomeCell: UITableViewCell {
             .taxi.config { (label) in
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         content.taxi.layout { (make) in
@@ -147,6 +147,7 @@ class VisitHomeCell: UITableViewCell {
             .taxi.config { (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
     }
 }

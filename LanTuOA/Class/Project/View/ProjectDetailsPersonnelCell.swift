@@ -13,13 +13,19 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
     // 点击删除回调
     var deleteBlock: (() -> ())?
     /// 锁定状态 （0：未锁定  1：锁定）
-    var lockState = 0
+    var lockState: Int? {
+        didSet {
+            if let _ = lockState {
+                deleteBtnHandle()
+            }
+        }
+    }
     
     var data: ProjectMemberListData? {
         didSet {
             if let data = data {
                 nameLabel.text = data.userName
-                departmentLabel.text = "后端未返回"
+                departmentLabel.text = "后端未返回" // TODO: 后端没有给数据
                 phoneLabel.text = "后端未返回"
             }
         }
@@ -56,7 +62,6 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
                 make.top.bottom.equalToSuperview()
             })
             .taxi.config({ (label) in
-                label.text = "名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字v"
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
             })
@@ -68,7 +73,6 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
                 make.top.bottom.equalToSuperview()
             })
             .taxi.config({ (label) in
-                label.text = "部门部门部门部门部门部门部门部门部门部门部门部门部门部门部门部门部门部门"
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
             })
@@ -84,8 +88,6 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
             })
-        
-        deleteBtnHandle()
     }
     
     private func deleteBtnHandle() {

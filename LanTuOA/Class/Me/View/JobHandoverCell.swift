@@ -9,6 +9,18 @@
 import UIKit
 
 class JobHandoverCell: UITableViewCell {
+    
+    /// 数据
+    var data: WorkExtendListData? {
+        didSet {
+            if let data = data {
+                nameLabel.text = preventEmpty(data.realname)
+                departmentLabel.text = "所属部门"
+                phoneLabel.text = preventEmpty(data.phone)
+                jobLabel.text = preventEmpty(data.projects)
+            }
+        }
+    }
 
     /// 名字
     private var nameLabel: UILabel!
@@ -21,6 +33,7 @@ class JobHandoverCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        accessoryType = .disclosureIndicator
         initSubViews()
     }
     
@@ -42,8 +55,8 @@ class JobHandoverCell: UITableViewCell {
             })
         
         let departmen = setTitle(titleStr: "所属部门：", contentLabel: departmentLabel, lastView: nameLabel) // 部门
-        let phone = setTitle(titleStr: "所属部门：", contentLabel: phoneLabel, lastView: departmen) // 手机号码
-        _ = setTitle(titleStr: "所属部门：", contentLabel: jobLabel, lastView: phone, isLast: true) // 交接工作
+        let phone = setTitle(titleStr: "手机号码：", contentLabel: phoneLabel, lastView: departmen) // 手机号码
+        _ = setTitle(titleStr: "交接工作：", contentLabel: jobLabel, lastView: phone, isLast: true) // 交接工作
     }
     
     /// 设置标题和内容
@@ -62,28 +75,43 @@ class JobHandoverCell: UITableViewCell {
         titleLabel.taxi.layout { (make) in
             make.left.equalToSuperview().offset(15)
             make.top.equalTo(lastView.snp.bottom).offset(5)
-            if isLast {
-                make.bottom.equalToSuperview().offset(-15)
-            }
-            make.right.lessThanOrEqualTo(contentLabel)
-                }
+        }
             .taxi.config { (label) in
                 label.text = titleStr
                 label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
+        
         
         contentLabel.taxi.layout { (make) in
             make.top.equalTo(titleLabel)
             make.left.equalTo(titleLabel.snp.right)
-            make.right.lessThanOrEqualToSuperview().offset(-15)
-                }
+            make.right.lessThanOrEqualToSuperview()
+            if isLast {
+                make.bottom.equalToSuperview().offset(-15)
+            }
+        }
             .taxi.config { (label) in
                 label.numberOfLines = 0
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         
         return titleLabel
+    }
+    
+    /// 防止传空
+    ///
+    /// - Parameter str: 要判断的内容
+    /// - Returns: 非空字符串
+    private func preventEmpty(_ contentStr: String?) -> String {
+        if let str = contentStr {
+            if str.count > 0 {
+                return str
+            }
+        }
+        return " "
     }
 }

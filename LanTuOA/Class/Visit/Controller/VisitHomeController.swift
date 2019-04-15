@@ -16,8 +16,6 @@ class VisitHomeController: UIViewController {
     private var tableView: UITableView!
     /// 筛选按钮
     private var screenBtn: UIButton!
-    /// 选择器
-    private var segmentView: ProjectSegmentView!
     /// 搜索框
     private var searchBar: UISearchBar!
     
@@ -203,7 +201,6 @@ class VisitHomeController: UIViewController {
             self?.startTimeStamp = start
             self?.endTimeStamp = end
             self?.visitType = index
-            // TODO: 调用接口
             self?.visitList(isMore: false)
         }
         showView.show()
@@ -221,14 +218,14 @@ extension VisitHomeController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-}
-
-extension VisitHomeController: ProjectSegmentDelegate {
-    func changeScrollView(page: Int) {
-        // TODO: 处理数据切换
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let vc = VisitDetailsController()
+        vc.visitListData = data[indexPath.row]
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
-
 
 extension VisitHomeController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

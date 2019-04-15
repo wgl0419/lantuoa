@@ -51,5 +51,10 @@ let blackColor = UIColor(hex: "#222222")
 /// 服务器地址(正式)
 //let serverAddressURL = ""
 
-/// 测试服务器
+/// 测试服务器(蒙冠洲电脑)
 let serverAddressURL = "192.168.1.135:9102"
+//let serverAddressURL = "192.168.1.247:9101"
+/// 测试服务器(李健电脑)
+//let serverAddressURL = "192.168.1.111:9101"
+/// 测试服务器
+//let serverAddressURL = "api.lantudev.danjuantaxi.com"

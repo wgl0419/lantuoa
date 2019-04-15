@@ -85,7 +85,7 @@ extension Date {
     }
     
     /// 时间戳转换过去的时间（用于显示评论时间之类）
-    func getEverTimeString() -> String {
+    func getCommentTimeString() -> String {
         if isToday {
             if minute < 5 {
                 return "刚刚"

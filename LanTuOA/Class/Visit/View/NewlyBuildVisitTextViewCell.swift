@@ -21,9 +21,28 @@ class NewlyBuildVisitTextViewCell: UITableViewCell {
             }
         }
     }
+    /// 富文本数据
+    var attriData: (NSMutableAttributedString, String)? {
+        didSet {
+            if let data = attriData {
+                titleLabel.attributedText = data.0
+                textView.placeHolderLabel?.text = data.1
+            }
+        }
+    }
+    /// 必选(默认非必选)
+    var isMust: Bool? {
+        didSet {
+            if let isMust = isMust {
+                mustLabel.isHidden = !isMust
+            }
+        }
+    }
     
     /// 标题
     private var titleLabel: UILabel!
+    /// 必选星星
+    private var mustLabel: UILabel!
     /// 输入框
     private var textView: UITextView!
     
@@ -48,6 +67,17 @@ class NewlyBuildVisitTextViewCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 16)
+            })
+        
+        mustLabel = UILabel().taxi.adhere(toSuperView: contentView) // 必选星星
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerY.equalTo(titleLabel)
+                make.right.equalTo(titleLabel.snp.left).offset(-3)
+            })
+            .taxi.config({ (label) in
+                label.text = "*"
+                label.isHidden = true
+                label.textColor = UIColor(hex: "#FF4444")
             })
         
         let interval = UITextView().textContainer.lineFragmentPadding // 间隔 -> 保持输入框内容和标题对齐

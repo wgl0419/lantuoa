@@ -24,7 +24,6 @@ class CustomerTextViewCell: UITableViewCell {
             }
         }
     }
-    
     /// 富文本数据(标题+提示文本)
     var attriData: (NSMutableAttributedString, String)? {
         didSet {
@@ -46,6 +45,22 @@ class CustomerTextViewCell: UITableViewCell {
             }
         }
     }
+    /// 必选(默认非必选)
+    var isMust: Bool? {
+        didSet {
+            if let isMust = isMust {
+                mustLabel.isHidden = !isMust
+            }
+        }
+    }
+    /// 是否可编辑 (默认可编辑)
+    var isEdit: Bool? {
+        didSet {
+            if let isEdit = isEdit {
+                textView.isUserInteractionEnabled = isEdit
+            }
+        }
+    }
     
     /// 父tableview
     var tableView: UITableView!
@@ -54,6 +69,8 @@ class CustomerTextViewCell: UITableViewCell {
     
     /// 标题
     private var titleLabel: UILabel!
+    /// 必选星星
+    private var mustLabel: UILabel!
     /// 输入框
     private var textView: UITextView!
     
@@ -79,6 +96,17 @@ class CustomerTextViewCell: UITableViewCell {
                 label.text = " "
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 16)
+            })
+        
+        mustLabel = UILabel().taxi.adhere(toSuperView: contentView) // 必选星星
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerY.equalTo(titleLabel)
+                make.right.equalTo(titleLabel.snp.left).offset(-3)
+            })
+            .taxi.config({ (label) in
+                label.text = "*"
+                label.isHidden = true
+                label.textColor = UIColor(hex: "#FF4444")
             })
         
         self.layoutIfNeeded()

@@ -37,6 +37,7 @@ struct CustomerListStatisticsData: HandyJSON {
     var lockedProjectNum: Int = 0
     var lastVisitUser: Int = 0
     var id: Int = 0
+    var industry: Int = 0
     var industryName: String?
     var fullName: String?
     var weekVisitNum: Int = 0

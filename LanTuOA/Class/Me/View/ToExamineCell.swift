@@ -152,12 +152,12 @@ class ToExamineCell: UITableViewCell {
             if position == 1 {
                 make.bottom.equalToSuperview().offset(-15)
             }
-            make.right.lessThanOrEqualTo(contentLabel)
         }
             .taxi.config { (label) in
                 label.text = titleStr
                 label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         contentLabel.taxi.layout { (make) in
@@ -168,6 +168,7 @@ class ToExamineCell: UITableViewCell {
             .taxi.config { (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         
         return titleLabel

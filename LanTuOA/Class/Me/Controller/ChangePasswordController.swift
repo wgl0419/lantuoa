@@ -111,10 +111,11 @@ class ChangePasswordController: UIViewController {
     
     // MARK: - 按钮点击
     @objc private func confirmClick() {
-        if contentStrArray[0][0] != contentStrArray[0][1] {
+        if contentStrArray[1][0] != contentStrArray[1][1] {
             MBProgressHUD.showError("确认密码和新密码不一致")
+            return
         }
-        // TODO: 调用修改密码接口
+        usersPwd()
     }
 }
 
@@ -136,9 +137,11 @@ extension ChangePasswordController: UITableViewDelegate, UITableViewDataSource {
         let section = indexPath.section
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerTextViewCell", for: indexPath) as! CustomerTextViewCell
         cell.data = (titleArray[section][row], placeholderArray[section][row])
+        cell.contentStr = contentStrArray[section][row]
         cell.tableView = tableView
         cell.stopBlock = { [weak self] (str) in
             self?.contentStrArray[section][row] = str
+            self?.judgeEnabled()
         }
         return cell
     }

@@ -9,6 +9,32 @@
 import UIKit
 
 class HandoverStaffCell: UITableViewCell {
+    
+    /// 数据
+    var data: WorkExtendListPersonData? {
+        didSet {
+            if let data = data {
+                var nameStr = data.name ?? ""
+                let newUserStr = data.lastExtend?.newUserName ?? ""
+                if newUserStr.count > 0 {
+                    nameStr = nameStr + "（已交接\(newUserStr)）"
+                    
+                    let attriMuStr = NSMutableAttributedString(string: nameStr)
+                    attriMuStr.changeColor(str: "（已交接\(newUserStr)）", color: UIColor(hex: "#5FB9A1"))
+                    attriMuStr.changeFont(str: "（已交接\(newUserStr)）", font: UIFont.boldSystemFont(ofSize: 12))
+                    nameLabel.attributedText = attriMuStr
+                    
+                    handoverBtn.isEnabled = false
+                    handoverBtn.setTitleColor(UIColor(hex: "#999999"), for: .normal)
+                } else {
+                    nameLabel.text = nameStr
+                    handoverBtn.isEnabled = true
+                    handoverBtn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+                }
+                
+            }
+        }
+    }
 
     /// 项目名称
     private var nameLabel: UILabel!
@@ -35,6 +61,7 @@ class HandoverStaffCell: UITableViewCell {
             })
             .taxi.config({ (btn) in
                 btn.setTitle("交接", for: .normal)
+                btn.isUserInteractionEnabled = false
                 btn.titleLabel?.font = UIFont.medium(size: 14)
                 btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
             })

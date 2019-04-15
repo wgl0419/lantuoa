@@ -21,16 +21,16 @@ enum APIManager {
     
     // MARK: - 客户
     case customerSave(String, String, String, Int, Int) // 新建客户（管理界面） (name:客户简称 full_name:客户全称  address:客户地址  type:客户类型：1.公司客户，2.待开发客户，3.开发中客户  industry:行业类型id，从行业列表中获取)
-    case customerUpdate(String, String, String, Int, Int) // 编辑客户 (name:客户简称 full_name:客户全称  address:客户地址  type:客户类型：1.公司客户，2.待开发客户，3.开发中客户  industry:行业类型id，从行业列表中获取)
+    case customerUpdate(String, String, String, Int, Int, Int) // 编辑客户 (name:客户简称 full_name:客户全称  address:客户地址  type:客户类型：1.公司客户，2.待开发客户，3.开发中客户  industry:行业类型id，从行业列表中获取     id:客户id)
     case customerContactList(Int, Int, Int) // 客户联系人列表 (customerId:客户id  page:页码  limit:一页有几条数据)
     case customerContactDetail(Int) // 客户联系人修改历史 （客户id:拼接到连接上）
     case customerList(String, Int, String, Int, Int) // 客户基本信息列表 (name:客户名称  type:1.公司客户2.待开发客户3.开发中客户 industry:行业id  page:页码  limit:一页几条数据)
     case customerContactSave(Int, String, String, String) // 新增客户联系人 （customerId:客户id   name:客户姓名  phone:手机号  position:职位）
-    case customerContactUpdate(Int, String, String, String) // 修改客户联系人信息 （customerId:客户id   name:客户姓名  phone:手机号  position:职位）
+    case customerContactUpdate(String, String, Int) // 修改客户联系人信息 （phone:手机号  position:职位  contactId:联系人Id）
     case customerListStatistics(String, Int?, Int?, Int, Int) // 客户统计信息列表 （name:客户名称  type:客户类型，1.公司客户，2.待开发客户，3.开发中客户  industry：行业id（保留）  page:页码  limit:一页几条数据）
     case customerSaveRequire(String, String, String, Int) // 申请新增客户（拜访页面） （name:客户名称  full_name:客户全称  address:公司地址  industry:行业id）
     case customerIndustryList() // 行业列表
-    case customerDetail(String) // 客户详情
+    case customerDetail(Int) // 客户详情
     
     
     // MARK: - 项目
@@ -38,8 +38,8 @@ enum APIManager {
     case projectUpdate(String?, Int, Int?, Int?, String?) // 编辑项目 （name:项目名称  id:id  manageUser:管理人id  isLock:是否锁定，1锁定，0否  address:地址）
     case projectOffline(Int, Int) // 上/下线项目 (id:项目id   offline:1设为下线，2设为上限)
     case projectMemberList(Int) // 项目成员列表 （projectId:项目id）
-    case projectMemberAdd(Int, String) // 新增项目成员  （projectId:项目id  users:用户id，英文半角逗号分隔）
-    case projectMemberDelete(Int, String) // 删除项目成员  （projectId:项目id  users:用户id，英文半角逗号分隔）
+    case projectMemberAdd(Int, [Int]) // 新增项目成员  （projectId:项目id  users:用户id数组）
+    case projectMemberDelete(Int, Int) // 删除项目成员  （projectId:项目id  userId:用户id）
     case projectListStatistics(String, Int, Int, Int, Int?) // 项目统计列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据  manageUser:管理人Id)
     case projectList(String, Int?, Int, Int) // 项目信息列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据)
     
@@ -49,8 +49,37 @@ enum APIManager {
     case visitList(String, Int?, Int?, Int, Int, Int, Int?, Int?) // 拜访查询 (name:关键词，客户名称/项目名称  startTime:开始时间，秒级  endTime:结束时间，秒级  queryType:1.全部，2.只看自己，3.工作组，4.接手  page:页码  limit:一页几条数据  customerId:客户id     projectId:项目id)
     
     // MARK: - 工作组
-    case workGroupCreate(String, [String], Int) // 新建工作组 (name:工作组名称  members:成员id  projectId:项目id)
+    case workGroupCreate(String, [Int], Int) // 新建工作组 (name:工作组名称  members:成员id  projectId:项目id)
     case workGroupList(Int, Int, Int) // 工作组列表 （page:页码  limit:一页数据  projectId:项目id）
+    case workGroupQuit(String) // 退出工作组
+    case workGroupInvite(Int, [Int]) // 邀请他人加入工作组   (groupId:工作组id  members：成员id数组)
+    
+    // MARK: - 通知
+    case notifyList(Int, Int)// 通知列表 (page:页码  limit:一页数据)
+    case notifyCheckReject(Int) // 拒绝审批-非创建客户/项目 (checkId:审批id）
+    case notifyCheckCusRejectExist(Int) // 拒绝创建客户/项目-客户已存在 (checkId:审批id）
+    case notifyCheckCusRejectMistake(Int) // 拒绝创建客户/项目-名称有误 (checkId:审批id）
+    case notifyCheckAgree(Int) // 同意审批
+    case notifyCheckList(Int, Int) // 审核列表 (page:页码  limit:一页数据)
+    case notifyCheckDetail(Int) // 审批详情
+    
+    // MARK: - 工作交接
+    case workExtendList(String) // 下级员工列表
+    
+    // MARK: - 部门
+    case departments(Int?) // 部门列表  (parent:父部门id)
+    case workExtendListPerson(Int) // 员工工作列表 (userId:员工id)
+    case workExtendExtend(Int, Int, Int) // 交接工作 (projectId:项目id   oldUser:被交接人id   newUser:接手人id)
+    case departmentsUsers(Int, String?, Int?) // 获取部门人员列表 （ 部门id  keyword:搜索内容   type:部门员工类型（默认1）：1 普通员工；2 副主管；3 主管；4 上级领导。选填。）
+    case departmentsCreate(String, Int) // 新增部门 (name:部门名称  parentId:上级部门id,如果是顶级部门，则传0或不传)
+    case departmentsAddUsers(Int, [Int]) // 新增部门人员 （id：部门id   userIds：新增人员）
+    
+    
+    // mARK: - 工作申请
+    case processHistory(Int, Int, Int) // 历史申请列表 (status:1.申请中，2.通过，3.被拒绝   page:页码  limit:一页数据)
+    case processList() // 流程列表
+    case processParams(Int) // 获取流程内容
+
     
     case x // MARK: 补位 -> 暂时代替一些没有使用的类型
 }
@@ -97,7 +126,32 @@ extension APIManager: TargetType {
             
         case .workGroupCreate: return "/api/workGroup/create"
         case .workGroupList: return "/api/workGroup/list"
+        case .workGroupQuit(let id): return "/api/workGroup/quit/\(id)"
+        case .workGroupInvite: return "/api/workGroup/invite"
             
+            
+        case .notifyList: return "/api/notify/list"
+        case .notifyCheckReject: return "/api/notify/check/reject"
+        case .notifyCheckCusRejectExist: return "/api/notify/check/cus/reject/exist"
+        case .notifyCheckCusRejectMistake: return "/api/notify/check/cus/reject/mistake"
+        case .notifyCheckAgree(let id): return "/api/notify/check/agree/\(id)"
+        case .notifyCheckList: return "/api/notify/check/list"
+        case .notifyCheckDetail(let id): return "/api/notify/check/detail/\(id)"
+            
+            
+        case .workExtendList: return "/api/workExtend/list"
+            
+            
+        case .departments: return "/api/departments"
+        case .workExtendListPerson: return "/api/workExtend/list/person"
+        case .workExtendExtend: return "/api/workExtend/extend"
+        case .departmentsUsers(let deptId, _, _): return "/api/departments/\(deptId)/users"
+        case .departmentsCreate: return "/api/departments"
+            
+        case .processHistory: return "/api/process/history"
+        case .processList: return "/api/process/list"
+        case .processParams(let id): return "/api/process/params/\(id)"
+        case .departmentsAddUsers(let id, _): return "/api/departments/\(id)/addUsers"
             
         default: return ""
         }
@@ -109,12 +163,20 @@ extension APIManager: TargetType {
             return .post
         case  .customerSave, .customerUpdate, .customerContactSave, .customerContactUpdate, .customerSaveRequire:
             return .post
-        case  .projectSave, .projectUpdate, .projectOffline, .projectMemberAdd, .projectMemberDelete:
+        case  .projectSave, .projectUpdate, .projectOffline, .projectMemberAdd:
             return .post
         case .visitSave:
             return .post
-        case .workGroupCreate:
+        case .workGroupCreate, .workGroupInvite:
             return .post
+        case .workGroupQuit:
+            return .delete
+        case .notifyCheckReject, .notifyCheckCusRejectExist, .notifyCheckCusRejectMistake, .notifyCheckAgree:
+            return .post
+        case .workExtendExtend, .departmentsCreate, .departmentsAddUsers:
+            return .post
+            case .projectMemberDelete:
+            return .delete
         default: return .get
         }
     }
@@ -136,16 +198,16 @@ extension APIManager: TargetType {
             
         case let .customerSave(name, full_name, address, type, industry): // 新建客户
             params = ["name": name, "full_name": full_name, "address": address, "type": type, "industry": industry]
-        case let .customerUpdate(name, full_name, address, type, industry): // 编辑客户
-            params = ["name": name, "full_name": full_name, "address": address, "type": type, "industry": industry]
+        case let .customerUpdate(name, full_name, address, type, industry, id): // 编辑客户
+            params = ["name": name, "full_name": full_name, "address": address, "type": type, "industry": industry, "id": id]
         case let .customerContactList(customerId, page, limit): // 客户联系人修改历史
             params = ["customerId": customerId, "page": page, "limit": limit]
         case let .customerList(name, type, industry, page, limit): // 客户基本信息列表
             params = ["name": name, "type": type, "industry": industry, "page": page, "limit": limit]
         case let .customerContactSave(customerId, name, phone, position): // 新增客户联系人
             params = ["customerId": customerId, "name": name, "phone": phone, "position": position]
-        case let .customerContactUpdate(customerId, name, phone, position): // 修改客户联系人信息
-            params = ["customerId": customerId, "name": name, "phone": phone, "position": position]
+        case let .customerContactUpdate(phone, position, contactId): // 修改客户联系人信息
+            params = ["phone": phone, "position": position, "contactId": contactId]
         case let .customerListStatistics(name, type, industry, page, limit): // 客户统计信息列表
             params = ["name": name, "page": page, "limit": limit]
             if type != nil { params["type"] = type }
@@ -166,8 +228,8 @@ extension APIManager: TargetType {
             params = ["projectId": projectId]
         case let .projectMemberAdd(projectId, users): // 新增项目成员
             params = ["projectId": projectId, "users": users]
-        case let .projectMemberDelete(projectId, users): // 删除项目成员
-            params = ["projectId": projectId, "users": users]
+        case let .projectMemberDelete(projectId, userId): // 删除项目成员
+            params = ["projectId": projectId, "userId": userId]
         case let .projectListStatistics(name, customerId, page, limit, manageUser): // 项目统计列表
             params = ["name": name, "customerId": customerId, "page": page, "limit": limit]
             if manageUser != nil { params["manageUser"] = manageUser! }
@@ -184,16 +246,55 @@ extension APIManager: TargetType {
             params = ["name": name, "queryType": queryType, "page": page, "limit": limit]
             if startTime != nil { params["startTime"] = startTime! }
             if endTime != nil { params["endTime"] = endTime! }
-            if cutomerId != nil { params["cutomerId"] = endTime! }
+            if cutomerId != nil { params["cutomerId"] = cutomerId! }
             if projectId != nil { params["projectId"] = projectId! }
             
             
         case let .workGroupCreate(name, members, projectId): // 新建工作组
             params = ["name": name, "members": members, "projectId": projectId]
-        case let .workGroupList(page, limit, projectId):
+        case let .workGroupList(page, limit, projectId): // 工作组列表
             params = ["page": page, "limit": limit, "projectId": projectId]
+        case let .workGroupInvite(groupId, members): // 邀请他人加入工作组
+            params = ["groupId": groupId, "members": members]
             
-        default: params = [:] // 退出登录,获取个人信息,客户联系人修改历史,行业列表
+            
+        case let .notifyList(page, limit): // 通知列表
+            params = ["page": page, "limit": limit]
+        case .notifyCheckReject(let checkId): // 拒绝审批-非创建客户/项目
+            params = ["checkId": checkId]
+        case .notifyCheckCusRejectExist(let checkId): // 拒绝创建客户/项目-客户已存在
+            params = ["checkId": checkId]
+        case .notifyCheckCusRejectMistake(let checkId): // 拒绝创建客户/项目-名称有误
+            params = ["checkId": checkId]
+        case let .notifyCheckList(page, limit): // 审核列表
+            params = ["page": page, "limit": limit]
+    
+            
+        case .departments(let parent): // 部门列表
+            params = [:]
+            if parent != nil { params["parent"] = parent! }
+        case .workExtendList(let name): // 下级员工列表
+            params = ["name": name]
+        case .workExtendListPerson(let userId): // 员工工作列表
+            params = ["userId": userId]
+        case let .workExtendExtend(projectId, oldUser, newUser): // 交接工作
+            params = ["projectId": projectId, "oldUser": oldUser, "newUser": newUser]
+        case let .departmentsUsers(_, keyword, type): // 获取部门人员列表
+            params = [:]
+            if keyword != nil { params["keyword"] = keyword! }
+            if keyword != nil { params["type"] = type! }
+        case let .departmentsCreate(name, parentId): // 新增部门
+            params = ["name": name, "parentId": parentId]
+        case .departmentsAddUsers(_, let userIds): // 新增部门人员
+            params = ["userIds": userIds]
+            
+            
+        case let .processHistory(status, page, limit): // 历史申请列表
+            params = ["status": status, "page": page, "limit": limit]
+            
+            
+            
+        default: params = [:] 
         }
         
         return .requestParameters(parameters: params, encoding: URLEncoding.default)

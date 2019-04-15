@@ -14,12 +14,23 @@ class AddCustomerEjectView: UIView {
     
     /// 添加回调
     var addBlock: (() -> ())?
-    /// 修改的数据
-    var modifyData: (String, [String])? {
+    /// 修改的数据(标题 + 数据)
+    var modifyData: (String, CustomerListStatisticsData)? {
         didSet {
-            if let data = modifyData {
-                titleLabel.text = data.0
-                seleStrArray = data.1
+            if let modifyData = modifyData {
+                isModify = true
+                titleLabel.text = modifyData.0
+                let data = modifyData.1
+                let type = data.type
+                seleStrArray[0] = data.name ?? ""
+                seleStrArray[1] = type == 1 ? "公司客户" : type == 2 ? "普通客户" : "开发中客户"
+                seleStrArray[2] = data.industryName ?? ""
+                seleStrArray[3] = data.address ?? ""
+                seleStrArray[4] = data.fullName ?? ""
+                
+                customerType = type
+                customerIndustryId = data.industry
+                customerId = data.id
                 tableView.reloadData()
             }
         }
@@ -36,8 +47,6 @@ class AddCustomerEjectView: UIView {
     
     
     /// 标题
-    var titleStr = "新增客户"
-    /// 标题
     private let titleArray = ["客户名称", "客户类型", "所属行业", "公司地址", "公司全名"]
     /// 提示
     private let placeholderArray = ["请输入", "请选择", "请选择", "请输入", "请输入"]
@@ -53,6 +62,8 @@ class AddCustomerEjectView: UIView {
     private var customerIndustryData = [CustomerIndustryListData]()
     /// 是否是修改
     private var isModify = false
+    /// 客户id
+    private var customerId = 0
     
     
     override init(frame: CGRect) {
@@ -109,7 +120,7 @@ class AddCustomerEjectView: UIView {
                 make.top.left.right.equalToSuperview()
             })
             .taxi.config({ (label) in
-                label.text = titleStr
+                label.text = "新增客户"
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
@@ -208,6 +219,20 @@ class AddCustomerEjectView: UIView {
         })
     }
     
+    /// 编辑客户
+    private func customerUpdate() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.customerUpdate(seleStrArray[0], seleStrArray[4], seleStrArray[3], customerType, customerIndustryId, customerId), t: LoginModel.self, successHandle: { (result) in
+            MBProgressHUD.showSuccess("修改客户成功")
+            if self.addBlock != nil {
+                self.addBlock!()
+            }
+            self.hidden()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "修改客户失败")
+        })
+    }
+    
     /// 获取行业列表
     private func customerIndustryList() {
         if customerIndustryData.count == 0 {
@@ -251,7 +276,11 @@ class AddCustomerEjectView: UIView {
             }
         }
         if isCan {
-            customerSave()
+            if isModify {
+                customerUpdate()
+            } else {
+                customerSave()
+            }
         } else {
             MBProgressHUD.showError("请先完成内容的输入")
         }

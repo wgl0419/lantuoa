@@ -10,6 +10,15 @@ import UIKit
 
 class HandoverStaffHeaderCell: UITableViewCell {
 
+    /// 数据
+    var data: WorkExtendListData? {
+        didSet {
+            nameLabel.text = data?.realname
+            departmentLabel.text = "部门名称"
+            phoneLabel.text = data?.phone
+        }
+    }
+    
     /// 名称
     private var nameLabel: UILabel!
     /// 部门
@@ -86,12 +95,12 @@ class HandoverStaffHeaderCell: UITableViewCell {
             if isLast {
                 make.bottom.equalToSuperview().offset(-15)
             }
-            make.right.lessThanOrEqualTo(contentLabel)
             }
             .taxi.config { (label) in
                 label.text = titleStr
                 label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         contentLabel.taxi.layout { (make) in
@@ -103,6 +112,7 @@ class HandoverStaffHeaderCell: UITableViewCell {
                 label.numberOfLines = 0
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         
         return titleLabel

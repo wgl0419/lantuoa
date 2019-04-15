@@ -10,6 +10,19 @@ import UIKit
 
 class HandoverStaffSeleCell: UITableViewCell {
     
+    /// 数据
+    var data: (UsersData, Bool)? {
+        didSet {
+            if let usersData = data?.0, let isSele = data?.1 {
+                seleBtn.isSelected = isSele
+                
+                let nameStr = (usersData.realname ?? "") + " " + "电话号码" //(usersData.realname ?? "")
+                nameLabel.text = nameStr
+                departmentLabel.text = "部门"
+            }
+        }
+    }
+    
     /// 选中按钮
     private var seleBtn: UIButton!
     /// 名称 + 电话号码
@@ -45,12 +58,12 @@ class HandoverStaffSeleCell: UITableViewCell {
                 make.top.bottom.equalToSuperview()
                 make.height.equalTo(50).priority(800)
                 make.left.equalTo(seleBtn.snp.right).offset(10)
-                make.right.lessThanOrEqualToSuperview().offset(-10)
             })
             .taxi.config({ (label) in
                 label.text = "生气试下 （12345678901）"
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
             })
         
         departmentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 部门
@@ -63,6 +76,7 @@ class HandoverStaffSeleCell: UITableViewCell {
                 label.text = "发酵说不过按付款了哈部门"
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
     }
 }

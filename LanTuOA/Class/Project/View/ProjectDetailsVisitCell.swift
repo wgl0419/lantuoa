@@ -126,11 +126,11 @@ class ProjectDetailsVisitCell: UITableViewCell {
             if isLast {
                 make.bottom.equalToSuperview().offset(-13).priority(800)
             }
-            make.right.lessThanOrEqualTo(content)
         }
             .taxi.config { (label) in
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         content.taxi.layout { (make) in
@@ -141,6 +141,7 @@ class ProjectDetailsVisitCell: UITableViewCell {
             .taxi.config { (label) in
                 label.textColor = blackColor
                 label.font = UIFont.boldSystemFont(ofSize: 12)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
     }
 }

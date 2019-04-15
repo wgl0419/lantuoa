@@ -53,7 +53,8 @@ class MainNavigationController: UINavigationController {
             navigationBar.isTranslucent = false
             UIApplication.shared.statusBarStyle = .lightContent
             self.interactivePopGestureRecognizer?.delegate = self
-            navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white,
+                                                 NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)]
         }
     }
     
@@ -66,11 +67,13 @@ class MainNavigationController: UINavigationController {
             UIApplication.shared.statusBarStyle = .lightContent
             UIApplication.shared.setStatusBarHidden(false, with: .none)
             navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+            
         case .dark:
             backBtn.setImage(UIImage(named: "nav_back_white"), for: .normal)
             UIApplication.shared.statusBarStyle = .default
             UIApplication.shared.setStatusBarHidden(false, with: .none)
-            navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white,
+                                                 NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)]
         case .hidden:
             UIApplication.shared.setStatusBarHidden(true, with: .slide)
         }

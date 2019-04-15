@@ -83,10 +83,11 @@ class ProjectDetailsController: UIViewController {
                     ejectView.pushBlock = { [weak self] in
                         ejectView.isHidden = true
                         let vc = ProjectManageSeleController()
-                        vc.backBlock = { (id, name) in
+                        vc.title = "选择主管"
+                        vc.backBlock = { (idArray, nameArray) in
                             ejectView.isHidden = false
-                            if id != nil {
-                                ejectView.manage = (id!, name!)
+                            if idArray.count != 0 {
+                                ejectView.manage = (idArray.first!, nameArray.first!)
                             }
                         }
                         self?.navigationController?.pushViewController(vc, animated: true)
@@ -122,6 +123,11 @@ class ProjectDetailsController: UIViewController {
                 }
             })
         
+        addTableView()
+    }
+    
+    /// 添加tableview
+    private func addTableView() {
         var lastTableView: ProjectDetailsTableView!
         for index in 0..<3 { // 添加3个tableview
             let tableView = ProjectDetailsTableView(style: ProjectDetailsTableView.CellStyle(rawValue: index)!, height: headerHeight, projectId: projectData.id) // tableview
@@ -136,7 +142,7 @@ class ProjectDetailsController: UIViewController {
                     if index == 2 {
                         make.right.equalToSuperview()
                     }
-            }
+                }
                 .taxi.config { (tableView) in
                     tableView.lockState = projectData.isLock
                     tableView.scrollBlock = { (offsetY) in
@@ -145,6 +151,46 @@ class ProjectDetailsController: UIViewController {
                             make.top.equalToSuperview().offset(changeY)
                         })
                         self.offsetY = offsetY
+                    }
+                    tableView.cellBlock = { [weak self] (id, type) in
+                        switch type {
+                        case 0:
+                            let vc = ProjectManageSeleController()
+                            vc.title = "选择成员"
+                            vc.isMultiple = true
+                            vc.backBlock = { (idArray, _) in
+                                if idArray.count != 0 {
+                                    self?.workGroupInvite(groupId: id, idArray: idArray)
+                                }
+                            }
+                            self?.navigationController?.pushViewController(vc, animated: true)
+                        default: break
+                        }
+                    }
+                    tableView.addBlock = { [weak self] (type) in
+                        switch type {
+                        case 0: // 添加成员
+                            let vc = ProjectManageSeleController()
+                            vc.title = "选择成员"
+                            vc.isMultiple = true
+                            vc.backBlock = { (idArray, _) in
+                                if idArray.count > 0 { // 有选中
+                                    self?.projectMemberAdd(users: idArray)
+                                }
+                            }
+                            self?.navigationController?.pushViewController(vc, animated: true)
+                        case 2: // 添加工作组
+                            let vc = NewWorkingGroupController()
+                            vc.projectData = (self?.projectData.id ?? 0, self?.projectData.name ?? "")
+                            vc.addBlock = {
+                                tableView.reload() // 重新获取数据
+                            }
+                            self?.navigationController?.pushViewController(vc, animated: true)
+                        default: break
+                        }
+                    }
+                    tableView.editBlock = { [weak self] (userId) in
+                        self?.projectMemberDelete(userId: userId)
                     }
             }
             lastTableView = tableView
@@ -193,7 +239,7 @@ class ProjectDetailsController: UIViewController {
     /// 修改项目
     private func projectUpdate(isLock: Int) {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.projectUpdate(nil, projectData.id, isLock, nil, nil), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.projectUpdate(nil, projectData.id, nil, isLock, nil), t: LoginModel.self, successHandle: { (result) in
             self.projectData.isLock = isLock
             self.reloadData()
             self.block()
@@ -201,6 +247,54 @@ class ProjectDetailsController: UIViewController {
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "")
         })
+    }
+    
+    /// 新增项目成员
+    ///
+    /// - Parameter users: 用户id数组
+    private func projectMemberAdd(users: [Int]) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.projectMemberAdd(projectData.id, users), t: LoginModel.self, successHandle: { (result) in
+            self.tableViewArray[0].reload()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "添加失败")
+        })
+    }
+    
+    /// 邀请他人进入工作组
+    ///
+    /// - Parameters:
+    ///   - groupId: 组id
+    ///   - idArray: id数组
+    private func workGroupInvite(groupId: Int, idArray: [Int]) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.workGroupInvite(groupId, idArray), t: LoginModel.self, successHandle: { (result) in
+            self.tableViewArray[2].reload()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "邀请失败")
+        })
+    }
+    
+    /// 删除项目成员
+    ///
+    /// - Parameter userId: 要删除成员的Id
+    private func projectMemberDelete(userId: Int) {
+        let alertController = UIAlertController(title: "提示", message: "是否删除该参与人员", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
+        alertController.addAction(cancelAction)
+        let agreeAction = UIAlertAction(title: "删除", style: .default, handler: { (_) in
+            MBProgressHUD.showWait("")
+            _ = APIService.shared.getData(.projectMemberDelete(self.projectData.id, userId), t: LoginModel.self, successHandle: { (result) in
+                self.tableViewArray[0].reload()
+                MBProgressHUD.dismiss()
+            }, errorHandle: { (error) in
+                MBProgressHUD.showError(error ?? "删除失败")
+            })
+        })
+        alertController.addAction(agreeAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - 按钮点击

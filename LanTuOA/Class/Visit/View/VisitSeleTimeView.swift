@@ -254,10 +254,10 @@ class VisitSeleTimeView: UIView {
             })
     }
     
-    // MAKR: - 按钮蒂娜及
+    // MAKR: - 按钮点击
     /// 设置选中时间
     @objc private func setTimeClick(btn: UIButton) {
-        let ejectView = SeleVisitTimeView()
+        let ejectView = SeleVisitTimeView(limit: true)
         ejectView.seleBlock = { (timeStr) in
             btn.setTitle(timeStr, for: .normal)
         }

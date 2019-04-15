@@ -29,21 +29,27 @@ class ProjectListCell: UITableViewCell {
                 let weekCount = setAttriMuStr(contentStr: "跟进人数：\(data.weekVisitUserNum)人", highlightStr: "跟进人数：", highlightColor:  UIColor(hex: "#999999"))
                 weekCountLabel.attributedText = weekCount
                 
-                let weekVisit = setAttriMuStr(contentStr: "拜访数：\(data.weekVisitUserNum)次", highlightStr: "拜访数：", highlightColor:  UIColor(hex: "#999999"))
-                weekVisitLabel.attributedText = weekVisit
+                let weekDeal = setAttriMuStr(contentStr: "成交：\(data.weekVisitUserNum)元", highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
+                weekDealLabel.attributedText = weekDeal
+                
+                let weekRebate = setAttriMuStr(contentStr: "回扣：\(data.weekVisitUserNum)元", highlightStr: "回扣：", highlightColor:  UIColor(hex: "#999999"))
+                weekRebateLabel.attributedText = weekRebate
                 
                 let moonCount = setAttriMuStr(contentStr: "跟进人数：\(data.monthVisitNum)人", highlightStr: "跟进人数：", highlightColor:  UIColor(hex: "#999999"))
                 moonCountLabel.attributedText = moonCount
                 
-                let moonVisit = setAttriMuStr(contentStr: "拜访数：\(data.monthVisitUserNum)次", highlightStr: "拜访数：", highlightColor:  UIColor(hex: "#999999"))
-                moonVisitLabel.attributedText = moonVisit
+                let moonDeal = setAttriMuStr(contentStr: "成交：\(data.weekVisitUserNum)元", highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
+                moonDealLabel.attributedText = moonDeal
+                
+                let moonRebate = setAttriMuStr(contentStr: "回扣：\(data.weekVisitUserNum)元", highlightStr: "回扣：", highlightColor:  UIColor(hex: "#999999"))
+                moonRebateLabel.attributedText = moonRebate
                 
                 
                 if data.isLock == 1 { //TODO: 未知1是不是锁定  暂定为锁定
                     followView.backgroundColor = UIColor(hex: "#FF7744")
                     stateConstraint.deactivate()
                     ascriptionConstraint.activate()
-                    ascriptionLabel.text = "后端没有给数据"
+                    ascriptionLabel.text = "后端没有给数据" // TODO: 后端没有给数据
                     ascription.text = "参与人员："
                 } else {
                     followView.backgroundColor = UIColor(hex: "#5FB9A1")
@@ -78,12 +84,16 @@ class ProjectListCell: UITableViewCell {
     private var ascriptionLabel: UILabel!
     /// 一周跟进人数
     private var weekCountLabel = UILabel()
-    /// 一周拜访次数
-    private var weekVisitLabel = UILabel()
+    /// 一周成交
+    private var weekDealLabel = UILabel()
+    /// 一周回扣
+    private var weekRebateLabel = UILabel()
     /// 一月跟进人数
     private var moonCountLabel = UILabel()
-    /// 一月拜访次数
-    private var moonVisitLabel = UILabel()
+    /// 一月成交
+    private var moonDealLabel = UILabel()
+    /// 一月回扣
+    private var moonRebateLabel = UILabel()
     
     
     /// 状态底部约束
@@ -214,8 +224,8 @@ class ProjectListCell: UITableViewCell {
         stateConstraint.deactivate()
         ascriptionConstraint.activate()
         
-        setCount(titleStr: "最近一周", count: weekCountLabel, visit: weekVisitLabel, lastView: arrowView)
-        setCount(titleStr: "最近一月", count: moonCountLabel, visit: moonVisitLabel, lastView: weekCountLabel, isLast: true)
+        setCount(titleStr: "最近一周", count: weekCountLabel, deal: weekDealLabel, rebate: weekRebateLabel, lastView: arrowView)
+        setCount(titleStr: "最近一月", count: moonCountLabel, deal: moonDealLabel, rebate: moonRebateLabel, lastView: weekCountLabel, isLast: true)
     }
     
     /// 设置标题和内容
@@ -229,7 +239,6 @@ class ProjectListCell: UITableViewCell {
         title.taxi.layout { (make) in
             make.left.equalToSuperview().offset(15)
             make.top.equalTo(lastLabel.snp.bottom).offset(5)
-            make.right.lessThanOrEqualTo(content).offset(-8)
             if isLast {
                 if lastLabel.text == "最新拜访时间：" { // 状态底部约束
                     stateConstraint = make.bottom.equalToSuperview().offset(-13).priority(800).constraint
@@ -241,6 +250,7 @@ class ProjectListCell: UITableViewCell {
             .taxi.config { (label) in
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         content.taxi.layout { (make) in
@@ -255,6 +265,7 @@ class ProjectListCell: UITableViewCell {
             .taxi.config { (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
     }
     
@@ -263,59 +274,75 @@ class ProjectListCell: UITableViewCell {
     /// - Parameters:
     ///   - titleStr: 标题内容
     ///   - count: 数量label
-    ///   - visit: 拜访label
+    ///   - deal: 成交label
+    ///   - rebate: 回扣label
     ///   - lastView: 跟随的最后一个视图
     ///   - isLast: 是否是最后一个
-    private func setCount(titleStr: String, count: UILabel, visit: UILabel, lastView: UIView, isLast: Bool = false) {
-        _ = UIView().taxi.adhere(toSuperView: whiteView)
+    private func setCount(titleStr: String, count: UILabel, deal: UILabel, rebate: UILabel, lastView: UIView, isLast: Bool = false) {
+        _ = UIView().taxi.adhere(toSuperView: whiteView) // 分割线
             .taxi.layout(snapKitMaker: { (make) in
                 make.height.equalTo(1)
                 make.right.equalToSuperview()
-                make.top.equalTo(lastView.snp.bottom)
+                if isLast { // 因为只有两个  直接判断 是否是第二个
+                    make.top.equalTo(lastView.snp.bottom).offset(10)
+                } else {
+                    make.top.equalTo(lastView.snp.bottom)
+                }
                 make.left.equalToSuperview().offset(15)
             })
             .taxi.config({ (view) in
                 view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
             })
         
-        _ = UILabel().taxi.adhere(toSuperView: whiteView)
-            .taxi.layout(snapKitMaker: { (make) in
-                make.height.equalTo(37)
-                make.top.equalTo(lastView.snp.bottom)
-                make.left.equalToSuperview().offset(15)
-                if isLast {
-                    make.bottom.equalToSuperview()
+        let title = UILabel().taxi.adhere(toSuperView: whiteView) // 标题
+            .taxi.layout { (make) in
+                if isLast { // 因为只有两个  直接判断 是否是第二个
+                    make.top.equalTo(lastView.snp.bottom).offset(20)
+                } else {
+                    make.top.equalTo(lastView.snp.bottom).offset(10)
                 }
-            })
-            .taxi.config({ (label) in
+                make.left.equalToSuperview().offset(15)
+            }
+            .taxi.config { (label) in
                 label.text = titleStr
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#6B83D1")
-            })
-        visit.taxi.adhere(toSuperView: whiteView)
-            .taxi.layout { (make) in
-                make.height.equalTo(37)
-                make.top.equalTo(lastView.snp.bottom)
-                make.right.equalToSuperview().offset(-5)
-                make.width.equalToSuperview().dividedBy(3.3).priority(800)
-            }
-            .taxi.config { (label) in
-                label.text = "拜访数：1000000次"
-                label.font = UIFont.medium(size: 12)
-                label.textColor = UIColor(hex: "#999999")
         }
         
-        count.taxi.adhere(toSuperView: whiteView)
+        count.taxi.adhere(toSuperView: whiteView) // 数量
             .taxi.layout { (make) in
-                make.height.equalTo(37)
-                make.top.equalTo(lastView.snp.bottom)
-                make.right.equalTo(visit.snp.left).offset(-5)
-                make.width.equalToSuperview().dividedBy(3.3).priority(800)
+                make.width.equalToSuperview().dividedBy(3.1).priority(800)
+                make.top.equalTo(title.snp.bottom).offset(5)
+                make.left.equalToSuperview().offset(15)
+                if isLast {
+                    make.bottom.equalToSuperview().offset(-10)
+                }
             }
             .taxi.config { (label) in
-                label.text = "跟进人数：100000人"
+                label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
-                label.textColor = UIColor(hex: "#999999")
+        }
+        
+        deal.taxi.adhere(toSuperView: whiteView) // 成交
+            .taxi.layout { (make) in
+                make.width.equalToSuperview().dividedBy(3.1).priority(800)
+                make.top.equalTo(title.snp.bottom).offset(5)
+                make.left.equalTo(count.snp.right).offset(5)
+            }
+            .taxi.config { (label) in
+                label.textColor = blackColor
+                label.font = UIFont.medium(size: 12)
+        }
+        
+        rebate.taxi.adhere(toSuperView: whiteView) // 回扣
+            .taxi.layout(snapKitMaker: { (make) in
+                make.width.equalToSuperview().dividedBy(3.1).priority(800)
+                make.top.equalTo(title.snp.bottom).offset(5)
+                make.left.equalTo(deal.snp.right).offset(5)
+            })
+            .taxi.config { (label) in
+                label.textColor = blackColor
+                label.font = UIFont.medium(size: 12)
         }
     }
     

@@ -46,13 +46,10 @@ extension SetUpController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCell(withIdentifier: "SetUpCell")
         if cell == nil {
-            cell = UITableViewCell(style: .value2, reuseIdentifier: "SetUpCell")
-//            cell?.imageView?.layer.cornerRadius = (cell?.imageView?.height ?? 0) / 2
-            cell?.imageView?.layer.masksToBounds = true
-            cell?.textLabel?.font = UIFont.medium(size: 14)
+            cell = UITableViewCell(style: .default, reuseIdentifier: "SetUpCell")
             cell?.textLabel?.textColor = UIColor(hex: "#444444")
+            cell?.textLabel?.font = UIFont.medium(size: 14)
         }
-        cell?.imageView?.backgroundColor = .gray
         cell?.textLabel?.text = indexPath.row == 0 ? "修改密码" : "退出登录"
         return cell!
     }
@@ -67,6 +64,11 @@ extension SetUpController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == 0 {
             let vc = ChangePasswordController()
             navigationController?.pushViewController(vc, animated: true)
+        } else {
+            UserInfo.share.userRemve() // 清除数据
+            let vc = LoginController()
+            let nav = MainNavigationController(rootViewController: vc)
+            self.view.window?.rootViewController = nav
         }
     }
 }

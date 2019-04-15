@@ -38,13 +38,9 @@ class SeleVisitTimeView: UIView {
     /// “时分”约束
     private var timeConstraint: Constraint!
     
-    override init(frame: CGRect) {
-        super.init(frame: ScreenBounds)
-        initSubViews()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    convenience init(limit: Bool) {
+        self.init(frame: ScreenBounds)
+        initSubViews(limit: limit)
     }
     
     // MAKR: - 自定义公有方法
@@ -68,7 +64,7 @@ class SeleVisitTimeView: UIView {
     
     // MARK: - 自定义私有方法
     /// 初始化子控件
-    private func initSubViews() {
+    private func initSubViews(limit: Bool) {
         
         grayView = UIView().taxi.adhere(toSuperView: self) // 灰色背景图
             .taxi.layout(snapKitMaker: { (make) in
@@ -145,7 +141,9 @@ class SeleVisitTimeView: UIView {
                 make.bottom.equalToSuperview().offset(-5)
             })
             .taxi.config({ (calendar) in
-                calendar.dataSource = self
+                if limit {
+                    calendar.dataSource = self
+                }
                 calendar.delegate = self
                 calendar.backgroundColor = UIColor.white
                 let locale = Locale(identifier: "zh_CN")

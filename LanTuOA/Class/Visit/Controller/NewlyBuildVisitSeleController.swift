@@ -173,7 +173,7 @@ class NewlyBuildVisitSeleController: UIViewController {
         case .customer:
             customerListStatistics(isMore: isMore)
         case .visitor:
-            customerContactList(isMore: isMore)
+            customerContactList()
         case .project:
             projectList(isMore: isMore)
         }
@@ -204,7 +204,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     private func customerListStatistics(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.customerListStatistics(searchBar.text ?? "", 1, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerListStatistics(searchBar.text ?? "", 2, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -238,9 +238,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     }
     
     /// 获取客户联系人列表
-    ///
-    /// - Parameter isMore: 是否是加载更多
-    private func customerContactList(isMore: Bool) { // 自行编写搜索
+    private func customerContactList() { // 自行编写搜索
         MBProgressHUD.showWait("")
         let searchStr = searchBar.text ?? ""
         if searchStr.count != 0 {
@@ -255,37 +253,19 @@ class NewlyBuildVisitSeleController: UIViewController {
             tableView.reloadData()
             MBProgressHUD.dismiss()
         } else {
-            let newPage = isMore ? page + 1 : 1
-            _ = APIService.shared.getData(.customerContactList(customerId, newPage, 99999), t: CustomerContactListModel.self, successHandle: { (result) in
+            _ = APIService.shared.getData(.customerContactList(customerId, 1, 99999), t: CustomerContactListModel.self, successHandle: { (result) in
                 MBProgressHUD.dismiss()
-                if isMore {
-                    for model in result.data {
-                        self.visitorData.append(model)
-                    }
-                    self.tableView.mj_footer.endRefreshing()
-                    self.tableView.mj_header.isHidden = false
-                    self.page += 1
-                } else {
-                    self.page = 1
-                    self.visitorData = result.data
-                    self.tableView.mj_header.endRefreshing()
-                    self.tableView.mj_footer.isHidden = false
-                }
-                //            if newPage == result.max_page {
+                self.page = 1
+                self.visitorData = result.data
+                self.tableView.mj_header.endRefreshing()
+                self.tableView.mj_footer.isHidden = false
                 self.tableView.mj_footer.endRefreshingWithNoMoreData()
-                //            } else {
-                //                self.tableView.mj_footer.resetNoMoreData()
-                //            }
+                
                 self.tableView.reloadData()
                 self.oldVisitorData = self.visitorData
             }, errorHandle: { (error) in
-                if isMore {
-                    self.tableView.mj_footer.endRefreshing()
-                    self.tableView.mj_header.isHidden = false
-                } else {
-                    self.tableView.mj_header.endRefreshing()
-                    self.tableView.mj_footer.isHidden = false
-                }
+                self.tableView.mj_header.endRefreshing()
+                self.tableView.mj_footer.isHidden = false
                 MBProgressHUD.showError(error ?? "获取失败")
             })
         }
@@ -344,7 +324,7 @@ class NewlyBuildVisitSeleController: UIViewController {
             let ejectView = AddVisitorEjectView()
             ejectView.customerId = id
             ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
-                self?.customerContactList(isMore: false)
+                self?.customerContactList()
             }
             ejectView.show()
         case .project(let id):

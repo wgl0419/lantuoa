@@ -71,7 +71,7 @@ class ProjectDetailsHeaderView: UIView {
                 make.right.equalToSuperview().offset(lockState == 2 ? -15 : -55).priority(800)
             })
             .taxi.config({ (label) in
-                label.textColor = blackColor
+                label.textColor = UIColor(hex: "#2E4695")
                 label.font = UIFont.boldSystemFont(ofSize: 24)
             })
         

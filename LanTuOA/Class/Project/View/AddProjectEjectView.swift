@@ -91,7 +91,7 @@ class AddProjectEjectView: UIView {
                 make.top.left.right.equalToSuperview()
             }
             .taxi.config { (label) in
-                label.text = "新增客户"
+                label.text = "新增项目"
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
@@ -221,6 +221,7 @@ extension AddProjectEjectView: UITableViewDelegate, UITableViewDataSource {
         let row = indexPath.row
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerTextViewCell", for: indexPath) as! CustomerTextViewCell
         cell.data = (titleArray[row], placeholderArray[row])
+        cell.contentStr = seleStrArray[row]
         cell.tableView = tableView
         if row == 1 { // 地址可输入3行
             cell.limitRow = 3

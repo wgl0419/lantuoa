@@ -154,7 +154,7 @@ class NewlyBuildVisitController: UIViewController {
     
     /// 选择时间处理
     private func seleTimeHandle() {
-        let view = SeleVisitTimeView()
+        let view = SeleVisitTimeView(limit: true)
         view.seleBlock = { [weak self] (timeStr) in
             self?.seleStrArray[4] = timeStr
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 4)], with: .fade)

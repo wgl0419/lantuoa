@@ -10,7 +10,7 @@ import UIKit
 
 class MeHomeCell: UITableViewCell {
     
-    /// 数据
+    /// 数据 (图片 + 标题 + 是否有红点)
     var data: (String, String, Bool)? {
         didSet {
             if let data = data {
@@ -45,11 +45,6 @@ class MeHomeCell: UITableViewCell {
                 make.bottom.equalToSuperview().offset(-13)
                 make.left.equalToSuperview().offset(15)
                 make.top.equalToSuperview().offset(13)
-            })
-            .taxi.config({ (imageView) in
-//                imageView.isShowRedDot = true
-                imageView.layer.cornerRadius = 12
-                imageView.backgroundColor = UIColor(hex: "#B8B8B8")
             })
         
         titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题

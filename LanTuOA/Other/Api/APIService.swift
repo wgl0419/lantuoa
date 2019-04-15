@@ -79,7 +79,7 @@ extension APIService {
                         let jsonDic = json as? [String: Any]
                         if let errCode = jsonDic!["errCode"] as? Int, errCode != 0 { // 错误信息
                             if errCode == 2000 { // token过期，异地登录
-                                print("请重新登录",target)
+                                UserInfo.share.userRemve() // 清除数据
                                 let vc = self.getCurrentController()
                                 let loginVc = LoginController()
                                 vc?.view.window?.rootViewController = loginVc

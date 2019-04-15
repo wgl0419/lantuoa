@@ -97,6 +97,11 @@ class SegmentView: UIView {
         }
     }
     
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        
+    }
+    
     /// 修改按钮
     private func btnChange(btn: UIButton) {
         if seleBtn != btn {

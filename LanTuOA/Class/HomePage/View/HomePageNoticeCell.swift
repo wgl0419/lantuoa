@@ -52,12 +52,12 @@ class HomePageNoticeCell: UITableViewCell {
         firstContentLabel.taxi.layout { (make) in
             make.top.equalTo(imageView)
             make.left.equalTo(imageView.snp.right).offset(24)
-            make.right.lessThanOrEqualTo(firstTimeLabel).offset(-8)
         }
             .taxi.config { (label) in
                 label.text = "123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123"
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         firstTimeLabel.taxi.layout { (make) in
@@ -69,6 +69,7 @@ class HomePageNoticeCell: UITableViewCell {
                 label.text = "123分钟"
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         
         firstSpot = UIView().taxi.adhere(toSuperView: contentView) // 第一个通知前面的点
@@ -89,12 +90,12 @@ class HomePageNoticeCell: UITableViewCell {
         secondContentLabel.taxi.layout { (make) in
             make.bottom.equalTo(imageView)
             make.left.equalTo(imageView.snp.right).offset(24)
-            make.right.lessThanOrEqualTo(firstTimeLabel).offset(-8)
             }
             .taxi.config { (label) in
                 label.text = "123123123123123123123"
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         secondTimeLabel.taxi.layout { (make) in
@@ -106,6 +107,7 @@ class HomePageNoticeCell: UITableViewCell {
                 label.text = "123分钟"
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         
         secondSpot = UIView().taxi.adhere(toSuperView: contentView) // 第一个通知前面的点

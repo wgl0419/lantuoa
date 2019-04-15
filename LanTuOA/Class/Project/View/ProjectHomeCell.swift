@@ -138,7 +138,6 @@ class ProjectHomeCell: UITableViewCell {
         title.taxi.layout { (make) in
             make.left.equalToSuperview().offset(15)
             make.top.equalTo(lastLabel.snp.bottom).offset(5)
-            make.right.lessThanOrEqualTo(content).offset(-8)
             if isLast {
                 make.bottom.equalToSuperview().offset(-13)
             }
@@ -146,6 +145,7 @@ class ProjectHomeCell: UITableViewCell {
             .taxi.config { (label) in
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         content.taxi.layout { (make) in
@@ -156,6 +156,7 @@ class ProjectHomeCell: UITableViewCell {
             .taxi.config { (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
     }
 }

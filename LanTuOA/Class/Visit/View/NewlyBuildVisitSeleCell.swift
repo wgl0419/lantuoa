@@ -19,6 +19,15 @@ class NewlyBuildVisitSeleCell: UITableViewCell {
             }
         }
     }
+    /// 数据(标题+提示文本)
+    var attriData: (NSMutableAttributedString, String)? {
+        didSet {
+            if let data = attriData {
+                titleLabel.attributedText = data.0
+                placeholderLabel.text = data.1
+            }
+        }
+    }
     /// 内容
     var contentStr: String? {
         didSet {
@@ -28,7 +37,6 @@ class NewlyBuildVisitSeleCell: UITableViewCell {
             }
         }
     }
-    
     /// 富文本内容
     var attriMuStr: NSMutableAttributedString? {
         didSet {
@@ -38,9 +46,20 @@ class NewlyBuildVisitSeleCell: UITableViewCell {
             }
         }
     }
+    /// 必选(默认非必选)
+    var isMust: Bool? {
+        didSet {
+            if let isMust = isMust {
+                mustLabel.isHidden = !isMust
+            }
+        }
+    }
+    
     
     /// 标题
     private var titleLabel: UILabel!
+    /// 必选星星
+    private var mustLabel: UILabel!
     /// 提示
     private var placeholderLabel: UILabel!
     /// 内容
@@ -71,6 +90,17 @@ class NewlyBuildVisitSeleCell: UITableViewCell {
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 16)
         }
+        
+        mustLabel = UILabel().taxi.adhere(toSuperView: contentView) // 必选星星
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerY.equalTo(titleLabel)
+                make.right.equalTo(titleLabel.snp.left).offset(-3)
+            })
+            .taxi.config({ (label) in
+                label.text = "*"
+                label.isHidden = true
+                label.textColor = UIColor(hex: "#FF4444")
+            })
         
         contentLabel.taxi.layout { (make) in
             make.top.equalTo(contentView).offset(15)

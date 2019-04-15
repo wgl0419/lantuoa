@@ -19,10 +19,13 @@ struct CustomerContactListModel: HandyJSON {
 }
 
 struct CustomerContactListData: HandyJSON {
-    var phone: String?
-    var name: String?
     var position: String?
-    var id: Int = 0
-    var createdTime: Int = 0
     var customerId: Int = 0
+    var positionLevel: Int = 0
+    var name: String?
+    var createdUser: Int = 0
+    var id: Int = 0
+    var phone: String?
+    var visitTime: Int = 0
+    var createdTime: Int = 0
 }
