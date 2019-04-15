@@ -22,8 +22,9 @@ variables:
 build:
   stage: build
   script:
-    - bundle install
-    - bundle exec fastlane build
+    #- bundle install
+    #- bundle exec fastlane build
+    - fastlane beta
   artifacts:
     paths:
     - ./*.ipa
