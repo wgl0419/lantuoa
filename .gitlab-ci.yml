@@ -12,17 +12,20 @@
 # detail on what to keep in mind in this scenario.
 
 stages:
-  - build
-
+    - build
 variables:
-  LC_ALL: "en_US.UTF-8"
-  LANG: "en_US.UTF-8"
-  GIT_STRATEGY: clone
-
-build:
-  stage: build
-  script:
-    - fastlane beta
-  artifacts:
+    LC_ALL: "en_US.UTF-8"
+    LANG: "en_US.UTF-8"
+build_project:
+    stage: build
+script:
+    - fastlane sit
+    - echo "https://www.pgyer.com/aadd1b891ca9e0e4cc789b1b116ef28a" | mail -s "iOS安装包已发布,请点击链接下载" 549129741@qq.com
+artifacts:
     paths:
-    - ./*.ipa
+    - ./build/LanTuOA.ipa
+   
+   
+   
+   
+   
