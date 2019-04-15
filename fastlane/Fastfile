@@ -19,7 +19,6 @@ platform :ios do
   desc "Description of what the lane does"
   lane :beta do
     build_app(export_method: "ad-hoc")
-    pgyer(api_key: "a8902addd7e0a0a886c42457cf5c4c88", user_key: "f6b9e850fcfa185a2a6d90765d779448")
-    # add actions here: https://docs.fastlane.tools/actions
+    pgyer(api_key: "a8902addd7e0a0a886c42457cf5c4c88", user_key: "f6b9e850fcfa185a2a6d90765d779448", update_description: "测试CI", password: "djdj", install_type: "2")
   end
 end

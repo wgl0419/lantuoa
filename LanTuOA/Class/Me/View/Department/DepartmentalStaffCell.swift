@@ -10,6 +10,8 @@ import UIKit
 
 class DepartmentalStaffCell: UITableViewCell {
     
+    /// 点击更多回调
+    var moreBlock: ((UIButton) -> ())?
     /// 数据
     var data: DepartmentsUsersData? {
         didSet {
@@ -82,13 +84,15 @@ class DepartmentalStaffCell: UITableViewCell {
             })
             .taxi.config({ (btn) in
                 btn.setImage(UIImage(named: "more"), for: .normal)
-                btn.addTarget(self, action: #selector(moreClick), for: .touchUpInside)
+                btn.addTarget(self, action: #selector(moreClick(btn:)), for: .touchUpInside)
             })
     }
     
     // MARK: - 按钮点击
     /// 点击更多功能
-    @objc private func moreClick() {
-        
+    @objc private func moreClick(btn: UIButton) {
+        if moreBlock != nil {
+            moreBlock!(btn)
+        }
     }
 }

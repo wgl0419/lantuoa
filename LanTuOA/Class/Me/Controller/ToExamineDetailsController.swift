@@ -41,14 +41,12 @@ class ToExamineDetailsController: UIViewController {
     // MARK: - APi
     /// 审批详情
     private func notifyCheckDetail() {
-//        MBProgressHUD.showWait("")
-//        _ = APIService.shared.getData(.notifyCheckDetail(1), t: <#T##HandyJSON.Protocol#>, successHandle: { (result) in
-//            MBProgressHUD.dismiss()
-//        }, errorHandle: { (error) in
-//            MBProgressHUD.showError(error ?? "获取审批详情失败")
-//        })
-        
-        // TODO: 接口数据不全
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.notifyCheckDetail(1), t: NotifyCheckDetailModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取审批详情失败")
+        })
     }
 }
 

@@ -28,7 +28,6 @@ class SeleVisitModelView: UIView {
         self.init(frame: ScreenBounds)
         titleStr = title
         contentStrArray = content
-        contentStrArray.append("取消")
         initSubViews()
     }
     
@@ -80,6 +79,7 @@ class SeleVisitModelView: UIView {
                 tableView.delegate = self
                 tableView.dataSource = self
                 tableView.estimatedRowHeight = 56
+                tableView.showsVerticalScrollIndicator = false
                 tableView.separatorInset = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
                 tableView.register(SeleVisitModelCell.self, forCellReuseIdentifier: "SeleVisitModelCell")
             })
@@ -112,19 +112,46 @@ extension SeleVisitModelView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SeleVisitModelCell", for: indexPath) as! SeleVisitModelCell
         let row = indexPath.row
-        cell.data = (contentStrArray[row], row == contentStrArray.count - 1 ? UIColor(hex: "#6B83D1") : blackColor)
+        cell.data = (contentStrArray[row], blackColor)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
-        if row != contentStrArray.count - 1 {
-            if didBlock != nil {
-                didBlock!(row)
-            }
+        if didBlock != nil {
+            didBlock!(row)
         }
         hidden()
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 55))
+        footerView.backgroundColor = .white
+        _ = UIView().taxi.adhere(toSuperView: footerView) // 分割线
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.right.top.equalToSuperview()
+                make.height.equalTo(1)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+            })
+        
+        _ = UIButton().taxi.adhere(toSuperView: footerView) // 取消按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.edges.equalToSuperview()
+            })
+            .taxi.config({ (btn) in
+                btn.setTitle("取消", for: .normal)
+                btn.titleLabel?.font = UIFont.medium(size: 16)
+                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+                btn.addTarget(self, action: #selector(hidden), for: .touchUpInside)
+            })
+        return footerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 55
     }
 }
 

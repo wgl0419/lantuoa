@@ -154,7 +154,7 @@ class ProjectDetailsController: UIViewController {
                     }
                     tableView.cellBlock = { [weak self] (id, type) in
                         switch type {
-                        case 0:
+                        case 0: // 邀请成员
                             let vc = ProjectManageSeleController()
                             vc.title = "选择成员"
                             vc.isMultiple = true
@@ -164,6 +164,8 @@ class ProjectDetailsController: UIViewController {
                                 }
                             }
                             self?.navigationController?.pushViewController(vc, animated: true)
+                        case 1: // 退出工作组
+                            self?.workGroupQuitHandle(groupId: id)
                         default: break
                         }
                     }
@@ -235,6 +237,18 @@ class ProjectDetailsController: UIViewController {
         }
     }
     
+    /// 退出工作组处理
+    private func workGroupQuitHandle(groupId: Int) {
+        let alertController = UIAlertController(title: "提示", message: "是否退出该工作组?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
+        alertController.addAction(cancelAction)
+        let agreeAction = UIAlertAction(title: "退出", style: .default, handler: { (_) in
+            self.workGroupQuit(groupId: groupId)
+        })
+        alertController.addAction(agreeAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
     // MARK: - Api
     /// 修改项目
     private func projectUpdate(isLock: Int) {
@@ -281,10 +295,10 @@ class ProjectDetailsController: UIViewController {
     ///
     /// - Parameter userId: 要删除成员的Id
     private func projectMemberDelete(userId: Int) {
-        let alertController = UIAlertController(title: "提示", message: "是否删除该参与人员", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
+        let alertController = UIAlertController(title: "提示", message: "是否删除该参与人员?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .default, handler: nil)
         alertController.addAction(cancelAction)
-        let agreeAction = UIAlertAction(title: "删除", style: .default, handler: { (_) in
+        let agreeAction = UIAlertAction(title: "删除", style: .destructive, handler: { (_) in
             MBProgressHUD.showWait("")
             _ = APIService.shared.getData(.projectMemberDelete(self.projectData.id, userId), t: LoginModel.self, successHandle: { (result) in
                 self.tableViewArray[0].reload()
@@ -295,6 +309,19 @@ class ProjectDetailsController: UIViewController {
         })
         alertController.addAction(agreeAction)
         present(alertController, animated: true, completion: nil)
+    }
+    
+    /// 退出工作组
+    ///
+    /// - Parameter groupId: 要退出的工作组id
+    private func workGroupQuit(groupId: Int) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.workGroupQuit(groupId), t: LoginModel.self, successHandle: { (result) in
+            self.tableViewArray[0].reload()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "退出工作组失败")
+        })
     }
     
     // MARK: - 按钮点击

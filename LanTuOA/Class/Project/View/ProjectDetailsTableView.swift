@@ -361,7 +361,7 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if cellStyle == .workingGroup { // 工作组
-            let view = SeleVisitModelView(title: "选择操作", content: ["邀请成员加入", "查看项目", "退出工作组"])
+            let view = SeleVisitModelView(title: "选择操作", content: ["邀请成员加入", "退出工作组"])
             view.didBlock = { [weak self] (seleIndex) in
                 if self?.cellBlock != nil {
                     let id = self?.groupData[indexPath.row].id ?? 0

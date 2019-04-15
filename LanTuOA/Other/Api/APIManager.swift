@@ -15,8 +15,8 @@ enum APIManager {
     case logout() // 退出登录
     case loginUser() // 获取个人信息
     case users(Int, Int, String, Int) // 用户列表 (page:页码 limit:一页几条数据 realname:真实名称  used:是否启用)
-
     case usersPwd(String, String) // 修改密码 （oldPwd:原密码  新密码:新密码）
+    case usersLeave(Int) // 离职员工
     
     
     // MARK: - 客户
@@ -51,8 +51,9 @@ enum APIManager {
     // MARK: - 工作组
     case workGroupCreate(String, [Int], Int) // 新建工作组 (name:工作组名称  members:成员id  projectId:项目id)
     case workGroupList(Int, Int, Int) // 工作组列表 （page:页码  limit:一页数据  projectId:项目id）
-    case workGroupQuit(String) // 退出工作组
+    case workGroupQuit(Int) // 退出工作组
     case workGroupInvite(Int, [Int]) // 邀请他人加入工作组   (groupId:工作组id  members：成员id数组)
+    
     
     // MARK: - 通知
     case notifyList(Int, Int)// 通知列表 (page:页码  limit:一页数据)
@@ -73,6 +74,7 @@ enum APIManager {
     case departmentsUsers(Int, String?, Int?) // 获取部门人员列表 （ 部门id  keyword:搜索内容   type:部门员工类型（默认1）：1 普通员工；2 副主管；3 主管；4 上级领导。选填。）
     case departmentsCreate(String, Int) // 新增部门 (name:部门名称  parentId:上级部门id,如果是顶级部门，则传0或不传)
     case departmentsAddUsers(Int, [Int]) // 新增部门人员 （id：部门id   userIds：新增人员）
+    case departmentsChange(Int, Int, Int) // 修改部门 （userid:用户id   oldDeptId:旧部门id     newDeptId:新部门）
     
     
     // mARK: - 工作申请
@@ -95,8 +97,8 @@ extension APIManager: TargetType {
         case .logout: return "/api/logout"
         case .loginUser: return "/api/loginUser"
         case .users: return "/api/users"
-            
         case .usersPwd: return "/api/users/pwd"
+        case .usersLeave(let id): return "/api/users/leave/\(id)"
             
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"
@@ -152,6 +154,7 @@ extension APIManager: TargetType {
         case .processList: return "/api/process/list"
         case .processParams(let id): return "/api/process/params/\(id)"
         case .departmentsAddUsers(let id, _): return "/api/departments/\(id)/addUsers"
+        case .departmentsChange(let id, _, _): return "/api/departments/change/\(id)"
             
         default: return ""
         }
@@ -175,7 +178,11 @@ extension APIManager: TargetType {
             return .post
         case .workExtendExtend, .departmentsCreate, .departmentsAddUsers:
             return .post
-            case .projectMemberDelete:
+        case .departmentsChange:
+            return .put
+        case .projectMemberDelete:
+            return .delete
+        case .usersLeave:
             return .delete
         default: return .get
         }
@@ -287,6 +294,8 @@ extension APIManager: TargetType {
             params = ["name": name, "parentId": parentId]
         case .departmentsAddUsers(_, let userIds): // 新增部门人员
             params = ["userIds": userIds]
+        case let .departmentsChange(_ , oldDeptId, newDeptId): // 修改部门
+            params = ["oldDeptId": oldDeptId, "newDeptId": newDeptId]
             
             
         case let .processHistory(status, page, limit): // 历史申请列表

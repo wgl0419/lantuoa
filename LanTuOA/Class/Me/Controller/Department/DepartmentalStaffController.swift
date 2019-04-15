@@ -8,12 +8,15 @@
 
 import UIKit
 import MJRefresh
+import YCMenuView
 import MBProgressHUD
 
 class DepartmentalStaffController: UIViewController {
 
-    /// 部门数据
+    /// 当前部门数据
     var departmentsData: DepartmentsData!
+    /// 其他部门数据
+    var otherDepartmentsData = [DepartmentsData]()
     
     /// tableView
     private var tableView: UITableView!
@@ -22,12 +25,14 @@ class DepartmentalStaffController: UIViewController {
     private var departmentData: [DepartmentsData]!
     /// 人员数据
     private var personnelData: [DepartmentsUsersData]!
+    /// 修改部门用户id
+    private var userId = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNav()
         initSubViews()
-        departments()
+        departments(parentId: departmentsData.id)
         departmentsUsers()
     }
 
@@ -59,7 +64,7 @@ class DepartmentalStaffController: UIViewController {
                 tableView.register(DepartmentalGroupCell.self, forCellReuseIdentifier: "DepartmentalGroupCell")
                 tableView.register(DepartmentalStaffCell.self, forCellReuseIdentifier: "DepartmentalStaffCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
-                    self?.departments()
+                    self?.departments(parentId: self?.departmentsData.id ?? 0)
                     self?.departmentsUsers()
                 })
             })
@@ -71,33 +76,16 @@ class DepartmentalStaffController: UIViewController {
         tableView.mj_header.isHidden = departmentData != nil && personnelData != nil
     }
     
-    // MARK: - Api
-    /// 部门列表
-    private func departments() {
-        MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.departments(departmentsData.id), t: DepartmentsModel.self, successHandle: { (result) in
-            MBProgressHUD.dismiss()
-            self.departmentData = result.data
-            self.reloadDataHandle()
-            self.tableView.reloadData()
-        }, errorHandle: { (error) in
-            self.tableView.mj_header.endRefreshing()
-            MBProgressHUD.showError(error ?? "获取部门列表失败")
-        })
-    }
-    
-    /// 获取部门人员列表
-    private func departmentsUsers() {
-        MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.departmentsUsers(departmentsData.id, nil, nil), t: DepartmentsUsersModel.self, successHandle: { (result) in
-            MBProgressHUD.dismiss()
-            self.personnelData = result.data
-            self.reloadDataHandle()
-            self.tableView.reloadData()
-        }, errorHandle: { (error) in
-            self.tableView.mj_header.endRefreshing()
-            MBProgressHUD.showError(error ?? "获取部门人员列表失败")
-        })
+    /// 离职员工处理
+    private func usersLeaveHandle() {
+        let alertController = UIAlertController(title: "提示", message: "是否离职该员工?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "删除", style: .destructive) { (_) in
+            self.usersLeave()
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(deleteAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     /// 添加类的尾视图
@@ -135,13 +123,119 @@ class DepartmentalStaffController: UIViewController {
         return footerView
     }
     
+    /// 点击更多处理
+    private func moreHandle(btn: UIButton) {
+        let replaceAction = YCMenuAction(title: "   更换部门", image: nil) { (_) in
+            if self.otherDepartmentsData.count == 0 {
+                self.departments(parentId: -1)
+            } else {
+                self.reloadDataHandle()
+            }
+        }
+        let quitAction = YCMenuAction(title: "   设为离职", image: nil) { (_) in
+            self.usersLeaveHandle()
+        }
+        let actionArray = [replaceAction!, quitAction!]
+        let menuView = YCMenuView.menu(with: actionArray, width: 100, relyonView: btn)
+        menuView?.menuColor = .white
+        menuView?.separatorColor = UIColor(hex: "#E5E5E5")
+        menuView?.maxDisplayCount = 5
+        menuView?.offset = 0
+        menuView?.textColor = UIColor(hex: "#6B83D1")
+        menuView?.textFont = UIFont.medium(size: 12)
+        menuView?.menuCellHeight = 40
+        menuView?.dismissOnselected = true
+        menuView?.dismissOnTouchOutside = true
+        
+        menuView?.show()
+    }
+    
+    /// 选择部门处理
+    private func seleDepartmentsHandle() {
+        var contentStrArray = [String]()
+        for model in otherDepartmentsData {
+            contentStrArray.append(model.name ?? "")
+        }
+        let view = SeleVisitModelView(title: "更换部门", content: contentStrArray)
+        view.didBlock = { [weak self] (seleIndex) in
+            let newDeptId = self?.otherDepartmentsData[seleIndex].id ?? 0
+            self?.departmentsChange(newDeptId: newDeptId)
+        }
+        view.show()
+    }
+    
+    // MARK: - Api
+    /// 部门列表
+    private func departments(parentId: Int) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.departments(parentId), t: DepartmentsModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            if parentId == -1 {
+                self.otherDepartmentsData = result.data
+                for index in (0..<self.otherDepartmentsData.count).reversed() {
+                    let model = self.otherDepartmentsData[index]
+                    if model.id == self.departmentsData.id {
+                        self.otherDepartmentsData.remove(at: index)
+                        break
+                    }
+                }
+                self.seleDepartmentsHandle()
+            } else {
+                self.departmentData = result.data
+                self.reloadDataHandle()
+                self.tableView.reloadData()
+            }
+        }, errorHandle: { (error) in
+            self.tableView.mj_header.endRefreshing()
+            MBProgressHUD.showError(error ?? "获取部门列表失败")
+        })
+    }
+    
+    /// 获取部门人员列表
+    private func departmentsUsers() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.departmentsUsers(departmentsData.id, nil, nil), t: DepartmentsUsersModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            self.personnelData = result.data
+            self.reloadDataHandle()
+            self.tableView.reloadData()
+        }, errorHandle: { (error) in
+            self.tableView.mj_header.endRefreshing()
+            MBProgressHUD.showError(error ?? "获取部门人员列表失败")
+        })
+    }
+    
+    /// 修改部门
+    private func departmentsChange(newDeptId: Int) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.departmentsChange(userId, departmentsData.id, newDeptId), t: LoginModel.self, successHandle: { (result) in
+            self.departmentsUsers()
+            self.departments(parentId: self.departmentsData.id)
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "修改部门失败")
+        })
+    }
+    
+    /// 离职员工
+    private func usersLeave() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.usersLeave(userId), t: LoginModel.self, successHandle: { (result) in
+            self.departmentsUsers()
+            self.departments(parentId: self.departmentsData.id)
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "离职员工失败")
+        })
+    }
+    
     // MARK: - 按钮点击
     /// 点击邀请成员
     @objc private func rightClick() {
         let ejectView = DepartmentEjectView()
         ejectView.displayData = ("新建小组", "小组名称", .group(departmentsData.id))
         ejectView.createBlock = { [weak self] in
-            self?.departments()
+            self?.departments(parentId: self?.departmentsData.id ?? 0)
         }
         ejectView.show()
     }
@@ -183,6 +277,10 @@ extension DepartmentalStaffController: UITableViewDelegate, UITableViewDataSourc
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DepartmentalStaffCell", for: indexPath) as! DepartmentalStaffCell
             cell.data = personnelData[indexPath.row]
+            cell.moreBlock = { [weak self] (btn) in
+                self?.userId = self?.personnelData[indexPath.row].id ?? 0
+                self?.moreHandle(btn: btn)
+            }
             return cell
         }
     }
