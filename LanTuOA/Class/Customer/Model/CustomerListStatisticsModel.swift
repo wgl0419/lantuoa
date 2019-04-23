@@ -41,4 +41,5 @@ struct CustomerListStatisticsData: HandyJSON {
     var industryName: String?
     var fullName: String?
     var weekVisitNum: Int = 0
+    var canManage: Int = 0
 }

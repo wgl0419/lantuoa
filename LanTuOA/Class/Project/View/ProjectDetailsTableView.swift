@@ -28,10 +28,14 @@ class ProjectDetailsTableView: UITableView {
     var addBlock: ((Int) -> ())?
     /// 点击cell回调 (工作组->组id  人员、历史->row         选择方式)
     var cellBlock: ((Int, Int) -> ())?
+    /// 点击拜访历史
+    var visitBlock: ((VisitListData) -> ())?
     /// 修改回调 (删除的id)
     var editBlock: ((Int) -> ())?
     /// 锁定状态 （0：未锁定   1：锁定）
     var lockState = 1
+    /// 能否编辑项目
+    var canManage = 0
     
     /// 历史顶部选择时间按钮
     private var seleTimeBtn: UIButton!
@@ -318,7 +322,7 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             cell.deleteBlock = {
                 self.projectMemberDelete(userId: self.memberData[row].userId)
             }
-            cell.lockState = lockState
+            cell.lockState = lockState == 1 && canManage == 1 ? 1 : 0
             cell.data = memberData[row]
             return cell
         } else if cellStyle == .history {
@@ -338,7 +342,7 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return 0
         } else if cellStyle == .history {
             return 30
-        } else if cellStyle == .personnel && lockState == 1 || cellStyle == .workingGroup {
+        } else if cellStyle == .personnel && lockState == 1 && canManage == 1 || cellStyle == .workingGroup {
             return 40
         } else {
             return 0
@@ -350,7 +354,7 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return nil
         } else if cellStyle == .history {
             return timeFooterViewHandle()
-        } else if cellStyle == .personnel && lockState == 1 || cellStyle == .workingGroup {
+        } else if cellStyle == .personnel && lockState == 1 && canManage == 1 || cellStyle == .workingGroup {
             return addFooterViewHandle()
         } else {
             return nil
@@ -369,10 +373,11 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
                 }
             }
             view.show()
-        } else { // 添加参与人员
-            
+        } else if cellStyle == .history { // 拜访历史
+            if visitBlock != nil {
+                visitBlock!(visitData[indexPath.row])
+            }
         }
-        
     }
 }
 

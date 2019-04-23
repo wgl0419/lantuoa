@@ -20,7 +20,7 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
             }
         }
     }
-    
+    /// 数据
     var data: ProjectMemberListData? {
         didSet {
             if let data = data {
@@ -92,7 +92,6 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
     
     private func deleteBtnHandle() {
         if lockState == 1 { // 锁定状态
-            // TODO: 添加尾视图
             if deleteBtn == nil {
                 deleteBtn = UIButton().taxi.adhere(toSuperView: contentView) // 删除按钮
                     .taxi.layout(snapKitMaker: { (make) in

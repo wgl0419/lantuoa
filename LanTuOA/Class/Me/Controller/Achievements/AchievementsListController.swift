@@ -7,6 +7,7 @@
 //  查询绩效  控制器
 
 import UIKit
+import MBProgressHUD
 
 class AchievementsListController: UIViewController {
 
@@ -15,7 +16,8 @@ class AchievementsListController: UIViewController {
     /// tableview
     private var tableView: UITableView!
     
-    
+    /// 数据
+    private var data = [PerformUnderData]()
     /// 记录输入次数  -> 用于减少计算次数
     private var inputCout = 0
     /// 页码
@@ -24,7 +26,7 @@ class AchievementsListController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
-        // TODO: 调用接口
+        performUnder()
     }
     
 
@@ -51,7 +53,7 @@ class AchievementsListController: UIViewController {
             })
             .taxi.config({ (searchBar) in
                 searchBar.sizeToFit()
-//                searchBar.delegate = self
+                searchBar.delegate = self
                 searchBar.backgroundColor = .clear
                 searchBar.searchBarStyle = .minimal
                 searchBar.placeholder = "项目名称/客户名称"
@@ -77,20 +79,41 @@ class AchievementsListController: UIViewController {
     /// - Parameter number: 记录的输入次数
     @objc private func distinguishSearch(number: NSNumber) {
         if Int(truncating: number) == inputCout { // 次数相同 说明停止输入
-            // TODO: 调用接口
+            performUnder()
         }
+    }
+    
+    // MARK: - Api
+    private func performUnder() {
+        MBProgressHUD.showWait("")
+        _ =  APIService.shared.getData(.performUnder(searchBar.text ?? ""), t: PerformUnderModel.self, successHandle: { (result) in
+            self.data = result.data
+            self.tableView.reloadData()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取失败")
+        })
     }
 }
 
 
 extension AchievementsListController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return data.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AchievementsListCell", for: indexPath) as! AchievementsListCell
+        cell.data = data[indexPath.row]
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let vc = AchievementsDetailsController()
+        vc.performUnderData = data[indexPath.row]
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

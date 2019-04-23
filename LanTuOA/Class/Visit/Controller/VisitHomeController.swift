@@ -48,6 +48,12 @@ class VisitHomeController: UIViewController {
         let nav = navigationController as! MainNavigationController
         nav.setNavConfigure(type: .dark, color: UIColor(hex: "#2E4695"), isShadow: false)
         nav.backBtn.isHidden = false
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "我的合同",
+                                                            titleColor: .white,
+                                                            titleFont: UIFont.medium(size: 15),
+                                                            titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
+                                                            target: self,
+                                                            action: #selector(rightClick))
     }
     
     /// 初始化子控件
@@ -184,6 +190,12 @@ class VisitHomeController: UIViewController {
     }
 
     // MARK: - 按钮点击
+    /// 点击我的合同
+    @objc private func rightClick() {
+        let vc = ContractListController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     /// 填写拜访按钮
     @objc private func btnClick() {
         let vc = NewlyBuildVisitController()

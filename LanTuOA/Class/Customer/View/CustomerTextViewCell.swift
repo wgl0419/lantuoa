@@ -96,6 +96,7 @@ class CustomerTextViewCell: UITableViewCell {
                 label.text = " "
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 16)
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
             })
         
         mustLabel = UILabel().taxi.adhere(toSuperView: contentView) // 必选星星
@@ -106,6 +107,7 @@ class CustomerTextViewCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.text = "*"
                 label.isHidden = true
+                label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#FF4444")
             })
         
@@ -113,10 +115,10 @@ class CustomerTextViewCell: UITableViewCell {
         let top = UITextView().textContainerInset.top
         textView = UITextView().taxi.adhere(toSuperView: contentView) // 输入框
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.equalToSuperview().offset(100)
                 make.right.equalToSuperview().offset(-30)
                 make.bottom.equalToSuperview().offset(-top)
                 make.top.equalToSuperview().offset(15 - top)
+                make.left.lessThanOrEqualToSuperview().offset(100)
                 make.height.equalTo(titleLabel.height).priority(800)
             })
             .taxi.config({ (textView) in
@@ -124,6 +126,7 @@ class CustomerTextViewCell: UITableViewCell {
                 textView.textAlignment = .right
                 textView.textColor = blackColor
                 textView.font = UIFont.medium(size: 16)
+                textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
     }
 }

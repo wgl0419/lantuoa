@@ -240,7 +240,7 @@ class AddVisitorEjectView: UIView {
         
         if !isCan {
             MBProgressHUD.showError("请先完成内容的输入")
-        } else if seleStrArray[1].isRegexMobile() {
+        } else if !seleStrArray[1].isRegexMobile() {
             MBProgressHUD.showError("请填写正确的手机号码")
         } else if isModify {
             customerContactUpdate()

@@ -41,12 +41,14 @@ class ProjectHomeController: UIViewController {
     /// 设置导航栏
     private func setNav() {
         title = customerName
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新增项目",
-                                                            titleColor: .white,
-                                                            titleFont: UIFont.medium(size: 15),
-                                                            titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
-                                                            target: self,
-                                                            action: #selector(rightClick))
+        if Jurisdiction.share.isAddProject {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新增项目",
+                                                                titleColor: .white,
+                                                                titleFont: UIFont.medium(size: 15),
+                                                                titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
+                                                                target: self,
+                                                                action: #selector(rightClick))
+        }
     }
     
     /// 初始化子控件

@@ -81,8 +81,10 @@ class VisitSeleTimeView: UIView {
         }
         endBtn.setTitle(endStr, for: .normal)
         
-        let btn = btnArray[sele]
-        seleClick(btn: btn)
+        if btnArray.count == 4 { // 有按钮
+            let btn = btnArray[sele]
+            seleClick(btn: btn)
+        }
     }
     
     // MARK: - 自定义私有方法
@@ -110,31 +112,33 @@ class VisitSeleTimeView: UIView {
         setTime(titleStr: "开始", btn: endBtn, lastView: startBtn)
         
         /**************  条件块  **************/
-        let condition = setModularHeader(titleStr: "条件", lastBtn: endBtn) // ”条件“
-        
-        let titleArray = ["全部", "我发起的", "我接手的", "工作组"]
-        for index in 0..<4 {
-            let row = index % 2
-            let section = index / 2
-            let btn = UIButton().taxi.adhere(toSuperView: whiteView)
-                .taxi.layout { (make) in
-                    make.top.equalTo(condition.snp.bottom).offset(section == 0 ? 30 : 72)
-                    make.left.equalToSuperview().offset(row == 0 ? 15 : 104)
-                    make.height.equalTo(26)
-                    make.width.equalTo(74)
+        if Jurisdiction.share.isViewVisitUnder {
+            let condition = setModularHeader(titleStr: "条件", lastBtn: endBtn) // ”条件“
+            
+            let titleArray = ["全部", "我发起的", "我接手的", "工作组"]
+            for index in 0..<4 {
+                let row = index % 2
+                let section = index / 2
+                let btn = UIButton().taxi.adhere(toSuperView: whiteView)
+                    .taxi.layout { (make) in
+                        make.top.equalTo(condition.snp.bottom).offset(section == 0 ? 30 : 72)
+                        make.left.equalToSuperview().offset(row == 0 ? 15 : 104)
+                        make.height.equalTo(26)
+                        make.width.equalTo(74)
+                    }
+                    .taxi.config { (btn) in
+                        btn.tag = index + 100
+                        btn.layer.borderWidth = 1
+                        btn.layer.cornerRadius = 4
+                        btn.setTitleColor(.white, for: .selected)
+                        btn.setTitle(titleArray[index], for: .normal)
+                        btn.titleLabel?.font = UIFont.medium(size: 12)
+                        btn.layer.borderColor = UIColor(hex: "#CCCCCC").cgColor
+                        btn.setTitleColor(UIColor(hex: "#787E82"), for: .normal)
+                        btn.addTarget(self, action: #selector(seleClick(btn:)), for: .touchUpInside)
+                }
+                btnArray.append(btn)
             }
-                .taxi.config { (btn) in
-                    btn.tag = index + 100
-                    btn.layer.borderWidth = 1
-                    btn.layer.cornerRadius = 4
-                    btn.setTitleColor(.white, for: .selected)
-                    btn.setTitle(titleArray[index], for: .normal)
-                    btn.titleLabel?.font = UIFont.medium(size: 12)
-                    btn.layer.borderColor = UIColor(hex: "#CCCCCC").cgColor
-                    btn.setTitleColor(UIColor(hex: "#787E82"), for: .normal)
-                    btn.addTarget(self, action: #selector(seleClick(btn:)), for: .touchUpInside)
-            }
-            btnArray.append(btn)
         }
         
         /**************  顶部块 **************/

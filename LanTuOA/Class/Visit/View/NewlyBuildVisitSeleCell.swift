@@ -99,6 +99,7 @@ class NewlyBuildVisitSeleCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.text = "*"
                 label.isHidden = true
+                label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#FF4444")
             })
         

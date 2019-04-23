@@ -51,6 +51,7 @@ class SelePersonnelCell: UITableViewCell {
         
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名称
             .taxi.layout(snapKitMaker: { (make) in
+                make.top.bottom.equalToSuperview()
                 make.height.equalTo(50).priority(800)
                 make.left.equalToSuperview().offset(40)
             })

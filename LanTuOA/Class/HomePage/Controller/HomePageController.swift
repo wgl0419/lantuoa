@@ -16,7 +16,7 @@ class HomePageController: UIViewController {
     
     
     /// 项目数据
-    private var data = [ProjectListData]()
+    private var data = [ProjectListStatisticsData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -137,5 +137,10 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let vc = ProjectDetailsController()
+        vc.lockState = 1
+        vc.projectId = data[indexPath.row].id
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

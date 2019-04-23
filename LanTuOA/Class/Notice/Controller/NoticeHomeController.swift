@@ -225,7 +225,7 @@ class NoticeHomeController: UIViewController {
     private func notifyCheckReject(index: IndexPath) {
         MBProgressHUD.showWait("")
         let checkId = pendingData[index.row].id
-        _ = APIService.shared.getData(.notifyCheckReject(checkId), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckReject(checkId, ""), t: LoginModel.self, successHandle: { (result) in
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
             MBProgressHUD.dismiss()
@@ -264,7 +264,7 @@ class NoticeHomeController: UIViewController {
     private func notifyCheckAgree(index: IndexPath) {
         MBProgressHUD.showWait("")
         let checkId = pendingData[index.row].id
-        _ = APIService.shared.getData(.notifyCheckAgree(checkId), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckAgree(checkId, ""), t: LoginModel.self, successHandle: { (result) in
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
             MBProgressHUD.dismiss()

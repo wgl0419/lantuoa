@@ -15,12 +15,22 @@ class FillInApplyController: UIViewController {
     var processName = "流程名称"
     /// 流程id
     var processId = 0
+    /// 流程类型
+    var pricessType = 0
 
     /// tableview
     private var tableView: UITableView!
+    /// 提交按钮
+    private var submissionBtn: UIButton!
     
     /// 数据
     private var data = [ProcessParamsData]()
+    /// 审核人数据
+    private var processUsersData: ProcessUsersData!
+    /// 添加的抄送人数据
+    private var carbonCopyData = [ProcessUsersCheckUsers]()
+    /// 添加合同人员数据
+    private var contractData = [(UsersData, String, String)]()
     /// 选中内容
     private var seleStrArray = [String]()
     /// 项目所在section
@@ -34,6 +44,7 @@ class FillInApplyController: UIViewController {
         super.viewDidLoad()
         initSubViews()
         processParams()
+        processUsers()
     }
     
     // MARK: - 自定义私有方法
@@ -42,9 +53,36 @@ class FillInApplyController: UIViewController {
         title = processName
         view.backgroundColor = .white
         
+        let btnView = UIView().taxi.adhere(toSuperView: view) // 按钮背景
+            .taxi.layout { (make) in
+                make.left.bottom.right.equalToSuperview()
+                make.height.equalTo(62 + (isIphoneX ? SafeH : 18))
+        }
+            .taxi.config { (view) in
+                view.backgroundColor = .white
+        }
+        
+        submissionBtn = UIButton().taxi.adhere(toSuperView: btnView) // 提交按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.width.equalToSuperview().offset(-30)
+                make.top.equalToSuperview().offset(18)
+                make.centerX.equalToSuperview()
+                make.height.equalTo(44)
+            })
+            .taxi.config({ (btn) in
+                btn.isEnabled = false
+                btn.setTitle("提交", for: .normal)
+                btn.setTitleColor(.white, for: .normal)
+                btn.backgroundColor = UIColor(hex: "#CCCCCC")
+                btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+                btn.addTarget(self, action: #selector(submissionClick), for: .touchUpInside)
+            })
+        
+        
         tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
-                make.edges.equalToSuperview()
+                make.top.left.right.equalToSuperview()
+                make.bottom.equalTo(btnView.snp.top)
             })
             .taxi.config({ (tableView) in
                 tableView.delegate = self
@@ -55,22 +93,79 @@ class FillInApplyController: UIViewController {
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
                 tableView.register(FillInApplyTextViewCell.self, forCellReuseIdentifier: "FillInApplyTextViewCell")
                 tableView.register(FillInApplyFieldViewCell.self, forCellReuseIdentifier: "FillInApplyFieldViewCell")
+                tableView.register(FillInApplyApprovalCell.self, forCellReuseIdentifier: "FillInApplyApprovalCell")
+                tableView.register(FillInApplyPersonnelCell.self, forCellReuseIdentifier: "FillInApplyPersonnelCell")
             })
     }
     
     /// 确认按钮处理
     private func confirmHandle() {
+        var isEnabled = true
+        for index in 0..<data.count {
+            let model = data[index]
+            if model.isNecessary == 1 && seleStrArray[index].count == 0 {
+                isEnabled = false
+                break
+            }
+        }
+        if isEnabled && pricessType == 5 {
+            isEnabled = contractData.count > 0
+        }
         
+        if isEnabled {
+            submissionBtn.backgroundColor = UIColor(hex: "#2E4695")
+            submissionBtn.isEnabled = true
+        } else {
+            submissionBtn.isEnabled = false
+            submissionBtn.backgroundColor = UIColor(hex: "#CCCCCC")
+        }
     }
     
     /// 选择时间
     private func seleTimeHandle(section: Int) {
-        let view = SeleVisitTimeView(limit: false)
+        let view = SingleSeleTimeEjectView()
+        view.titleStr = (data[section].title ?? "") + "："
         view.seleBlock = { [weak self] (timeStr) in
             self?.seleStrArray[section] = timeStr
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .fade)
+            self?.confirmHandle()
         }
         view.show()
+    }
+    
+    /// 单选
+    private func singleSeleHandle(section: Int) {
+        var contentArray = [String]()
+        for model in data[section].choices {
+            contentArray.append(model.name ?? "")
+        }
+        let view = SeleVisitModelView(title: "选择拜访方式", content: contentArray)
+        view.didBlock = { [weak self] (seleIndex) in
+            self?.seleStrArray[section] = contentArray[seleIndex]
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .fade)
+            self?.confirmHandle()
+        }
+        view.show()
+    }
+    
+    /// 多选处理
+    private func multipleSeleHandle(section: Int) {
+        var contentArray = [String]()
+        for model in data[section].choices {
+            contentArray.append(model.name ?? "")
+        }
+        let vc = MultipleSeleController()
+        vc.contentArray = contentArray
+        vc.didBlock = { [weak self] (seleArray) in
+            var seleStr = ""
+            for str in seleArray {
+                seleStr.append("、" + str)
+            }
+            if seleStr.count > 0 { seleStr.remove(at: seleStr.startIndex) }
+            self?.seleStrArray[section] = seleStr
+            self?.confirmHandle()
+        }
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     /// 选择客户
@@ -83,8 +178,12 @@ class FillInApplyController: UIViewController {
             self?.seleStrArray[section] = customerArray.first?.1 ?? ""
             // 重置数据 -> 防止出现选择项目后 修改客户
             self?.projectId = -1
-            self?.seleStrArray[position] = ""
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section), IndexPath(row: 0, section: position)], with: .fade)
+            if position != -1 {
+                self?.seleStrArray[position] = ""
+                self?.tableView.reloadRows(at: [IndexPath(row: 0, section: position)], with: .fade)
+            }
+            
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .fade)
             self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -122,6 +221,67 @@ class FillInApplyController: UIViewController {
         }
     }
     
+    /// 添加抄送人处理
+    private func addCarbonCopyHandle() {
+        let vc = SelePersonnelController()
+        var prohibitIds = [Int]()
+        for model in processUsersData.ccUsers {
+            prohibitIds.append(model.checkUserId)
+        }
+        vc.prohibitIds = prohibitIds
+        vc.displayData = ("请选择", "添加", .back)
+        vc.backBlock = { [weak self] (users) in
+            for model in users {
+                var newModel = ProcessUsersCheckUsers()
+                newModel.checkUserId = model.id
+                newModel.realname = model.realname
+                self?.carbonCopyData.append(newModel)
+                self?.processUsersData.ccUsers.append(newModel)
+            }
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: (self?.data.count ?? 0) + 1)], with: .fade)
+            self?.confirmHandle()
+        }
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /// 处理添加人员
+    private func addPersonnelHandle() {
+        let ejectView = FillInApplyAddPersonnelEjectView()
+        /// 剩余的业绩百分比和提成百分比
+        var achievemenhtsPercentage = 100
+        var royaltyPercentage = 100
+        for model in contractData {
+            achievemenhtsPercentage -= Int(model.1) ?? 0
+            royaltyPercentage -= Int(model.2) ?? 0
+        }
+        
+        ejectView.maxInput = [achievemenhtsPercentage, royaltyPercentage]
+        ejectView.determineBlock = { [weak self] (userData, achievemenhts, royalty) in
+            self?.contractData.append((userData, achievemenhts, royalty))
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: (self?.data.count ?? 0) + 2)], with: .fade)
+            self?.confirmHandle()
+        }
+        ejectView.seleBlock = { [weak self] in
+            ejectView.isHidden = true
+            let vc = SelePersonnelController()
+            var prohibitIds = [Int]()
+            for model in (self?.contractData)! {
+                prohibitIds.append(model.0.id)
+            }
+            vc.prohibitIds = prohibitIds
+            vc.isMultiple = false
+            vc.displayData = ("选择人员", "选定", .back)
+            vc.backBlock = { (users) in
+                if users.count > 0 {
+                    ejectView.userData = users[0]
+                }
+                ejectView.isHidden = false
+            }
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+        ejectView.show()
+    }
+    
     // MARK: - Api
     /// 获取流程内容
     private func processParams() {
@@ -135,11 +295,83 @@ class FillInApplyController: UIViewController {
             MBProgressHUD.showError(error ?? "获取流程内容失败,请下拉重新加载")
         })
     }
+    
+    /// 获取流程默认审批/抄送人
+    private func processUsers() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.processUsers(processId), t: ProcessUsersModel.self, successHandle: { (result) in
+            self.processUsersData = result.data
+            self.tableView.reloadData()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "")
+        })
+    }
+    
+    /// 提交流程
+    private func processCommit() {
+        MBProgressHUD.showWait("")
+        
+        /// 数据
+        var dataDic: [String:String] = [:]
+        for index in 0..<data.count {
+            let model = data[index]
+            var contentStr = seleStrArray[index]
+            if model.type == 3 { // 时间
+                contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd"))"
+            } else if model.type == 6 { // 客户
+                contentStr = "\(customerId)"
+            } else if model.type == 7 { // 项目
+                contentStr = "\(projectId)"
+            }
+            dataDic.updateValue(contentStr, forKey: model.name ?? "")
+        }
+        
+        /// 成员
+        var memberArray = [[String:String]]()
+        if pricessType == 5 {
+            for index in 0..<contractData.count {
+                let model = contractData[index]
+                var dic: [String:String] = [:]
+                dic["userId"] = "\(model.0.id)"
+                dic["propPerform"] = model.1
+                dic["propMoney"] = model.2
+                memberArray.append(dic)
+            }
+        }
+        
+        /// 抄送人
+        var ccUsersArray = [[String:String]]()
+        for index in 0..<carbonCopyData.count {
+            let model = carbonCopyData[index]
+            var dic: [String:String] = [:]
+            dic["checkUser"] = "\(model.checkUserId)"
+            dic["checkUserName"] = model.realname ?? ""
+            ccUsersArray.append(dic)
+        }
+        
+        _ = APIService.shared.getData(.processCommit(processId, dataDic, memberArray, ccUsersArray), t: LoginModel.self, successHandle: { (result) in
+            MBProgressHUD.showSuccess("申请成功")
+            self.navigationController?.popViewController(animated: true)
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "申请失败")
+        })
+    }
+    
+    // MARK: - 按钮点击
+    /// 点击提交
+    @objc private func submissionClick() {
+        processCommit()
+    }
 }
 
 extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return data.count
+        if processUsersData != nil {
+            return pricessType == 5 ? data.count + 3 : data.count + 2
+        } else {
+            return data.count
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -148,32 +380,57 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
-        let model = data[section]
-        switch model.type {
-        case 1: // 1.文本
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyTextViewCell", for: indexPath) as! FillInApplyTextViewCell
-            cell.data = (model.title ?? "", model.hint ?? "")
-            cell.isMust = model.isNecessary == 1
-            cell.inputBlock = { [weak self] (contentStr) in
-                self?.seleStrArray[section] = contentStr
+        if section == data.count { // 审批人
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
+            cell.isApproval = true
+            cell.data = processUsersData.checkUsers
+            return cell
+        } else if section == data.count + 1 { // 抄送
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
+            cell.isApproval = false
+            cell.data = processUsersData.ccUsers
+            cell.addBlock = { [weak self] in
+                self?.addCarbonCopyHandle()
             }
             return cell
-        case 2: // 2.数字
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyFieldViewCell", for: indexPath) as! FillInApplyFieldViewCell
-            cell.data = (model.title ?? "", model.hint ?? "")
-            cell.isMust = model.isNecessary == 1
-            cell.isNumber = true
-            cell.inputBlock = { [weak self] (contentStr) in
-                self?.seleStrArray[section] = contentStr
+        } else if section == data.count + 2 { // 合同人员
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyPersonnelCell", for: indexPath) as! FillInApplyPersonnelCell
+            cell.data = contractData
+            cell.addBlock = {[weak self] in
+                self?.addPersonnelHandle()
+                self?.confirmHandle()
             }
             return cell
-        case 3, 4, 5, 6, 7: // 3.日期，4.单选，5.多选，6.客户，7.项目
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitSeleCell", for: indexPath) as! NewlyBuildVisitSeleCell
-            cell.data = (model.title ?? "", model.hint ?? "")
-            cell.contentStr = seleStrArray[section]
-            cell.isMust = model.isNecessary == 1
-            return cell
-        default: return UITableViewCell()
+        } else {
+            let model = data[section]
+            switch model.type {
+            case 1: // 1.文本
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyTextViewCell", for: indexPath) as! FillInApplyTextViewCell
+                cell.data = (model.title ?? "", model.hint ?? "")
+                cell.isMust = model.isNecessary == 1
+                cell.inputBlock = { [weak self] (contentStr) in
+                    self?.seleStrArray[section] = contentStr
+                    self?.confirmHandle()
+                }
+                return cell
+            case 2: // 2.数字
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyFieldViewCell", for: indexPath) as! FillInApplyFieldViewCell
+                cell.data = (model.title ?? "", model.hint ?? "")
+                cell.isMust = model.isNecessary == 1
+                cell.isNumber = true
+                cell.inputBlock = { [weak self] (contentStr) in
+                    self?.seleStrArray[section] = contentStr
+                    self?.confirmHandle()
+                }
+                return cell
+            case 3, 4, 5, 6, 7: // 3.日期，4.单选，5.多选，6.客户，7.项目
+                let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitSeleCell", for: indexPath) as! NewlyBuildVisitSeleCell
+                cell.data = (model.title ?? "", model.hint ?? "")
+                cell.contentStr = seleStrArray[section]
+                cell.isMust = model.isNecessary == 1
+                return cell
+            default: return UITableViewCell()
+            }
         }
     }
     
@@ -191,12 +448,17 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let section = indexPath.section
+        guard section < data.count else {
+            return
+        }
         let model = data[section]
         switch model.type {
         case 3: // 3.日期
             seleTimeHandle(section: section)
-        case 4, 5: // 4.单选，5.多选
-            break
+        case 4: // 4.单选
+            singleSeleHandle(section: section)
+        case 5: // 5.多选
+            multipleSeleHandle(section: section)
         case 6: // 6.客户
             seleCustomerHandle(section: section)
         case 7: // 7.项目

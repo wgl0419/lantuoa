@@ -76,16 +76,18 @@ class DepartmentalStaffCell: UITableViewCell {
                 label.font = UIFont.boldSystemFont(ofSize: 14)
             })
         
-        _ = UIButton().taxi.adhere(toSuperView: contentView) // 功能按钮
-            .taxi.layout(snapKitMaker: { (make) in
-                make.right.equalToSuperview().offset(-5)
-                make.top.bottom.equalToSuperview()
-                make.width.equalTo(40)
-            })
-            .taxi.config({ (btn) in
-                btn.setImage(UIImage(named: "more"), for: .normal)
-                btn.addTarget(self, action: #selector(moreClick(btn:)), for: .touchUpInside)
-            })
+        if Jurisdiction.share.isModifyPerson || Jurisdiction.share.isLeavePerson { // 有修改部门或离职员工权限
+            _ = UIButton().taxi.adhere(toSuperView: contentView) // 功能按钮
+                .taxi.layout(snapKitMaker: { (make) in
+                    make.right.equalToSuperview().offset(-5)
+                    make.top.bottom.equalToSuperview()
+                    make.width.equalTo(40)
+                })
+                .taxi.config({ (btn) in
+                    btn.setImage(UIImage(named: "more"), for: .normal)
+                    btn.addTarget(self, action: #selector(moreClick(btn:)), for: .touchUpInside)
+                })
+        }
     }
     
     // MARK: - 按钮点击

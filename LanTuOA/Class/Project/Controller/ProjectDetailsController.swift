@@ -15,8 +15,14 @@ class ProjectDetailsController: UIViewController {
     var editBlock: ((ProjectListStatisticsData) -> ())?
     /// 锁定状态 （1：显示锁图标  2：无状态）
     var lockState = 1
-    /// 项目id
+    /// 项目数据 (从项目列表进入)
     var projectData: ProjectListStatisticsData!
+    /// 项目id (其他入口  没有项目数据)
+    var projectId: Int! {
+        didSet {
+            projectDetail()
+        }
+    }
     
     /// 顶部视图
     private var headerView: ProjectDetailsHeaderView!
@@ -38,19 +44,24 @@ class ProjectDetailsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initSubViews()
+        if projectData != nil {
+            initSubViews()
+        }
+        
     }
     
     // MARK: - 自定义私有方法
     /// 设置导航栏
     private func setNav(_ titleStr: String) {
         title = "项目详情"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: titleStr,
-                                                            titleColor: .white,
-                                                            titleFont: UIFont.medium(size: 15),
-                                                            titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
-                                                            target: self,
-                                                            action: #selector(rightClick))
+        if Jurisdiction.share.isEditProject || projectData.canManage == 1 {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: titleStr,
+                                                                titleColor: .white,
+                                                                titleFont: UIFont.medium(size: 15),
+                                                                titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
+                                                                target: self,
+                                                                action: #selector(rightClick))
+        }
     }
     
     /// 初始化子控件
@@ -145,6 +156,7 @@ class ProjectDetailsController: UIViewController {
                 }
                 .taxi.config { (tableView) in
                     tableView.lockState = projectData.isLock
+                    tableView.canManage = projectData.canManage
                     tableView.scrollBlock = { (offsetY) in
                         let changeY = offsetY < -self.headerHeight - 40 ? 0 : offsetY >= -40 ? -self.headerHeight : -self.headerHeight - offsetY - 40
                         self.headerView.snp.updateConstraints({ (make) in
@@ -168,6 +180,11 @@ class ProjectDetailsController: UIViewController {
                             self?.workGroupQuitHandle(groupId: id)
                         default: break
                         }
+                    }
+                    tableView.visitBlock = { [weak self] (model) in
+                        let vc = VisitDetailsController()
+                        vc.visitListData = model
+                        self?.navigationController?.pushViewController(vc, animated: true)
                     }
                     tableView.addBlock = { [weak self] (type) in
                         switch type {
@@ -321,6 +338,18 @@ class ProjectDetailsController: UIViewController {
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "退出工作组失败")
+        })
+    }
+    
+    /// 获取项目详情
+    private func projectDetail() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.projectDetail(projectId), t: ProjectDetailModel.self, successHandle: { (result) in
+            self.projectData = result.data
+            self.initSubViews()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取项目详情失败")
         })
     }
     

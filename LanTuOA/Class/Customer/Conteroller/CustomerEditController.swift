@@ -94,7 +94,7 @@ class CustomerEditController: UIViewController {
     /// 添加tableview
     private func addTableView() {
         var lastTableView: CustomerDetailsTableView!
-        for index in 0..<3 { // 添加3个tableview
+        for index in 0..<4 { // 添加3个tableview
             let tableView = CustomerDetailsTableView(style: CustomerDetailsTableView.CellStyle(rawValue: index)!, height: headerHeight, customerId: customerData.id) // tableview
                 .taxi.adhere(toSuperView: scrollView)
                 .taxi.layout { (make) in
@@ -104,7 +104,7 @@ class CustomerEditController: UIViewController {
                         make.left.equalTo(lastTableView.snp.right)
                     }
                     make.width.top.height.equalToSuperview()
-                    if index == 2 {
+                    if index == 3 {
                         make.right.equalToSuperview()
                     }
                 }
@@ -116,9 +116,22 @@ class CustomerEditController: UIViewController {
                         })
                         self.offsetY = offsetY
                     }
-//                    tableView.cellBlock = { [weak self] (id, type) in
-//                        
-//                    }
+                    tableView.projectBlock = { [weak self] (model) in
+                        let vc = ProjectDetailsController()
+                        vc.lockState = 1
+                        vc.projectData = model
+                        self?.navigationController?.pushViewController(vc, animated: true)
+                    }
+                    tableView.visitBlock = { [weak self] (model) in
+                        let vc = VisitDetailsController()
+                        vc.visitListData = model
+                        self?.navigationController?.pushViewController(vc, animated: true)
+                    }
+                    tableView.contractBlock = { [weak self] (model) in
+                        let vc = ContractDetailsController()
+                        vc.contractListData = model
+                        self?.navigationController?.pushViewController(vc, animated: true)
+                    }
             }
             lastTableView = tableView
             tableViewArray.append(tableView)

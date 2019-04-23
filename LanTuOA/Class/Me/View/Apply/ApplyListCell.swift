@@ -116,13 +116,13 @@ extension ApplyListCell: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ApplyCollectionCell", for: indexPath) as! ApplyCollectionCell
-        cell.data = data?.list[indexPath.section]
+        cell.data = data?.list[indexPath.row]
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if clickBlock != nil {
-            clickBlock!(indexPath.section)
+            clickBlock!(indexPath.row)
         }
     }
 }

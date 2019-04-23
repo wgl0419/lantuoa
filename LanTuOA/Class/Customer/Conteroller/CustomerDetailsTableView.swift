@@ -26,8 +26,12 @@ class CustomerDetailsTableView: UITableView {
     
     /// 滚动回调
     var scrollBlock: ((CGFloat) -> ())?
-    /// 点击cell回调 (工作组->组id  人员、历史->row         选择方式)
-    var cellBlock: ((Int, Int) -> ())?
+    /// 点击项目
+    var projectBlock: ((ProjectListStatisticsData) -> ())?
+    /// 点击历史拜访
+    var visitBlock: ((VisitListData) -> ())?
+    /// 点击合同
+    var contractBlock: ((ContractListData) -> ())?
     
     /// 历史顶部选择时间按钮
     private var seleTimeBtn: UIButton!
@@ -46,7 +50,8 @@ class CustomerDetailsTableView: UITableView {
     private var contactListData = [CustomerContactListData]()
     /// 拜访历史
     private var visitData = [VisitListData]()
-    /// 历史合同 // TODO: 暂时没有接口
+    /// 历史合同
+    private var contractListData = [ContractListData]()
     
     /// 第一次加载
     private var isFirst = true
@@ -68,8 +73,10 @@ class CustomerDetailsTableView: UITableView {
             visitList(isMore: false)
         } else if cellStyle == .project { // 在线项目
             projectListStatistics()
-        } else { // 联系人、合同  // if cellStyle == .visitor { // 联系人
+        } else if cellStyle == .visitor { // 联系人
             customerContactList()
+        } else { // 合同
+            contractList(isMore: false)
         }
     }
     
@@ -87,7 +94,10 @@ class CustomerDetailsTableView: UITableView {
         delegate = self
         dataSource = self
         estimatedRowHeight = 50
-        separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        if cellStyle != .project {
+            separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        }
+        
         _ = UIView().taxi.adhere(toSuperView: self) // 添加底部安全区的白色背景 -> 防止出现尾视图在内容之上的问题
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.right.bottom.equalToSuperview()
@@ -104,15 +114,20 @@ class CustomerDetailsTableView: UITableView {
         register(CostomerDetailsProjectCell.self, forCellReuseIdentifier: "CostomerDetailsProjectCell")
         register(ProjectDetailsVisitCell.self, forCellReuseIdentifier: "ProjectDetailsVisitCell")
         register(CostomerDetailsVisitorCell.self, forCellReuseIdentifier: "CostomerDetailsVisitorCell")
+        register(CostomerDetailsContractCell.self, forCellReuseIdentifier: "CostomerDetailsContractCell")
         
         
         mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
             self?.reload()
         })
-        if cellStyle == .history { // "参与成员" 没有上拉
+        if cellStyle == .history || cellStyle == .contract {
             mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
                 self?.mj_header.isHidden = true
-                self?.visitList(isMore: true)
+                if self?.cellStyle == .history {
+                    self?.visitList(isMore: true)
+                } else {
+                    self?.contractList(isMore: true)
+                }
             })
         }
         
@@ -133,6 +148,7 @@ class CustomerDetailsTableView: UITableView {
     /// 添加类的尾视图
     private func addFooterViewHandle() -> UIView {
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 40))
+        footerView.backgroundColor = .white
         _ = UIButton().taxi.adhere(toSuperView: footerView)
             .taxi.layout(snapKitMaker: { (make) in
                 make.edges.equalToSuperview()
@@ -196,6 +212,7 @@ class CustomerDetailsTableView: UITableView {
             self.projectData = result.data
             self.mj_header.endRefreshing()
             self.reloadData()
+            self.setTableFooterView()
         }, errorHandle: { (error) in
             self.mj_header.endRefreshing()
             MBProgressHUD.showError(error ?? "获取在线项目失败")
@@ -209,6 +226,7 @@ class CustomerDetailsTableView: UITableView {
             self.contactListData = result.data
             self.mj_header.endRefreshing()
             self.reloadData()
+            self.setTableFooterView()
         }, errorHandle: { (error) in
             self.mj_header.endRefreshing()
             MBProgressHUD.showError(error ?? "获取拜访人失败")
@@ -252,6 +270,44 @@ class CustomerDetailsTableView: UITableView {
                 self.mj_footer.isHidden = false
             }
             MBProgressHUD.showError(error ?? "获取历史拜访失败")
+        })
+    }
+    
+    /// 历史合同
+    private func contractList(isMore: Bool) {
+        MBProgressHUD.showWait("")
+        let newPage = isMore ? page + 1 : 1
+        _ = APIService.shared.getData(.contractList("", customerId, nil, nil, newPage, 10), t: ContractListModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            if isMore {
+                for model in result.data {
+                    self.contractListData.append(model)
+                }
+                self.mj_footer.endRefreshing()
+                self.mj_header.isHidden = false
+                self.page += 1
+            } else {
+                self.page = 1
+                self.contractListData = result.data
+                self.mj_header.endRefreshing()
+                self.mj_footer.isHidden = false
+            }
+            if result.data.count == 0 {
+                self.mj_footer.endRefreshingWithNoMoreData()
+            } else {
+                self.mj_footer.resetNoMoreData()
+            }
+            self.reloadData()
+            self.setTableFooterView()
+        }, errorHandle: { (error) in
+            if isMore {
+                self.mj_footer.endRefreshing()
+                self.mj_header.isHidden = false
+            } else {
+                self.mj_header.endRefreshing()
+                self.mj_footer.isHidden = false
+            }
+            MBProgressHUD.showError(error ?? "获取历史合同失败")
         })
     }
     
@@ -306,7 +362,7 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
         } else if cellStyle == .history { // 拜访历史
             return section == 0 ? 0 : visitData.count
         } else { // 历史合同
-            return 0
+            return contractListData.count
         }
     }
     
@@ -335,11 +391,10 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             cell.data = visitData[row]
             return cell
         } else { // 历史合同
-            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsContractCell", for: indexPath) as! CostomerDetailsContractCell
+            cell.data = contractListData[row]
+            return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsProjectCell", for: indexPath) as! CostomerDetailsProjectCell
-        cell.data = projectData[row]
-        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -363,6 +418,25 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return addFooterViewHandle()
         } else {
             return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let row = indexPath.row
+        if cellStyle == .project {
+            if projectBlock != nil {
+                projectBlock!(projectData[row])
+            }
+        } else if cellStyle == .history {
+            if visitBlock != nil {
+                visitBlock!(visitData[row])
+            }
+        } else if cellStyle == .contract {
+            if contractBlock != nil {
+                contractBlock!(contractListData[row])
+            }
         }
     }
 }

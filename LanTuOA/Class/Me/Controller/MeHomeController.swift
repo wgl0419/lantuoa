@@ -14,9 +14,9 @@ class MeHomeController: UIViewController {
     private var tableView: UITableView!
     
     /// 标题
-    private let titleArray = [["", "我的审批", "查询绩效", "工作申请", "离职申请", "工作交接"], ["部门管理", "角色管理"], ["设置"]]
+    private var titleArray = [["", "我的审批", "查询绩效", "工作申请", "离职申请"], ["部门管理", "角色管理"], ["设置"]]
     /// 图标
-    private let iconArray = [["", "me_approval", "me_achievements", "me_jobApplication", "me_jeaveApplication", "me_handover"], ["me_departmentManagement", "me_roleManagement"], ["me_setUp"]]
+    private var iconArray = [["", "me_approval", "me_achievements", "me_jobApplication", "me_jeaveApplication"], ["me_departmentManagement", "me_roleManagement"], ["me_setUp"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +34,11 @@ class MeHomeController: UIViewController {
     
     /// 初始化子控件
     private func initSubViews() {
+        if Jurisdiction.share.isViewWorkextend { // 有无工作交接权限
+            titleArray[0].append("工作交接")
+            iconArray[0].append("me_handover")
+        }
+        
         tableView = UITableView().taxi.adhere(toSuperView: view) // 主要显示数据的tableview
             .taxi.layout(snapKitMaker: { (make) in
                 make.edges.equalToSuperview()

@@ -98,6 +98,7 @@ extension String {
     ///
     /// - Returns: 是否是数字（两位小数）
     func isRegexDecimal() -> Bool {
+//        ^[0-9]+(\.[0-9]{2})?$
         let predicateStr = "(^[1-9](\\d+)?([.]\\d{0,2})?$)|(^0$)|(^\\d[.]\\d{0,2}$)"
         let predicate =  NSPredicate(format: "SELF MATCHES %@" ,predicateStr)
         return predicate.evaluate(with: self)

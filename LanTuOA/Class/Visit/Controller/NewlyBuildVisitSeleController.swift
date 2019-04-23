@@ -56,7 +56,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     /// 拜访人数据 -> 保存源数据
     private var oldVisitorData = [CustomerContactListData]()
     /// 项目数据
-    private var projectData = [ProjectListData]()
+    private var projectData = [ProjectListStatisticsData]()
     /// 拜访位置数据
     private var positionData = [CustomerListStatisticsData]()
     
@@ -70,26 +70,30 @@ class NewlyBuildVisitSeleController: UIViewController {
     // MARK: - 自定义私有方法
     /// 设置标题栏
     private func setNav() {
-        var titleStr = ""
         var rightStr = ""
         switch type {
         case .customer:
-            titleStr = "客户"
+            title = "客户"
             rightStr = "新增客户"
             searchStr = "客户名称"
+            guard Jurisdiction.share.isAddProject else {
+                return
+            }
         case .visitor(let id):
             customerId = id
             isMultiple = true
-            titleStr = "拜访人"
+            title = "拜访人"
             rightStr = "新增拜访人"
             searchStr = "拜访人名称"
         case .project(let id):
             customerId = id
-            titleStr = "项目"
+            title = "项目"
             rightStr = "新增项目"
             searchStr = "项目名称"
+            guard Jurisdiction.share.isAddProject else {
+                return
+            }
         }
-        title = titleStr
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightStr,
                                                             titleColor: .white,
                                                             titleFont: UIFont.medium(size: 15),
@@ -204,7 +208,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     private func customerListStatistics(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.customerListStatistics(searchBar.text ?? "", 2, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerListStatistics(searchBar.text ?? "", nil, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

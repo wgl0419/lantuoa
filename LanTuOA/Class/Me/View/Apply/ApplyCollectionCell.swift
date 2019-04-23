@@ -57,11 +57,12 @@ class ApplyCollectionCell: UICollectionViewCell {
                 make.width.equalTo(70).priority(800)
             })
             .taxi.config({ (label) in
-                label.text = "双层车喷绘通知单"
                 label.numberOfLines = 2
                 label.textColor = blackColor
                 label.textAlignment = .center
+                label.minimumScaleFactor = 0.5
                 label.font = UIFont.medium(size: 12)
+                label.adjustsFontSizeToFitWidth = true
             })
     }
 }

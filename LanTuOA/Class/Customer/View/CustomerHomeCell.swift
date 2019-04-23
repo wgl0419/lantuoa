@@ -203,22 +203,22 @@ class CustomerHomeCell: UITableViewCell {
                 imageView.image = UIImage(named: "arrow")
             })
         
-        _ = UIButton().taxi.adhere(toSuperView: arrowView) // “编辑”按钮
-            .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalTo(60)
-                make.height.equalTo(24)
-                make.top.equalToSuperview().offset(15)
-                make.right.equalToSuperview().offset(-15)
-            })
-            .taxi.config({ (btn) in
-                btn.setTitle("编辑", for: .normal)
-                btn.setTitleColor(.white, for: .normal)
-                btn.backgroundColor = UIColor(hex: "#2E4695")
-                btn.titleLabel?.font = UIFont.medium(size: 12)
-                btn.layer.cornerRadius = 2
-                btn.layer.masksToBounds = true
-                btn.addTarget(self, action: #selector(editClick), for: .touchUpInside)
-            })
+        //        _ = UIButton().taxi.adhere(toSuperView: arrowView) // “编辑”按钮 // TODO: 蒙冠洲叫改
+//            .taxi.layout(snapKitMaker: { (make) in
+//                make.width.equalTo(60)
+//                make.height.equalTo(24)
+//                make.top.equalToSuperview().offset(15)
+//                make.right.equalToSuperview().offset(-15)
+//            })
+//            .taxi.config({ (btn) in
+//                btn.setTitle("编辑", for: .normal)
+//                btn.setTitleColor(.white, for: .normal)
+//                btn.backgroundColor = UIColor(hex: "#2E4695")
+//                btn.titleLabel?.font = UIFont.medium(size: 12)
+//                btn.layer.cornerRadius = 2
+//                btn.layer.masksToBounds = true
+//                btn.addTarget(self, action: #selector(editClick), for: .touchUpInside)
+//            })
         
         let project = UILabel().taxi.adhere(toSuperView: arrowView) // "项目"
             .taxi.layout { (make) in

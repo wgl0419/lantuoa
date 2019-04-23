@@ -12,11 +12,19 @@ class SeleVisitModelView: UIView {
 
     /// 点击结果回调
     var didBlock: ((Int) -> ())?
+    /// 是否点击
+    var isClick: Bool = true {
+        didSet  {
+            tableView.reloadData()
+        }
+    }
     
     /// 灰色背景view
     private var grayView: UIView!
     /// tableview
     private var tableView: UITableView!
+    /// 取消按钮
+    private var cancelBtn: UIButton!
     
     /// 内容数组
     private var contentStrArray = [String]()
@@ -113,10 +121,14 @@ extension SeleVisitModelView: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SeleVisitModelCell", for: indexPath) as! SeleVisitModelCell
         let row = indexPath.row
         cell.data = (contentStrArray[row], blackColor)
+        if !isClick { cell.selectionStyle = .none }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard isClick else {
+            return
+        }
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
         if didBlock != nil {
@@ -142,7 +154,11 @@ extension SeleVisitModelView: UITableViewDelegate, UITableViewDataSource {
                 make.edges.equalToSuperview()
             })
             .taxi.config({ (btn) in
-                btn.setTitle("取消", for: .normal)
+                if isClick {
+                    btn.setTitle("取消", for: .normal)
+                } else {
+                    btn.setTitle("关闭", for: .normal)
+                }
                 btn.titleLabel?.font = UIFont.medium(size: 16)
                 btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
                 btn.addTarget(self, action: #selector(hidden), for: .touchUpInside)

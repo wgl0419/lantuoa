@@ -41,12 +41,14 @@ class DepartmentalStaffController: UIViewController {
     private func setNav() {
         title = departmentsData.name ?? ""
         view.backgroundColor = .white
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新建小组",
-                                                            titleColor: .white,
-                                                            titleFont: UIFont.medium(size: 15),
-                                                            titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
-                                                            target: self,
-                                                            action: #selector(rightClick))
+        if Jurisdiction.share.isAddDepartment {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新建小组",
+                                                                titleColor: .white,
+                                                                titleFont: UIFont.medium(size: 15),
+                                                                titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
+                                                                target: self,
+                                                                action: #selector(rightClick))
+        }
     }
     
     /// 初始化子控件
@@ -125,17 +127,24 @@ class DepartmentalStaffController: UIViewController {
     
     /// 点击更多处理
     private func moreHandle(btn: UIButton) {
-        let replaceAction = YCMenuAction(title: "   更换部门", image: nil) { (_) in
-            if self.otherDepartmentsData.count == 0 {
-                self.departments(parentId: -1)
-            } else {
-                self.reloadDataHandle()
+        var actionArray = [YCMenuAction]()
+        if Jurisdiction.share.isModifyPerson {
+            let replaceAction = YCMenuAction(title: "   更换部门", image: nil) { (_) in
+                if self.otherDepartmentsData.count == 0 {
+                    self.departments(parentId: -1)
+                } else {
+                    self.reloadDataHandle()
+                }
             }
+            actionArray.append(replaceAction!)
         }
-        let quitAction = YCMenuAction(title: "   设为离职", image: nil) { (_) in
-            self.usersLeaveHandle()
+        if Jurisdiction.share.isLeavePerson {
+            let quitAction = YCMenuAction(title: "   设为离职", image: nil) { (_) in
+                self.usersLeaveHandle()
+            }
+            actionArray.append(quitAction!)
         }
-        let actionArray = [replaceAction!, quitAction!]
+        
         let menuView = YCMenuView.menu(with: actionArray, width: 100, relyonView: btn)
         menuView?.menuColor = .white
         menuView?.separatorColor = UIColor(hex: "#E5E5E5")
@@ -287,7 +296,7 @@ extension DepartmentalStaffController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 45
+            return Jurisdiction.share.isAddDepartmentMember ? 45 : 0
         } else {
             return 0
         }
@@ -295,7 +304,7 @@ extension DepartmentalStaffController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 1 {
-            return addFooterViewHandle()
+            return Jurisdiction.share.isAddDepartmentMember ? addFooterViewHandle() : nil
         } else {
             return nil
         }

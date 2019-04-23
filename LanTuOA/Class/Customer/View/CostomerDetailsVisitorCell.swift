@@ -46,7 +46,7 @@ class CostomerDetailsVisitorCell: UITableViewCell {
     private func initSubViews() {
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名字
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalTo(ScreenWidth / 4 - 10)
+                make.width.equalTo(ScreenWidth / 4 - 20)
                 make.left.equalToSuperview().offset(15)
                 make.height.equalTo(45).priority(800)
                 make.top.bottom.equalToSuperview()
@@ -59,7 +59,7 @@ class CostomerDetailsVisitorCell: UITableViewCell {
         departmentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 部门
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalToSuperview().offset(ScreenWidth / 4)
-                make.width.equalTo(ScreenWidth / 3)
+                make.width.equalTo(ScreenWidth / 4.5)
                 make.top.bottom.equalToSuperview()
             })
             .taxi.config({ (label) in

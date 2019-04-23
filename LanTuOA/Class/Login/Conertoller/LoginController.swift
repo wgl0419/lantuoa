@@ -187,25 +187,42 @@ class LoginController: UIViewController {
     
     /// 跳转主界面
     private func postMainController() {
+        
         let vcs = [HomePageController(), VisitHomeController(), CustomerHomeController(), NoticeHomeController(), MeHomeController()]
         let seleImageNames = ["menu_homePage_highlight", "menu_visit_highlight", "menu_customer_highlight", "menu_notice_highlight", "menu_me_highlight"]
         let imageNames = ["menu_homePage_normal", "menu_visit_normal", "menu_customer_normal", "menu_notice_normal", "menu_me_normal"]
         let titles = ["首页", "拜访", "客户", "通知", "我"]
         let bar = UITabBarController()
         for index in 0..<vcs.count {
-            let vc = vcs[index]
-            let nav = MainNavigationController(rootViewController: vc)
-            let item = nav.tabBarItem
-            item?.title = titles[index]
-            item?.selectedImage = UIImage(named: seleImageNames[index])?.withRenderingMode(.alwaysOriginal)
-            item?.image = UIImage(named: imageNames[index])?.withRenderingMode(.alwaysOriginal)
-            item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#999999")], for: .normal)
-            item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2E4695")], for: .selected)
-            bar.addChild(nav)
+            if index == 2 && !Jurisdiction.share.isCheckCustomer { // 没有查看权限
+                
+            } else {
+                let vc = vcs[index]
+                let nav = MainNavigationController(rootViewController: vc)
+                let item = nav.tabBarItem
+                item?.title = titles[index]
+                item?.selectedImage = UIImage(named: seleImageNames[index])?.withRenderingMode(.alwaysOriginal)
+                item?.image = UIImage(named: imageNames[index])?.withRenderingMode(.alwaysOriginal)
+                item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#999999")], for: .normal)
+                item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2E4695")], for: .selected)
+                bar.addChild(nav)
+            }
         }
         self.view.window?.rootViewController = bar
     }
     
+    /// 获取个人权限
+    private func usersPermissions() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.usersPermissions(), t: UsersPermissionsModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            Jurisdiction.share.setJurisdiction(data: result.data)
+            self.postMainController()
+        }, errorHandle: { (_) in
+            UserInfo.share.userRemve()
+            MBProgressHUD.showError("登录失败")
+        })
+    }
     // MARK: - 按钮点击
     /// 点击登录
     @objc private func loginClick() {
@@ -215,7 +232,7 @@ class LoginController: UIViewController {
         _ = APIService.shared.getData(.login(accountStr, pwdStr), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             UserInfo.share.setToken(result.data?.token ?? "")
-            self.postMainController()
+            self.usersPermissions()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "登录失败")
         })

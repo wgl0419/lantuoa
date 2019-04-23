@@ -42,12 +42,14 @@ class DepartmentManagementController: UIViewController {
     private func setNav() {
         title = "部门管理"
         view.backgroundColor = UIColor(hex: "#F3F3F3")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新增部门",
-                                                            titleColor: .white,
-                                                            titleFont: UIFont.medium(size: 15),
-                                                            titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
-                                                            target: self,
-                                                            action: #selector(rightClick))
+        if Jurisdiction.share.isAddDepartment {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新增部门",
+                                                                titleColor: .white,
+                                                                titleFont: UIFont.medium(size: 15),
+                                                                titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
+                                                                target: self,
+                                                                action: #selector(rightClick))
+        }
     }
     /// 初始化子控件
     private func initSubViews() {

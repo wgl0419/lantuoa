@@ -41,12 +41,14 @@ class CustomerHomeController: UIViewController {
         let nav = navigationController as! MainNavigationController
         nav.backBtn.isHidden = false
         nav.setNavConfigure(type: .dark, color: UIColor(hex: "#2E4695"), isShadow: false)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新增客户",
-                                                            titleColor: .white,
-                                                            titleFont: UIFont.medium(size: 15),
-                                                            titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
-                                                            target: self,
-                                                            action: #selector(rightClick))
+        if Jurisdiction.share.isAddCustomer {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新增客户",
+                                                                titleColor: .white,
+                                                                titleFont: UIFont.medium(size: 15),
+                                                                titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
+                                                                target: self,
+                                                                action: #selector(rightClick))
+        }
     }
     
     /// 初始化子控件
@@ -166,22 +168,28 @@ extension CustomerHomeController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerHomeCell", for: indexPath) as! CustomerHomeCell
-        cell.editBlock = { [weak self] in
-            let vc = CustomerEditController()
-            vc.customerData = self?.data[indexPath.row]
-            vc.editBlock = { [weak self] in
-                self?.customerListStatistics(isMore: false, show: false)
-            }
-            self?.navigationController?.pushViewController(vc, animated: true)
-        }
+//        cell.editBlock = { [weak self] in
+//            let vc = CustomerEditController()
+//            vc.customerData = self?.data[indexPath.row]
+//            vc.editBlock = { [weak self] in
+//                self?.customerListStatistics(isMore: false, show: false)
+//            }
+//            self?.navigationController?.pushViewController(vc, animated: true)
+//        }
         cell.data = data[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = ProjectHomeController()
-        vc.customerId = data[indexPath.row].id
-        vc.customerName = data[indexPath.row].name ?? ""
+//        let vc = ProjectHomeController()
+//        vc.customerId = data[indexPath.row].id
+//        vc.customerName = data[indexPath.row].name ?? ""
+//        navigationController?.pushViewController(vc, animated: true)
+        let vc = CustomerEditController()
+        vc.customerData = data[indexPath.row]
+        vc.editBlock = { [weak self] in
+            self?.customerListStatistics(isMore: false, show: false)
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
 }

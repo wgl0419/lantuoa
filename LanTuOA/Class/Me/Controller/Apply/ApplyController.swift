@@ -85,7 +85,7 @@ extension ApplyController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return data[section].list.count == 0 ? 0 : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -95,6 +95,7 @@ extension ApplyController: UITableViewDelegate, UITableViewDataSource {
             let vc = FillInApplyController()
             vc.processName = self?.data[indexPath.section].list[row].name ?? ""
             vc.processId = self?.data[indexPath.section].list[row].id ?? 0
+            vc.pricessType = self?.data[indexPath.section].list[row].type ?? 0
             self?.navigationController?.pushViewController(vc, animated: true)
         }
         return cell

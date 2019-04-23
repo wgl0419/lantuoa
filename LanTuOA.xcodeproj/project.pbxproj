@@ -70,6 +70,14 @@
 		1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */; };
 		1806FBDD2243637D005A4A77 /* ProjectDetailsSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */; };
 		1806FBDF22436E06005A4A77 /* ProjectDetailsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDE22436E06005A4A77 /* ProjectDetailsCollectionCell.swift */; };
+		18070721226D4D2700E6C36C /* FillInApplyPersonnelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070720226D4D2700E6C36C /* FillInApplyPersonnelCell.swift */; };
+		18070723226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070722226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift */; };
+		18070725226DAE3000E6C36C /* SingleSeleTimeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070724226DAE2F00E6C36C /* SingleSeleTimeEjectView.swift */; };
+		18070729226DBA1300E6C36C /* MultipleSeleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070728226DBA1300E6C36C /* MultipleSeleController.swift */; };
+		180736B5226EB3E7001F1FA6 /* Jurisdiction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736B4226EB3E7001F1FA6 /* Jurisdiction.swift */; };
+		180736B7226EBA5C001F1FA6 /* UsersPermissionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736B6226EBA5C001F1FA6 /* UsersPermissionsModel.swift */; };
+		180736B9226EE176001F1FA6 /* ProjectDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736B8226EE176001F1FA6 /* ProjectDetailModel.swift */; };
+		180736BB226EFF83001F1FA6 /* UpdateHintsEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736BA226EFF83001F1FA6 /* UpdateHintsEjectView.swift */; };
 		1809E3F8225D865000B615A8 /* ToExamineDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E3F7225D865000B615A8 /* ToExamineDetailsController.swift */; };
 		1809E3FC225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E3FB225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift */; };
 		1809E3FE225DBB9700B615A8 /* AddDepartmentEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E3FD225DBB9700B615A8 /* AddDepartmentEjectView.swift */; };
@@ -81,6 +89,17 @@
 		180B77012239F8770096403B /* ProjectSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B77002239F8770096403B /* ProjectSegmentView.swift */; };
 		180B7707223A21D50096403B /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B7706223A21D50096403B /* LoginController.swift */; };
 		180B7709223A34EC0096403B /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B7708223A34EC0096403B /* LoginModel.swift */; };
+		180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB2C22656AF3001879BD /* NotifyCheckUserListModel.swift */; };
+		180BFB2F22656DD3001879BD /* ToExamineDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */; };
+		180BFB3122658A0D001879BD /* ToExamineDescController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB3022658A0D001879BD /* ToExamineDescController.swift */; };
+		180BFB332265B14C001879BD /* ContractListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB322265B14C001879BD /* ContractListModel.swift */; };
+		180BFB352265B49F001879BD /* CostomerDetailsContractCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB342265B49F001879BD /* CostomerDetailsContractCell.swift */; };
+		180BFB372265BE16001879BD /* ContractListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB362265BE16001879BD /* ContractListController.swift */; };
+		180BFB392265C086001879BD /* ContractListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB382265C086001879BD /* ContractListCell.swift */; };
+		180BFB3C2265CDC3001879BD /* ContractDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB3B2265CDC3001879BD /* ContractDetailsController.swift */; };
+		180BFB3F2265CE26001879BD /* ContractDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB3E2265CE26001879BD /* ContractDetailsHeaderView.swift */; };
+		180BFB412265D675001879BD /* ContractDetailsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB402265D675001879BD /* ContractDetailsTableView.swift */; };
+		180BFB432265DE70001879BD /* ContractDetailsContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB422265DE70001879BD /* ContractDetailsContentCell.swift */; };
 		1810EC4C222F597C00CF6488 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC4B222F597C00CF6488 /* AppDelegate.swift */; };
 		1810EC53222F597D00CF6488 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1810EC52222F597D00CF6488 /* Assets.xcassets */; };
 		1810EC73222F5D4100CF6488 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC65222F5D4100CF6488 /* Date.swift */; };
@@ -114,6 +133,20 @@
 		181788502238D73F0015DC30 /* HomePageNoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1817884F2238D73F0015DC30 /* HomePageNoticeCell.swift */; };
 		181788522238E0B00015DC30 /* HomePageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788512238E0B00015DC30 /* HomePageHeaderView.swift */; };
 		181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788532238E5F60015DC30 /* HomePageVisitCell.swift */; };
+		1827ED82226802E800EFF889 /* ContractDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED81226802E800EFF889 /* ContractDetailModel.swift */; };
+		1827ED842268076D00EFF889 /* ContractRepaymentEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED832268076D00EFF889 /* ContractRepaymentEjectView.swift */; };
+		1827ED862268209700EFF889 /* PerformUnderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED852268209700EFF889 /* PerformUnderModel.swift */; };
+		1827ED882268223700EFF889 /* AchievementsDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED872268223700EFF889 /* AchievementsDetailsController.swift */; };
+		1827ED8A2268262300EFF889 /* AchievementsDetailsHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED892268262300EFF889 /* AchievementsDetailsHeaderCell.swift */; };
+		1827ED8C22684A3E00EFF889 /* AchievementsDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED8B22684A3E00EFF889 /* AchievementsDetailsCell.swift */; };
+		1827ED8E22685E9600EFF889 /* AchievementsDetailsEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED8D22685E9600EFF889 /* AchievementsDetailsEjectView.swift */; };
+		1827ED902268620B00EFF889 /* AchievementsDetailsEjectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED8F2268620B00EFF889 /* AchievementsDetailsEjectCell.swift */; };
+		1827ED9222686DE000EFF889 /* PerformDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED9122686DE000EFF889 /* PerformDetailModel.swift */; };
+		1827ED9422695F8700EFF889 /* ProcessUsersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED9322695F8700EFF889 /* ProcessUsersModel.swift */; };
+		1827ED962269603900EFF889 /* FillInApplyApprovalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED952269603900EFF889 /* FillInApplyApprovalCell.swift */; };
+		1827ED982269660700EFF889 /* FillInApplyApprovalCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED972269660700EFF889 /* FillInApplyApprovalCollectionCell.swift */; };
+		1827ED9A22696E0400EFF889 /* FillInApplyArrowCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED9922696E0400EFF889 /* FillInApplyArrowCollectionCell.swift */; };
+		1827ED9E2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED9D2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift */; };
 		1830BE6322373C0D00ADC03A /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1830BE6222373C0D00ADC03A /* APIService.swift */; };
 		1830BE6522373C4200ADC03A /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1830BE6422373C4200ADC03A /* APIManager.swift */; };
 		183383012251B4650053F2BF /* WorkGroupListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183383002251B4650053F2BF /* WorkGroupListModel.swift */; };
@@ -133,6 +166,15 @@
 		1838BC54225C9BC700978E72 /* CostomerDetailsProjectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1838BC53225C9BC700978E72 /* CostomerDetailsProjectCell.swift */; };
 		1838BC56225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1838BC55225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift */; };
 		184407162264889300F10D83 /* NotifyCheckDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184407152264889300F10D83 /* NotifyCheckDetailModel.swift */; };
+		1876A8DC2266B376002EBDB2 /* ContractPaybackListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */; };
+		1876A8DE2266BA52002EBDB2 /* PerformListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */; };
+		1876A8E02266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DF2266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift */; };
+		1876A8E22266D92B002EBDB2 /* ContractPerformanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8E12266D92B002EBDB2 /* ContractPerformanceCell.swift */; };
+		1876A8E42266DC08002EBDB2 /* ContractPerformanceHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8E32266DC08002EBDB2 /* ContractPerformanceHeaderCell.swift */; };
+		1876A8E622671CA4002EBDB2 /* ContractRepaymentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8E522671CA4002EBDB2 /* ContractRepaymentCell.swift */; };
+		1876A8E822672093002EBDB2 /* ContractRepaymentHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8E722672093002EBDB2 /* ContractRepaymentHeaderCell.swift */; };
+		1876A8EA22672850002EBDB2 /* MoreTimeSeleEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8E922672850002EBDB2 /* MoreTimeSeleEjectView.swift */; };
+		1876A8EC226736DF002EBDB2 /* ContractMoneyEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8EB226736DF002EBDB2 /* ContractMoneyEjectView.swift */; };
 		18A7C967223F438E000B4007 /* NewlyBuildVisitSeleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C966223F438E000B4007 /* NewlyBuildVisitSeleController.swift */; };
 		18A7C969223F7552000B4007 /* CustomerContactListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C968223F7552000B4007 /* CustomerContactListModel.swift */; };
 		18A7C96B223F7BA7000B4007 /* ProjectListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C96A223F7BA7000B4007 /* ProjectListModel.swift */; };
@@ -183,7 +225,7 @@
 		1803A327225F276500B86F20 /* ApplyHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyHistoryController.swift; sourceTree = "<group>"; };
 		1803A329225F293500B86F20 /* ApplyHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyHistoryCell.swift; sourceTree = "<group>"; };
 		1803A32B225F32A600B86F20 /* ProcessHistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHistoryModel.swift; sourceTree = "<group>"; };
-		1803A32D225F426400B86F20 /* FillInApplyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyController.swift; sourceTree = "<group>"; };
+		1803A32D225F426400B86F20 /* FillInApplyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyController.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		1804E1F4224A00EE006AB973 /* AddVisitorEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVisitorEjectView.swift; sourceTree = "<group>"; };
 		1804E1F8224A1231006AB973 /* CustomerEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerEditController.swift; sourceTree = "<group>"; };
 		1804E1FC224A2124006AB973 /* SetUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpController.swift; sourceTree = "<group>"; };
@@ -206,6 +248,14 @@
 		1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsPersonnelCell.swift; sourceTree = "<group>"; };
 		1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsSegmentedView.swift; sourceTree = "<group>"; };
 		1806FBDE22436E06005A4A77 /* ProjectDetailsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsCollectionCell.swift; sourceTree = "<group>"; };
+		18070720226D4D2700E6C36C /* FillInApplyPersonnelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyPersonnelCell.swift; sourceTree = "<group>"; };
+		18070722226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyAddPersonnelEjectView.swift; sourceTree = "<group>"; };
+		18070724226DAE2F00E6C36C /* SingleSeleTimeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSeleTimeEjectView.swift; sourceTree = "<group>"; };
+		18070728226DBA1300E6C36C /* MultipleSeleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSeleController.swift; sourceTree = "<group>"; };
+		180736B4226EB3E7001F1FA6 /* Jurisdiction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jurisdiction.swift; sourceTree = "<group>"; };
+		180736B6226EBA5C001F1FA6 /* UsersPermissionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersPermissionsModel.swift; sourceTree = "<group>"; };
+		180736B8226EE176001F1FA6 /* ProjectDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailModel.swift; sourceTree = "<group>"; };
+		180736BA226EFF83001F1FA6 /* UpdateHintsEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateHintsEjectView.swift; sourceTree = "<group>"; };
 		1809E3F7225D865000B615A8 /* ToExamineDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsController.swift; sourceTree = "<group>"; };
 		1809E3FB225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsHeaderCell.swift; sourceTree = "<group>"; };
 		1809E3FD225DBB9700B615A8 /* AddDepartmentEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDepartmentEjectView.swift; sourceTree = "<group>"; };
@@ -217,6 +267,17 @@
 		180B77002239F8770096403B /* ProjectSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectSegmentView.swift; sourceTree = "<group>"; };
 		180B7706223A21D50096403B /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		180B7708223A34EC0096403B /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		180BFB2C22656AF3001879BD /* NotifyCheckUserListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCheckUserListModel.swift; sourceTree = "<group>"; };
+		180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsCell.swift; sourceTree = "<group>"; };
+		180BFB3022658A0D001879BD /* ToExamineDescController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDescController.swift; sourceTree = "<group>"; };
+		180BFB322265B14C001879BD /* ContractListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractListModel.swift; sourceTree = "<group>"; };
+		180BFB342265B49F001879BD /* CostomerDetailsContractCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostomerDetailsContractCell.swift; sourceTree = "<group>"; };
+		180BFB362265BE16001879BD /* ContractListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractListController.swift; sourceTree = "<group>"; };
+		180BFB382265C086001879BD /* ContractListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractListCell.swift; sourceTree = "<group>"; };
+		180BFB3B2265CDC3001879BD /* ContractDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsController.swift; sourceTree = "<group>"; };
+		180BFB3E2265CE26001879BD /* ContractDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsHeaderView.swift; sourceTree = "<group>"; };
+		180BFB402265D675001879BD /* ContractDetailsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsTableView.swift; sourceTree = "<group>"; };
+		180BFB422265DE70001879BD /* ContractDetailsContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsContentCell.swift; sourceTree = "<group>"; };
 		1810EC48222F597C00CF6488 /* LanTuOA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LanTuOA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1810EC4B222F597C00CF6488 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1810EC52222F597D00CF6488 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -253,6 +314,20 @@
 		1817884F2238D73F0015DC30 /* HomePageNoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageNoticeCell.swift; sourceTree = "<group>"; };
 		181788512238E0B00015DC30 /* HomePageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageHeaderView.swift; sourceTree = "<group>"; };
 		181788532238E5F60015DC30 /* HomePageVisitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageVisitCell.swift; sourceTree = "<group>"; };
+		1827ED81226802E800EFF889 /* ContractDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailModel.swift; sourceTree = "<group>"; };
+		1827ED832268076D00EFF889 /* ContractRepaymentEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractRepaymentEjectView.swift; sourceTree = "<group>"; };
+		1827ED852268209700EFF889 /* PerformUnderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformUnderModel.swift; sourceTree = "<group>"; };
+		1827ED872268223700EFF889 /* AchievementsDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsDetailsController.swift; sourceTree = "<group>"; };
+		1827ED892268262300EFF889 /* AchievementsDetailsHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsDetailsHeaderCell.swift; sourceTree = "<group>"; };
+		1827ED8B22684A3E00EFF889 /* AchievementsDetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsDetailsCell.swift; sourceTree = "<group>"; };
+		1827ED8D22685E9600EFF889 /* AchievementsDetailsEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsDetailsEjectView.swift; sourceTree = "<group>"; };
+		1827ED8F2268620B00EFF889 /* AchievementsDetailsEjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsDetailsEjectCell.swift; sourceTree = "<group>"; };
+		1827ED9122686DE000EFF889 /* PerformDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformDetailModel.swift; sourceTree = "<group>"; };
+		1827ED9322695F8700EFF889 /* ProcessUsersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessUsersModel.swift; sourceTree = "<group>"; };
+		1827ED952269603900EFF889 /* FillInApplyApprovalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyApprovalCell.swift; sourceTree = "<group>"; };
+		1827ED972269660700EFF889 /* FillInApplyApprovalCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyApprovalCollectionCell.swift; sourceTree = "<group>"; };
+		1827ED9922696E0400EFF889 /* FillInApplyArrowCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyArrowCollectionCell.swift; sourceTree = "<group>"; };
+		1827ED9D2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyCarbonCopyAddCell.swift; sourceTree = "<group>"; };
 		1830BE6222373C0D00ADC03A /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		1830BE6422373C4200ADC03A /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		183383002251B4650053F2BF /* WorkGroupListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkGroupListModel.swift; sourceTree = "<group>"; };
@@ -272,6 +347,15 @@
 		1838BC53225C9BC700978E72 /* CostomerDetailsProjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostomerDetailsProjectCell.swift; sourceTree = "<group>"; };
 		1838BC55225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostomerDetailsVisitorCell.swift; sourceTree = "<group>"; };
 		184407152264889300F10D83 /* NotifyCheckDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCheckDetailModel.swift; sourceTree = "<group>"; };
+		1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPaybackListModel.swift; sourceTree = "<group>"; };
+		1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformListModel.swift; sourceTree = "<group>"; };
+		1876A8DF2266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPerformanceHeaderView.swift; sourceTree = "<group>"; };
+		1876A8E12266D92B002EBDB2 /* ContractPerformanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPerformanceCell.swift; sourceTree = "<group>"; };
+		1876A8E32266DC08002EBDB2 /* ContractPerformanceHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPerformanceHeaderCell.swift; sourceTree = "<group>"; };
+		1876A8E522671CA4002EBDB2 /* ContractRepaymentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractRepaymentCell.swift; sourceTree = "<group>"; };
+		1876A8E722672093002EBDB2 /* ContractRepaymentHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractRepaymentHeaderCell.swift; sourceTree = "<group>"; };
+		1876A8E922672850002EBDB2 /* MoreTimeSeleEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreTimeSeleEjectView.swift; sourceTree = "<group>"; };
+		1876A8EB226736DF002EBDB2 /* ContractMoneyEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractMoneyEjectView.swift; sourceTree = "<group>"; };
 		18A7C966223F438E000B4007 /* NewlyBuildVisitSeleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildVisitSeleController.swift; sourceTree = "<group>"; };
 		18A7C968223F7552000B4007 /* CustomerContactListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerContactListModel.swift; sourceTree = "<group>"; };
 		18A7C96A223F7BA7000B4007 /* ProjectListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListModel.swift; sourceTree = "<group>"; };
@@ -323,6 +407,7 @@
 				1838BC4D225C87F600978E72 /* CustomerDetailsHeaderView.swift */,
 				1838BC53225C9BC700978E72 /* CostomerDetailsProjectCell.swift */,
 				1838BC55225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift */,
+				180BFB342265B49F001879BD /* CostomerDetailsContractCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -333,6 +418,7 @@
 				1801AE91223F2FE60027A5DB /* CustomerListStatisticsModel.swift */,
 				180115342248C3C500EA551F /* CustomerIndustryListModel.swift */,
 				1838BC43225C462300978E72 /* CustomerDetailModel.swift */,
+				180BFB322265B14C001879BD /* ContractListModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -378,6 +464,7 @@
 			isa = PBXGroup;
 			children = (
 				1803A31A225EE73900B86F20 /* AchievementsListController.swift */,
+				1827ED872268223700EFF889 /* AchievementsDetailsController.swift */,
 			);
 			path = Achievements;
 			sourceTree = "<group>";
@@ -386,6 +473,10 @@
 			isa = PBXGroup;
 			children = (
 				1803A31D225EE81300B86F20 /* AchievementsListCell.swift */,
+				1827ED892268262300EFF889 /* AchievementsDetailsHeaderCell.swift */,
+				1827ED8B22684A3E00EFF889 /* AchievementsDetailsCell.swift */,
+				1827ED8D22685E9600EFF889 /* AchievementsDetailsEjectView.swift */,
+				1827ED8F2268620B00EFF889 /* AchievementsDetailsEjectCell.swift */,
 			);
 			path = Achievements;
 			sourceTree = "<group>";
@@ -396,6 +487,7 @@
 				18050D60224B278200C9DB9A /* ApplyController.swift */,
 				1803A327225F276500B86F20 /* ApplyHistoryController.swift */,
 				1803A32D225F426400B86F20 /* FillInApplyController.swift */,
+				18070728226DBA1300E6C36C /* MultipleSeleController.swift */,
 			);
 			path = Apply;
 			sourceTree = "<group>";
@@ -408,6 +500,13 @@
 				1803A329225F293500B86F20 /* ApplyHistoryCell.swift */,
 				180533D12260188200B785B7 /* FillInApplyTextViewCell.swift */,
 				180533D5226027CB00B785B7 /* FillInApplyFieldViewCell.swift */,
+				1827ED952269603900EFF889 /* FillInApplyApprovalCell.swift */,
+				1827ED972269660700EFF889 /* FillInApplyApprovalCollectionCell.swift */,
+				1827ED9922696E0400EFF889 /* FillInApplyArrowCollectionCell.swift */,
+				1827ED9D2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift */,
+				18070720226D4D2700E6C36C /* FillInApplyPersonnelCell.swift */,
+				18070722226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift */,
+				18070724226DAE2F00E6C36C /* SingleSeleTimeEjectView.swift */,
 			);
 			path = Apply;
 			sourceTree = "<group>";
@@ -453,6 +552,7 @@
 		180B7704223A21B80096403B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				180736BA226EFF83001F1FA6 /* UpdateHintsEjectView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -461,8 +561,56 @@
 			isa = PBXGroup;
 			children = (
 				180B7708223A34EC0096403B /* LoginModel.swift */,
+				180736B6226EBA5C001F1FA6 /* UsersPermissionsModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		180BFB2822655F90001879BD /* ToExamine */ = {
+			isa = PBXGroup;
+			children = (
+				18050D5C224B16C200C9DB9A /* ToExamineController.swift */,
+				1809E3F7225D865000B615A8 /* ToExamineDetailsController.swift */,
+				180BFB3022658A0D001879BD /* ToExamineDescController.swift */,
+			);
+			path = ToExamine;
+			sourceTree = "<group>";
+		};
+		180BFB2922655F9E001879BD /* ToExamine */ = {
+			isa = PBXGroup;
+			children = (
+				1809E3FB225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift */,
+				180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */,
+			);
+			path = ToExamine;
+			sourceTree = "<group>";
+		};
+		180BFB3A2265CD97001879BD /* Contract */ = {
+			isa = PBXGroup;
+			children = (
+				180BFB362265BE16001879BD /* ContractListController.swift */,
+				180BFB3B2265CDC3001879BD /* ContractDetailsController.swift */,
+				180BFB402265D675001879BD /* ContractDetailsTableView.swift */,
+			);
+			path = Contract;
+			sourceTree = "<group>";
+		};
+		180BFB3D2265CE0C001879BD /* Contract */ = {
+			isa = PBXGroup;
+			children = (
+				180BFB382265C086001879BD /* ContractListCell.swift */,
+				180BFB3E2265CE26001879BD /* ContractDetailsHeaderView.swift */,
+				180BFB422265DE70001879BD /* ContractDetailsContentCell.swift */,
+				1876A8DF2266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift */,
+				1876A8E12266D92B002EBDB2 /* ContractPerformanceCell.swift */,
+				1876A8E32266DC08002EBDB2 /* ContractPerformanceHeaderCell.swift */,
+				1876A8E522671CA4002EBDB2 /* ContractRepaymentCell.swift */,
+				1876A8E722672093002EBDB2 /* ContractRepaymentHeaderCell.swift */,
+				1876A8E922672850002EBDB2 /* MoreTimeSeleEjectView.swift */,
+				1876A8EB226736DF002EBDB2 /* ContractMoneyEjectView.swift */,
+				1827ED832268076D00EFF889 /* ContractRepaymentEjectView.swift */,
+			);
+			path = Contract;
 			sourceTree = "<group>";
 		};
 		1810EC3F222F597C00CF6488 = {
@@ -574,6 +722,7 @@
 			isa = PBXGroup;
 			children = (
 				1810EC96222F5F9500CF6488 /* UserInfo.swift */,
+				180736B4226EB3E7001F1FA6 /* Jurisdiction.swift */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -649,6 +798,7 @@
 		1830BE6C2237A7B600ADC03A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				180BFB2922655F9E001879BD /* ToExamine */,
 				180533D822606F9E00B785B7 /* Department */,
 				1803A322225F0A7200B86F20 /* Apply */,
 				1803A31C225EE7F700B86F20 /* Achievements */,
@@ -659,7 +809,6 @@
 				18050D6A224B4E8500C9DB9A /* HandoverStaffHeaderCell.swift */,
 				18050D6C224B531400C9DB9A /* HandoverStaffCell.swift */,
 				18050D70224B5CA300C9DB9A /* HandoverStaffSeleCell.swift */,
-				1809E3FB225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift */,
 				1809E3FD225DBB9700B615A8 /* AddDepartmentEjectView.swift */,
 				1809E405225DD5FC00B615A8 /* SelePersonnelCell.swift */,
 			);
@@ -669,17 +818,16 @@
 		1830BE6D2237A7BB00ADC03A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				180BFB2822655F90001879BD /* ToExamine */,
 				180533D722606F8900B785B7 /* Department */,
 				1803A31F225EEFAE00B86F20 /* Apply */,
 				1803A319225EE71900B86F20 /* Achievements */,
 				1817884D2238ADC00015DC30 /* MeHomeController.swift */,
 				1804E1FC224A2124006AB973 /* SetUpController.swift */,
 				1804E1FE224A2ACC006AB973 /* ChangePasswordController.swift */,
-				18050D5C224B16C200C9DB9A /* ToExamineController.swift */,
 				18050D68224B4C4D00C9DB9A /* HandoverStaffController.swift */,
 				18050D6E224B5B2D00C9DB9A /* HandoverStaffSeleController.swift */,
 				1802B00F22549D1200E94341 /* JobHandoverController.swift */,
-				1809E3F7225D865000B615A8 /* ToExamineDetailsController.swift */,
 				1809E403225DCC7F00B615A8 /* SelePersonnelController.swift */,
 			);
 			path = Controller;
@@ -696,6 +844,10 @@
 				1803A32B225F32A600B86F20 /* ProcessHistoryModel.swift */,
 				180533D322601F7100B785B7 /* ProcessParamsModel.swift */,
 				184407152264889300F10D83 /* NotifyCheckDetailModel.swift */,
+				180BFB2C22656AF3001879BD /* NotifyCheckUserListModel.swift */,
+				1827ED852268209700EFF889 /* PerformUnderModel.swift */,
+				1827ED9122686DE000EFF889 /* PerformDetailModel.swift */,
+				1827ED9322695F8700EFF889 /* ProcessUsersModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -742,6 +894,7 @@
 				1802335B2244710B0064A50E /* ProjectMemberListModel.swift */,
 				183383002251B4650053F2BF /* WorkGroupListModel.swift */,
 				183383082251F1270053F2BF /* UsersModel.swift */,
+				180736B8226EE176001F1FA6 /* ProjectDetailModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -766,6 +919,7 @@
 		1830BE752237A81800ADC03A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				180BFB3D2265CE0C001879BD /* Contract */,
 				180B77002239F8770096403B /* ProjectSegmentView.swift */,
 				180B76FC2239DFCC0096403B /* VisitHomeCell.swift */,
 				18026DF0223BA3B300993B66 /* NewlyBuildVisitSeleCell.swift */,
@@ -787,6 +941,9 @@
 				18A7C968223F7552000B4007 /* CustomerContactListModel.swift */,
 				18A7C96A223F7BA7000B4007 /* ProjectListModel.swift */,
 				1833DD392241D9F600730FB9 /* VisitListModel.swift */,
+				1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */,
+				1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */,
+				1827ED81226802E800EFF889 /* ContractDetailModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -794,6 +951,7 @@
 		1830BE772237A81800ADC03A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				180BFB3A2265CD97001879BD /* Contract */,
 				181788472238AB5C0015DC30 /* VisitHomeController.swift */,
 				18026DEE223B9F7E00993B66 /* NewlyBuildVisitController.swift */,
 				18A7C966223F438E000B4007 /* NewlyBuildVisitSeleController.swift */,
@@ -985,8 +1143,10 @@
 				1838BC52225C932E00978E72 /* CustomerDetailsTableView.swift in Sources */,
 				1830BE6522373C4200ADC03A /* APIManager.swift in Sources */,
 				1802B00C2254555A00E94341 /* NoticeHomePendingCell.swift in Sources */,
+				180BFB332265B14C001879BD /* ContractListModel.swift in Sources */,
 				1801AE92223F2FE60027A5DB /* CustomerListStatisticsModel.swift in Sources */,
 				1810EC74222F5D4100CF6488 /* UiView.swift in Sources */,
+				180736BB226EFF83001F1FA6 /* UpdateHintsEjectView.swift in Sources */,
 				1809E400225DC4D400B615A8 /* DepartmentsUsersModel.swift in Sources */,
 				1810EC7B222F5D4100CF6488 /* String.swift in Sources */,
 				18A7C96B223F7BA7000B4007 /* ProjectListModel.swift in Sources */,
@@ -996,10 +1156,16 @@
 				1806FBDD2243637D005A4A77 /* ProjectDetailsSegmentedView.swift in Sources */,
 				1802B0142254B21000E94341 /* WorkExtendListPersonModel.swift in Sources */,
 				18050D6D224B531400C9DB9A /* HandoverStaffCell.swift in Sources */,
+				1827ED9A22696E0400EFF889 /* FillInApplyArrowCollectionCell.swift in Sources */,
 				180533DC226071E100B785B7 /* DepartmentEjectView.swift in Sources */,
 				1838BC4C225C825F00978E72 /* DepartmentalStaffController.swift in Sources */,
 				1810EC77222F5D4100CF6488 /* UIColor.swift in Sources */,
+				18070721226D4D2700E6C36C /* FillInApplyPersonnelCell.swift in Sources */,
 				18050D5F224B180600C9DB9A /* ToExamineCell.swift in Sources */,
+				180736B9226EE176001F1FA6 /* ProjectDetailModel.swift in Sources */,
+				180736B7226EBA5C001F1FA6 /* UsersPermissionsModel.swift in Sources */,
+				180BFB372265BE16001879BD /* ContractListController.swift in Sources */,
+				18070723226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift in Sources */,
 				1809E3F8225D865000B615A8 /* ToExamineDetailsController.swift in Sources */,
 				1802B01222549EA100E94341 /* WorkExtendListModel.swift in Sources */,
 				1803A326225F0F3D00B86F20 /* ApplyListCell.swift in Sources */,
@@ -1020,15 +1186,23 @@
 				1810EC76222F5D4100CF6488 /* NamespaceWrappable.swift in Sources */,
 				183383012251B4650053F2BF /* WorkGroupListModel.swift in Sources */,
 				18050D6F224B5B2D00C9DB9A /* HandoverStaffSeleController.swift in Sources */,
+				180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */,
+				180BFB352265B49F001879BD /* CostomerDetailsContractCell.swift in Sources */,
 				180B7707223A21D50096403B /* LoginController.swift in Sources */,
+				180BFB3122658A0D001879BD /* ToExamineDescController.swift in Sources */,
 				18050D71224B5CA300C9DB9A /* HandoverStaffSeleCell.swift in Sources */,
 				184407162264889300F10D83 /* NotifyCheckDetailModel.swift in Sources */,
+				1876A8E22266D92B002EBDB2 /* ContractPerformanceCell.swift in Sources */,
+				1827ED9E2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift in Sources */,
 				180233682244D7EA0064A50E /* AddCustomerEjectView.swift in Sources */,
 				1833DD3E2241F27700730FB9 /* ProjectDetailsHeaderView.swift in Sources */,
 				180018832252FB6100832E60 /* NewWorkingGroupController.swift in Sources */,
 				1801AE90223F28C40027A5DB /* ProjectLlistStatisticsModel.swift in Sources */,
+				1876A8E42266DC08002EBDB2 /* ContractPerformanceHeaderCell.swift in Sources */,
 				1809E3FC225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift in Sources */,
+				1876A8DC2266B376002EBDB2 /* ContractPaybackListModel.swift in Sources */,
 				1804E1F9224A1231006AB973 /* CustomerEditController.swift in Sources */,
+				1876A8EC226736DF002EBDB2 /* ContractMoneyEjectView.swift in Sources */,
 				1809E402225DC55300B615A8 /* DepartmentalStaffCell.swift in Sources */,
 				180115372248CFD000EA551F /* AddProjectEjectView.swift in Sources */,
 				1803A31E225EE81300B86F20 /* AchievementsListCell.swift in Sources */,
@@ -1039,7 +1213,10 @@
 				1817884C2238ABE40015DC30 /* WrokHomeController.swift in Sources */,
 				180273E5223B5A410033E083 /* ProjectListCell.swift in Sources */,
 				1803A321225EF07300B86F20 /* ProcessListModel.swift in Sources */,
+				1827ED882268223700EFF889 /* AchievementsDetailsController.swift in Sources */,
+				1827ED982269660700EFF889 /* FillInApplyApprovalCollectionCell.swift in Sources */,
 				1838BC56225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift in Sources */,
+				1876A8E02266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift in Sources */,
 				1804E1FF224A2ACC006AB973 /* ChangePasswordController.swift in Sources */,
 				1810EC80222F5D4100CF6488 /* UITextView.swift in Sources */,
 				183383092251F1270053F2BF /* UsersModel.swift in Sources */,
@@ -1052,20 +1229,28 @@
 				180115332248BE3C00EA551F /* CustomerTextViewCell.swift in Sources */,
 				18026DED223B8EAC00993B66 /* CustomerHomeCell.swift in Sources */,
 				1810EC8F222F5F2F00CF6488 /* UIBarButtonItemExtension.swift in Sources */,
+				180BFB2F22656DD3001879BD /* ToExamineDetailsCell.swift in Sources */,
+				1827ED9422695F8700EFF889 /* ProcessUsersModel.swift in Sources */,
 				1802B0082254501E00E94341 /* NotifyCheckListModel.swift in Sources */,
 				1810EC4C222F597C00CF6488 /* AppDelegate.swift in Sources */,
+				1876A8E822672093002EBDB2 /* ContractRepaymentHeaderCell.swift in Sources */,
+				1827ED962269603900EFF889 /* FillInApplyApprovalCell.swift in Sources */,
 				1810EC7F222F5D4100CF6488 /* MBProgressHUD.swift in Sources */,
 				180018892253697500832E60 /* VisitDetailsCell.swift in Sources */,
+				180BFB3C2265CDC3001879BD /* ContractDetailsController.swift in Sources */,
 				18001885225351E400832E60 /* NotifyListModel.swift in Sources */,
 				18050D67224B46EA00C9DB9A /* JobHandoverCell.swift in Sources */,
 				1810EC7E222F5D4100CF6488 /* UIFont.swift in Sources */,
 				1810EC79222F5D4100CF6488 /* NSMutableAttributedString.swift in Sources */,
+				1827ED8C22684A3E00EFF889 /* AchievementsDetailsCell.swift in Sources */,
 				180533D422601F7100B785B7 /* ProcessParamsModel.swift in Sources */,
 				180018872253679500832E60 /* VisitDetailsController.swift in Sources */,
 				1810EC90222F5F2F00CF6488 /* DispatchQueueExtension.swift in Sources */,
 				180233662244C6640064A50E /* MeHomeCell.swift in Sources */,
+				1876A8EA22672850002EBDB2 /* MoreTimeSeleEjectView.swift in Sources */,
 				1803A31B225EE73900B86F20 /* AchievementsListController.swift in Sources */,
 				1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */,
+				1827ED902268620B00EFF889 /* AchievementsDetailsEjectCell.swift in Sources */,
 				181788502238D73F0015DC30 /* HomePageNoticeCell.swift in Sources */,
 				1802B01022549D1300E94341 /* JobHandoverController.swift in Sources */,
 				18026DF1223BA3B300993B66 /* NewlyBuildVisitSeleCell.swift in Sources */,
@@ -1077,10 +1262,12 @@
 				18A7C967223F438E000B4007 /* NewlyBuildVisitSeleController.swift in Sources */,
 				1810EC95222F5F6F00CF6488 /* GlobalData.swift in Sources */,
 				18A7C96D223F7E1B000B4007 /* NewlyBuildSeleCell.swift in Sources */,
+				18070725226DAE3000E6C36C /* SingleSeleTimeEjectView.swift in Sources */,
 				1803A328225F276500B86F20 /* ApplyHistoryController.swift in Sources */,
 				1802CD9E224CAB87005997F1 /* SegmentView.swift in Sources */,
 				18050D61224B278200C9DB9A /* ApplyController.swift in Sources */,
 				1803A32A225F293500B86F20 /* ApplyHistoryCell.swift in Sources */,
+				180BFB412265D675001879BD /* ContractDetailsTableView.swift in Sources */,
 				18A7C969223F7552000B4007 /* CustomerContactListModel.swift in Sources */,
 				180115352248C3C500EA551F /* CustomerIndustryListModel.swift in Sources */,
 				1810EC7D222F5D4100CF6488 /* UIImage.swift in Sources */,
@@ -1091,25 +1278,38 @@
 				180273E7223B7ACC0033E083 /* WrokHomeCell.swift in Sources */,
 				180233642244C1DD0064A50E /* MeHomeHeaderCell.swift in Sources */,
 				1810EC97222F5F9500CF6488 /* UserInfo.swift in Sources */,
+				1827ED8A2268262300EFF889 /* AchievementsDetailsHeaderCell.swift in Sources */,
+				180BFB392265C086001879BD /* ContractListCell.swift in Sources */,
 				1838BC46225C68B400978E72 /* DepartmentManagementController.swift in Sources */,
 				1802CD9A224C736F005997F1 /* NoticeHomeController.swift in Sources */,
+				1876A8E622671CA4002EBDB2 /* ContractRepaymentCell.swift in Sources */,
+				180BFB3F2265CE26001879BD /* ContractDetailsHeaderView.swift in Sources */,
 				1833DD3C2241E8C800730FB9 /* ProjectDetailsController.swift in Sources */,
 				1833DD3A2241D9F600730FB9 /* VisitListModel.swift in Sources */,
+				180736B5226EB3E7001F1FA6 /* Jurisdiction.swift in Sources */,
 				180533D22260188200B785B7 /* FillInApplyTextViewCell.swift in Sources */,
+				1876A8DE2266BA52002EBDB2 /* PerformListModel.swift in Sources */,
 				1810EC7C222F5D4100CF6488 /* UIButton.swift in Sources */,
 				1811AA92224089BA0073A794 /* SeleVisitTimeView.swift in Sources */,
 				1838BC48225C6AD300978E72 /* DepartmentsModel.swift in Sources */,
+				1827ED82226802E800EFF889 /* ContractDetailModel.swift in Sources */,
 				1803A32C225F32A600B86F20 /* ProcessHistoryModel.swift in Sources */,
 				181788522238E0B00015DC30 /* HomePageHeaderView.swift in Sources */,
 				1809E404225DCC7F00B615A8 /* SelePersonnelController.swift in Sources */,
 				180533D6226027CB00B785B7 /* FillInApplyFieldViewCell.swift in Sources */,
 				1817884E2238ADC00015DC30 /* MeHomeController.swift in Sources */,
+				1827ED842268076D00EFF889 /* ContractRepaymentEjectView.swift in Sources */,
 				1802CDA0224CC3D3005997F1 /* VisitSeleTimeView.swift in Sources */,
+				1827ED8E22685E9600EFF889 /* AchievementsDetailsEjectView.swift in Sources */,
 				18A7C96F223F9828000B4007 /* SeleVisitModelView.swift in Sources */,
+				18070729226DBA1300E6C36C /* MultipleSeleController.swift in Sources */,
 				1802B00A225454D000E94341 /* NoticeHomeSystemCell.swift in Sources */,
 				1804E1FD224A2124006AB973 /* SetUpController.swift in Sources */,
 				180233602244900D0064A50E /* ProjectDetailsVisitCell.swift in Sources */,
 				1811AA942240E30D0073A794 /* ProjectListStatisticsModel.swift in Sources */,
+				1827ED9222686DE000EFF889 /* PerformDetailModel.swift in Sources */,
+				180BFB432265DE70001879BD /* ContractDetailsContentCell.swift in Sources */,
+				1827ED862268209700EFF889 /* PerformUnderModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

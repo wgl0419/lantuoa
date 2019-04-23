@@ -36,6 +36,7 @@ class ProjectDetailsVisitCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        accessoryType = .disclosureIndicator
         initSubViews()
     }
     
@@ -50,7 +51,6 @@ class ProjectDetailsVisitCell: UITableViewCell {
         let name = UILabel().taxi.adhere(toSuperView: contentView) // “拜访人”
             .taxi.layout { (make) in
                 make.top.left.equalToSuperview().offset(15)
-//                make.bottom.equalToSuperview().offset(-15)
         }
             .taxi.config { (label) in
                 label.text = "拜访人："

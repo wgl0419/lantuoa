@@ -30,6 +30,16 @@ class FillInApplyFieldViewCell: UITableViewCell {
             }
         }
     }
+    /// 内容
+    var contentStr: String? {
+        didSet {
+            if let str = contentStr {
+                textField.text = str
+            }
+        }
+    }
+    /// 正则式 (默认两位小数)
+    var regexStr = "(^[1-9](\\d+)?([.]\\d{0,2})?$)|(^0$)|(^\\d[.]\\d{0,2}$)"
     /// 输入类型是否是数字
     var isNumber: Bool? {
         didSet {
@@ -87,7 +97,7 @@ class FillInApplyFieldViewCell: UITableViewCell {
         textField = UITextField().taxi.adhere(toSuperView: contentView) // 输入框
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalTo(titleLabel.snp.right).offset(15)
-                make.right.equalToSuperview().offset(-15)
+                make.right.equalToSuperview().offset(-30)
                 make.top.bottom.equalToSuperview()
             })
             .taxi.config({ (textField) in
@@ -115,7 +125,7 @@ extension FillInApplyFieldViewCell: UITextFieldDelegate {
                 return true
             }
             let str = (textField.text ?? "") + string
-            return str.isRegexDecimal()
+            return str.isRegex(str: regexStr)
         } else {
             return true
         }

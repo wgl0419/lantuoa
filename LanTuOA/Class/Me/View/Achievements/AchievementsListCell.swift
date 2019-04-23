@@ -10,6 +10,22 @@ import UIKit
 
 class AchievementsListCell: UITableViewCell {
 
+    /// 数据
+    var data: PerformUnderData? {
+        didSet {
+            if let data = data {
+                nameLabel.text = data.realname
+                let departmentStr = data.departmentName ?? ""
+                departmentLabel.text = departmentStr.count > 0 ? departmentStr : " "
+                
+                let attriStr = String(format: "%.2f元", data.monthPerform)
+                let attriMuStr = NSMutableAttributedString(string: attriStr)
+                attriMuStr.addUnderline(color: UIColor(hex: "#FF7744"), range: NSRange(location: 0, length: attriMuStr.length))
+                achievementsLabel.attributedText = attriMuStr
+            }
+        }
+    }
+    
     /// 员工名称
     private var nameLabel: UILabel!
     /// 部门名称
@@ -48,22 +64,25 @@ class AchievementsListCell: UITableViewCell {
                 label.text = "部门名称："
                 label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
+                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         }
         
         departmentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 部门名称
             .taxi.layout(snapKitMaker: { (make) in
+                make.right.equalToSuperview().offset(-15)
                 make.left.equalTo(department.snp.right)
                 make.top.equalTo(department)
             })
             .taxi.config({ (label) in
-                label.text = "部门名称"
+                label.numberOfLines = 0
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
+                label.setContentHuggingPriority(.defaultLow, for: .horizontal)
             })
         
         let achievements = UILabel().taxi.adhere(toSuperView: contentView) // ”本月绩效“
             .taxi.layout { (make) in
-                make.top.equalTo(department.snp.bottom).offset(5)
+                make.top.equalTo(departmentLabel.snp.bottom).offset(5)
                 make.bottom.equalToSuperview().offset(-15)
                 make.left.equalToSuperview().offset(15)
         }
@@ -81,11 +100,6 @@ class AchievementsListCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#FF7744")
-                
-                let attriStr = "23000元"
-                let attriMuStr = NSMutableAttributedString(string: attriStr)
-                attriMuStr.addUnderline(color: UIColor(hex: "#FF7744"), range: NSRange(location: 0, length: attriMuStr.length))
-                label.attributedText = attriMuStr
             })
     }
 }

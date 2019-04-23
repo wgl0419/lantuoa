@@ -16,10 +16,14 @@ class SelePersonnelController: UIViewController {
     enum SeleMode {
         /// 部门添加人员 （部门id）
         case departmentAddUsers(Int)
+        /// 返回数据
+        case back
     }
     
     /// 确定回调
     var determineBlock: (() -> ())?
+    /// 返回数据回调
+    var backBlock: (([UsersData]) -> ())?
     /// 多选
     var isMultiple = true
     /// 禁止选ids
@@ -44,10 +48,23 @@ class SelePersonnelController: UIViewController {
     private var sourceData = [UsersData]()
     /// 页码
     private var page = 1
+    /// 记录输入次数  -> 用于减少计算次数
+    private var inputCout = 0
     /// 选中的id
     private var selectedIds = [Int]()
     /// 选中的位置 (用于单选)
     private var seleRows = [Int]()
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        switch displayData.2 {
+        case .back:
+            if backBlock != nil {
+                backBlock!([])
+            }
+        default: break
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +97,7 @@ class SelePersonnelController: UIViewController {
             })
             .taxi.config({ (searchBar) in
                 searchBar.sizeToFit()
-//                searchBar.delegate = self
+                searchBar.delegate = self
                 searchBar.backgroundColor = .clear
                 searchBar.searchBarStyle = .minimal
                 searchBar.returnKeyType = .done
@@ -210,6 +227,14 @@ class SelePersonnelController: UIViewController {
         }
     }
     
+    /// 区分出搜索的内容
+    ///
+    /// - Parameter number: 记录的输入次数
+    @objc private func distinguishSearch(number: NSNumber) {
+        if Int(truncating: number) == inputCout { // 次数相同 说明停止输入
+            users(isMore: false)
+        }
+    }
     
     // MARK: - Api
     /// 获取用户列表
@@ -256,6 +281,7 @@ class SelePersonnelController: UIViewController {
         var deptId = 0
         switch displayData.2 {
         case .departmentAddUsers(let id): deptId = id
+        default: break
         }
         _ = APIService.shared.getData(.departmentsAddUsers(deptId, selectedIds), t: LoginModel.self, successHandle: { (result) in
             if self.determineBlock != nil {
@@ -268,10 +294,21 @@ class SelePersonnelController: UIViewController {
         })
     }
     
+    /// 返回处理
+    private func backData() {
+        if backBlock != nil {
+            backBlock!(seleData)
+        }
+        navigationController?.popViewController(animated: true)
+    }
+    
     // MARK: - 按钮点击
     /// 点击确定
     @objc private func determineClick() {
-        departmentsAddUsers()
+        switch displayData.2 {
+        case .departmentAddUsers: departmentsAddUsers()
+        case .back: backData()
+        }
     }
 
 }
@@ -297,7 +334,7 @@ extension SelePersonnelController: UITableViewDelegate, UITableViewDataSource {
                     }
                 }
             } else {
-                isSele = selectedIds[row] == seleModel.id
+                isSele = selectedIds[0] == seleModel.id
             }
         }
         cell.data = (seleModel.realname ?? "", isSele)
@@ -331,5 +368,18 @@ extension SelePersonnelController: UITableViewDelegate, UITableViewDataSource {
         }
         determineBtn.isEnabled = seleData.count > 0 // 处理按钮可否点击
         determineBtn.backgroundColor = seleData.count > 0 ? UIColor(hex: "#2E4695") : UIColor(hex: "#999999")
+    }
+}
+
+
+extension SelePersonnelController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        inputCout += 1
+        let count = NSNumber(value: inputCout)
+        self.perform(#selector(distinguishSearch(number:)), with: count, afterDelay: 0.3)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        UIApplication.shared.keyWindow?.endEditing(true)
     }
 }

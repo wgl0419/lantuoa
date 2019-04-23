@@ -17,6 +17,7 @@ enum APIManager {
     case users(Int, Int, String, Int) // 用户列表 (page:页码 limit:一页几条数据 realname:真实名称  used:是否启用)
     case usersPwd(String, String) // 修改密码 （oldPwd:原密码  新密码:新密码）
     case usersLeave(Int) // 离职员工
+    case usersPermissions() // 获取权限
     
     
     // MARK: - 客户
@@ -42,6 +43,7 @@ enum APIManager {
     case projectMemberDelete(Int, Int) // 删除项目成员  （projectId:项目id  userId:用户id）
     case projectListStatistics(String, Int, Int, Int, Int?) // 项目统计列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据  manageUser:管理人Id)
     case projectList(String, Int?, Int, Int) // 项目信息列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据)
+    case projectDetail(Int) // 项目详情 (项目id)
     
     
     // MARK: - 拜访
@@ -57,12 +59,13 @@ enum APIManager {
     
     // MARK: - 通知
     case notifyList(Int, Int)// 通知列表 (page:页码  limit:一页数据)
-    case notifyCheckReject(Int) // 拒绝审批-非创建客户/项目 (checkId:审批id）
+    case notifyCheckReject(Int, String) // 拒绝审批-非创建客户/项目 (checkId:审批id    desc:备注）
     case notifyCheckCusRejectExist(Int) // 拒绝创建客户/项目-客户已存在 (checkId:审批id）
     case notifyCheckCusRejectMistake(Int) // 拒绝创建客户/项目-名称有误 (checkId:审批id）
-    case notifyCheckAgree(Int) // 同意审批
+    case notifyCheckAgree(Int, String) // 同意审批 （desc:备注）
     case notifyCheckList(Int, Int) // 审核列表 (page:页码  limit:一页数据)
     case notifyCheckDetail(Int) // 审批详情
+    case notifyCheckUserList(Int) // 审批人列表
     
     // MARK: - 工作交接
     case workExtendList(String) // 下级员工列表
@@ -81,6 +84,19 @@ enum APIManager {
     case processHistory(Int, Int, Int) // 历史申请列表 (status:1.申请中，2.通过，3.被拒绝   page:页码  limit:一页数据)
     case processList() // 流程列表
     case processParams(Int) // 获取流程内容
+    case processUsers(Int) // 获取流程默认审批/抄送人
+    case processCommit(Int, [String:String], [[String:String]],[[String:String]]) // 提交流程
+    
+    // MARK: - 合同
+    case contractList(String, Int?, Int?, Int?, Int, Int) // 合同列表/查询合同 (name:客户名称/项目名称/合同编码   customerId:客户id  projectId:项目id   userId:用户id，查询他人合同时使用  page:页码   limit:一页数据)
+    case contractPaybackList(Int) // 回款列表  (合同id)
+    case performList(Int, Int?, Int?, Int?)  // 业绩列表  (queryType: 1.按人-合同查询 2.按人查询总业绩      userId:用户id(与self排斥)    self:查看自己的业绩(与userId排斥)       contractId:合同id（queryType = 1时传）)
+    case contractUpdate(Int, Float?, Float?, Int?, Int?) // 修改合同内容  (合同id  totalMoney：合同总额   rebate:组稿费总额   startTime:开始时间戳  endTime:结束时间戳)
+    case contractDetail(Int) // 合同详情 (合同id)
+    case contractPaybackUpdate(Int, String, Float, Int) // 修改回款 (回款id  desc:备注  money:金额  payTime:回款时间)
+    case contractPaybackAdd(Int, String, Float, Int) // 添加回款 (contractId:合同id  desc:备注  money:金额  payTime:回款时间)
+    case performUnder(String) // 查询绩效 (name:查询名称)
+    case performDetail(Int?, Int?, String) // 查询绩效-详情-月份绩效 （userId:用户id  self:是否是自己  month:月份,格式yyyy-MM）
 
     
     case x // MARK: 补位 -> 暂时代替一些没有使用的类型
@@ -99,6 +115,7 @@ extension APIManager: TargetType {
         case .users: return "/api/users"
         case .usersPwd: return "/api/users/pwd"
         case .usersLeave(let id): return "/api/users/leave/\(id)"
+        case .usersPermissions: return "/api/users/permissions"
             
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"
@@ -120,6 +137,7 @@ extension APIManager: TargetType {
         case .projectMemberDelete: return "/api/project/member/delete"
         case .projectListStatistics: return "/api/project/list/statistics"
         case .projectList: return "/api/project/list"
+        case .projectDetail(let id): return "/api/project/detail/\(id)"
 
             
         case .visitSave: return "/api/visit/save"
@@ -139,6 +157,7 @@ extension APIManager: TargetType {
         case .notifyCheckAgree(let id): return "/api/notify/check/agree/\(id)"
         case .notifyCheckList: return "/api/notify/check/list"
         case .notifyCheckDetail(let id): return "/api/notify/check/detail/\(id)"
+        case .notifyCheckUserList(let id): return "/api/notify/check/user/list/\(id)"
             
             
         case .workExtendList: return "/api/workExtend/list"
@@ -149,12 +168,25 @@ extension APIManager: TargetType {
         case .workExtendExtend: return "/api/workExtend/extend"
         case .departmentsUsers(let deptId, _, _): return "/api/departments/\(deptId)/users"
         case .departmentsCreate: return "/api/departments"
+        case .departmentsAddUsers(let id, _): return "/api/departments/\(id)/addUsers"
+        case .departmentsChange(let id, _, _): return "/api/departments/change/\(id)"
             
         case .processHistory: return "/api/process/history"
         case .processList: return "/api/process/list"
         case .processParams(let id): return "/api/process/params/\(id)"
-        case .departmentsAddUsers(let id, _): return "/api/departments/\(id)/addUsers"
-        case .departmentsChange(let id, _, _): return "/api/departments/change/\(id)"
+        case .processUsers(let id): return "/api/process/users/\(id)"
+        case .processCommit: return "/api/process/commit"
+        
+            
+        case .contractList: return "/api/contract/list"
+        case .contractPaybackList(let id): return "/api/contract/payback/list/\(id)"
+        case .performList: return "/api/perform/list"
+        case .contractUpdate(let id, _, _, _, _): return "/api/contract/update/\(id)"
+        case .contractDetail(let id): return "/api/contract/detail/\(id)"
+        case .contractPaybackUpdate(let id, _, _, _): return "/api/contract/payback/update/\(id)"
+        case .contractPaybackAdd: return "/api/contract/payback/add"
+        case .performUnder: return "/api/perform/under"
+        case .performDetail: return "/api/perform/detail"
             
         default: return ""
         }
@@ -176,9 +208,9 @@ extension APIManager: TargetType {
             return .delete
         case .notifyCheckReject, .notifyCheckCusRejectExist, .notifyCheckCusRejectMistake, .notifyCheckAgree:
             return .post
-        case .workExtendExtend, .departmentsCreate, .departmentsAddUsers:
+        case .workExtendExtend, .departmentsCreate, .departmentsAddUsers, .contractPaybackAdd, .processCommit:
             return .post
-        case .departmentsChange:
+        case .departmentsChange, .contractUpdate, .contractPaybackUpdate:
             return .put
         case .projectMemberDelete:
             return .delete
@@ -267,14 +299,16 @@ extension APIManager: TargetType {
             
         case let .notifyList(page, limit): // 通知列表
             params = ["page": page, "limit": limit]
-        case .notifyCheckReject(let checkId): // 拒绝审批-非创建客户/项目
-            params = ["checkId": checkId]
+        case let .notifyCheckReject(checkId, desc): // 拒绝审批-非创建客户/项目
+            params = ["checkId": checkId, "desc": desc]
         case .notifyCheckCusRejectExist(let checkId): // 拒绝创建客户/项目-客户已存在
             params = ["checkId": checkId]
         case .notifyCheckCusRejectMistake(let checkId): // 拒绝创建客户/项目-名称有误
             params = ["checkId": checkId]
         case let .notifyCheckList(page, limit): // 审核列表
             params = ["page": page, "limit": limit]
+        case .notifyCheckAgree(_, let desc): // 同意审批
+            params = ["desc": desc]
     
             
         case .departments(let parent): // 部门列表
@@ -300,7 +334,39 @@ extension APIManager: TargetType {
             
         case let .processHistory(status, page, limit): // 历史申请列表
             params = ["status": status, "page": page, "limit": limit]
+        case let .processCommit(processId, data, member, ccUsers):
+            params = ["processId": processId, "data": data]
+            if member.count > 0 { params["member"] = member }
+            if ccUsers.count > 0 { params["ccUsers"] = ccUsers }
+            return .requestParameters(parameters: params, encoding: JSONEncoding.default)
             
+            
+        case let .contractList(name, customerId, projectId, userId, page, limit): // 合同列表/查询合同
+            params = ["name": name, "page": page, "limit": limit]
+            if customerId != nil { params["customerId"] = customerId! }
+            if projectId != nil { params["projectId"] = projectId! }
+            if userId != nil { params["userId"] = userId! }
+        case let .performList(queryType, userId, `self`, contractId): // 业绩列表
+            params = ["queryType": queryType]
+            if userId != nil { params["userId"] = userId! }
+            if `self` != nil { params["self"] = `self`! }
+            if contractId != nil { params["contractId"] = contractId! }
+        case let .contractUpdate(_, totalMoney, rebate, startTime, endTime): // 修改合同内容
+            params = [:]
+            if totalMoney != nil { params["totalMoney"] = totalMoney! }
+            if rebate != nil { params["rebate"] = rebate! }
+            if startTime != nil { params["startTime"] = startTime! }
+            if endTime != nil { params["endTime"] = endTime! }
+        case let .contractPaybackUpdate(_, desc, money, payTime): // 修改回款
+            params = ["desc": desc, "money": money, "payTime": payTime]
+        case let .contractPaybackAdd(contractId, desc, money, payTime): // 新增回款
+            params = ["contractId": contractId, "desc": desc, "money": money, "payTime": payTime]
+        case .performUnder(let name): // 查询绩效
+            params = ["name": name]
+        case let .performDetail(userId, `self`, month):
+            params = ["month": month]
+            if userId != nil { params["userId"] = userId! }
+            if `self` != nil { params["self"] = `self`! }
             
             
         default: params = [:] 
@@ -311,7 +377,7 @@ extension APIManager: TargetType {
     
     var headers: [String : String]? {
         switch self {
-        case .x:
+        case .processCommit:
             return ["Content-Type": "application/json"]
         default:
             return [:]
