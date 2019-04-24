@@ -15,7 +15,7 @@ class JobHandoverCell: UITableViewCell {
         didSet {
             if let data = data {
                 nameLabel.text = preventEmpty(data.realname)
-                departmentLabel.text = "所属部门"
+                departmentLabel.text = preventEmpty(data.departmentName)
                 phoneLabel.text = preventEmpty(data.phone)
                 jobLabel.text = preventEmpty(data.projects)
             }
@@ -54,9 +54,9 @@ class JobHandoverCell: UITableViewCell {
                 label.textColor = UIColor(hex: "#2E4695")
             })
         
-        let departmen = setTitle(titleStr: "所属部门：", contentLabel: departmentLabel, lastView: nameLabel) // 部门
-        let phone = setTitle(titleStr: "手机号码：", contentLabel: phoneLabel, lastView: departmen) // 手机号码
-        _ = setTitle(titleStr: "交接工作：", contentLabel: jobLabel, lastView: phone, isLast: true) // 交接工作
+        _ = setTitle(titleStr: "所属部门：", contentLabel: departmentLabel, lastView: nameLabel) // 部门
+        _ = setTitle(titleStr: "手机号码：", contentLabel: phoneLabel, lastView: departmentLabel) // 手机号码
+        _ = setTitle(titleStr: "交接工作：", contentLabel: jobLabel, lastView: phoneLabel, isLast: true) // 交接工作
     }
     
     /// 设置标题和内容

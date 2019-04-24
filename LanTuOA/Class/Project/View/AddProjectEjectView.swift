@@ -15,8 +15,26 @@ class AddProjectEjectView: UIView {
     
     /// 添加回调
     var addBlock: (() -> ())?
+    /// 申请项目回调
+    var applyBlock: ((ProjectListStatisticsData) -> ())?
     /// 客户id
     var customerId = -1
+    /// 客户名称
+    var customerName: String! {
+        didSet {
+            seleStrArray[2] = customerName
+            tableView.reloadData()
+        }
+    }
+    /// 是否是申请
+    var isApply: Bool! {
+        didSet {
+            if isApply {
+                confirmBtn.setTitle("提交申请", for: .normal)
+            }
+        }
+    }
+    
     
     /// 灰色背景view
     private var grayView: UIView!
@@ -26,11 +44,11 @@ class AddProjectEjectView: UIView {
     private var confirmBtn: UIButton!
     
     /// 标题
-    private let titleArray = ["项目名称", "项目地址"]
+    private let titleArray = ["项目名称", "项目地址", "客户"]
     /// 提示
-    private let placeholderArray = ["请输入", "请选择"]
+    private let placeholderArray = ["请输入", "请选择", ""]
     /// 选中内容
-    private var seleStrArray = ["", ""]
+    private var seleStrArray = ["", "", ""]
     /// 记录当前偏移的高度
     private var deviationHeight: CGFloat = 0
     /// 行业数据
@@ -82,7 +100,7 @@ class AddProjectEjectView: UIView {
             .taxi.config({ (view) in
                 view.layer.cornerRadius = 4
                 view.layer.masksToBounds = true
-                view.backgroundColor = UIColor(hex: "#F1F1F1")
+                view.backgroundColor = .white
             })
         
         let titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // “新增客户”
@@ -95,6 +113,7 @@ class AddProjectEjectView: UIView {
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
+                label.backgroundColor = UIColor(hex: "#F1F1F1")
         }
         
         tableView = UITableView().taxi.adhere(toSuperView: grayView) // tableview
@@ -107,6 +126,8 @@ class AddProjectEjectView: UIView {
                 tableView.bounces = false
                 tableView.delegate = self
                 tableView.dataSource = self
+                tableView.estimatedRowHeight = 50
+                tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 tableView.register(CustomerTextViewCell.self, forCellReuseIdentifier: "CustomerTextViewCell")
             })
         
@@ -135,6 +156,15 @@ class AddProjectEjectView: UIView {
                 btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
                 btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
                 btn.addTarget(self, action: #selector(confirmClick), for: .touchUpInside)
+            })
+        
+        _ = UIView().taxi.adhere(toSuperView: grayView) // 分割线
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.left.bottom.equalTo(confirmBtn)
+                make.width.equalTo(1)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
             })
         
         layoutIfNeeded()
@@ -189,6 +219,20 @@ class AddProjectEjectView: UIView {
         })
     }
     
+    /// 申请新增项目
+    private func projectSaveRequire() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.projectSave(seleStrArray[0], customerId, seleStrArray[1]), t: ProjectSaveRequireModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            if self.applyBlock != nil {
+                self.applyBlock!(result.data ?? ProjectListStatisticsData())
+            }
+            self.hidden()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "添加失败")
+        })
+    }
+    
     // MARK: - 按钮点击
     /// 点击取消
     @objc private func cancelClick() {
@@ -205,7 +249,11 @@ class AddProjectEjectView: UIView {
             }
         }
         if isCan {
-            projectSave()
+            if isApply {
+                projectSaveRequire()
+            } else {
+                projectSave()
+            }
         } else {
             MBProgressHUD.showError("请先完成内容的输入")
         }
@@ -222,6 +270,7 @@ extension AddProjectEjectView: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerTextViewCell", for: indexPath) as! CustomerTextViewCell
         cell.data = (titleArray[row], placeholderArray[row])
         cell.contentStr = seleStrArray[row]
+        cell.isEdit = row != 2
         cell.tableView = tableView
         if row == 1 { // 地址可输入3行
             cell.limitRow = 3

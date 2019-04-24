@@ -15,7 +15,7 @@ class ToExamineDetailsCell: UITableViewCell {
         didSet {
             if let data = data {
                 nameLabel.text = data.0
-                statusLabel.text = data.2 == 0 ? "(发起申请)" : data.2 == 1 ? "(审批中)" : data.2 == 1 ? "(同意)" : "(拒绝)"
+                statusLabel.text = data.2 == 0 ? "(发起申请)" : data.2 == 1 ? "(审批中)" : data.2 == 2 ? "(同意)" : "(拒绝)"
                 if data.3 == -1 { // 都写  防止复用
                     topLineView.isHidden = true
                     bottomLineView.isHidden = false

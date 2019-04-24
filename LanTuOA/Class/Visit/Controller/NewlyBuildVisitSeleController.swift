@@ -19,13 +19,15 @@ class NewlyBuildVisitSeleController: UIViewController {
         /// 拜访人
         case visitor(Int)
         /// 项目
-        case project(Int)
+        case project(Int, String)
     }
     
     /// 选中回调 (id + 文本)
     var seleBlock: (([(Int, String)]) -> ())?
     /// 选择类型
     var type: SeleType = .customer
+    /// 是否是申请 -> 从填写拜访进入的都是直接申请
+    var isApply = false
     
     
     /// 搜索框
@@ -85,7 +87,7 @@ class NewlyBuildVisitSeleController: UIViewController {
             title = "拜访人"
             rightStr = "新增拜访人"
             searchStr = "拜访人名称"
-        case .project(let id):
+        case .project(let id, _):
             customerId = id
             title = "项目"
             rightStr = "新增项目"
@@ -320,8 +322,16 @@ class NewlyBuildVisitSeleController: UIViewController {
         switch type {
         case .customer:
             let ejectView = AddCustomerEjectView()
+            ejectView.isApply = isApply
             ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
                 self?.customerListStatistics(isMore: false)
+            }
+            ejectView.applyBlock = { [weak self] (model) in // 申请成功 -> 返回上层并填写
+                if self?.seleBlock != nil {
+                    let seleArray = [(model.id, model.name ?? "")]
+                    self?.seleBlock!(seleArray)
+                }
+                self?.navigationController?.popViewController(animated: true)
             }
             ejectView.show()
         case .visitor(let id):
@@ -331,11 +341,20 @@ class NewlyBuildVisitSeleController: UIViewController {
                 self?.customerContactList()
             }
             ejectView.show()
-        case .project(let id):
+        case let .project(id, name):
             let ejectView = AddProjectEjectView()
+            ejectView.isApply = isApply
             ejectView.customerId = id
+            ejectView.customerName = name
             ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
                 self?.projectList(isMore: false)
+            }
+            ejectView.applyBlock = { [weak self] (model) in // 申请成功 -> 返回上层并填写
+                if self?.seleBlock != nil {
+                    let seleArray = [(model.id, model.name ?? "")]
+                    self?.seleBlock!(seleArray)
+                }
+                self?.navigationController?.popViewController(animated: true)
             }
             ejectView.show()
         }

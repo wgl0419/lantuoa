@@ -88,6 +88,7 @@ class NewlyBuildVisitController: UIViewController {
     private func seleCustomerHandle() {
         let vc = NewlyBuildVisitSeleController()
         vc.type = .customer
+        vc.isApply = true
         vc.seleBlock = { [weak self] (customerArray) in
             self?.seleIdArray[0] = customerArray.first?.0 ?? -1
             self?.seleStrArray[0] = customerArray.first?.1 ?? ""
@@ -108,6 +109,7 @@ class NewlyBuildVisitController: UIViewController {
     /// - Parameter section: 在tableview中的位置
     private func seleOtherHandle(section: Int) {
         let customerId = seleIdArray.first ?? -1
+        let customerName = seleStrArray.first ?? ""
         guard customerId != -1 else {
             MBProgressHUD.showError("请先选择客户")
             return
@@ -116,7 +118,8 @@ class NewlyBuildVisitController: UIViewController {
         if section == 1 {
             vc.type = .visitor(customerId)
         } else {
-            vc.type = .project(customerId)
+            vc.isApply = true
+            vc.type = .project(customerId, customerName)
         }
         
         vc.seleBlock = { [weak self] (customerArray) in

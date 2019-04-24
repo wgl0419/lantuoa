@@ -20,6 +20,8 @@ class SegmentView: UIView {
     private var titleArray = [String]()
     /// 记录按钮
     private var btnArray = [UIButton]()
+    /// 标记数组
+    private var tipArray = [UILabel]()
     /// 选中按钮
     private var seleBtn: UIButton!
     
@@ -29,9 +31,23 @@ class SegmentView: UIView {
         initSubViews()
     }
     
-    func setTips(index: Int, showTips: Bool) {
-        let btn = btnArray[index]
-        btn.titleLabel?.isShowRedDot = true
+    func setTips(index: Int, number: Int) {
+        let label = tipArray[index]
+        if number == 0 {
+            label.isHidden = true
+            return
+        } else {
+            label.isHidden = false
+        }
+        let numberStr = number < 100 ? "\(number)" : "99+"
+        label.text = numberStr
+        let width = numberStr.getTextSize(font: UIFont.boldSystemFont(ofSize: 10), maxSize: CGSize(width: ScreenWidth, height: ScreenHeight)).width
+        label.snp.updateConstraints { (make) in
+            make.width.equalTo(width + 8)
+        }
+        layoutIfNeeded()
+        label.layer.cornerRadius = label.height / 2
+        label.layer.masksToBounds = true
     }
     
     /// 修改显示按钮
@@ -70,6 +86,31 @@ class SegmentView: UIView {
             }
             lastBtn = btn
             btnArray.append(btn)
+            
+//            _ = UILabel().taxi.adhere(toSuperView: self)
+//                .taxi.layout(snapKitMaker: { (make) in
+//                    make.left.equalTo(btn.titleLabel!.snp.right)
+//                    make.centerY.equalTo(btn)
+//                })
+//                .taxi.config({ (label) in
+//                    label.text = "123"
+//                    label.textColor = .green
+//                })
+            let tipLabel = UILabel().taxi.adhere(toSuperView: self) // 提示数量
+                .taxi.layout { (make) in
+                    make.left.equalTo(btn.titleLabel!.snp.right).offset(5)
+                    make.centerY.equalTo(btn)
+                    make.width.equalTo(10)
+            }
+                .taxi.config { (label) in
+                    label.isHidden = true
+                    label.textColor = .white
+                    label.textAlignment = .center
+                    label.font = UIFont.boldSystemFont(ofSize: 10)
+                    label.backgroundColor = UIColor(hex: "#FF3333")
+            }
+            tipArray.append(tipLabel)
+            
             if index != 0 {
                 _ = UIView().taxi.adhere(toSuperView: self) // 分割线
                     .taxi.layout(snapKitMaker: { (make) in

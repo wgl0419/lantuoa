@@ -195,8 +195,9 @@ class FillInApplyController: UIViewController {
             MBProgressHUD.showError("请先选择客户")
             return
         }
+        let customerName = seleStrArray.first ?? ""
         let vc = NewlyBuildVisitSeleController()
-        vc.type = .project(customerId)
+        vc.type = .project(customerId, customerName)
         
         vc.seleBlock = { [weak self] (customerArray) in
             self?.projectId = customerArray.first?.0 ?? -1

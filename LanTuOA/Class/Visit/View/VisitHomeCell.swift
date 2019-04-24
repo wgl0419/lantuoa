@@ -15,7 +15,7 @@ class VisitHomeCell: UITableViewCell {
         didSet {
             if let data = data {
                 titleLabel.text = data.projectName
-                visitNameLabel.text = "后端没有给数据" // TODO: 后端没有给数据
+                visitNameLabel.text = data.contactInfo
                 initiateLabel.text = data.createUserName
                 stateLabel.text = data.result
                 let timeStr = Date(timeIntervalSince1970: TimeInterval(data.visitTime)).yearTimeStr()
@@ -104,17 +104,17 @@ class VisitHomeCell: UITableViewCell {
         
         let initiate = UILabel().taxi.adhere(toSuperView: whiteView) // "发起人"
         initiateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 发起人
-        setTitle(title: initiate, content: initiateLabel, lastLabel: visitName)
+        setTitle(title: initiate, content: initiateLabel, lastLabel: visitNameLabel)
         initiate.text = "发起人："
         
         let time = UILabel().taxi.adhere(toSuperView: whiteView) // “时间”
         timeLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 时间
-        setTitle(title: time, content: timeLabel, lastLabel: initiate)
+        setTitle(title: time, content: timeLabel, lastLabel: initiateLabel)
         time.text = "拜访时间："
         
         let state = UILabel().taxi.adhere(toSuperView: whiteView) // “状态“
         stateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 状态
-        setTitle(title: state, content: stateLabel, lastLabel: time, isLast: true)
+        setTitle(title: state, content: stateLabel, lastLabel: timeLabel, isLast: true)
         state.text = "最新状态："
     }
     
@@ -145,6 +145,7 @@ class VisitHomeCell: UITableViewCell {
             make.right.lessThanOrEqualToSuperview().offset(-23)
         }
             .taxi.config { (label) in
+                label.numberOfLines = 0
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
                 label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)

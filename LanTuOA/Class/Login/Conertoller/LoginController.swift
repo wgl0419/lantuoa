@@ -207,13 +207,14 @@ class LoginController: UIViewController {
         self.view.window?.rootViewController = bar
     }
     
-    /// 获取个人权限
-    private func usersPermissions() {
+    /// 获取个人信息
+    private func loginUser() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.usersPermissions(), t: UsersPermissionsModel.self, successHandle: { (result) in
-            MBProgressHUD.dismiss()
-            Jurisdiction.share.setJurisdiction(data: result.data)
+        _ = APIService.shared.getData(.loginUser(), t: LoginUserModel.self, successHandle: { (result) in
+            Jurisdiction.share.setJurisdiction(data: result.data?.privilegeList ?? [])
+            UserInfo.share.setUserName(result.data?.realname ?? "")
             self.postMainController()
+            MBProgressHUD.dismiss()
         }, errorHandle: { (_) in
             UserInfo.share.userRemve()
             MBProgressHUD.showError("登录失败")
@@ -228,7 +229,7 @@ class LoginController: UIViewController {
         _ = APIService.shared.getData(.login(accountStr, pwdStr), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             UserInfo.share.setToken(result.data?.token ?? "")
-            self.usersPermissions()
+            self.loginUser()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "登录失败")
         })

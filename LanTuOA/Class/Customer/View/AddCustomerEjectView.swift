@@ -14,6 +14,9 @@ class AddCustomerEjectView: UIView {
     
     /// 添加回调
     var addBlock: (() -> ())?
+    /// 申请回调
+    var applyBlock: ((CustomerListStatisticsData) -> ())?
+    
     /// 修改的数据(标题 + 数据)
     var modifyData: (String, CustomerListStatisticsData)? {
         didSet {
@@ -35,6 +38,22 @@ class AddCustomerEjectView: UIView {
             }
         }
     }
+    /// 是否是申请
+    var isApply: Bool! {
+        didSet {
+            if isApply {
+                placeholderArray.remove(at: 1)
+                seleStrArray.remove(at: 1)
+                titleArray.remove(at: 1)
+                tableView.reloadData()
+                layoutIfNeeded()
+                tableView.snp.updateConstraints { (make) in
+                    make.height.equalTo(tableView.contentSize.height)
+                }
+                confirmBtn.setTitle("提交申请", for: .normal)
+            }
+        }
+    }
     
     /// 灰色背景view
     private var grayView: UIView!
@@ -47,9 +66,9 @@ class AddCustomerEjectView: UIView {
     
     
     /// 标题
-    private let titleArray = ["客户名称", "客户类型", "所属行业", "公司地址", "公司全名"]
+    private var titleArray = ["客户名称", "客户类型", "所属行业", "公司地址", "公司全名"]
     /// 提示
-    private let placeholderArray = ["请输入", "请选择", "请选择", "请输入", "请输入"]
+    private var placeholderArray = ["请输入", "请选择", "请选择", "请输入", "请输入"]
     /// 选中内容
     private var seleStrArray = ["", "", "", "", ""]
     /// 记录当前偏移的高度
@@ -111,7 +130,7 @@ class AddCustomerEjectView: UIView {
             .taxi.config({ (view) in
                 view.layer.cornerRadius = 4
                 view.layer.masksToBounds = true
-                view.backgroundColor = UIColor(hex: "#F1F1F1")
+                view.backgroundColor = .white
             })
         
         titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // 标题
@@ -124,6 +143,7 @@ class AddCustomerEjectView: UIView {
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
+                label.backgroundColor = UIColor(hex: "#F1F1F1")
             })
         
         tableView = UITableView().taxi.adhere(toSuperView: grayView) // tableview
@@ -136,6 +156,8 @@ class AddCustomerEjectView: UIView {
                 tableView.bounces = false
                 tableView.delegate = self
                 tableView.dataSource = self
+                tableView.estimatedRowHeight = 50
+                tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 tableView.register(CustomerTextViewCell.self, forCellReuseIdentifier: "CustomerTextViewCell")
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
             })
@@ -167,11 +189,19 @@ class AddCustomerEjectView: UIView {
                 btn.addTarget(self, action: #selector(confirmClick), for: .touchUpInside)
             })
         
+        _ = UIView().taxi.adhere(toSuperView: grayView) // 分割线
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.left.bottom.equalTo(confirmBtn)
+                make.width.equalTo(1)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+            })
+        
         layoutIfNeeded()
         tableView.snp.updateConstraints { (make) in
             make.height.equalTo(tableView.contentSize.height)
         }
-        
     }
     
     
@@ -219,6 +249,20 @@ class AddCustomerEjectView: UIView {
         })
     }
     
+    /// 申请新增客户
+    private func customerSaveRequire() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.customerSaveRequire(seleStrArray[0], seleStrArray[3], seleStrArray[2], customerIndustryId), t: CustomerSaveRequireModel.self, successHandle: { (result) in
+            MBProgressHUD.showSuccess("新增客户成功")
+            if self.applyBlock != nil {
+                self.applyBlock!(result.data ?? CustomerListStatisticsData())
+            }
+            self.hidden()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "新增客户失败")
+        })
+    }
+        
     /// 编辑客户
     private func customerUpdate() {
         MBProgressHUD.showWait("")
@@ -278,6 +322,8 @@ class AddCustomerEjectView: UIView {
         if isCan {
             if isModify {
                 customerUpdate()
+            } else if isApply {
+                customerSaveRequire()
             } else {
                 customerSave()
             }
@@ -304,9 +350,10 @@ extension AddCustomerEjectView: UITableViewDelegate, UITableViewDataSource {
             cell.data = (titleArray[row], placeholderArray[row])
             cell.contentStr = seleStrArray[row]
             cell.tableView = tableView
-            if row == 3 { // 地址可输入3行
+            let str = titleArray[row]
+            if str == "公司地址" { // 地址可输入3行
                 cell.limitRow = 3
-            } else if row == 4 { // 公司全称可输入2行
+            } else if str == "公司全名" { // 公司全称可输入2行
                 cell.limitRow = 2
             }
             cell.stopBlock = { [weak self] (str) in

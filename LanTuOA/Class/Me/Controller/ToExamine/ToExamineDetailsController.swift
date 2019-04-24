@@ -20,6 +20,8 @@ class ToExamineDetailsController: UIViewController {
     
     /// tableview
     private var tableView: UITableView!
+    /// 按钮框
+    private var btnView: UIView!
     
     /// 审批详情数据
     private var data = [NotifyCheckUserListData]()
@@ -37,14 +39,14 @@ class ToExamineDetailsController: UIViewController {
         title = "审核详情"
         view.backgroundColor = .white
         
-        let btnView = UIView().taxi.adhere(toSuperView: view) // 按钮背景图
-            .taxi.layout { (make) in
+        btnView = UIView().taxi.adhere(toSuperView: view) // 按钮框
+            .taxi.layout(snapKitMaker: { (make) in
                 make.bottom.left.right.equalToSuperview()
                 make.height.equalTo(62 + (isIphoneX ? SafeH : 18))
-        }
-            .taxi.config { (view) in
+            })
+            .taxi.config({ (view) in
                 view.backgroundColor = .white
-        }
+            })
         
         _ = UIButton().taxi.adhere(toSuperView: btnView) // 拒绝按钮
             .taxi.layout(snapKitMaker: { (make) in
@@ -102,6 +104,9 @@ class ToExamineDetailsController: UIViewController {
     
     /// 修改处理
     private func changeHandle() {
+        btnView.snp.updateConstraints { (make) in
+            make.height.equalTo(0)
+        }
         notifyCheckDetail()
         notifyCheckUserList()
         if changeBlock != nil {

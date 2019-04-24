@@ -7,6 +7,7 @@
 //  我 首页 控制器
 
 import UIKit
+import MBProgressHUD
 
 class MeHomeController: UIViewController {
 
@@ -22,6 +23,7 @@ class MeHomeController: UIViewController {
         super.viewDidLoad()
         setNav()
         initSubViews()
+        loginUser()
     }
     
     // MARK: - 自定义私有方法
@@ -52,6 +54,20 @@ class MeHomeController: UIViewController {
                 tableView.register(MeHomeCell.self, forCellReuseIdentifier: "MeHomeCell")
                 tableView.register(MeHomeHeaderCell.self, forCellReuseIdentifier: "MeHomeHeaderCell")
             })
+    }
+    
+    // MARK: - Api
+    /// 获取个人信息
+    private func loginUser() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.loginUser(), t: LoginUserModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            UserInfo.share.setUserName(result.data?.realname ?? "")
+            Jurisdiction.share.setJurisdiction(data: result.data?.privilegeList ?? [])
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取个人信息失败")
+        })
     }
 }
 

@@ -16,7 +16,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
             if let data = data {
                 projectNameLabel.text = data.projectName
                 customerNameLabel.text = data.customerName
-                projectAddressLabel.text = "后端未给数据,或者是给了经纬 需要自己去获取地理位置" // TODO: 后端没有给数据
+                projectAddressLabel.text = data.projectAddress
             }
         }
     }

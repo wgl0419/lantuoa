@@ -32,4 +32,5 @@ struct WorkExtendListData: HandyJSON {
     var phone: String?
     var remark: String?
     var projects: String?
+    var departmentName: String?
 }

@@ -45,6 +45,7 @@ enum APIManager {
     case projectListStatistics(String, Int, Int, Int, Int?) // 项目统计列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据  manageUser:管理人Id)
     case projectList(String, Int?, Int, Int) // 项目信息列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据)
     case projectDetail(Int) // 项目详情 (项目id)
+    case projectSaveRequire(String, Int, String) // 申请新增项目（拜访页面） （name:项目名称  customerId:客户id  address:地址）
     
     
     // MARK: - 拜访
@@ -140,6 +141,7 @@ extension APIManager: TargetType {
         case .projectListStatistics: return "/api/project/list/statistics"
         case .projectList: return "/api/project/list"
         case .projectDetail(let id): return "/api/project/detail/\(id)"
+        case .projectSaveRequire: return "/api/project/save/require"
 
             
         case .visitSave: return "/api/visit/save"
@@ -156,7 +158,7 @@ extension APIManager: TargetType {
         case .notifyCheckReject: return "/api/notify/check/reject"
         case .notifyCheckCusRejectExist: return "/api/notify/check/cus/reject/exist"
         case .notifyCheckCusRejectMistake: return "/api/notify/check/cus/reject/mistake"
-        case .notifyCheckAgree(let id): return "/api/notify/check/agree/\(id)"
+        case .notifyCheckAgree(let id, _): return "/api/notify/check/agree/\(id)"
         case .notifyCheckList: return "/api/notify/check/list"
         case .notifyCheckDetail(let id): return "/api/notify/check/detail/\(id)"
         case .notifyCheckUserList(let id): return "/api/notify/check/user/list/\(id)"
@@ -200,7 +202,7 @@ extension APIManager: TargetType {
             return .post
         case  .customerSave, .customerUpdate, .customerContactSave, .customerContactUpdate, .customerSaveRequire:
             return .post
-        case  .projectSave, .projectUpdate, .projectOffline, .projectMemberAdd:
+        case  .projectSave, .projectUpdate, .projectOffline, .projectMemberAdd, .projectSaveRequire:
             return .post
         case .visitSave:
             return .post
@@ -212,7 +214,7 @@ extension APIManager: TargetType {
             return .post
         case .workExtendExtend, .departmentsCreate, .departmentsAddUsers, .contractPaybackAdd, .processCommit:
             return .post
-        case .departmentsChange, .contractUpdate, .contractPaybackUpdate:
+        case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate:
             return .put
         case .projectMemberDelete:
             return .delete
@@ -281,6 +283,8 @@ extension APIManager: TargetType {
             if customerId != nil { params["customerId"] = customerId! }
         case let .customerSaveRequire(name, full_name, address, industry): // 申请新增客户（拜访页面）
             params = ["name": name, "full_name": full_name, "address": address, "industry": industry]
+        case let .projectSaveRequire(name, customerId, address): // 申请新增项目（拜访页面）
+            params = ["name": name, "customerId": customerId, "address": address]
             
             
         case let .visitSave(customerId, projectId, type, content, result, visitTime, contact): // 新增拜访

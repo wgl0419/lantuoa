@@ -89,7 +89,7 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
         
         statusImageView = UIImageView().taxi.adhere(toSuperView: contentView) // 状态图标
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.equalToSuperview().offset(-7)
+                make.right.equalToSuperview().offset(-7)
                 make.top.equalToSuperview().offset(8)
             })
     }

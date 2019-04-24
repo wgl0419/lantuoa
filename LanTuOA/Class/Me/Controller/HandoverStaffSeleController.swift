@@ -29,7 +29,7 @@ class HandoverStaffSeleController: UIViewController {
     
     
     /// 数据
-    private var data = [UsersData]()
+    private var data = [WorkExtendListData]()
     /// 记录输入次数  -> 用于减少计算次数
     private var inputCout = 0
     /// 选中cell的row
@@ -40,7 +40,7 @@ class HandoverStaffSeleController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
-        users(isMore: false)
+        workExtendList()
     }
     
     // MARK: - 自定义私有方法
@@ -100,12 +100,7 @@ class HandoverStaffSeleController: UIViewController {
                 tableView.tableFooterView = UIView()
                 tableView.register(HandoverStaffSeleCell.self, forCellReuseIdentifier: "HandoverStaffSeleCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
-                    tableView.mj_footer.isHidden = true
-                    self?.users(isMore: false)
-                })
-                tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
-                    tableView.mj_header.isHidden = true
-                    self?.users(isMore: true)
+                    self?.workExtendList()
                 })
             })
         
@@ -117,7 +112,7 @@ class HandoverStaffSeleController: UIViewController {
     /// - Parameter number: 记录的输入次数
     @objc private func distinguishSearch(number: NSNumber) {
         if Int(truncating: number) == inputCout { // 次数相同 说明停止输入
-            users(isMore: false)
+            workExtendList()
         }
     }
     
@@ -135,39 +130,16 @@ class HandoverStaffSeleController: UIViewController {
     }
     
     // MARK: - Api
-    /// 获取用户列表
-    private func users(isMore: Bool) {
+    /// 获取下级成员列表
+    private func workExtendList() {
         MBProgressHUD.showWait("")
-        let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.users(newPage, 10, searchBar.text ?? "", 1), t: UsersModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.workExtendList(searchBar.text ?? ""), t: WorkExtendListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
-            if isMore {
-                for model in result.data {
-                    self.data.append(model)
-                }
-                self.tableView.mj_footer.endRefreshing()
-                self.tableView.mj_header.isHidden = false
-                self.page += 1
-            } else {
-                self.page = 1
-                self.data = result.data
-                self.tableView.mj_header.endRefreshing()
-                self.tableView.mj_footer.isHidden = false
-            }
-            if newPage == result.max_page {
-                self.tableView.mj_footer.endRefreshingWithNoMoreData()
-            } else {
-                self.tableView.mj_footer.resetNoMoreData()
-            }
+            self.data = result.data
+            self.tableView.mj_header.endRefreshing()
             self.tableView.reloadData()
         }, errorHandle: { (error) in
-            if isMore {
-                self.tableView.mj_footer.endRefreshing()
-                self.tableView.mj_header.isHidden = false
-            } else {
-                self.tableView.mj_header.endRefreshing()
-                self.tableView.mj_footer.isHidden = false
-            }
+            self.tableView.mj_header.endRefreshing()
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }

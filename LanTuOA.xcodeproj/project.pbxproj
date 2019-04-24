@@ -78,6 +78,9 @@
 		180736B7226EBA5C001F1FA6 /* UsersPermissionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736B6226EBA5C001F1FA6 /* UsersPermissionsModel.swift */; };
 		180736B9226EE176001F1FA6 /* ProjectDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736B8226EE176001F1FA6 /* ProjectDetailModel.swift */; };
 		180736BB226EFF83001F1FA6 /* UpdateHintsEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736BA226EFF83001F1FA6 /* UpdateHintsEjectView.swift */; };
+		180736BD22700FAA001F1FA6 /* LoginUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736BC22700FAA001F1FA6 /* LoginUserModel.swift */; };
+		180736C3227067FF001F1FA6 /* ProjectSaveRequireModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736C2227067FF001F1FA6 /* ProjectSaveRequireModel.swift */; };
+		180736C522706A4F001F1FA6 /* CustomerSaveRequireModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736C422706A4F001F1FA6 /* CustomerSaveRequireModel.swift */; };
 		1809E3F8225D865000B615A8 /* ToExamineDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E3F7225D865000B615A8 /* ToExamineDetailsController.swift */; };
 		1809E3FC225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E3FB225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift */; };
 		1809E3FE225DBB9700B615A8 /* AddDepartmentEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E3FD225DBB9700B615A8 /* AddDepartmentEjectView.swift */; };
@@ -256,6 +259,9 @@
 		180736B6226EBA5C001F1FA6 /* UsersPermissionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersPermissionsModel.swift; sourceTree = "<group>"; };
 		180736B8226EE176001F1FA6 /* ProjectDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailModel.swift; sourceTree = "<group>"; };
 		180736BA226EFF83001F1FA6 /* UpdateHintsEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateHintsEjectView.swift; sourceTree = "<group>"; };
+		180736BC22700FAA001F1FA6 /* LoginUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserModel.swift; sourceTree = "<group>"; };
+		180736C2227067FF001F1FA6 /* ProjectSaveRequireModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSaveRequireModel.swift; sourceTree = "<group>"; };
+		180736C422706A4F001F1FA6 /* CustomerSaveRequireModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerSaveRequireModel.swift; sourceTree = "<group>"; };
 		1809E3F7225D865000B615A8 /* ToExamineDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsController.swift; sourceTree = "<group>"; };
 		1809E3FB225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsHeaderCell.swift; sourceTree = "<group>"; };
 		1809E3FD225DBB9700B615A8 /* AddDepartmentEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDepartmentEjectView.swift; sourceTree = "<group>"; };
@@ -419,6 +425,7 @@
 				180115342248C3C500EA551F /* CustomerIndustryListModel.swift */,
 				1838BC43225C462300978E72 /* CustomerDetailModel.swift */,
 				180BFB322265B14C001879BD /* ContractListModel.swift */,
+				180736C422706A4F001F1FA6 /* CustomerSaveRequireModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -848,6 +855,7 @@
 				1827ED852268209700EFF889 /* PerformUnderModel.swift */,
 				1827ED9122686DE000EFF889 /* PerformDetailModel.swift */,
 				1827ED9322695F8700EFF889 /* ProcessUsersModel.swift */,
+				180736BC22700FAA001F1FA6 /* LoginUserModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -895,6 +903,7 @@
 				183383002251B4650053F2BF /* WorkGroupListModel.swift */,
 				183383082251F1270053F2BF /* UsersModel.swift */,
 				180736B8226EE176001F1FA6 /* ProjectDetailModel.swift */,
+				180736C2227067FF001F1FA6 /* ProjectSaveRequireModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1148,6 +1157,7 @@
 				1810EC74222F5D4100CF6488 /* UiView.swift in Sources */,
 				180736BB226EFF83001F1FA6 /* UpdateHintsEjectView.swift in Sources */,
 				1809E400225DC4D400B615A8 /* DepartmentsUsersModel.swift in Sources */,
+				180736C3227067FF001F1FA6 /* ProjectSaveRequireModel.swift in Sources */,
 				1810EC7B222F5D4100CF6488 /* String.swift in Sources */,
 				18A7C96B223F7BA7000B4007 /* ProjectListModel.swift in Sources */,
 				18050D69224B4C4D00C9DB9A /* HandoverStaffController.swift in Sources */,
@@ -1245,6 +1255,7 @@
 				1827ED8C22684A3E00EFF889 /* AchievementsDetailsCell.swift in Sources */,
 				180533D422601F7100B785B7 /* ProcessParamsModel.swift in Sources */,
 				180018872253679500832E60 /* VisitDetailsController.swift in Sources */,
+				180736C522706A4F001F1FA6 /* CustomerSaveRequireModel.swift in Sources */,
 				1810EC90222F5F2F00CF6488 /* DispatchQueueExtension.swift in Sources */,
 				180233662244C6640064A50E /* MeHomeCell.swift in Sources */,
 				1876A8EA22672850002EBDB2 /* MoreTimeSeleEjectView.swift in Sources */,
@@ -1275,6 +1286,7 @@
 				1809E406225DD5FC00B615A8 /* SelePersonnelCell.swift in Sources */,
 				1817884A2238ABA90015DC30 /* ProjectHomeController.swift in Sources */,
 				18050D6B224B4E8500C9DB9A /* HandoverStaffHeaderCell.swift in Sources */,
+				180736BD22700FAA001F1FA6 /* LoginUserModel.swift in Sources */,
 				180273E7223B7ACC0033E083 /* WrokHomeCell.swift in Sources */,
 				180233642244C1DD0064A50E /* MeHomeHeaderCell.swift in Sources */,
 				1810EC97222F5F9500CF6488 /* UserInfo.swift in Sources */,

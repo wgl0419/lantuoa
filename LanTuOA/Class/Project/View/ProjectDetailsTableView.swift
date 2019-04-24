@@ -342,7 +342,7 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return 0
         } else if cellStyle == .history {
             return 30
-        } else if cellStyle == .personnel && lockState == 1 && canManage == 1 || cellStyle == .workingGroup {
+        } else if cellStyle == .personnel && lockState == 1 && Jurisdiction.share.isEditProject || canManage == 1 || cellStyle == .workingGroup {
             return 40
         } else {
             return 0
@@ -354,7 +354,7 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return nil
         } else if cellStyle == .history {
             return timeFooterViewHandle()
-        } else if cellStyle == .personnel && lockState == 1 && canManage == 1 || cellStyle == .workingGroup {
+        } else if cellStyle == .personnel && lockState == 1 && Jurisdiction.share.isEditProject || canManage == 1 || cellStyle == .workingGroup {
             return addFooterViewHandle()
         } else {
             return nil

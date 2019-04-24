@@ -96,8 +96,8 @@ class AddVisitorEjectView: UIView {
             })
             .taxi.config({ (view) in
                 view.layer.cornerRadius = 4
+                view.backgroundColor = .white
                 view.layer.masksToBounds = true
-                view.backgroundColor = UIColor(hex: "#F1F1F1")
             })
         
         titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // 标题
@@ -110,6 +110,7 @@ class AddVisitorEjectView: UIView {
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
+                label.backgroundColor = UIColor(hex: "#F1F1F1")
             })
         
         tableView = UITableView().taxi.adhere(toSuperView: grayView) // tableview
@@ -122,6 +123,8 @@ class AddVisitorEjectView: UIView {
                 tableView.bounces = false
                 tableView.delegate = self
                 tableView.dataSource = self
+                tableView.estimatedRowHeight = 50
+                tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 tableView.register(CustomerTextViewCell.self, forCellReuseIdentifier: "CustomerTextViewCell")
             })
         
@@ -150,6 +153,15 @@ class AddVisitorEjectView: UIView {
                 btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
                 btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
                 btn.addTarget(self, action: #selector(confirmClick), for: .touchUpInside)
+            })
+        
+        _ = UIView().taxi.adhere(toSuperView: grayView) // 分割线
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.left.bottom.equalTo(confirmBtn)
+                make.width.equalTo(1)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
             })
         
         layoutIfNeeded()

@@ -23,6 +23,7 @@ class HomePageController: UIViewController {
         setNav()
         initSubViews()
         projectList()
+        loginUser()
     }
     
     // MARK: - 自定义私有方法
@@ -64,6 +65,14 @@ class HomePageController: UIViewController {
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取我的项目失败")
         })
+    }
+    
+    /// 获取个人信息 -> 更新权限
+    private func loginUser() {
+        _ = APIService.shared.getData(.loginUser(), t: LoginUserModel.self, successHandle: { (result) in
+            Jurisdiction.share.setJurisdiction(data: result.data?.privilegeList ?? [])
+            UserInfo.share.setUserName(result.data?.realname ?? "")
+        }, errorHandle: nil)
     }
 }
 

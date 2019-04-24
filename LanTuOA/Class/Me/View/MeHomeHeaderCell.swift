@@ -66,8 +66,8 @@ class MeHomeHeaderCell: UITableViewCell {
                 make.left.equalTo(headImageView.snp.right).offset(15)
             })
             .taxi.config({ (label) in
-                label.text = "姓名"
                 label.textColor = blackColor
+                label.text = UserInfo.share.userName
                 label.font = UIFont.boldSystemFont(ofSize: 18)
             })
         

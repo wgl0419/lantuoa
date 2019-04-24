@@ -19,6 +19,6 @@ platform :ios do
   desc "Description of what the lane does"
   lane :sit do
     gym(scheme: "LanTuOA", export_method:"development", output_directory: "./build", output_name: "LanTuOA")
-    pgyer(api_key: "a8902addd7e0a0a886c42457cf5c4c88", user_key: "f6b9e850fcfa185a2a6d90765d779448", update_description: "Ci测试", password: "djdj", install_type: "2")
+    pgyer(api_key: "a8902addd7e0a0a886c42457cf5c4c88", user_key: "f6b9e850fcfa185a2a6d90765d779448", update_description: "测试版本", password: "djdj", install_type: "2")
   end
 end

@@ -100,7 +100,7 @@ class NewWorkingGroupController: UIViewController {
     }
     
     // MARK: - Api
-    /// 新家工作组
+    /// 新建工作组
     private func workGroupCreate() {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.workGroupCreate(seleStrArray[0], personIdArray, projectData.0), t: LoginModel.self, successHandle: { (result) in

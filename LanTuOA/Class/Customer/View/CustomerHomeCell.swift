@@ -370,7 +370,7 @@ class CustomerHomeCell: UITableViewCell {
         
         count.taxi.adhere(toSuperView: whiteView) // 数量
             .taxi.layout { (make) in
-                make.width.equalToSuperview().dividedBy(3.1).priority(800)
+                make.width.equalToSuperview().dividedBy(3.8).priority(800)
                 make.top.equalTo(title.snp.bottom).offset(5)
                 make.left.equalToSuperview().offset(15)
                 if isLast {
@@ -391,6 +391,7 @@ class CustomerHomeCell: UITableViewCell {
             .taxi.config { (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
+                label.adjustsFontSizeToFitWidth = true
         }
         
         rebate.taxi.adhere(toSuperView: whiteView) // 回扣
@@ -402,6 +403,7 @@ class CustomerHomeCell: UITableViewCell {
             .taxi.config { (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
+                label.adjustsFontSizeToFitWidth = true
         }
     }
     
