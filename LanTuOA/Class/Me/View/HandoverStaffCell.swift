@@ -23,13 +23,8 @@ class HandoverStaffCell: UITableViewCell {
                     attriMuStr.changeColor(str: "（已交接\(newUserStr)）", color: UIColor(hex: "#5FB9A1"))
                     attriMuStr.changeFont(str: "（已交接\(newUserStr)）", font: UIFont.boldSystemFont(ofSize: 12))
                     nameLabel.attributedText = attriMuStr
-                    
-                    handoverBtn.isEnabled = false
-                    handoverBtn.setTitleColor(UIColor(hex: "#999999"), for: .normal)
                 } else {
                     nameLabel.text = nameStr
-                    handoverBtn.isEnabled = true
-                    handoverBtn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
                 }
                 
             }

@@ -119,14 +119,14 @@ class ContractDetailsTableView: UITableView {
         register(ContractPerformanceHeaderCell.self, forCellReuseIdentifier: "ContractPerformanceHeaderCell")
         register(ContractPerformanceCell.self, forCellReuseIdentifier: "ContractPerformanceCell")
         
-        if cellStyle == .repayment { // 回款详情
-            
-        } else if cellStyle == .performance { // 业绩详情
-            
+        if cellStyle == .content { // 发布内容
+            setTableFooterView()
+        } else {
+            mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
+                self?.reload()
+            })
         }
-        mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
-            self?.reload()
-        })
+        
 //        mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
 //            self?.reload()
 //        })
@@ -209,6 +209,7 @@ class ContractDetailsTableView: UITableView {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.contractPaybackList(contractId), t: ContractPaybackListModel.self, successHandle: { (result) in
             self.repaymentData = result.data
+            self.mj_header.endRefreshing()
             self.reloadData()
             self.setTableFooterView()
             MBProgressHUD.dismiss()
@@ -227,6 +228,7 @@ class ContractDetailsTableView: UITableView {
         _ = APIService.shared.getData(.performList(1, model.userId, nil, model.contractId), t: PerformListModel.self, successHandle: { (result) in
             self.performanceData = result.data
             self.setPerformanceHeaderView()
+            self.mj_header.endRefreshing()
             self.setOpenArray()
             self.reloadData()
             self.setTableFooterView()
@@ -360,8 +362,9 @@ extension ContractDetailsTableView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let trueSection = indexPath.section / 2
-        if cellStyle == .performance && indexPath.row == 0 && trueSection == 0 {
+        let section = indexPath.section % 2
+        if cellStyle == .performance && indexPath.row == 0 && section == 0 {
+            let trueSection = indexPath.section / 2
             let cell = tableView.cellForRow(at: indexPath) as! ContractPerformanceHeaderCell
             cell.changeOpen()
             openArray[trueSection] = !openArray[trueSection]

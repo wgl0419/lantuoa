@@ -175,6 +175,7 @@ class ContractMoneyEjectView: UIView {
         if seleBlock != nil {
             seleBlock!(money)
         }
+        hidden()
     }
 }
 

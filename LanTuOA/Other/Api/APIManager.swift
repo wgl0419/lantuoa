@@ -18,6 +18,7 @@ enum APIManager {
     case usersPwd(String, String) // 修改密码 （oldPwd:原密码  新密码:新密码）
     case usersLeave(Int) // 离职员工
     case usersPermissions() // 获取权限
+    case version() // 获取版本信息 (1.安卓2.iOS3.web)
     
     
     // MARK: - 客户
@@ -116,6 +117,7 @@ extension APIManager: TargetType {
         case .usersPwd: return "/api/users/pwd"
         case .usersLeave(let id): return "/api/users/leave/\(id)"
         case .usersPermissions: return "/api/users/permissions"
+        case .version: return "/api/version"
             
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"
@@ -230,9 +232,11 @@ extension APIManager: TargetType {
         case let .login(phone, pwd): // 登录
             params = ["phone":phone, "pwd": pwd]
         case let .users(page, limit, realname, used): // 用户列表
-            params = ["page": page, "limit": limit, "realname": realname, "used": used]
+            params = ["page": page, "limit": limit, "realname": realname, "used": used, "status": 1]
         case let .usersPwd(oldPwd, newPwd): // 修改密码
             params = ["oldPwd": oldPwd, "newPwd": newPwd]
+        case .version():
+            params = ["os": 2]
             
             
         case let .customerSave(name, full_name, address, type, industry): // 新建客户

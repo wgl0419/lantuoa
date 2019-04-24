@@ -309,6 +309,17 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == pendingTableView {
+            let vc = ToExamineDetailsController()
+            vc.checkListData = pendingData[indexPath.row]
+            vc.changeBlock = { [weak self] in
+                self?.notifyCheckList(isMore: false)
+            }
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }
 
 

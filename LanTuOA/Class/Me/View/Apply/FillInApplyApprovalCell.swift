@@ -23,6 +23,8 @@ class FillInApplyApprovalCell: UITableViewCell {
     
     /// CollectionView
     private var collectionView: UICollectionView!
+    /// 标题
+    private var titleLabel: UILabel!
     
     /// 处理过的数据
     private var processedData = [[ProcessUsersCheckUsers]]()
@@ -40,16 +42,15 @@ class FillInApplyApprovalCell: UITableViewCell {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        let approval = UILabel().taxi.adhere(toSuperView: contentView) // ”审批人“
-            .taxi.layout { (make) in
+        titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
+            .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalToSuperview().offset(15)
                 make.top.equalToSuperview().offset(10)
-        }
-            .taxi.config { (label) in
-                label.text = "审批人"
+            })
+            .taxi.config({ (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 16)
-        }
+            })
         
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
@@ -60,7 +61,7 @@ class FillInApplyApprovalCell: UITableViewCell {
             .taxi.adhere(toSuperView: contentView)
             .taxi.layout(snapKitMaker: { (make) in
                 make.height.equalTo(200).priority(800)
-                make.top.equalTo(approval.snp.bottom)
+                make.top.equalTo(titleLabel.snp.bottom)
                 make.left.right.equalToSuperview()
                 make.bottom.equalToSuperview()
             })
@@ -80,10 +81,12 @@ class FillInApplyApprovalCell: UITableViewCell {
     private func dataHandle() {
         processedData = []
         if !isApproval { // 抄送人不需要处理
+            titleLabel.text = "抄送人"
             for model in data {
                 processedData.append([model])
             }
         } else { // 审批人 需要处理
+            titleLabel.text = "审批人"
             var newData = data!
             guard newData.count > 0 else {
                 return

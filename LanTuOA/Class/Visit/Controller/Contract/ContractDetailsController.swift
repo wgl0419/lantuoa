@@ -61,8 +61,8 @@ class ContractDetailsController: UIViewController {
             })
             .taxi.config({ (view) in
                 view.data = contractListData
-                view.editBlock = { [weak self] (totalMoney, rebate, startTime, endTime) in
-                    self?.contractUpdate(totalMoney: totalMoney, rebate: rebate, startTime: startTime, endTime: endTime)
+                view.editBlock = { [weak self] in
+                    self?.contractDetail()
                 }
             })
         
@@ -113,7 +113,7 @@ class ContractDetailsController: UIViewController {
                         self.offsetY = offsetY
                     }
                     tableView.changeBlock = { [weak self] in
-                        self?.reloadData()
+                        self?.contractDetail()
                     }
             }
             lastTableView = tableView
@@ -165,17 +165,6 @@ class ContractDetailsController: UIViewController {
         }) { (error) in
             MBProgressHUD.showError(error ?? "获取合同详情失败")
         }
-    }
-    
-    /// 修改合同内容
-    private func contractUpdate(totalMoney: Float?, rebate: Float?, startTime: Int?, endTime: Int?) {
-        MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.contractUpdate(contractListData.id, totalMoney, rebate, startTime, endTime), t: LoginModel.self, successHandle: { (result) in
-            self.contractDetail()
-            MBProgressHUD.dismiss()
-        }, errorHandle: { (error) in
-            MBProgressHUD.showError(error ?? "修改合同内容失败")
-        })
     }
 }
 

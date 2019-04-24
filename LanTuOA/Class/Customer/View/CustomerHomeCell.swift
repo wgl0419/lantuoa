@@ -49,19 +49,19 @@ class CustomerHomeCell: UITableViewCell {
                 let weekCount = setAttriMuStr(contentStr: "跟进人数：\(data.weekVisitUserNum)人", highlightStr: "跟进人数：", highlightColor:  UIColor(hex: "#999999"))
                 weekCountLabel.attributedText = weekCount
                 
-                let weekDeal = setAttriMuStr(contentStr: "成交：\(data.weekVisitUserNum)元", highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
+                let weekDeal = setAttriMuStr(contentStr: String(format: "成交：%.2f元", data.monthMoney), highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
                 weekDealLabel.attributedText = weekDeal
                 
-                let weekRebate = setAttriMuStr(contentStr: "回扣：\(data.weekVisitUserNum)元", highlightStr: "回扣：", highlightColor:  UIColor(hex: "#999999"))
+                let weekRebate = setAttriMuStr(contentStr: String(format: "回扣：%.2f元", data.monthRebate), highlightStr: "回扣：", highlightColor:  UIColor(hex: "#999999"))
                 weekRebateLabel.attributedText = weekRebate
                 
                 let moonCount = setAttriMuStr(contentStr: "跟进人数：\(data.monthVisitNum)人", highlightStr: "跟进人数：", highlightColor:  UIColor(hex: "#999999"))
                 moonCountLabel.attributedText = moonCount
                 
-                let moonDeal = setAttriMuStr(contentStr: "成交：\(data.weekVisitUserNum)元", highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
+                let moonDeal = setAttriMuStr(contentStr: String(format: "成交：%.2f元", data.seasonMoney), highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
                 moonDealLabel.attributedText = moonDeal
                 
-                let moonRebate = setAttriMuStr(contentStr: "回扣：\(data.weekVisitUserNum)元", highlightStr: "回扣：", highlightColor:  UIColor(hex: "#999999"))
+                let moonRebate = setAttriMuStr(contentStr: String(format: "回扣：%.2f元", data.seasonRebate), highlightStr: "回扣：", highlightColor:  UIColor(hex: "#999999"))
                 moonRebateLabel.attributedText = moonRebate
             }
         }
@@ -287,8 +287,8 @@ class CustomerHomeCell: UITableViewCell {
         setTitle(title: ascription, content: ascriptionLabel, lastLabel: state, isLast: true)
         ascription.text = "锁定人："
         
-        setCount(titleStr: "最近一周", count: weekCountLabel, deal: weekDealLabel, rebate: weekRebateLabel, lastView: arrowView)
-        setCount(titleStr: "最近一月", count: moonCountLabel, deal: moonDealLabel, rebate: moonRebateLabel, lastView: weekCountLabel, isLast: true)
+        setCount(titleStr: "最近一月", count: weekCountLabel, deal: weekDealLabel, rebate: weekRebateLabel, lastView: arrowView)
+        setCount(titleStr: "最近三月", count: moonCountLabel, deal: moonDealLabel, rebate: moonRebateLabel, lastView: weekCountLabel, isLast: true)
     }
     
     /// 设置标题和内容

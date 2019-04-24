@@ -194,19 +194,15 @@ class LoginController: UIViewController {
         let titles = ["首页", "拜访", "客户", "通知", "我"]
         let bar = UITabBarController()
         for index in 0..<vcs.count {
-            if index == 2 && !Jurisdiction.share.isCheckCustomer { // 没有查看权限
-                
-            } else {
-                let vc = vcs[index]
-                let nav = MainNavigationController(rootViewController: vc)
-                let item = nav.tabBarItem
-                item?.title = titles[index]
-                item?.selectedImage = UIImage(named: seleImageNames[index])?.withRenderingMode(.alwaysOriginal)
-                item?.image = UIImage(named: imageNames[index])?.withRenderingMode(.alwaysOriginal)
-                item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#999999")], for: .normal)
-                item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2E4695")], for: .selected)
-                bar.addChild(nav)
-            }
+            let vc = vcs[index]
+            let nav = MainNavigationController(rootViewController: vc)
+            let item = nav.tabBarItem
+            item?.title = titles[index]
+            item?.selectedImage = UIImage(named: seleImageNames[index])?.withRenderingMode(.alwaysOriginal)
+            item?.image = UIImage(named: imageNames[index])?.withRenderingMode(.alwaysOriginal)
+            item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#999999")], for: .normal)
+            item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2E4695")], for: .selected)
+            bar.addChild(nav)
         }
         self.view.window?.rootViewController = bar
     }

@@ -14,9 +14,9 @@ class MeHomeController: UIViewController {
     private var tableView: UITableView!
     
     /// 标题
-    private var titleArray = [["", "我的审批", "查询绩效", "工作申请", "离职申请"], ["部门管理", "角色管理"], ["设置"]]
+    private var titleArray = [["", "我的审批", "查询绩效", "工作申请"], ["部门管理"], ["设置"]]
     /// 图标
-    private var iconArray = [["", "me_approval", "me_achievements", "me_jobApplication", "me_jeaveApplication"], ["me_departmentManagement", "me_roleManagement"], ["me_setUp"]]
+    private var iconArray = [["", "me_approval", "me_achievements", "me_jobApplication"], ["me_departmentManagement"], ["me_setUp"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,24 +102,14 @@ extension MeHomeController: UITableViewDelegate, UITableViewDataSource {
             case 3:
                 vc = ApplyController()
             case 4:
-                return
-            case 5:
                 vc = JobHandoverController()
             default: return
             }
-            navigationController?.pushViewController(vc, animated: true)
+        } else if section == 1 {
+            vc = DepartmentManagementController()
+        } else if section == 2 {
+            vc = SetUpController()
         }
-        if section == 1 {
-            if row == 0 {
-                let vc = DepartmentManagementController()
-                navigationController?.pushViewController(vc, animated: true)
-            } else {
-                
-            }
-        }
-        if section == 2 {
-            let vc = SetUpController()
-            navigationController?.pushViewController(vc, animated: true)
-        }
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

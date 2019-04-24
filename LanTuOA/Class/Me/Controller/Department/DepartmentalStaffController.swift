@@ -75,7 +75,6 @@ class DepartmentalStaffController: UIViewController {
     /// 数据刷新处理
     private func reloadDataHandle() {
         tableView.mj_header.endRefreshing()
-        tableView.mj_header.isHidden = departmentData != nil && personnelData != nil
     }
     
     /// 离职员工处理

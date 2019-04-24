@@ -7,11 +7,12 @@
 //  合同详情  顶部视图
 
 import UIKit
+import MBProgressHUD
 
 class ContractDetailsHeaderView: UIView {
 
-    /// 修改回调
-    var editBlock: ((Float?, Float?, Int?, Int?) -> ())?
+    /// 修改成功回调
+    var editBlock: (() -> ())?
     /// 数据
     var data: ContractListData? {
         didSet {
@@ -173,6 +174,20 @@ class ContractDetailsHeaderView: UIView {
         }
     }
     
+    // MARK: - Api
+    /// 修改合同内容
+    private func contractUpdate(totalMoney: Float?, rebate: Float?, startTime: Int?, endTime: Int?) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.contractUpdate(data?.id ?? 0, totalMoney, rebate, startTime, endTime), t: LoginModel.self, successHandle: { (result) in
+            if self.editBlock != nil {
+                self.editBlock!()
+            }
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "修改合同内容失败")
+        })
+    }
+    
     // MARK: - 按钮点击
     /// 点击修改
     @objc private func modifyClick() {
@@ -182,27 +197,21 @@ class ContractDetailsHeaderView: UIView {
             case 0:
                 let showView = MoreTimeSeleEjectView()
                 showView.seleBlock = { (start, end) in
-                    if self?.editBlock != nil {
-                        self?.editBlock!(nil, nil, start, end)
-                    }
+                    self?.contractUpdate(totalMoney: nil, rebate: nil, startTime: start, endTime: end)
                 }
                 showView.show()
             case 1:
                 let showView = ContractMoneyEjectView()
                 showView.data = ("修改组稿费", "组稿费（元）：")
                 showView.seleBlock = { (money) in
-                    if self?.editBlock != nil {
-                        self?.editBlock!(nil, money, nil, nil)
-                    }
+                    self?.contractUpdate(totalMoney: nil, rebate: money, startTime: nil, endTime: nil)
                 }
                 showView.show()
             case 2:
                 let showView = ContractMoneyEjectView()
                 showView.data = ("修改合同总额", "合同总额（元）：")
                 showView.seleBlock = { (money) in
-                    if self?.editBlock != nil {
-                        self?.editBlock!(money, nil, nil, nil)
-                    }
+                    self?.contractUpdate(totalMoney: money, rebate: nil, startTime: nil, endTime: nil)
                 }
                 showView.show()
             default:

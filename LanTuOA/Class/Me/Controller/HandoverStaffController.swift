@@ -124,17 +124,13 @@ extension HandoverStaffController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 {
-            let newUserStr = data[indexPath.row].lastExtend?.newUserName ?? ""
-            if newUserStr.count == 0 {
-                let vc = HandoverStaffSeleController()
-                vc.oldUserId = userData.id
-                vc.projectId = data[indexPath.row].id
-                vc.workExtendBlock = { [weak self] in // 交接成功  -> 删除
-                    self?.data.remove(at: indexPath.row)
-                    tableView.deleteRows(at: [indexPath], with: .fade)
-                }
-                navigationController?.pushViewController(vc, animated: true)
+            let vc = HandoverStaffSeleController()
+            vc.oldUserId = userData.id
+            vc.projectId = data[indexPath.row].id
+            vc.workExtendBlock = { [weak self] in // 交接成功  -> 删除
+                self?.workExtendListPerson()
             }
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
