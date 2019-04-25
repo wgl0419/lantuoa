@@ -17,6 +17,8 @@ class ApplyController: UIViewController {
     
     /// 数据
     private var data = [ProcessListData]()
+    /// 展开数组
+    private var openArray = [Bool]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +67,11 @@ class ApplyController: UIViewController {
         _ = APIService.shared.getData(.processList(), t: ProcessListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.data = result.data
+            var moreArray = [Bool]()
+            for _ in result.data {
+                moreArray.append(false)
+            }
+            self.openArray = moreArray
             self.tableView.reloadData()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取失败")
@@ -85,12 +92,17 @@ extension ApplyController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data[section].list.count == 0 ? 0 : 1
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ApplyListCell", for: indexPath) as! ApplyListCell
+        cell.isOpen = openArray[indexPath.section]
         cell.data = data[indexPath.section]
+        cell.moreBlock = { [weak self] (isOpen) in
+            self?.openArray[indexPath.section] = isOpen
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
         cell.clickBlock = { [weak self] (row) in
             let vc = FillInApplyController()
             vc.processName = self?.data[indexPath.section].list[row].name ?? ""

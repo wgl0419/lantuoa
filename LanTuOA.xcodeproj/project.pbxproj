@@ -137,6 +137,7 @@
 		181788522238E0B00015DC30 /* HomePageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788512238E0B00015DC30 /* HomePageHeaderView.swift */; };
 		181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788532238E5F60015DC30 /* HomePageVisitCell.swift */; };
 		181FF96622714E9600ED5A2A /* ModifyNoticeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181FF96522714E9600ED5A2A /* ModifyNoticeEjectView.swift */; };
+		181FF96822719BB200ED5A2A /* StartupSumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181FF96722719BB200ED5A2A /* StartupSumModel.swift */; };
 		1827ED82226802E800EFF889 /* ContractDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED81226802E800EFF889 /* ContractDetailModel.swift */; };
 		1827ED842268076D00EFF889 /* ContractRepaymentEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED832268076D00EFF889 /* ContractRepaymentEjectView.swift */; };
 		1827ED862268209700EFF889 /* PerformUnderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED852268209700EFF889 /* PerformUnderModel.swift */; };
@@ -322,6 +323,7 @@
 		181788512238E0B00015DC30 /* HomePageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageHeaderView.swift; sourceTree = "<group>"; };
 		181788532238E5F60015DC30 /* HomePageVisitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageVisitCell.swift; sourceTree = "<group>"; };
 		181FF96522714E9600ED5A2A /* ModifyNoticeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyNoticeEjectView.swift; sourceTree = "<group>"; };
+		181FF96722719BB200ED5A2A /* StartupSumModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupSumModel.swift; sourceTree = "<group>"; };
 		1827ED81226802E800EFF889 /* ContractDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailModel.swift; sourceTree = "<group>"; };
 		1827ED832268076D00EFF889 /* ContractRepaymentEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractRepaymentEjectView.swift; sourceTree = "<group>"; };
 		1827ED852268209700EFF889 /* PerformUnderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformUnderModel.swift; sourceTree = "<group>"; };
@@ -983,6 +985,7 @@
 		1830BE792237A82000ADC03A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				181FF96722719BB200ED5A2A /* StartupSumModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1252,6 +1255,7 @@
 				1810EC7F222F5D4100CF6488 /* MBProgressHUD.swift in Sources */,
 				180018892253697500832E60 /* VisitDetailsCell.swift in Sources */,
 				180BFB3C2265CDC3001879BD /* ContractDetailsController.swift in Sources */,
+				181FF96822719BB200ED5A2A /* StartupSumModel.swift in Sources */,
 				18001885225351E400832E60 /* NotifyListModel.swift in Sources */,
 				18050D67224B46EA00C9DB9A /* JobHandoverCell.swift in Sources */,
 				1810EC7E222F5D4100CF6488 /* UIFont.swift in Sources */,

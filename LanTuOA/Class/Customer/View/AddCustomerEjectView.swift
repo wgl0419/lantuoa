@@ -26,7 +26,7 @@ class AddCustomerEjectView: UIView {
                 let data = modifyData.1
                 let type = data.type
                 seleStrArray[0] = data.name ?? ""
-                seleStrArray[1] = type == 1 ? "公司客户" : type == 2 ? "普通客户" : "开发中客户"
+                seleStrArray[1] = type == 1 ? "公司客户" : "开发中客户"
                 seleStrArray[2] = data.industryName ?? ""
                 seleStrArray[3] = data.address ?? ""
                 seleStrArray[4] = data.fullName ?? ""
@@ -371,7 +371,7 @@ extension AddCustomerEjectView: UITableViewDelegate, UITableViewDataSource {
         
         let row = indexPath.row
         if row == 1 { // 客户类型
-            let contentArray = ["公司客户", "普通客户", "开发中客户"]
+            let contentArray = ["公司客户", "普通客户"]
             let view = SeleVisitModelView(title: "选择客户类型", content: contentArray)
             view.didBlock = { [weak self] (seleIndex) in
                 self?.customerType = seleIndex + 1

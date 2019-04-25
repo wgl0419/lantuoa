@@ -17,8 +17,6 @@ class HomePageHeaderView: UIView {
     private var logoImageView: UIImageView!
     /// 标题
     private var titleLabel: UILabel!
-    /// 功能按钮
-    private var btn: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,10 +33,8 @@ class HomePageHeaderView: UIView {
     /// - Parameters:
     ///   - logoName: 图标名称
     ///   - attriMuStr: 标题富文本
-    ///   - btnStr: 按钮文本
-    func setContent(logoName: String, attriMuStr: NSMutableAttributedString, btnStr: String) {
+    func setContent(logoName: String, attriMuStr: NSMutableAttributedString) {
         titleLabel.attributedText = attriMuStr
-        btn.setTitle("  \(btnStr)  ", for: .normal)
         logoImageView.image = UIImage(named: logoName)
     }
     
@@ -62,17 +58,6 @@ class HomePageHeaderView: UIView {
                 label.text = "我的项目"
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
-            })
-        
-        btn = UIButton().taxi.adhere(toSuperView: self)
-            .taxi.layout(snapKitMaker: { (make) in
-                make.top.bottom.right.equalTo(self)
-            })
-            .taxi.config({ (btn) in
-                btn.setTitle("  查看全部  ", for: .normal)
-                btn.titleLabel?.font = UIFont.medium(size: 12)
-                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
-                btn.addTarget(self, action: #selector(btnClick), for: .touchUpInside)
             })
         
         _ = UIView().taxi.adhere(toSuperView: self) // 分割线

@@ -10,6 +10,17 @@ import UIKit
 
 class HomePageVisitCell: UITableViewCell {
     
+    var data: StartupSumData? {
+        didSet {
+            if let data = data {
+                visitCompanyLabel.text = "\(data.monthVisitNum)"
+                projectLabel.text = String(format: "%.2f元", data.monthPerform)
+                visitNumberLabel.text = "\(data.monthContract)"
+                visitLabel.text = String(format: "%.2f元", data.monthMoney)
+            }
+        }
+    }
+    
     /// 拜访公司数量
     private var visitCompanyLabel: UILabel!
     /// 项目
@@ -52,7 +63,7 @@ class HomePageVisitCell: UITableViewCell {
                 make.bottom.equalTo(visitCompanyLabel.snp.top).offset(-7)
             })
             .taxi.config({ (label) in
-                label.text = "拜访公司"
+                label.text = "拜访次数"
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
             })
@@ -76,7 +87,7 @@ class HomePageVisitCell: UITableViewCell {
                 make.bottom.equalTo(projectLabel.snp.top).offset(-7)
             })
             .taxi.config({ (label) in
-                label.text = "项目"
+                label.text = "绩效"
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
             })
@@ -100,7 +111,7 @@ class HomePageVisitCell: UITableViewCell {
                 make.bottom.equalTo(visitNumberLabel.snp.top).offset(-7)
             })
             .taxi.config({ (label) in
-                label.text = "拜访公司"
+                label.text = "签约合同数"
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
             })
@@ -124,7 +135,7 @@ class HomePageVisitCell: UITableViewCell {
                 make.bottom.equalTo(visitLabel.snp.top).offset(-7)
             })
             .taxi.config({ (label) in
-                label.text = "拜访人数"
+                label.text = "签约金额"
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
             })

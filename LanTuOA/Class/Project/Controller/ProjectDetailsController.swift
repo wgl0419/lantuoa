@@ -17,12 +17,6 @@ class ProjectDetailsController: UIViewController {
     var lockState = 1
     /// 项目数据 (从项目列表进入)
     var projectData: ProjectListStatisticsData!
-    /// 项目id (其他入口  没有项目数据)
-    var projectId: Int! {
-        didSet {
-            projectDetail()
-        }
-    }
     
     /// 顶部视图
     private var headerView: ProjectDetailsHeaderView!
@@ -44,9 +38,7 @@ class ProjectDetailsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if projectData != nil {
-            initSubViews()
-        }
+        initSubViews()
         
     }
     
@@ -270,8 +262,8 @@ class ProjectDetailsController: UIViewController {
     /// 修改项目
     private func projectUpdate(isLock: Int) {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.projectUpdate(nil, projectData.id, nil, isLock, nil), t: LoginModel.self, successHandle: { (result) in
-            self.projectData.isLock = isLock
+        _ = APIService.shared.getData(.projectUpdate(nil, projectData.id, nil, isLock, nil), t: ProjectDetailModel.self, successHandle: { (result) in
+            self.projectData = result.data
             self.reloadData()
             self.block()
             MBProgressHUD.dismiss()
@@ -341,17 +333,17 @@ class ProjectDetailsController: UIViewController {
         })
     }
     
-    /// 获取项目详情
-    private func projectDetail() {
-        MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.projectDetail(projectId), t: ProjectDetailModel.self, successHandle: { (result) in
-            self.projectData = result.data
-            self.initSubViews()
-            MBProgressHUD.dismiss()
-        }, errorHandle: { (error) in
-            MBProgressHUD.showError(error ?? "获取项目详情失败")
-        })
-    }
+//    /// 获取项目详情
+//    private func projectDetail() {
+//        MBProgressHUD.showWait("")
+//        _ = APIService.shared.getData(.projectDetail(projectId), t: ProjectDetailModel.self, successHandle: { (result) in
+//            self.projectData = result.data
+//            self.initSubViews()
+//            MBProgressHUD.dismiss()
+//        }, errorHandle: { (error) in
+//            MBProgressHUD.showError(error ?? "获取项目详情失败")
+//        })
+//    }
     
     // MARK: - 按钮点击
     /// 点击新增项目

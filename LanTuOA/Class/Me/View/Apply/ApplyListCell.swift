@@ -12,12 +12,19 @@ class ApplyListCell: UITableViewCell {
 
     /// 点击回调
     var clickBlock: ((Int) -> ())?
+    /// 查看更多
+    var moreBlock: ((Bool) -> ())?
+    /// 查看更多
+    var isOpen = false
     /// 数据
     var data: ProcessListData? {
         didSet {
             if let data = data {
                 titleLabel.text = data.desc
-                moreBtn.isHidden = data.list.count <= 4
+                collectionView.reloadData()
+                layoutIfNeeded()
+                self.perform(#selector(setCollectionViewHeight), with: nil, afterDelay: 0.01)
+//                moreBtn.isHidden = data.list.count <= 4
             }
         }
     }
@@ -45,9 +52,9 @@ class ApplyListCell: UITableViewCell {
         
         titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
             .taxi.layout(snapKitMaker: { (make) in
-                make.height.equalTo(45)
-                make.top.equalToSuperview()
                 make.left.equalToSuperview().offset(15)
+                make.top.equalToSuperview()
+                make.height.equalTo(45)
             })
             .taxi.config({ (label) in
                 label.text = "标题"
@@ -80,7 +87,8 @@ class ApplyListCell: UITableViewCell {
         
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
-        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.scrollDirection = .vertical
         layout.estimatedItemSize = CGSize(width: 50, height: 50)
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout) // collectionView
@@ -88,7 +96,7 @@ class ApplyListCell: UITableViewCell {
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.right.bottom.equalToSuperview()
                 make.top.equalTo(titleLabel.snp.bottom)
-                make.height.equalTo(102)
+                make.height.equalTo(102).priority(800)
             })
             .taxi.config({ (collectionView) in
                 collectionView.delegate = self
@@ -98,25 +106,36 @@ class ApplyListCell: UITableViewCell {
                 collectionView.showsHorizontalScrollIndicator = false
                 collectionView.register(ApplyCollectionCell.self, forCellWithReuseIdentifier: "ApplyCollectionCell")
             })
+        
+    }
+    
+    @objc private func setCollectionViewHeight() {
+        collectionView.snp.updateConstraints { (make) in
+            make.height.equalTo(collectionView.contentSize.height).priority(800)
+        }
     }
     
     // MARK: - 按钮点击
     /// 点击更多
     @objc private func moreClick() {
-        
+        if moreBlock != nil {
+            moreBlock!(!isOpen)
+        }
     }
 }
 
 
 extension ApplyListCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = data?.list.count ?? 0
-        return count > 4 ? 4 : count
+        var count = data?.list.count ?? 0
+        count = count > 0 ? 5 : 0
+        return count > 4 ? isOpen ? count : 4 : count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ApplyCollectionCell", for: indexPath) as! ApplyCollectionCell
-        cell.data = data?.list[indexPath.row]
+        cell.data = data?.list[0]//data?.list[indexPath.row]
+        cell.row = indexPath.row
         return cell
     }
     

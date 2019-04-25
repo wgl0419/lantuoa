@@ -7,18 +7,34 @@
 //
 
 import UIKit
+import Alamofire
 import IQKeyboardManagerSwift // 键盘处理
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+    /// 网络状态枚举
+    ///
+    /// - notReachable: 无网络
+    /// - unknown: 未知
+    /// - wwan: 4G
+    /// - wifi: WIFI
+    enum NetWorkState {
+        case notReachable
+        case unknown
+        case wwan
+        case wifi
+    }
+    
     var window: UIWindow?
+    static var netWorkState : NetWorkState = .unknown
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         setDifferenceForIOS11()
         setIQKeyboardManager()
         setMainController()
+        setNetWork()
         return true
     }
     
@@ -78,8 +94,25 @@ extension AppDelegate {
             }
             window?.rootViewController = bar
         }
-        
         window?.backgroundColor = .white
         window?.makeKeyAndVisible()
+    }
+    
+    /// 设置网络连接监听通知
+    private func setNetWork() {
+        let net = NetworkReachabilityManager()
+            net?.listener = { (status) in
+            switch status {
+            case .notReachable:
+                AppDelegate.netWorkState = .notReachable
+            case .unknown:
+                AppDelegate.netWorkState = .unknown
+            case .reachable(.ethernetOrWiFi):
+                AppDelegate.netWorkState = .wifi
+            case .reachable(.wwan):
+                AppDelegate.netWorkState = .wwan
+            }
+        }
+        net?.startListening()
     }
 }

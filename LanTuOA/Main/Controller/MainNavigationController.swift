@@ -64,13 +64,13 @@ class MainNavigationController: UINavigationController {
         switch type {
         case .light:
             backBtn.setImage(UIImage(named: "nav_icon_back"), for: .normal)
-            UIApplication.shared.statusBarStyle = .lightContent
+            UIApplication.shared.statusBarStyle = .default
             UIApplication.shared.setStatusBarHidden(false, with: .none)
             navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
             
         case .dark:
             backBtn.setImage(UIImage(named: "nav_back_white"), for: .normal)
-            UIApplication.shared.statusBarStyle = .default
+            UIApplication.shared.statusBarStyle = .lightContent
             UIApplication.shared.setStatusBarHidden(false, with: .none)
             navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white,
                                                  NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)]

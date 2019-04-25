@@ -32,9 +32,9 @@ class MeHomeHeaderCell: UITableViewCell {
         
         let whiteView = UIView().taxi.adhere(toSuperView: contentView) // 白色背景的cell
             .taxi.layout { (make) in
+                make.right.equalToSuperview().offset(-15).priority(800)
                 make.top.left.equalToSuperview().offset(15)
                 make.bottom.equalToSuperview().offset(-22)
-                make.right.equalToSuperview().offset(-15)
                 make.height.equalTo(100).priority(800)
         }
             .taxi.config { (view) in

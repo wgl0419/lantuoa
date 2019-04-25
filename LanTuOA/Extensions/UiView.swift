@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import YYText
 
 extension UIView: NamespaceWrappable { }
 extension NamespaceWrapper where T: UIView {
@@ -225,7 +226,7 @@ extension UIView {
             if !(imageView is UIImageView) {
                 self.noDataImageView = UIImageView().taxi.adhere(toSuperView: self)
                     .taxi.layout(snapKitMaker: { (make) in
-                        make.centerX.equalTo(self)
+                        make.centerX.equalToSuperview()
                         make.bottom.equalTo(self.snp.centerY).offset(-55 + spacing * 2)
                     })
                     .taxi.config({ (imageView) in
@@ -237,17 +238,17 @@ extension UIView {
     }
     
     /// 无数据文本提示
-    var noDataLabel: UILabel? {
+    var noDataLabel: YYLabel? {
         set {
             objc_setAssociatedObject(self, &noDataLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         
         get {
             let label = objc_getAssociatedObject(self, &noDataLabelKey)
-            if !(label is UILabel) {
-                self.noDataLabel = UILabel().taxi.adhere(toSuperView: self)
+            if !(label is YYLabel) {
+                self.noDataLabel = YYLabel().taxi.adhere(toSuperView: self)
                     .taxi.layout(snapKitMaker: { (make) in
-                        make.centerX.equalTo(self)
+                        make.centerX.equalToSuperview()
                         make.bottom.equalTo(self.snp.centerY)
                     })
                     .taxi.config({ (label) in
@@ -258,7 +259,7 @@ extension UIView {
                     })
             }
             
-            return objc_getAssociatedObject(self, &noDataLabelKey) as? UILabel
+            return objc_getAssociatedObject(self, &noDataLabelKey) as? YYLabel
         }
     }
     

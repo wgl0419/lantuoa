@@ -19,6 +19,11 @@ class ApplyCollectionCell: UICollectionViewCell {
             }
         }
     }
+    var row: Int! {
+        didSet {
+            titleLabel.text = "\(row)"
+        }
+    }
     
     /// 图标
     private var imageView: UIImageView!
@@ -51,10 +56,10 @@ class ApplyCollectionCell: UICollectionViewCell {
         
         titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(imageView.snp.bottom).offset(7)
                 make.width.equalToSuperview().offset(-30).priority(800)
+                make.width.equalTo(ScreenWidth / 4 - 31).priority(800)
+                make.top.equalTo(imageView.snp.bottom).offset(7)
                 make.centerX.equalToSuperview()
-                make.width.equalTo(70).priority(800)
             })
             .taxi.config({ (label) in
                 label.numberOfLines = 2

@@ -7,7 +7,9 @@
 //  首页 控制器
 
 import UIKit
+import MJRefresh
 import MBProgressHUD
+import Alamofire
 
 class HomePageController: UIViewController {
 
@@ -17,12 +19,14 @@ class HomePageController: UIViewController {
     
     /// 项目数据
     private var data = [ProjectListStatisticsData]()
+    /// 首页统计数据
+    private var startupSumData: StartupSumData!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNav()
         initSubViews()
-        projectList()
+        getData()
         loginUser()
     }
     
@@ -35,8 +39,67 @@ class HomePageController: UIViewController {
         nav.backBtn.isHidden = false
     }
     
+    /// 获取数据
+    private func getData() {
+        if AppDelegate.netWorkState == .notReachable {
+            if data.count == 0 {
+                view.noDataImageView?.image = UIImage(named: "notReachable")
+                let str = "网络异常！请检查您的网络状态"
+                let attriMuStr = NSMutableAttributedString(string: str)
+                attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+                attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+                view.noDataLabel?.attributedText = attriMuStr
+                view.isNoData = true
+                return
+            }
+        }
+        projectList()
+        startupSum()
+    }
+    
+    /// 设置重新加载
+    private func setReload() {
+        if data.count == 0 {
+            view.noDataImageView?.image = UIImage(named: "lostData")
+            view.isNoData = true
+            
+            let str = "数据加载失败！点击重新加载"
+            let attriMuStr = NSMutableAttributedString(string: str)
+            attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+            attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+            attriMuStr.yy_setTextHighlight(NSRange(location: 7, length: 6),
+                                           color: UIColor(hex: "#6B83D1"),
+                                           backgroundColor: .clear) { (_, text, _, _) in
+                                            self.getData()
+            }
+            view.noDataLabel?.attributedText = attriMuStr
+        }
+    }
+    
+    /// 添加无数据view
+    private func addNoDataView() {
+        self.tableView.tableFooterView = UIView()
+        if data.count == 0 {
+            view.layoutIfNeeded()
+            let height = ScreenHeight - tableView.contentSize.height - NavigationH - TabbarH
+            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: height))
+            footerView.backgroundColor = .white
+            footerView.noDataImageView?.image = UIImage(named: "noneData")
+            footerView.isNoData = true
+            
+            let str = "您目前没有跟进的项目！"
+            let attriMuStr = NSMutableAttributedString(string: str)
+            attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+            attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+            footerView.noDataLabel?.attributedText = attriMuStr
+            self.tableView.tableFooterView = footerView
+        }
+    }
+    
     /// 初始化子控件
     private func initSubViews() {
+        view.backgroundColor = UIColor(hex: "#F3F3F3")
+        
         tableView = UITableView(frame: .zero, style: .grouped)
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
@@ -51,6 +114,10 @@ class HomePageController: UIViewController {
                 tableView.separatorInset = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
                 tableView.register(HomePageVisitCell.self, forCellReuseIdentifier: "HomePageVisitCell")
                 tableView.register(HomePageNoticeCell.self, forCellReuseIdentifier: "HomePageNoticeCell")
+                tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
+                    self?.projectList()
+                    self?.startupSum()
+                })
             })
     }
     
@@ -60,9 +127,14 @@ class HomePageController: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.projectList("", nil, 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
             self.data = result.data
-            self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .fade)
+            self.view.isNoData = false
+            self.tableView.reloadData()
+            self.tableView.mj_header.endRefreshing()
+            self.addNoDataView()
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
+            self.setReload()
+            self.tableView.mj_header.endRefreshing()
             MBProgressHUD.showError(error ?? "获取我的项目失败")
         })
     }
@@ -74,12 +146,26 @@ class HomePageController: UIViewController {
             UserInfo.share.setUserName(result.data?.realname ?? "")
         }, errorHandle: nil)
     }
+    
+    /// 首页统计
+    private func startupSum() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.startupSum(), t: StartupSumModel.self, successHandle: { (result) in
+            self.startupSumData = result.data
+            self.tableView.reloadData()
+            self.tableView.mj_header.endRefreshing()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            self.tableView.mj_header.endRefreshing()
+            MBProgressHUD.showError(error ?? "获取本月统计失败")
+        })
+    }
 }
 
 extension HomePageController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return data.count == 0 && startupSumData == nil ? 0 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -93,6 +179,7 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "HomePageVisitCell", for: indexPath) as! HomePageVisitCell
+            cell.data = startupSumData
             return cell
         } else {
             var cell = tableView.dequeueReusableCell(withIdentifier: "HomePageProjectCell")
@@ -105,7 +192,15 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
                 cell?.detailTextLabel?.font = UIFont.medium(size: 12)
                 cell?.detailTextLabel?.textColor = UIColor(hex: "#999999")
             }
-            cell?.textLabel?.text = data[indexPath.row].fullName ?? ""
+            let attriMuStr = NSMutableAttributedString(string: data[indexPath.row].fullName ?? "" + "  ")
+            if data[indexPath.row].isLock == 1 { // 添加锁图标
+                let attachment = NSTextAttachment()
+                attachment.image = UIImage(named: "project_lock")
+                attachment.bounds = CGRect(x: 5, y: 0, width: 13, height: 15)
+                let attriStr = NSAttributedString(attachment: attachment)
+                attriMuStr.append(attriStr)
+            }
+            cell?.textLabel?.attributedText = attriMuStr
             cell?.detailTextLabel?.text = "最新状态：" + (data[indexPath.row].lastVisitResult ?? "")
             return cell!
         }
@@ -115,17 +210,12 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 54))
         let header = HomePageHeaderView(frame: CGRect(x: 0, y: 10, width: ScreenWidth, height: 44))
         var logoName = "visit"
-        var btnStr = "查看历史"
-        var attriMuStr = NSMutableAttributedString(string: "本周拜访")
+        var attriMuStr = NSMutableAttributedString(string: "本月统计")
         if section == 1 {
             logoName = "project"
-            btnStr = ""
-            let coutStr = " (当前跟进项目数：\(data.count))"
-            attriMuStr = NSMutableAttributedString(string: "我的项目" + coutStr)
-            attriMuStr.changeFont(str: coutStr, font: UIFont.medium(size: 12))
-            attriMuStr.changeColor(str: coutStr, color: UIColor(hex: "#999999"))
+            attriMuStr = NSMutableAttributedString(string: "我的项目")
         }
-        header.setContent(logoName: logoName, attriMuStr: attriMuStr, btnStr: btnStr)
+        header.setContent(logoName: logoName, attriMuStr: attriMuStr)
         
         header.btnBlock = { // [weak self] in // 跳转其他界面
             if section == 1 {
@@ -149,7 +239,7 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
         
         let vc = ProjectDetailsController()
         vc.lockState = 1
-        vc.projectId = data[indexPath.row].id
+        vc.projectData = data[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
     }
 }

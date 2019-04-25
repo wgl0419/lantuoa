@@ -19,6 +19,7 @@ enum APIManager {
     case usersLeave(Int) // 离职员工
     case usersPermissions() // 获取权限
     case version() // 获取版本信息 (1.安卓2.iOS3.web)
+    case startupSum() // 首页统计
     
     
     // MARK: - 客户
@@ -44,7 +45,7 @@ enum APIManager {
     case projectMemberDelete(Int, Int) // 删除项目成员  （projectId:项目id  userId:用户id）
     case projectListStatistics(String, Int, Int, Int, Int?) // 项目统计列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据  manageUser:管理人Id)
     case projectList(String, Int?, Int, Int) // 项目信息列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据)
-    case projectDetail(Int) // 项目详情 (项目id)
+//    case projectDetail(Int) // 项目详情 (项目id)
     case projectSaveRequire(String, Int, String) // 申请新增项目（拜访页面） （name:项目名称  customerId:客户id  address:地址）
     
     
@@ -119,6 +120,7 @@ extension APIManager: TargetType {
         case .usersLeave(let id): return "/api/users/leave/\(id)"
         case .usersPermissions: return "/api/users/permissions"
         case .version: return "/api/version"
+        case .startupSum: return "/api/startup/sum"
             
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"
@@ -140,7 +142,7 @@ extension APIManager: TargetType {
         case .projectMemberDelete: return "/api/project/member/delete"
         case .projectListStatistics: return "/api/project/list/statistics"
         case .projectList: return "/api/project/list"
-        case .projectDetail(let id): return "/api/project/detail/\(id)"
+//        case .projectDetail(let id): return "/api/project/detail/\(id)"
         case .projectSaveRequire: return "/api/project/save/require"
 
             

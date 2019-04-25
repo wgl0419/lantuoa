@@ -172,7 +172,6 @@ class ModifyNoticeEjectView: UIView {
     
     @objc private func setTableViewHeight() {
         layoutIfNeeded()
-        print(tableView.contentSize.height)
         tableView.snp.updateConstraints { (make) in
             make.height.equalTo(tableView.contentSize.height)
         }
