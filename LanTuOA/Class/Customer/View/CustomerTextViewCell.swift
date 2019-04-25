@@ -73,6 +73,8 @@ class CustomerTextViewCell: UITableViewCell {
     private var mustLabel: UILabel!
     /// 输入框
     private var textView: UITextView!
+    /// 清除按钮
+    private var clearBtn: UIButton!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -128,6 +130,27 @@ class CustomerTextViewCell: UITableViewCell {
                 textView.font = UIFont.medium(size: 16)
                 textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
+        
+        clearBtn = UIButton().taxi.adhere(toSuperView: contentView) // 清除按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalTo(textView.snp.right).offset(5)
+                make.centerY.equalToSuperview()
+            })
+            .taxi.config({ (btn) in
+                btn.setImage(UIImage(named: "input_clear"), for: .normal)
+                btn.addTarget(self, action: #selector(clearClick), for: .touchUpInside)
+            })
+    }
+    
+    // MARK: - 点击按钮
+    /// 点击清除
+    @objc private func clearClick() {
+        textView.text = ""
+        clearBtn.isHidden = true
+        textView.placeHolderLabel?.isHidden = false
+        if stopBlock != nil {
+            stopBlock!("")
+        }
     }
 }
 
@@ -141,6 +164,7 @@ extension CustomerTextViewCell: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         textView.placeHolderLabel?.isHidden = textView.text.count > 0
+        clearBtn.isHidden = !(textView.isUserInteractionEnabled  && textView.text.count > 0)
         
         let height = textView.contentSize.height // 内容高度
         let top = UITextView().textContainerInset.top // 顶部高度

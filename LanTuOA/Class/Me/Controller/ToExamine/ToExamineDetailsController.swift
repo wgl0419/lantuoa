@@ -152,11 +152,43 @@ class ToExamineDetailsController: UIViewController {
         })
     }
     
+    /// 拒绝审核 填写弹出框
+    ///
+    /// - Parameter type: 0：已存在  1：有误
+    private func modifyEjectView(type: Int) {
+        let ejectView = ModifyNoticeEjectView()
+        ejectView.data = checkListData
+        if type == 0 {
+            ejectView.modifyType = .alreadyExist
+        } else {
+            ejectView.modifyType = .unreasonable
+        }
+        ejectView.alreadyExistBlock = { [weak self] (idArray) in
+            self?.notifyCheckCusRejectExist(id: idArray)
+        }
+        ejectView.unreasonableBlock = { [weak self] (contentArray) in
+            self?.notifyCheckCusRejectMistake(conten: contentArray)
+        }
+        ejectView.show()
+    }
+    
     /// 拒绝创建客户/项目-客户已存在
-    private func notifyCheckCusRejectExist() {
+    private func notifyCheckCusRejectExist(id: [Int]) {
         MBProgressHUD.showWait("")
         let checkId = checkListData.id
-        _ = APIService.shared.getData(.notifyCheckCusRejectExist(checkId), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckCusRejectExist(checkId, id[0], id[1]), t: LoginModel.self, successHandle: { (result) in
+            self.changeHandle()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "拒绝失败")
+        })
+    }
+    
+    /// 拒绝创建客户/项目-名称有误
+    private func notifyCheckCusRejectMistake(conten: [String]) {
+        MBProgressHUD.showWait("")
+        let checkId = checkListData.id
+        _ = APIService.shared.getData(.notifyCheckCusRejectMistake(checkId, conten[0], conten[1]), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.changeHandle()
         }, errorHandle: { (error) in
@@ -164,17 +196,7 @@ class ToExamineDetailsController: UIViewController {
         })
     }
     
-    /// 拒绝创建客户/项目-名称有误
-    private func notifyCheckCusRejectMistake() {
-        MBProgressHUD.showWait("")
-        let checkId = checkListData.id
-        _ = APIService.shared.getData(.notifyCheckCusRejectMistake(checkId), t: LoginModel.self, successHandle: { (result) in
-            MBProgressHUD.dismiss()
-            self.changeHandle()
-        }, errorHandle: { (error) in
-            MBProgressHUD.showError(error ?? "拒绝失败")
-        })
-    }
+    
     
     /// 同意审批
     private func notifyCheckAgree() {
@@ -195,11 +217,7 @@ class ToExamineDetailsController: UIViewController {
         if checkListData.processType == 1 || checkListData.processType == 2 {
             let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户/拜访人", "名字不合理"])
             view.didBlock = { [weak self] (seleIndex) in
-                switch seleIndex {
-                case 1: self?.notifyCheckCusRejectExist()
-                case 2: self?.notifyCheckCusRejectMistake()
-                default: break
-                }
+                self?.modifyEjectView(type: seleIndex)
             }
             view.show()
         } else {

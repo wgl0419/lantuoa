@@ -171,6 +171,7 @@ class FillInApplyController: UIViewController {
     /// 选择客户
     private func seleCustomerHandle(section: Int) {
         let vc = NewlyBuildVisitSeleController()
+        vc.isAdd = false
         vc.type = .customer
         vc.seleBlock = { [weak self] (customerArray) in
             let position = self?.projectPosition ?? 0
@@ -198,6 +199,7 @@ class FillInApplyController: UIViewController {
         let customerName = seleStrArray.first ?? ""
         let vc = NewlyBuildVisitSeleController()
         vc.type = .project(customerId, customerName)
+        vc.isAdd = false
         
         vc.seleBlock = { [weak self] (customerArray) in
             self?.projectId = customerArray.first?.0 ?? -1

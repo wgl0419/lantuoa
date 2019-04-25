@@ -116,7 +116,7 @@ class ProjectHomeController: UIViewController {
     private func projectListStatistics(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.projectListStatistics(searchBar.text ?? "", customerId, newPage, 10, nil), t: ProjectListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.projectList(searchBar.text ?? "", customerId, newPage, 10), t: ProjectListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

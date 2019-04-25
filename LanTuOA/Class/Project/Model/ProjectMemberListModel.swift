@@ -17,8 +17,11 @@ struct ProjectMemberListModel: HandyJSON {
 }
 
 struct ProjectMemberListData: HandyJSON {
+    var roleName: String?
     var projectId: Int = 0
+    var phone: String?
     var userName: String?
+    var departmentName: String?
     var userId: Int = 0
     var joinTime: Int = 0
 }

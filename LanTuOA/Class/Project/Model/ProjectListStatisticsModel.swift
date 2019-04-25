@@ -4,7 +4,7 @@
 //
 //  Created by HYH on 2019/3/19.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//
+//  项目列表  数据模型
 
 import UIKit
 import HandyJSON
@@ -46,4 +46,5 @@ struct ProjectListStatisticsData: HandyJSON {
     var weekVisitNum: Int = 0
     var manageUserName: String?
     var canManage: Int = 0
+    var fullName: String?
 }

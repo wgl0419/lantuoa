@@ -25,8 +25,8 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
         didSet {
             if let data = data {
                 nameLabel.text = data.userName
-                departmentLabel.text = "后端未返回" // TODO: 后端没有给数据
-                phoneLabel.text = "后端未返回"
+                departmentLabel.text = data.roleName
+                phoneLabel.text = data.phone
             }
         }
     }

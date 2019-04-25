@@ -235,13 +235,36 @@ class NoticeHomeController: UIViewController {
         })
     }
     
+    /// 拒绝审核 填写弹出框
+    ///
+    /// - Parameters:
+    ///   - type: 类型  0：已存在  1：有误
+    ///   - index: 在tableView中的位置
+    private func modifyEjectView(type: Int ,index: IndexPath) {
+        let ejectView = ModifyNoticeEjectView()
+        ejectView.data = pendingData[index.row]
+        if type == 0 {
+            ejectView.modifyType = .alreadyExist
+        } else {
+            ejectView.modifyType = .unreasonable
+        }
+        ejectView.alreadyExistBlock = { [weak self] (idArray) in
+            self?.notifyCheckCusRejectExist(index: index, id: idArray)
+        }
+        ejectView.unreasonableBlock = { [weak self] (contentArray) in
+            self?.notifyCheckCusRejectMistake(index: index, conten: contentArray)
+        }
+        ejectView.show()
+    }
+    
     /// 拒绝创建客户/项目-客户已存在
-    private func notifyCheckCusRejectExist(index: IndexPath) {
+    private func notifyCheckCusRejectExist(index: IndexPath, id: [Int]) {
         MBProgressHUD.showWait("")
         let checkId = pendingData[index.row].id
-        _ = APIService.shared.getData(.notifyCheckCusRejectExist(checkId), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckCusRejectExist(checkId, id[0], id[1]), t: LoginModel.self, successHandle: { (result) in
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
+            self.segmentView.setTips(index: 0, number: self.pendingData.count)
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "拒绝失败")
@@ -249,12 +272,13 @@ class NoticeHomeController: UIViewController {
     }
     
     /// 拒绝创建客户/项目-名称有误
-    private func notifyCheckCusRejectMistake(index: IndexPath) {
+    private func notifyCheckCusRejectMistake(index: IndexPath, conten: [String]) {
         MBProgressHUD.showWait("")
         let checkId = pendingData[index.row].id
-        _ = APIService.shared.getData(.notifyCheckCusRejectMistake(checkId), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckCusRejectMistake(checkId, conten[0], conten[1]), t: LoginModel.self, successHandle: { (result) in
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
+            self.segmentView.setTips(index: 0, number: self.pendingData.count)
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "拒绝失败")
@@ -295,11 +319,7 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
                 if type == nil {
                     self?.refuseHandle(indexPath: indexPath)
                 } else {
-                    switch type {
-                    case 1: self?.notifyCheckCusRejectExist(index: indexPath)
-                    case 2: self?.notifyCheckCusRejectMistake(index: indexPath)
-                    default: break
-                    }
+                    self?.modifyEjectView(type: type!, index: indexPath)
                 }
             }
             return cell

@@ -60,6 +60,6 @@ struct ContractListData: HandyJSON {
     var otherParams: String?
     var paybackMoney: Float = 0
     var endTime: Int = 0
-    var makeMoney: Int = 0
+    var makeMoney: Float = 0
     var startTime: Int = 0
 }

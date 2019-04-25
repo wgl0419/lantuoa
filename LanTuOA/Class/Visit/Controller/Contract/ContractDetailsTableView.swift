@@ -4,7 +4,7 @@
 //
 //  Created by HYH on 2019/4/16.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  合同详情  各个类型的tableview  //TODO:业绩详情界面点击缩小时会
+//  合同详情  各个类型的tableview 
 
 import UIKit
 import MJRefresh
@@ -156,13 +156,15 @@ class ContractDetailsTableView: UITableView {
     private func setPerformanceHeaderView() {
         let headerView = ContractPerformanceHeaderView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 98))
         headerView.contractUsersData = contractUsersData
-        var totalMoney: Float = 0
+        var totalPerformance: Float = 0 // 总业绩金额
         for model in performanceData {
-            totalMoney += model.money
+            totalPerformance += model.money
         }
+        // 发布总额 -> 减去制作费和组稿费
+        let totalMoney = contractListData.totalMoney - contractListData.makeMoney - contractListData.rebate
         
         let model = contractUsersData[seleContractUsers]
-        headerView.data = (contractListData.totalMoney, model.realname ?? "", model.propPerform, totalMoney)
+        headerView.data = (totalMoney, model.realname ?? "", model.propPerform, totalPerformance)
         headerView.seleBlock = { [weak self] (seleIndex) in
             self?.seleContractUsers = seleIndex
             self?.performList()

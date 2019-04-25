@@ -207,7 +207,7 @@ class CustomerDetailsTableView: UITableView {
     /// 获取项目统计列表
     private func projectListStatistics() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.projectListStatistics("", customerId, 1, 9999, nil), t: ProjectListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.projectList("", customerId, 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.projectData = result.data
             self.mj_header.endRefreshing()

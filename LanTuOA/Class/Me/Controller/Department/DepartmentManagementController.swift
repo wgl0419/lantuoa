@@ -25,7 +25,7 @@ class DepartmentManagementController: UIViewController {
     private var page = 1
     /// 记录输入次数  -> 用于减少计算次数
     private var inputCout = 0
-    /// 父部门id // TODO:可能后期会使用
+    /// 父部门id 
     private var parentId = -1
     
     

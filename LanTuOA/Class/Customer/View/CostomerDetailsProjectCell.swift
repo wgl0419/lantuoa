@@ -14,7 +14,7 @@ class CostomerDetailsProjectCell: UITableViewCell {
     var data: ProjectListStatisticsData? {
         didSet {
             if let data = data {
-                nameLabel.text = data.name ?? " "
+                nameLabel.text = data.fullName ?? " "
                 stateLabel.text = "最新状态：" + (data.lastVisitResult ?? "")
             }
         }

@@ -11,7 +11,7 @@ import HandyJSON
 
 struct ProjectSaveRequireModel: HandyJSON {
     var status: Int = 0
-    var data: ProjectListStatisticsData?
+    var data: ProjectLlistStatisticsData?
     var message: String?
     var errCode: Int = 0
 }

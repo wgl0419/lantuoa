@@ -24,10 +24,15 @@ class NewlyBuildVisitSeleController: UIViewController {
     
     /// 选中回调 (id + 文本)
     var seleBlock: (([(Int, String)]) -> ())?
+    /// 点击回调
+    var backBlock: (() -> ())?
+    
     /// 选择类型
     var type: SeleType = .customer
     /// 是否是申请 -> 从填写拜访进入的都是直接申请
     var isApply = false
+    /// 是否能添加 -> 从工作申请进入不能添加
+    var isAdd = true
     
     
     /// 搜索框
@@ -61,6 +66,13 @@ class NewlyBuildVisitSeleController: UIViewController {
     private var projectData = [ProjectListStatisticsData]()
     /// 拜访位置数据
     private var positionData = [CustomerListStatisticsData]()
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if backBlock != nil {
+            backBlock!()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,12 +108,14 @@ class NewlyBuildVisitSeleController: UIViewController {
                 return
             }
         }
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightStr,
-                                                            titleColor: .white,
-                                                            titleFont: UIFont.medium(size: 15),
-                                                            titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
-                                                            target: self,
-                                                            action: #selector(rightClick))
+        if isAdd {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightStr,
+                                                                titleColor: .white,
+                                                                titleFont: UIFont.medium(size: 15),
+                                                                titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
+                                                                target: self,
+                                                                action: #selector(rightClick))
+        }
     }
     
     /// 初始化子控件

@@ -44,4 +44,7 @@ struct NotifyCheckListData: HandyJSON {
     var title: String?
     var paramsLength: Int = 0
     var processType: Int = 0
+    var projectName: String?
+    var customerName: String?
 }
+

@@ -13,7 +13,7 @@ class ProjectDetailsHeaderView: UIView {
     var data: (ProjectListStatisticsData, Int)? {
         didSet {
             if let projectData = data?.0, let type = data?.1 {
-                projectNameLabel.text = projectData.name
+                projectNameLabel.text = projectData.fullName
                 customerNameLabel.text = projectData.customerName
                 addressLabel.text = projectData.address
                 manageLabel.text = projectData.manageUserName

@@ -19,7 +19,7 @@ class NoticeHomePendingCell: UITableViewCell {
                 timeLabel.text = timeHandle(date: date)
                 
                 titleLabel.text = data.processName
-                titleLabel.textColor = UIColor(hex: "#FF7744")  // TODO: 暂时使用默认色
+                titleLabel.textColor = UIColor(hex: "#FF7744")
                 
                 let smallData = data.data
                 if smallData.count == 1 {
@@ -201,7 +201,7 @@ class NoticeHomePendingCell: UITableViewCell {
     /// 点击拒绝
     @objc private func refuseClick() {
         if data!.processType == 1 || data!.processType == 2 {
-            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户/拜访人", "名字不合理"])
+            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户", "名字不合理"])
             view.didBlock = { [weak self] (seleIndex) in
                 if self?.refuseBlock != nil {
                     self?.refuseBlock!(seleIndex)

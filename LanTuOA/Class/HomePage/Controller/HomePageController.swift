@@ -105,7 +105,7 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
                 cell?.detailTextLabel?.font = UIFont.medium(size: 12)
                 cell?.detailTextLabel?.textColor = UIColor(hex: "#999999")
             }
-            cell?.textLabel?.text = data[indexPath.row].name ?? ""
+            cell?.textLabel?.text = data[indexPath.row].fullName ?? ""
             cell?.detailTextLabel?.text = "最新状态：" + (data[indexPath.row].lastVisitResult ?? "")
             return cell!
         }

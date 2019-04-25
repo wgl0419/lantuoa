@@ -112,7 +112,6 @@ class VisitSeleTimeView: UIView {
         setTime(titleStr: "开始", btn: endBtn, lastView: startBtn)
         
         /**************  条件块  **************/
-        if Jurisdiction.share.isViewVisitUnder {
             let condition = setModularHeader(titleStr: "条件", lastBtn: endBtn) // ”条件“
             
             let titleArray = ["全部", "我发起的", "我接手的", "工作组"]
@@ -138,7 +137,6 @@ class VisitSeleTimeView: UIView {
                         btn.addTarget(self, action: #selector(seleClick(btn:)), for: .touchUpInside)
                 }
                 btnArray.append(btn)
-            }
         }
         
         /**************  顶部块 **************/

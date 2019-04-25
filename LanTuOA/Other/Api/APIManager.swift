@@ -62,8 +62,8 @@ enum APIManager {
     // MARK: - 通知
     case notifyList(Int, Int)// 通知列表 (page:页码  limit:一页数据)
     case notifyCheckReject(Int, String) // 拒绝审批-非创建客户/项目 (checkId:审批id    desc:备注）
-    case notifyCheckCusRejectExist(Int) // 拒绝创建客户/项目-客户已存在 (checkId:审批id）
-    case notifyCheckCusRejectMistake(Int) // 拒绝创建客户/项目-名称有误 (checkId:审批id）
+    case notifyCheckCusRejectExist(Int, Int, Int) // 拒绝创建客户/项目-客户已存在 (checkId:审批id   customerId:客户id   projectId:项目id）
+    case notifyCheckCusRejectMistake(Int, String, String) // 拒绝创建客户/项目-名称有误 (checkId:审批id   customerName:客户名称   projectName: 项目名称）
     case notifyCheckAgree(Int, String) // 同意审批 （desc:备注）
     case notifyCheckList(Int, Int) // 审核列表 (page:页码  limit:一页数据)
     case notifyCheckDetail(Int) // 审批详情
@@ -309,10 +309,10 @@ extension APIManager: TargetType {
             params = ["page": page, "limit": limit]
         case let .notifyCheckReject(checkId, desc): // 拒绝审批-非创建客户/项目
             params = ["checkId": checkId, "desc": desc]
-        case .notifyCheckCusRejectExist(let checkId): // 拒绝创建客户/项目-客户已存在
-            params = ["checkId": checkId]
-        case .notifyCheckCusRejectMistake(let checkId): // 拒绝创建客户/项目-名称有误
-            params = ["checkId": checkId]
+        case let .notifyCheckCusRejectExist(checkId, customerId, projectId): // 拒绝创建客户/项目-客户已存在
+            params = ["checkId": checkId, "customerId": customerId, "projectId": projectId]
+        case let .notifyCheckCusRejectMistake(checkId, customerName, projectName): // 拒绝创建客户/项目-名称有误
+            params = ["checkId": checkId, "customerName": customerName, "projectName": projectName]
         case let .notifyCheckList(page, limit): // 审核列表
             params = ["page": page, "limit": limit]
         case .notifyCheckAgree(_, let desc): // 同意审批

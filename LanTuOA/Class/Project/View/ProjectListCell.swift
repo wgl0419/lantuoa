@@ -14,7 +14,7 @@ class ProjectListCell: UITableViewCell {
     var data: ProjectListStatisticsData? {
         didSet {
             if let data = data {
-                titleLabel.text = data.name ?? " "
+                titleLabel.text = data.fullName ?? " "
                 followLabel.text = "\(data.responseUserNum)人"
                 manageLabel.text = data.customerName
                 countLabel.text = data.name
@@ -45,11 +45,11 @@ class ProjectListCell: UITableViewCell {
                 moonRebateLabel.attributedText = moonRebate
                 
                 
-                if data.isLock == 1 { //TODO: 未知1是不是锁定  暂定为锁定
+                if data.isLock == 1 { 
                     followView.backgroundColor = UIColor(hex: "#FF7744")
                     stateConstraint.deactivate()
                     ascriptionConstraint.activate()
-                    ascriptionLabel.text = "后端没有给数据" // TODO: 后端没有给数据
+                    ascriptionLabel.text = "后端没有给数据" // TODO: 后端没有给数据  界面被遗弃
                     ascription.text = "参与人员："
                 } else {
                     followView.backgroundColor = UIColor(hex: "#5FB9A1")

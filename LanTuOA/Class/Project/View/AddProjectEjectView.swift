@@ -16,7 +16,7 @@ class AddProjectEjectView: UIView {
     /// 添加回调
     var addBlock: (() -> ())?
     /// 申请项目回调
-    var applyBlock: ((ProjectListStatisticsData) -> ())?
+    var applyBlock: ((ProjectLlistStatisticsData) -> ())?
     /// 客户id
     var customerId = -1
     /// 客户名称
@@ -222,10 +222,10 @@ class AddProjectEjectView: UIView {
     /// 申请新增项目
     private func projectSaveRequire() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.projectSave(seleStrArray[0], customerId, seleStrArray[1]), t: ProjectSaveRequireModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.projectSaveRequire(seleStrArray[0], customerId, seleStrArray[1]), t: ProjectSaveRequireModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if self.applyBlock != nil {
-                self.applyBlock!(result.data ?? ProjectListStatisticsData())
+                self.applyBlock!(result.data ?? ProjectLlistStatisticsData())
             }
             self.hidden()
         }, errorHandle: { (error) in
