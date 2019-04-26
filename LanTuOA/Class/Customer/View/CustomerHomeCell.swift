@@ -20,12 +20,18 @@ class CustomerHomeCell: UITableViewCell {
                 titleAttriMuStr.changeFont(str: industryStr, font: UIFont.medium(size: 12))
                 titleLabel.attributedText = titleAttriMuStr
                 
+                // TODO: 框颜色 和 背景颜色  没有
                 let customerTypeStr = data.type == 1 ? "公司" : data.type == 2 ? "普通" : "开发中"
+//                let layerColor = data.type == 1 ? "公司" : data.type == 2 ? "普通" : "开发中"
+//                let backColor = data.type == 1 ? "公司" : data.type == 2 ? "普通" : "开发中"
+
                 let width = customerTypeStr.getTextSize(font: UIFont.medium(size: 10), maxSize: CGSize(width: ScreenWidth, height: ScreenHeight)).width
                 customerTypeBtn.snp.updateConstraints { (make) in
                     make.width.equalTo(width + 10)
                 }
                 customerTypeBtn.setTitle(customerTypeStr, for: .normal)
+//                customerTypeBtn.layer.borderColor = layerColor.cgColor
+//                customerTypeBtn.backgroundColor = backColor
                 
                 let allAttriMuStr = setAttriMuStr(contentStr: "在线  \(data.onlineProjectNum)", highlightStr: "在线", highlightColor:  UIColor(hex: "#999999"))
                 allLabel.attributedText = allAttriMuStr

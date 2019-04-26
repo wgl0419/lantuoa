@@ -127,8 +127,7 @@ class ApplyListCell: UITableViewCell {
 
 extension ApplyListCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var count = data?.list.count ?? 0
-//        count = count > 0 ? 5 : 0
+        let count = data?.list.count ?? 0
         return count > 4 ? isOpen ? count : 4 : count
     }
     

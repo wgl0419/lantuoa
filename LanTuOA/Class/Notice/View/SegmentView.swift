@@ -31,7 +31,22 @@ class SegmentView: UIView {
         initSubViews()
     }
     
-    func setTips(index: Int, number: Int) {
+    /// 设置红点提示
+    ///
+    /// - Parameters:
+    ///   - index: 位置
+    ///   - show: 是否显示
+    func setTips(index: Int, show: Bool) {
+        let btn = btnArray[index]
+        btn.titleLabel?.isShowRedDot = show
+    }
+    
+    /// 设置数量提示
+    ///
+    /// - Parameters:
+    ///   - index: 位置
+    ///   - number: 数量
+    func setNumber(index: Int, number: Int) {
         let label = tipArray[index]
         if number == 0 {
             label.isHidden = true

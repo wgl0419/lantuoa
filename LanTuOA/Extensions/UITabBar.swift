@@ -9,41 +9,35 @@
 import UIKit
 
 extension UITabBar {
-    func showBadgeOnItem(index:Int, count:Int) {
-        removeBadgeOnItem(index: index)
-        let bview = UIView.init()
-        bview.tag = 888+index
-        bview.layer.cornerRadius = 9
-        bview.clipsToBounds = true
-        bview.backgroundColor = UIColor.red
-        let tabFrame = self.frame
+    
+    
+    /// 显示红点
+    ///
+    /// - Parameter index: 第几个tabbar
+    func showBadgeOnItemIndex(index: Int) {
+        /// 删除原有小红点
+        hideBadgeOnItemIndex(index: index)
         
-        let percentX = (Float(index)+0.6) / 4
-        let x = CGFloat(ceilf(percentX*Float(tabFrame.width)))
-        let y = CGFloat(ceilf(0.1*Float(tabFrame.height)))
-        bview.frame = CGRect(x: x, y: y, width: 18, height: 18)
+        // 新建小红点
+        let badgeView = UIView()
+        badgeView.tag = 888 + index
+        badgeView.layer.cornerRadius = 5
+        badgeView.layer.masksToBounds = true
+        let tabFrame = frame
         
-        let cLabel = UILabel.init()
-        cLabel.text = "\(count)"
-        cLabel.frame = CGRect(x: 0, y: 0, width: 18, height: 18)
-        cLabel.font = UIFont.systemFont(ofSize: 10)
-        cLabel.textColor = UIColor.white
-        cLabel.textAlignment = .center
-        bview.addSubview(cLabel)
-        
-        addSubview(bview)
-        bringSubviewToFront(bview)
+        // 确定小红点位置
+        let percentX: CGFloat = (CGFloat(index) + 0.6) / 5 // 5为tabbar数量
+        let X: CGFloat = CGFloat(ceilf(Float(percentX * tabFrame.size.width)))
+        let Y: CGFloat = CGFloat(ceilf(Float(0.1 * tabFrame.size.height)))
+        badgeView.frame = CGRect(x: X, y: Y, width: 10, height: 10) // 红点宽高为10
+        badgeView.backgroundColor = .red
+        addSubview(badgeView)
     }
-    //隐藏红点
-    func hideBadgeOnItem(index:Int) {
-        removeBadgeOnItem(index: index)
-    }
-    //移除控件
-    func removeBadgeOnItem(index:Int) {
-        for subView:UIView in subviews {
-            if subView.tag == 888+index {
-                subView.removeFromSuperview()
-            }
-        }
+    
+    /// 隐藏红点
+    ///
+    /// - Parameter index: 第几个tabbar
+    func hideBadgeOnItemIndex(index: Int) {
+        removeByTag(tag: 888 + index)
     }
 }

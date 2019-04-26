@@ -95,6 +95,8 @@
 		180B8F9B2272A3EA00E6FDE5 /* ApplyControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8F9A2272A3EA00E6FDE5 /* ApplyControllers.swift */; };
 		180B8F9D2272AE9C00E6FDE5 /* ApplyFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8F9C2272AE9C00E6FDE5 /* ApplyFooterView.swift */; };
 		180B8F9F2272B09700E6FDE5 /* ApplyHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8F9E2272B09700E6FDE5 /* ApplyHeaderView.swift */; };
+		180B8FA3227300A200E6FDE5 /* NotifyNumberModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8FA2227300A200E6FDE5 /* NotifyNumberModel.swift */; };
+		180B8FA72273191B00E6FDE5 /* UIResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8FA62273191B00E6FDE5 /* UIResponder.swift */; };
 		180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB2C22656AF3001879BD /* NotifyCheckUserListModel.swift */; };
 		180BFB2F22656DD3001879BD /* ToExamineDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */; };
 		180BFB3122658A0D001879BD /* ToExamineDescController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB3022658A0D001879BD /* ToExamineDescController.swift */; };
@@ -281,6 +283,8 @@
 		180B8F9A2272A3EA00E6FDE5 /* ApplyControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyControllers.swift; sourceTree = "<group>"; };
 		180B8F9C2272AE9C00E6FDE5 /* ApplyFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyFooterView.swift; sourceTree = "<group>"; };
 		180B8F9E2272B09700E6FDE5 /* ApplyHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyHeaderView.swift; sourceTree = "<group>"; };
+		180B8FA2227300A200E6FDE5 /* NotifyNumberModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyNumberModel.swift; sourceTree = "<group>"; };
+		180B8FA62273191B00E6FDE5 /* UIResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponder.swift; sourceTree = "<group>"; };
 		180BFB2C22656AF3001879BD /* NotifyCheckUserListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCheckUserListModel.swift; sourceTree = "<group>"; };
 		180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsCell.swift; sourceTree = "<group>"; };
 		180BFB3022658A0D001879BD /* ToExamineDescController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDescController.swift; sourceTree = "<group>"; };
@@ -734,6 +738,7 @@
 				1810EC70222F5D4100CF6488 /* UIFont.swift */,
 				1810EC71222F5D4100CF6488 /* MBProgressHUD.swift */,
 				1810EC72222F5D4100CF6488 /* UITextView.swift */,
+				180B8FA62273191B00E6FDE5 /* UIResponder.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -995,6 +1000,7 @@
 			isa = PBXGroup;
 			children = (
 				181FF96722719BB200ED5A2A /* StartupSumModel.swift */,
+				180B8FA2227300A200E6FDE5 /* NotifyNumberModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1206,6 +1212,7 @@
 				180B76FD2239DFCC0096403B /* VisitHomeCell.swift in Sources */,
 				18026DEF223B9F7E00993B66 /* NewlyBuildVisitController.swift in Sources */,
 				181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */,
+				180B8FA3227300A200E6FDE5 /* NotifyNumberModel.swift in Sources */,
 				180533DE2260898100B785B7 /* DepartmentalGroupCell.swift in Sources */,
 				1801AE94223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift in Sources */,
 				1810EC75222F5D4100CF6488 /* Array.swift in Sources */,
@@ -1333,6 +1340,7 @@
 				1827ED842268076D00EFF889 /* ContractRepaymentEjectView.swift in Sources */,
 				1802CDA0224CC3D3005997F1 /* VisitSeleTimeView.swift in Sources */,
 				1827ED8E22685E9600EFF889 /* AchievementsDetailsEjectView.swift in Sources */,
+				180B8FA72273191B00E6FDE5 /* UIResponder.swift in Sources */,
 				18A7C96F223F9828000B4007 /* SeleVisitModelView.swift in Sources */,
 				18070729226DBA1300E6C36C /* MultipleSeleController.swift in Sources */,
 				1802B00A225454D000E94341 /* NoticeHomeSystemCell.swift in Sources */,

@@ -69,6 +69,8 @@ enum APIManager {
     case notifyCheckList(Int, Int) // 审核列表 (page:页码  limit:一页数据)
     case notifyCheckDetail(Int) // 审批详情
     case notifyCheckUserList(Int) // 审批人列表
+    case notifyNumber() // 未读消息数
+    case notifyReadAll() // 全部已读
     
     // MARK: - 工作交接
     case workExtendList(String) // 下级员工列表
@@ -164,6 +166,8 @@ extension APIManager: TargetType {
         case .notifyCheckList: return "/api/notify/check/list"
         case .notifyCheckDetail(let id): return "/api/notify/check/detail/\(id)"
         case .notifyCheckUserList(let id): return "/api/notify/check/user/list/\(id)"
+        case .notifyNumber: return "/api/notify/number"
+        case .notifyReadAll: return "/api/notify/readAll"
             
             
         case .workExtendList: return "/api/workExtend/list"
@@ -212,7 +216,7 @@ extension APIManager: TargetType {
             return .post
         case .workGroupQuit:
             return .delete
-        case .notifyCheckReject, .notifyCheckCusRejectExist, .notifyCheckCusRejectMistake, .notifyCheckAgree:
+        case .notifyCheckReject, .notifyCheckCusRejectExist, .notifyCheckCusRejectMistake, .notifyCheckAgree, .notifyReadAll:
             return .post
         case .workExtendExtend, .departmentsCreate, .departmentsAddUsers, .contractPaybackAdd, .processCommit:
             return .post

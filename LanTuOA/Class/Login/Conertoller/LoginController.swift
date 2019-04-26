@@ -36,17 +36,16 @@ class LoginController: UIViewController {
     private func initSubViews() {
         let imageView = UIImageView().taxi.adhere(toSuperView: view) // logo
             .taxi.layout { (make) in
-                make.width.height.equalTo(35)
                 make.left.equalToSuperview().offset(30)
                 make.top.equalToSuperview().offset(30 + NavigationH)
         }
             .taxi.config { (imageView) in
-                imageView.image = UIImage(named: "")
+                imageView.image = UIImage(named: "login_logo")
         }
         
         _ = UILabel().taxi.adhere(toSuperView: view) // “欢迎使用蓝图OA”
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.equalTo(imageView.snp.right).offset(5)
+                make.left.equalTo(imageView.snp.right).offset(8)
                 make.centerY.equalTo(imageView)
             })
             .taxi.config({ (label) in

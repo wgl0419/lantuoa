@@ -88,6 +88,14 @@ class DepartmentManagementController: UIViewController {
                 tableView.backgroundColor = .white
                 tableView.estimatedRowHeight = 200
                 tableView.tableFooterView = UIView()
+                
+                let str = "暂无通知！"
+                let attriMuStr = NSMutableAttributedString(string: str)
+                attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+                attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+                tableView.noDataLabel?.attributedText = attriMuStr
+                tableView.noDataImageView?.image = UIImage(named: "noneData2")
+                
                 tableView.register(DepartmentManagementCell.self, forCellReuseIdentifier: "DepartmentManagementCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     self?.departments()
@@ -131,6 +139,7 @@ class DepartmentManagementController: UIViewController {
             self.tableView.reloadData()
             self.sourceData = result.data
             self.tableView.mj_header.endRefreshing()
+            self.tableView.isNoData = result.data.count == 0
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取部门列表失败")
         })

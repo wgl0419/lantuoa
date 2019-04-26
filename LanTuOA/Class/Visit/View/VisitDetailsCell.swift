@@ -27,7 +27,7 @@ class VisitDetailsCell: UITableViewCell {
                 switch type {
                 case .details:
                     let createStr = data.createUserName ?? ""
-                    let visitStr = data.createUserName ?? ""
+                    let visitStr = data.contactInfo ?? ""
                     let typeStr = data.type == 1 ? "面谈" : data.type == 2 ? "电话沟通" : "网络聊天"
                     let time = Date(timeIntervalSince1970: TimeInterval(data.createdTime)).yearTimeStr()
                     let create = setTitleAndContent("发起人：", contentStr: createStr, lastLabel: nil, position: -1)

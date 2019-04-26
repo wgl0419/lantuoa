@@ -73,9 +73,12 @@ class ApplyControllers: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.processList(), t: ProcessListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
-            self.data = result.data
+            
+            self.data = result.data.filter({ (model) -> Bool in
+                return model.list.count > 0
+            })
             var moreArray = [Bool]()
-            for _ in result.data {
+            for _ in self.data {
                 moreArray.append(false)
             }
             self.openArray = moreArray

@@ -105,7 +105,7 @@ extension AchievementsDetailsController: UITableViewDelegate, UITableViewDataSou
             return cell
         } else if (section - 1) % 2 == 0 { // 标题cell -> 年份
             let cell = tableView.dequeueReusableCell(withIdentifier: "ContractPerformanceHeaderCell", for: indexPath) as! ContractPerformanceHeaderCell
-            let trueSection = (section - 1) % 2
+            let trueSection = (section - 1) / 2
             cell.data = (data[trueSection].title ?? "", data[trueSection].money, openArray[trueSection])
             return cell
         } else { // 月份数据
@@ -121,8 +121,8 @@ extension AchievementsDetailsController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let trueSection = indexPath.section / 2
-        if indexPath.row == 0 && trueSection == 0 {
+        if indexPath.row == 0 && (indexPath.section - 1) % 2 == 0 {
+            let trueSection = indexPath.section / 2
             let cell = tableView.cellForRow(at: indexPath) as! ContractPerformanceHeaderCell
             cell.changeOpen()
             openArray[trueSection] = !openArray[trueSection]

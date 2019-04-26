@@ -109,7 +109,7 @@ class VisitSeleTimeView: UIView {
         /**************  时间块  **************/
         let time = setModularHeader(titleStr: "时间", lastBtn: nil) // “时间”
         setTime(titleStr: "开始", btn: startBtn, lastView: time)
-        setTime(titleStr: "开始", btn: endBtn, lastView: startBtn)
+        setTime(titleStr: "结束", btn: endBtn, lastView: startBtn)
         
         /**************  条件块  **************/
             let condition = setModularHeader(titleStr: "条件", lastBtn: endBtn) // ”条件“

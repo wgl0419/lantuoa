@@ -55,6 +55,7 @@ class HomePageController: UIViewController {
         }
         projectList()
         startupSum()
+        notifyNumber()
     }
     
     /// 设置重新加载
@@ -160,6 +161,19 @@ class HomePageController: UIViewController {
             MBProgressHUD.showError(error ?? "获取本月统计失败")
         })
     }
+    
+    /// 未读信息数
+    private func notifyNumber() {
+        _ = APIService.shared.getData(.notifyNumber(), t: NotifyNumberModel.self, successHandle: { (result) in
+            let checkNum = result.data?.checkNum ?? 0
+            let notReadNum = result.data?.notReadNum ?? 0
+            if checkNum > 0 {
+                self.tabBarController?.tabBar.items?[3].badgeValue = "\(checkNum)"
+            } else if notReadNum > 0 {
+                self.tabBarController?.tabBar.showBadgeOnItemIndex(index: 3)
+            }
+        }, errorHandle: nil)
+    }
 }
 
 extension HomePageController: UITableViewDelegate, UITableViewDataSource {
@@ -216,12 +230,6 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
             attriMuStr = NSMutableAttributedString(string: "我的项目")
         }
         header.setContent(logoName: logoName, attriMuStr: attriMuStr)
-        
-        header.btnBlock = { // [weak self] in // 跳转其他界面
-            if section == 1 {
-                
-            }
-        }
         headerView.addSubview(header)
         return headerView
     }

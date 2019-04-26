@@ -30,13 +30,15 @@ class NoticeHomeController: UIViewController {
     private var pendingPage = 1
     /// 系统页码
     private var systemPage = 1
-    /// 是否加载过系统数据
-    private var isSystem = false
+    /// 查看系统信息
+    private var isCheckSystem = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNav()
         initSubViews()
+        notifyCheckList(isMore: false) // 获取待处理的初始数据
+        notifyList(isMore: false) // 获取系统的初始数据
     }
     
     // MARK: - 自定义私有方法
@@ -85,6 +87,14 @@ class NoticeHomeController: UIViewController {
                 tableView.separatorStyle = .none
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                
+                let str = "暂无审批！"
+                let attriMuStr = NSMutableAttributedString(string: str)
+                attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+                attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+                tableView.noDataLabel?.attributedText = attriMuStr
+                tableView.noDataImageView?.image = UIImage(named: "noneData1")
+                
                 tableView.register(NoticeHomePendingCell.self, forCellReuseIdentifier: "NoticeHomePendingCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     tableView.mj_footer.isHidden = true
@@ -95,7 +105,6 @@ class NoticeHomeController: UIViewController {
                     self?.notifyCheckList(isMore: true)
                 })
             })
-        notifyCheckList(isMore: false) // 获取待处理的初始数据
         
         
         systemTableView = UITableView().taxi.adhere(toSuperView: scrollView) // 系统信息 tableView
@@ -109,6 +118,14 @@ class NoticeHomeController: UIViewController {
                 tableView.separatorStyle = .none
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                
+                let str = "暂无通知！"
+                let attriMuStr = NSMutableAttributedString(string: str)
+                attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+                attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+                tableView.noDataLabel?.attributedText = attriMuStr
+                tableView.noDataImageView?.image = UIImage(named: "noneData3")
+                
                 tableView.register(NoticeHomeSystemCell.self, forCellReuseIdentifier: "NoticeHomeSystemCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     tableView.mj_footer.isHidden = true
@@ -145,6 +162,23 @@ class NoticeHomeController: UIViewController {
 //        present(alertController, animated: true, completion: nil)
     }
     
+    /// 处理提示
+    private func setTips() {
+        segmentView.setNumber(index: 0, number: pendingData.count)
+        
+        tabBarController?.tabBar.items?[3].badgeValue = pendingData.count > 0 ? "\(pendingData.count)" : nil
+        if systemData.count > 0 && !isCheckSystem { // 有数量  并且为读
+            tabBarController?.tabBar.showBadgeOnItemIndex(index: 3)
+            segmentView.setTips(index: 1, show: systemData.count > 0)
+        } else {
+            tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
+            segmentView.setTips(index: 1, show: false)
+        }
+        
+        pendingTableView.isNoData = pendingData.count == 0
+        systemTableView.isNoData = systemData.count == 0
+    }
+    
     // MARK: - Api
     /// 审核列表
     private func notifyCheckList(isMore: Bool) {
@@ -169,7 +203,7 @@ class NoticeHomeController: UIViewController {
             } else {
                 self.pendingTableView.mj_footer.resetNoMoreData()
             }
-            self.segmentView.setTips(index: 0, number: self.pendingData.count)
+            self.setTips()
             self.pendingTableView.reloadData()
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
@@ -207,7 +241,7 @@ class NoticeHomeController: UIViewController {
             } else {
                 self.systemTableView.mj_footer.resetNoMoreData()
             }
-            self.segmentView.setTips(index: 1, number: self.systemData.count)
+            self.setTips()
             self.systemTableView.reloadData()
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
@@ -264,7 +298,7 @@ class NoticeHomeController: UIViewController {
         _ = APIService.shared.getData(.notifyCheckCusRejectExist(checkId, id[0], id[1]), t: LoginModel.self, successHandle: { (result) in
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
-            self.segmentView.setTips(index: 0, number: self.pendingData.count)
+            self.setTips()
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "拒绝失败")
@@ -278,7 +312,7 @@ class NoticeHomeController: UIViewController {
         _ = APIService.shared.getData(.notifyCheckCusRejectMistake(checkId, conten[0], conten[1]), t: LoginModel.self, successHandle: { (result) in
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
-            self.segmentView.setTips(index: 0, number: self.pendingData.count)
+            self.setTips()
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "拒绝失败")
@@ -296,6 +330,13 @@ class NoticeHomeController: UIViewController {
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "同意失败")
         })
+    }
+    
+    /// 全部已读
+    private func notifyReadAll() {
+        _ = APIService.shared.getData(.notifyReadAll(), t: LoginModel.self, successHandle: { (_) in
+            self.setTips()
+        }, errorHandle: nil)
     }
 }
 
@@ -353,9 +394,10 @@ extension NoticeHomeController: UIScrollViewDelegate {
         if scrollToScrollStop {
             let page = Int(scrollView.contentOffset.x / ScreenWidth)
             segmentView.changeBtn(page: page)
-            if page == 1 && !isSystem {
-                isSystem = true
-                notifyList(isMore: false) // 获取系统的初始数据
+            if page == 1 && !isCheckSystem {
+                isCheckSystem = true
+                notifyReadAll()
+                setTips()
             }
         }
     }
@@ -369,9 +411,10 @@ extension NoticeHomeController: UIScrollViewDelegate {
             if dragToDragStop {
                 let page = Int(scrollView.contentOffset.x / ScreenWidth)
                 segmentView.changeBtn(page: page)
-                if page == 1 && !isSystem {
-                    isSystem = true
-                    notifyList(isMore: false) // 获取系统的初始数据
+                if page == 1 && !isCheckSystem {
+                    isCheckSystem = true
+                    notifyReadAll()
+                    setTips()
                 }
             }
         }
@@ -381,9 +424,10 @@ extension NoticeHomeController: UIScrollViewDelegate {
 extension NoticeHomeController: SegmentViewDelegate {
     func changeScrollView(page: Int) {
         scrollView.setContentOffset(CGPoint(x: CGFloat(page) * ScreenWidth, y: 0), animated: true)
-        if page == 1 && !isSystem {
-            isSystem = true
-            notifyList(isMore: false) // 获取系统的初始数据
+        if page == 1 && !isCheckSystem {
+            isCheckSystem = true
+            notifyReadAll()
+            setTips()
         }
     }
 }

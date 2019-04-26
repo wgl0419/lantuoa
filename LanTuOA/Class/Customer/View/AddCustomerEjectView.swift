@@ -217,9 +217,10 @@ class AddCustomerEjectView: UIView {
         
         let endKeyboardRect = userInfo.object(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! CGRect
         
-        let inputRect = tableView.cellForRow(at: IndexPath(row: 4, section: 0))?.frame
-        let inputMaxY = (inputRect?.maxY ?? 0) + tableView.y + grayView.y
-        
+        let firstResponder = UIResponder.firstResponder() as! UITextView
+        let inputRect = firstResponder.convert(firstResponder.frame, to: self)
+        let inputMaxY = inputRect.maxY
+        // TODO: 已经可以使用 修改到其他地方
         if inputMaxY == endKeyboardRect.origin.y { // 已经弹出到固定位置
             return
         }
@@ -230,6 +231,7 @@ class AddCustomerEjectView: UIView {
                 make.centerY.equalTo(self).offset(yOffset == 0 ? 0 : yOffset + self.deviationHeight)
                 self.deviationHeight = yOffset
             }
+            self.layoutIfNeeded()
         }
         
     }

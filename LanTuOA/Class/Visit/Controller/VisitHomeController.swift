@@ -48,7 +48,7 @@ class VisitHomeController: UIViewController {
         let nav = navigationController as! MainNavigationController
         nav.setNavConfigure(type: .dark, color: UIColor(hex: "#2E4695"), isShadow: false)
         nav.backBtn.isHidden = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "我的合同",
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "合同",
                                                             titleColor: .white,
                                                             titleFont: UIFont.medium(size: 15),
                                                             titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
@@ -79,7 +79,7 @@ class VisitHomeController: UIViewController {
                 searchBar.delegate = self
                 searchBar.backgroundColor = .clear
                 searchBar.searchBarStyle = .minimal
-                searchBar.placeholder = "项目名称/拜访人"
+                searchBar.placeholder = "客户名称/项目名称/员工姓名"
                 searchBar.returnKeyType = .done
             })
         
@@ -149,6 +149,33 @@ class VisitHomeController: UIViewController {
         }
     }
     
+    /// 设置无数据信息
+    ///
+    /// - Parameters:
+    ///   - str: 提示内容
+    ///   - imageStr: 提示图片名称
+    private func setNoneData(str: String, imageStr: String) {
+        
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        tableView.noDataLabel?.attributedText = attriMuStr
+        tableView.noDataImageView?.image = UIImage(named: imageStr)
+    }
+    
+    /// 处理无数据
+    private func noneDataHandle() {
+        if data.count == 0 {
+            let searchStr = searchBar.text ?? ""
+            if searchStr.count == 0 {
+                setNoneData(str: "暂无拜访", imageStr: "nonData2")
+            } else {
+                setNoneData(str: "搜索不到相关内容！", imageStr: "noneData4")
+            }
+        }
+        tableView.isNoData = data.count == 0
+    }
+    
     // MARK: - Api
     /// 获取拜访列表
     ///
@@ -177,6 +204,7 @@ class VisitHomeController: UIViewController {
                 self.tableView.mj_footer.resetNoMoreData()
             }
             self.tableView.reloadData()
+            self.noneDataHandle()
         }, errorHandle: { (error) in
             if isMore {
                 self.tableView.mj_footer.endRefreshing()
