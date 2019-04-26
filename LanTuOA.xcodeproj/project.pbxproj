@@ -92,6 +92,9 @@
 		180B77012239F8770096403B /* ProjectSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B77002239F8770096403B /* ProjectSegmentView.swift */; };
 		180B7707223A21D50096403B /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B7706223A21D50096403B /* LoginController.swift */; };
 		180B7709223A34EC0096403B /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B7708223A34EC0096403B /* LoginModel.swift */; };
+		180B8F9B2272A3EA00E6FDE5 /* ApplyControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8F9A2272A3EA00E6FDE5 /* ApplyControllers.swift */; };
+		180B8F9D2272AE9C00E6FDE5 /* ApplyFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8F9C2272AE9C00E6FDE5 /* ApplyFooterView.swift */; };
+		180B8F9F2272B09700E6FDE5 /* ApplyHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8F9E2272B09700E6FDE5 /* ApplyHeaderView.swift */; };
 		180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB2C22656AF3001879BD /* NotifyCheckUserListModel.swift */; };
 		180BFB2F22656DD3001879BD /* ToExamineDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */; };
 		180BFB3122658A0D001879BD /* ToExamineDescController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB3022658A0D001879BD /* ToExamineDescController.swift */; };
@@ -275,6 +278,9 @@
 		180B77002239F8770096403B /* ProjectSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectSegmentView.swift; sourceTree = "<group>"; };
 		180B7706223A21D50096403B /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		180B7708223A34EC0096403B /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		180B8F9A2272A3EA00E6FDE5 /* ApplyControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyControllers.swift; sourceTree = "<group>"; };
+		180B8F9C2272AE9C00E6FDE5 /* ApplyFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyFooterView.swift; sourceTree = "<group>"; };
+		180B8F9E2272B09700E6FDE5 /* ApplyHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyHeaderView.swift; sourceTree = "<group>"; };
 		180BFB2C22656AF3001879BD /* NotifyCheckUserListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCheckUserListModel.swift; sourceTree = "<group>"; };
 		180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsCell.swift; sourceTree = "<group>"; };
 		180BFB3022658A0D001879BD /* ToExamineDescController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDescController.swift; sourceTree = "<group>"; };
@@ -499,6 +505,7 @@
 				1803A327225F276500B86F20 /* ApplyHistoryController.swift */,
 				1803A32D225F426400B86F20 /* FillInApplyController.swift */,
 				18070728226DBA1300E6C36C /* MultipleSeleController.swift */,
+				180B8F9A2272A3EA00E6FDE5 /* ApplyControllers.swift */,
 			);
 			path = Apply;
 			sourceTree = "<group>";
@@ -518,6 +525,8 @@
 				18070720226D4D2700E6C36C /* FillInApplyPersonnelCell.swift */,
 				18070722226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift */,
 				18070724226DAE2F00E6C36C /* SingleSeleTimeEjectView.swift */,
+				180B8F9C2272AE9C00E6FDE5 /* ApplyFooterView.swift */,
+				180B8F9E2272B09700E6FDE5 /* ApplyHeaderView.swift */,
 			);
 			path = Apply;
 			sourceTree = "<group>";
@@ -1183,6 +1192,7 @@
 				180BFB372265BE16001879BD /* ContractListController.swift in Sources */,
 				18070723226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift in Sources */,
 				1809E3F8225D865000B615A8 /* ToExamineDetailsController.swift in Sources */,
+				180B8F9B2272A3EA00E6FDE5 /* ApplyControllers.swift in Sources */,
 				1802B01222549EA100E94341 /* WorkExtendListModel.swift in Sources */,
 				1803A326225F0F3D00B86F20 /* ApplyListCell.swift in Sources */,
 				1838BC44225C462300978E72 /* CustomerDetailModel.swift in Sources */,
@@ -1306,8 +1316,10 @@
 				180BFB3F2265CE26001879BD /* ContractDetailsHeaderView.swift in Sources */,
 				1833DD3C2241E8C800730FB9 /* ProjectDetailsController.swift in Sources */,
 				1833DD3A2241D9F600730FB9 /* VisitListModel.swift in Sources */,
+				180B8F9F2272B09700E6FDE5 /* ApplyHeaderView.swift in Sources */,
 				180736B5226EB3E7001F1FA6 /* Jurisdiction.swift in Sources */,
 				180533D22260188200B785B7 /* FillInApplyTextViewCell.swift in Sources */,
+				180B8F9D2272AE9C00E6FDE5 /* ApplyFooterView.swift in Sources */,
 				1876A8DE2266BA52002EBDB2 /* PerformListModel.swift in Sources */,
 				1810EC7C222F5D4100CF6488 /* UIButton.swift in Sources */,
 				1811AA92224089BA0073A794 /* SeleVisitTimeView.swift in Sources */,

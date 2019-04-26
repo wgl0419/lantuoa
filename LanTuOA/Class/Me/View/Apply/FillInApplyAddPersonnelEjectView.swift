@@ -36,7 +36,7 @@ class FillInApplyAddPersonnelEjectView: UIView {
                 } else if tenPlace == 0 { // 0 ~ 9
                     regexStr = "^[0-\(bit)$"
                 } else { // 20 ~ 99
-                    regexStr = "^(\\d|[1-1]\\d)|^(\\d|2[0-7])$"
+                    regexStr = "^(\\d|[1-1]\\d)|^(\\d|[1-\(tenPlace)][0-\(bit)])$"
                 }
                 regexArray[index] = regexStr
                 tableView.reloadData()

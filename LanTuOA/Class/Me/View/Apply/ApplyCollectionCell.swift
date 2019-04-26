@@ -14,14 +14,15 @@ class ApplyCollectionCell: UICollectionViewCell {
     var data: ProcessListList? {
         didSet {
             if let data = data {
-//                imageView.image =  // TODO: 根据Type 使用不同的本地图标
+//                4  政策    5  合同内容    6  制作、下单    7  合同条款    8  客户/项目    9  其他
+                let imageArray = ["apply_policy", "apply_contract", "apply_make", "apply_clause", "apply_customer", "apply_other"]
+                let imageIndex = data.type - 4
+                imageView.image = UIImage(named: imageArray[imageIndex])
                 titleLabel.text = data.name
+            } else {
+                imageView.image = UIImage()
+                titleLabel.text = ""
             }
-        }
-    }
-    var row: Int! {
-        didSet {
-            titleLabel.text = "\(row)"
         }
     }
     
@@ -45,20 +46,18 @@ class ApplyCollectionCell: UICollectionViewCell {
         
         imageView = UIImageView().taxi.adhere(toSuperView: contentView) // 图标
             .taxi.layout(snapKitMaker: { (make) in
-                make.bottom.equalToSuperview().offset(-50).priority(800)
+                make.bottom.equalToSuperview().offset(-50)
                 make.top.equalToSuperview().offset(12)
+                make.height.equalTo(40).priority(800)
                 make.centerX.equalToSuperview()
-                make.width.height.equalTo(40).priority(800)
-            })
-            .taxi.config({ (imageView) in
-                imageView.backgroundColor = .blue
+                make.width.equalTo(40)
             })
         
         titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalToSuperview().offset(-30).priority(800)
                 make.width.equalTo(ScreenWidth / 4 - 31).priority(800)
                 make.top.equalTo(imageView.snp.bottom).offset(7)
+                make.width.equalToSuperview().offset(-30)
                 make.centerX.equalToSuperview()
             })
             .taxi.config({ (label) in

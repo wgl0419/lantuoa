@@ -225,7 +225,7 @@ class FillInApplyController: UIViewController {
     }
     
     /// 添加抄送人处理
-    private func addCarbonCopyHandle() {
+    private func addCarbonCopyHandle(indexPath: IndexPath) {
         let vc = SelePersonnelController()
         var prohibitIds = [Int]()
         for model in processUsersData.ccUsers {
@@ -241,7 +241,7 @@ class FillInApplyController: UIViewController {
                 self?.carbonCopyData.append(newModel)
                 self?.processUsersData.ccUsers.append(newModel)
             }
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: (self?.data.count ?? 0) + 1)], with: .fade)
+            self?.tableView.reloadRows(at: [indexPath], with: .none)
             self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -261,7 +261,7 @@ class FillInApplyController: UIViewController {
         ejectView.maxInput = [achievemenhtsPercentage, royaltyPercentage]
         ejectView.determineBlock = { [weak self] (userData, achievemenhts, royalty) in
             self?.contractData.append((userData, achievemenhts, royalty))
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: (self?.data.count ?? 0) + 2)], with: .fade)
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: self?.data.count ?? 0)], with: .fade)
             self?.confirmHandle()
         }
         ejectView.seleBlock = { [weak self] in
@@ -283,6 +283,20 @@ class FillInApplyController: UIViewController {
             self?.navigationController?.pushViewController(vc, animated: true)
         }
         ejectView.show()
+    }
+    
+    /// 处理添加人员
+    private func deletePersonnelHandle(index: Int) {
+        let alertController = UIAlertController(title: "提示", message: "是否删除该合同人员", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        let deleteAction = UIAlertAction(title: "删除", style: .destructive) { (_) in
+            self.contractData.remove(at: index)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: self.data.count)], with: .fade)
+            self.confirmHandle()
+        }
+        alertController.addAction(deleteAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - Api
@@ -383,27 +397,39 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
-        if section == data.count { // 审批人
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
-            cell.isApproval = true
-            cell.data = processUsersData.checkUsers
-            return cell
-        } else if section == data.count + 1 { // 抄送
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
-            cell.isApproval = false
-            cell.data = processUsersData.ccUsers
-            cell.addBlock = { [weak self] in
-                self?.addCarbonCopyHandle()
+        if section == data.count {
+            if pricessType == 5 { // 合同人员
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyPersonnelCell", for: indexPath) as! FillInApplyPersonnelCell
+                cell.data = contractData
+                cell.addBlock = { [weak self] in
+                    self?.addPersonnelHandle()
+                    self?.confirmHandle()
+                }
+                cell.deleteBlock = { [weak self] (index) in
+                    self?.deletePersonnelHandle(index: index)
+                }
+                return cell
+            } else { // 审批人
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
+                cell.isApproval = true
+                cell.data = processUsersData.checkUsers
+                return cell
             }
-            return cell
-        } else if section == data.count + 2 { // 合同人员
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyPersonnelCell", for: indexPath) as! FillInApplyPersonnelCell
-            cell.data = contractData
-            cell.addBlock = {[weak self] in
-                self?.addPersonnelHandle()
-                self?.confirmHandle()
+        } else if section > data.count { // 抄送
+            if pricessType == 5 && section == data.count + 1 { // 审批人
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
+                cell.isApproval = true
+                cell.data = processUsersData.checkUsers
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
+                cell.isApproval = false
+                cell.data = processUsersData.ccUsers
+                cell.addBlock = { [weak self] in
+                    self?.addCarbonCopyHandle(indexPath: indexPath)
+                }
+                return cell
             }
-            return cell
         } else {
             let model = data[section]
             switch model.type {

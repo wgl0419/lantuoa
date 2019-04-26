@@ -13,6 +13,8 @@ class FillInApplyPersonnelCell: UITableViewCell {
     
     /// 点击添加回调
     var addBlock: (() -> ())?
+    /// 删除回调
+    var deleteBlock: ((Int) -> ())?
     /// 数据
     var data: [(UsersData, String, String)]? {
         didSet {
@@ -22,7 +24,7 @@ class FillInApplyPersonnelCell: UITableViewCell {
                 for index in 0..<data.count {
                     let smallData = data[index]
                     let attriMuStr = initAttriMuStr(data: smallData)
-                    lastLabel = setPersonnelData(attriMuStr: attriMuStr, lastLabel: lastLabel, isLast: index == data.count - 1)
+                    lastLabel = setPersonnelData(attriMuStr: attriMuStr, lastLabel: lastLabel, isLast: index == data.count - 1, index: index)
                 }
             }
         }
@@ -95,12 +97,13 @@ class FillInApplyPersonnelCell: UITableViewCell {
     ///   - attriMuStr: 富文本
     ///   - lastLabel: 跟随的控件
     ///   - isLast: 是否是最后一个
+    ///   - index: 提供位置  -> 删除按钮的tag
     /// - Returns: 返回名称label -> 提供给下行跟随
-    private func setPersonnelData(attriMuStr: NSMutableAttributedString, lastLabel: UILabel, isLast: Bool) -> UILabel {
+    private func setPersonnelData(attriMuStr: NSMutableAttributedString, lastLabel: UILabel, isLast: Bool, index: Int) -> UILabel {
         let contentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 内容
             .taxi.layout { (make) in
                 make.left.equalToSuperview().offset(15)
-                make.top.equalTo(lastLabel.snp.bottom).offset(lastLabel != personnelLabel ? 5 : 10)
+                make.top.equalTo(lastLabel.snp.bottom).offset(lastLabel != personnelLabel ? 10 : 15)
                 if isLast {
                     nameConstraint = make.bottom.equalToSuperview().offset(-15).constraint
                 }
@@ -114,6 +117,18 @@ class FillInApplyPersonnelCell: UITableViewCell {
                     nameConstraint.activate()
                 }
         }
+        
+        _ = UIButton().taxi.adhere(toSuperView: contentView) // 删除按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerY.equalTo(contentLabel)
+                make.right.equalToSuperview().offset(-15)
+            })
+            .taxi.config({ (btn) in
+                btn.tag = index
+                btn.setImage(UIImage(named: "input_clear"), for: .normal)
+                btn.addTarget(self, action: #selector(deleteClick(btn:)), for: .touchUpInside)
+            })
+        
         return contentLabel
     }
     
@@ -128,9 +143,17 @@ class FillInApplyPersonnelCell: UITableViewCell {
     }
     
     // MARK: - 按钮点击
+    /// 点击添加
     @objc private func addClick() {
         if addBlock != nil {
             addBlock!()
+        }
+    }
+    
+    /// 点击删除
+    @objc private func deleteClick(btn: UIButton) {
+        if deleteBlock != nil {
+            deleteBlock!(btn.tag)
         }
     }
 }

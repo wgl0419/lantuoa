@@ -128,14 +128,13 @@ class ApplyListCell: UITableViewCell {
 extension ApplyListCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var count = data?.list.count ?? 0
-        count = count > 0 ? 5 : 0
+//        count = count > 0 ? 5 : 0
         return count > 4 ? isOpen ? count : 4 : count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ApplyCollectionCell", for: indexPath) as! ApplyCollectionCell
         cell.data = data?.list[0]//data?.list[indexPath.row]
-        cell.row = indexPath.row
         return cell
     }
     

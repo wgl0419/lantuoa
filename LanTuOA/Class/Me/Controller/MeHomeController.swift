@@ -15,7 +15,7 @@ class MeHomeController: UIViewController {
     private var tableView: UITableView!
     
     /// 标题
-    private var titleArray = [["", "我的审批", "查询绩效", "工作申请"], ["部门管理"], ["设置"]]
+    private var titleArray = [["", "我的审批", "查询绩效", "工作申请"], ["组织架构"], ["设置"]]
     /// 图标
     private var iconArray = [["", "me_approval", "me_achievements", "me_jobApplication"], ["me_departmentManagement"], ["me_setUp"]]
     
@@ -116,7 +116,7 @@ extension MeHomeController: UITableViewDelegate, UITableViewDataSource {
             case 2:
                 vc = AchievementsListController()
             case 3:
-                vc = ApplyController()
+                vc = ApplyControllers()
             case 4:
                 vc = JobHandoverController()
             default: return

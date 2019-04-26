@@ -40,7 +40,7 @@ class DepartmentManagementController: UIViewController {
     // MARK: - 自定义私有方法
     /// 设置导航栏
     private func setNav() {
-        title = "部门管理"
+        title = "组织架构"
         view.backgroundColor = UIColor(hex: "#F3F3F3")
         if Jurisdiction.share.isAddDepartment {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新增部门",

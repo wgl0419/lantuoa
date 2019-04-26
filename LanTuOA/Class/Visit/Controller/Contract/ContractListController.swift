@@ -34,7 +34,7 @@ class ContractListController: UIViewController {
     // MARk: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        title = "我的合同"
+        title = "合同"
         view.backgroundColor = UIColor(hex: "#F3F3F3")
         
         let barView = UIView().taxi.adhere(toSuperView: view) // bar背景view

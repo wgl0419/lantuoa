@@ -122,7 +122,7 @@ class ContractPerformanceHeaderView: UIView {
             let contentStr = "\(model.realname ?? "")(\(model.propPerform)%)"
             contentArray.append(contentStr)
         }
-        let view = SeleVisitModelView(title: "选择拜访方式", content: contentArray)
+        let view = SeleVisitModelView(title: "选择参与人员", content: contentArray)
         view.didBlock = { [weak self] (seleIndex) in
             if self?.seleBlock != nil {
                 self?.seleBlock!(seleIndex)
