@@ -263,7 +263,7 @@ extension EditProjectEjectView: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerTextViewCell", for: indexPath) as! CustomerTextViewCell
-            cell.limitRow = 3 // 地址可输入3行
+            cell.limitRow = 2 // 地址可输入2行
             cell.tableView = tableView
             cell.contentStr = seleStrArray[row]
             cell.data = (titleArray[row], placeholderArray[row])

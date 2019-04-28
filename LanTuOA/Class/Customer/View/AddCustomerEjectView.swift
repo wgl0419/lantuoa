@@ -220,7 +220,6 @@ class AddCustomerEjectView: UIView {
         let firstResponder = UIResponder.firstResponder() as! UITextView
         let inputRect = firstResponder.convert(firstResponder.frame, to: self)
         let inputMaxY = inputRect.maxY
-        // TODO: 已经可以使用 修改到其他地方
         if inputMaxY == endKeyboardRect.origin.y { // 已经弹出到固定位置
             return
         }
@@ -353,8 +352,8 @@ extension AddCustomerEjectView: UITableViewDelegate, UITableViewDataSource {
             cell.contentStr = seleStrArray[row]
             cell.tableView = tableView
             let str = titleArray[row]
-            if str == "公司地址" { // 地址可输入3行
-                cell.limitRow = 3
+            if str == "公司地址" { // 地址可输入2行
+                cell.limitRow = 2
             } else if str == "公司全名" { // 公司全称可输入2行
                 cell.limitRow = 2
             }

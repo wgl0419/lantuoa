@@ -64,7 +64,7 @@ class AchievementsListCell: UITableViewCell {
                 label.text = "部门名称："
                 label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
-                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         departmentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 部门名称
@@ -77,7 +77,7 @@ class AchievementsListCell: UITableViewCell {
                 label.numberOfLines = 0
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
-                label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
         
         let achievements = UILabel().taxi.adhere(toSuperView: contentView) // ”本月绩效“

@@ -20,6 +20,8 @@ class ProjectDetailsTableView: UITableView {
         case history = 1
         /// 工作组
         case workingGroup = 2
+        /// 历史合同
+        case contract = 3
     }
     
     /// 滚动回调
@@ -30,6 +32,8 @@ class ProjectDetailsTableView: UITableView {
     var cellBlock: ((Int, Int) -> ())?
     /// 点击拜访历史
     var visitBlock: ((VisitListData) -> ())?
+    /// 点击合同
+    var contractBlock: ((ContractListData) -> ())?
     /// 修改回调 (删除的id)
     var editBlock: ((Int) -> ())?
     /// 锁定状态 （0：未锁定   1：锁定）
@@ -54,6 +58,8 @@ class ProjectDetailsTableView: UITableView {
     private var visitData = [VisitListData]()
     /// 工作组
     private var groupData = [WorkGroupListData]()
+    /// 历史合同
+    private var contractListData = [ContractListData]()
     /// 第一次加载
     private var isFirst = true
     /// 历史选择的时间戳
@@ -74,8 +80,10 @@ class ProjectDetailsTableView: UITableView {
             visitList(isMore: false)
         } else if cellStyle == .personnel {
             projectMemberList()
-        } else {
+        } else if cellStyle == .workingGroup {
             workGroupList()
+        } else {
+            contractList(isMore: false)
         }
     }
     
@@ -110,15 +118,20 @@ class ProjectDetailsTableView: UITableView {
         register(ProjectDetailsPersonnelCell.self, forCellReuseIdentifier: "ProjectDetailsPersonnelCell")
         register(ProjectDetailsVisitCell.self, forCellReuseIdentifier: "ProjectDetailsVisitCell")
         register(WrokHomeCell.self, forCellReuseIdentifier: "WrokHomeCell")
+        register(CostomerDetailsContractCell.self, forCellReuseIdentifier: "CostomerDetailsContractCell")
         
         
         mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
             self?.reload()
         })
-        if cellStyle == .history { // "参与成员" 没有上拉
+        if cellStyle == .history || cellStyle == .contract { // "拜访历史" 有上拉
             mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
                 self?.mj_header.isHidden = true
-                self?.visitList(isMore: true)
+                if self?.cellStyle == .history {
+                    self?.visitList(isMore: true)
+                } else {
+                    self?.contractList(isMore: true)
+                }
             })
         }
         
@@ -271,6 +284,44 @@ class ProjectDetailsTableView: UITableView {
         })
     }
     
+    /// 历史合同
+    private func contractList(isMore: Bool) {
+        MBProgressHUD.showWait("")
+        let newPage = isMore ? page + 1 : 1
+        _ = APIService.shared.getData(.contractList("", nil, projectId, nil, newPage, 10), t: ContractListModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            if isMore {
+                for model in result.data {
+                    self.contractListData.append(model)
+                }
+                self.mj_footer.endRefreshing()
+                self.mj_header.isHidden = false
+                self.page += 1
+            } else {
+                self.page = 1
+                self.contractListData = result.data
+                self.mj_header.endRefreshing()
+                self.mj_footer.isHidden = false
+            }
+            if result.data.count == 0 {
+                self.mj_footer.endRefreshingWithNoMoreData()
+            } else {
+                self.mj_footer.resetNoMoreData()
+            }
+            self.reloadData()
+            self.setTableFooterView()
+        }, errorHandle: { (error) in
+            if isMore {
+                self.mj_footer.endRefreshing()
+                self.mj_header.isHidden = false
+            } else {
+                self.mj_header.endRefreshing()
+                self.mj_footer.isHidden = false
+            }
+            MBProgressHUD.showError(error ?? "获取历史合同失败")
+        })
+    }
+    
     /// 删除项目成员
     ///
     /// - Parameter userId: 要删除成员的Id
@@ -317,7 +368,7 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
-        if cellStyle == .personnel {
+        if cellStyle == .personnel { // 参与人员
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectDetailsPersonnelCell", for: indexPath) as! ProjectDetailsPersonnelCell
             cell.deleteBlock = {
                 self.projectMemberDelete(userId: self.memberData[row].userId)
@@ -325,14 +376,18 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             cell.lockState = lockState == 1 && canManage == 1 ? 1 : 0
             cell.data = memberData[row]
             return cell
-        } else if cellStyle == .history {
+        } else if cellStyle == .history { // 拜访历史
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectDetailsVisitCell", for: indexPath) as! ProjectDetailsVisitCell
             cell.accessoryType = .disclosureIndicator
             cell.data = visitData[row]
             return cell
-        } else {
+        } else if cellStyle == .workingGroup { // 工作组
             let cell = tableView.dequeueReusableCell(withIdentifier: "WrokHomeCell", for: indexPath) as! WrokHomeCell
             cell.data = groupData[row]
+            return cell
+        } else { // 合同历史
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsContractCell", for: indexPath) as! CostomerDetailsContractCell
+            cell.data = contractListData[row]
             return cell
         }
     }
@@ -342,6 +397,8 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return 0
         } else if cellStyle == .history {
             return 30
+        } else if cellStyle == .contract {
+            return 0
         } else if cellStyle == .personnel && lockState == 1 && Jurisdiction.share.isEditProject || canManage == 1 || cellStyle == .workingGroup {
             return 40
         } else {
@@ -354,6 +411,8 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return nil
         } else if cellStyle == .history {
             return timeFooterViewHandle()
+        } else if cellStyle == .contract {
+            return nil
         } else if cellStyle == .personnel && lockState == 1 && Jurisdiction.share.isEditProject || canManage == 1 || cellStyle == .workingGroup {
             return addFooterViewHandle()
         } else {
@@ -376,6 +435,10 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
         } else if cellStyle == .history { // 拜访历史
             if visitBlock != nil {
                 visitBlock!(visitData[indexPath.row])
+            }
+        } else if cellStyle == .contract {
+            if contractBlock != nil {
+                contractBlock!(contractListData[indexPath.row])
             }
         }
     }

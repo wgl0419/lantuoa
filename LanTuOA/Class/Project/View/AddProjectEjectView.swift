@@ -187,9 +187,9 @@ class AddProjectEjectView: UIView {
         
         let endKeyboardRect = userInfo.object(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! CGRect
         
-        let inputRect = tableView.cellForRow(at: IndexPath(row: 4, section: 0))?.frame
-        let inputMaxY = (inputRect?.maxY ?? 0) + tableView.y + grayView.y
-        
+        let firstResponder = UIResponder.firstResponder() as! UITextView
+        let inputRect = firstResponder.convert(firstResponder.frame, to: self)
+        let inputMaxY = inputRect.maxY
         if inputMaxY == endKeyboardRect.origin.y { // 已经弹出到固定位置
             return
         }
@@ -200,6 +200,7 @@ class AddProjectEjectView: UIView {
                 make.centerY.equalTo(self).offset(yOffset == 0 ? 0 : yOffset + self.deviationHeight)
                 self.deviationHeight = yOffset
             }
+            self.layoutIfNeeded()
         }
         
     }
@@ -272,8 +273,8 @@ extension AddProjectEjectView: UITableViewDelegate, UITableViewDataSource {
         cell.contentStr = seleStrArray[row]
         cell.isEdit = row != 2
         cell.tableView = tableView
-        if row == 1 { // 地址可输入3行
-            cell.limitRow = 3
+        if row == 1 { // 地址可输入2行
+            cell.limitRow = 2
         }
         cell.stopBlock = { [weak self] (str) in
             self?.seleStrArray[row] = str

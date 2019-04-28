@@ -13,7 +13,11 @@ class FillInApplyApprovalCell: UITableViewCell {
     /// 添加回调
     var addBlock: (() -> ())?
     /// 是审批人
-    var isApproval: Bool = true
+    var isApproval: Bool! {
+        didSet {
+            print("修改", isApproval)
+        }
+    }
     /// 数据
     var data: [ProcessUsersCheckUsers]! {
         didSet {
@@ -88,26 +92,27 @@ class FillInApplyApprovalCell: UITableViewCell {
         } else { // 审批人 需要处理
             titleLabel.text = "审批人"
             var newData = data!
-            guard newData.count > 0 else {
-                return
-            }
-            newData.sort { (model1, model2) -> Bool in // 数据排序
-                return model1.sort < model2.sort
-            }
-            for index in 1...newData.count {
-                let newModel = newData.filter { (model) -> Bool in
-                    return model.sort == index
+            if newData.count > 0 {
+                newData.sort { (model1, model2) -> Bool in // 数据排序
+                    return model1.sort < model2.sort
                 }
-                if newModel.count != 0 {
-                    processedData.append(newModel)
+                for index in 1...newData.count {
+                    let newModel = newData.filter { (model) -> Bool in
+                        return model.sort == index
+                    }
+                    if newModel.count != 0 {
+                        processedData.append(newModel)
+                    }
                 }
             }
         }
         
         collectionView.reloadData()
         layoutIfNeeded()
+        var collectionHeight = collectionView.contentSize.height
+        collectionHeight = collectionHeight == 0 ? 15 : collectionHeight
         collectionView.snp.updateConstraints { (make) in
-            make.height.equalTo(collectionView.contentSize.height).priority(800)
+            make.height.equalTo(collectionHeight).priority(800)
         }
     }
 }

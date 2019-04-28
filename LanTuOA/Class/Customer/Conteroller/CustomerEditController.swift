@@ -109,6 +109,7 @@ class CustomerEditController: UIViewController {
                     }
                 }
                 .taxi.config { (tableView) in
+                    tableView.customerName = customerData.name ?? ""
                     tableView.scrollBlock = { (offsetY) in
                         let changeY = offsetY < -self.headerHeight - 40 ? 0 : offsetY >= -40 ? -self.headerHeight : -self.headerHeight - offsetY - 40
                         self.headerView.snp.updateConstraints({ (make) in

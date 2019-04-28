@@ -13,7 +13,7 @@ class ProjectDetailsVisitCell: UITableViewCell {
     var data: VisitListData? {
         didSet {
             if let data = data {
-                nameLabel.text = data.customerName
+                nameLabel.text = data.contactInfo
                 initiatedLabel.text = data.createUserName
                 modeLabel.text = data.type == 1 ? "面谈" : data.type == 2 ? "电话沟通" : "网络聊天"
                 resultLabel.text = data.result

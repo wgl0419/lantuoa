@@ -130,7 +130,7 @@ class AchievementsDetailsEjectView: UIView {
 
 extension AchievementsDetailsEjectView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return data.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

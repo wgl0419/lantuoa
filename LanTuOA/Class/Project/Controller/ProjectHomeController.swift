@@ -154,6 +154,7 @@ class ProjectHomeController: UIViewController {
     @objc private func rightClick() {
         let ejectView = AddProjectEjectView()
         ejectView.customerId = customerId
+        ejectView.customerName = customerName
         ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
             self?.projectListStatistics(isMore: false)
         }

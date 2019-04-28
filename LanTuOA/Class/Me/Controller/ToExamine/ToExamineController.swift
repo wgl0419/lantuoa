@@ -58,26 +58,26 @@ class ToExamineController: UIViewController {
     
     /// 点击同意处理
     private func agreeHandle(indexPath: IndexPath) {
-//        let alertController = UIAlertController(title: "提示", message: "是否同意该申请?", preferredStyle: .alert)
-//        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
-//        alertController.addAction(cancelAction)
-//        let agreeAction = UIAlertAction(title: "同意", style: .default, handler: { (_) in
-        self.notifyCheckAgree(index: indexPath)
-//        })
-//        alertController.addAction(agreeAction)
-//        present(alertController, animated: true, completion: nil)
+        let alertController = UIAlertController(title: "提示", message: "是否同意该申请?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
+        alertController.addAction(cancelAction)
+        let agreeAction = UIAlertAction(title: "同意", style: .default, handler: { (_) in
+            self.notifyCheckAgree(index: indexPath)
+        })
+        alertController.addAction(agreeAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     /// 点击拒绝处理
     private func refuseHandle(indexPath: IndexPath) {
-//        let alertController = UIAlertController(title: "提示", message: "是否拒绝该申请?", preferredStyle: .alert)
-//        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
-//        alertController.addAction(cancelAction)
-//        let agreeAction = UIAlertAction(title: "拒绝", style: .default, handler: { (_) in
-        self.notifyCheckReject(index: indexPath)
-//        })
-//        alertController.addAction(agreeAction)
-//        present(alertController, animated: true, completion: nil)
+        let alertController = UIAlertController(title: "提示", message: "是否拒绝该申请?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
+        alertController.addAction(cancelAction)
+        let agreeAction = UIAlertAction(title: "拒绝", style: .default, handler: { (_) in
+            self.notifyCheckReject(index: indexPath)
+        })
+        alertController.addAction(agreeAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - Api

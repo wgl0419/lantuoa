@@ -148,6 +148,7 @@ class CustomerTextViewCell: UITableViewCell {
         textView.text = ""
         clearBtn.isHidden = true
         textView.placeHolderLabel?.isHidden = false
+        textViewDidChange(textView)
         if stopBlock != nil {
             stopBlock!("")
         }

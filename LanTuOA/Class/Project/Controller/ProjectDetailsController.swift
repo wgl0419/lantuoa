@@ -112,7 +112,7 @@ class ProjectDetailsController: UIViewController {
         if lockState != 2 {
             setNav(projectData.isLock == 0 ? "锁定项目" : "解锁项目")
         }
-        let titleArray = lockState == 2 ? ["历史拜访"] : ["参与人员", "历史拜访", "工作组"]
+        let titleArray = lockState == 2 ? ["历史拜访"] : ["参与人员", "历史拜访", "工作组", "历史合同"]
         segment = ProjectDetailsSegmentedView(title: titleArray)
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
@@ -132,7 +132,7 @@ class ProjectDetailsController: UIViewController {
     /// 添加tableview
     private func addTableView() {
         var lastTableView: ProjectDetailsTableView!
-        for index in 0..<3 { // 添加3个tableview
+        for index in 0..<4 { // 添加4个tableview
             let tableView = ProjectDetailsTableView(style: ProjectDetailsTableView.CellStyle(rawValue: index)!, height: headerHeight, projectId: projectData.id) // tableview
                 .taxi.adhere(toSuperView: scrollView)
                 .taxi.layout { (make) in
@@ -199,6 +199,11 @@ class ProjectDetailsController: UIViewController {
                             self?.navigationController?.pushViewController(vc, animated: true)
                         default: break
                         }
+                    }
+                    tableView.contractBlock = { [weak self] (model) in
+                        let vc = ContractDetailsController()
+                        vc.contractListData = model
+                        self?.navigationController?.pushViewController(vc, animated: true)
                     }
                     tableView.editBlock = { [weak self] (userId) in
                         self?.projectMemberDelete(userId: userId)

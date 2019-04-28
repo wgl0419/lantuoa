@@ -32,6 +32,8 @@ class CustomerDetailsTableView: UITableView {
     var visitBlock: ((VisitListData) -> ())?
     /// 点击合同
     var contractBlock: ((ContractListData) -> ())?
+    /// 客户名称
+    var customerName = ""
     
     /// 历史顶部选择时间按钮
     private var seleTimeBtn: UIButton!
@@ -317,6 +319,7 @@ class CustomerDetailsTableView: UITableView {
         if cellStyle == .project {
             let ejectView = AddProjectEjectView()
             ejectView.customerId = customerId
+            ejectView.customerName = customerName
             ejectView.addBlock = { // 添加成功 -> 刷新
                 self.reload()
             }

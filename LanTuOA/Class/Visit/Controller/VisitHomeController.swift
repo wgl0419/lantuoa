@@ -7,6 +7,7 @@
 //  我的拜访 首页  控制器
 
 import UIKit
+import SnapKit
 import MJRefresh
 import MBProgressHUD
 
@@ -18,7 +19,16 @@ class VisitHomeController: UIViewController {
     private var screenBtn: UIButton!
     /// 搜索框
     private var searchBar: UISearchBar!
-    
+    /// 筛选内容
+    private var screenView: UIView!
+    /// 时间筛选视图
+    private var timeScreenView: ScreenView!
+    /// 类型筛选视图
+    private var typeScreenView: ScreenView!
+    /// 有选中时间条件约束
+    private var timeConstraint: Constraint!
+    /// 无选中时间条件约束
+    private var noneTimeConstraint: Constraint!
     
     /// 列表数据
     private var data = [VisitListData]()
@@ -69,9 +79,9 @@ class VisitHomeController: UIViewController {
         
         searchBar = UISearchBar().taxi.adhere(toSuperView: barView)
             .taxi.layout(snapKitMaker: { (make) in
+                make.bottom.equalToSuperview()
                 make.top.equalToSuperview().offset(5)
                 make.left.equalTo(barView).offset(10)
-                make.bottom.equalToSuperview().offset(-5)
                 make.right.equalTo(barView).offset(-55)
             })
             .taxi.config({ (searchBar) in
@@ -98,9 +108,53 @@ class VisitHomeController: UIViewController {
             })
         screenBtn.setSpacing()
         
+        screenView = UIView().taxi.adhere(toSuperView: view) // 筛选视图
+            .taxi.layout(snapKitMaker: { (make) in
+                make.height.equalTo(0)
+                make.top.equalTo(barView.snp.bottom)
+                make.left.right.equalToSuperview()
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = .white
+                view.layer.masksToBounds = true
+            })
+        
+        timeScreenView = ScreenView().taxi.adhere(toSuperView: screenView) // 时间筛选视图
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerY.equalToSuperview().offset(-5)
+                make.left.equalToSuperview().offset(15)
+            })
+            .taxi.config({ (view) in
+                view.deleteBlock = { [weak self] in
+                    self?.startTimeStamp = nil
+                    self?.endTimeStamp = nil
+                    self?.setScreenView()
+                    self?.visitList(isMore: false)
+                }
+            })
+        
+        typeScreenView = ScreenView().taxi.adhere(toSuperView: screenView) // 类型筛选视图
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerY.equalToSuperview().offset(-5)
+                noneTimeConstraint = make.left.equalToSuperview().offset(15).priority(800).constraint
+                timeConstraint = make.left.equalTo(timeScreenView.snp.right).offset(15).constraint
+                
+            })
+            .taxi.config({ (view) in
+                noneTimeConstraint.activate()
+                timeConstraint.deactivate()
+                view.deleteBlock = { [weak self] in
+                    self?.visitType = 0
+                    self?.setScreenView()
+                    self?.visitList(isMore: false)
+                }
+            })
+        
+        setScreenView()
+        
         tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(barView.snp.bottom)
+                make.top.equalTo(screenView.snp.bottom)
                 make.left.right.bottom.equalTo(view)
             })
             .taxi.config({ (tableView) in
@@ -149,6 +203,50 @@ class VisitHomeController: UIViewController {
         }
     }
     
+    /// 处理筛选视图
+    private func setScreenView() {
+        if visitType == 0 && startTimeStamp == nil && endTimeStamp == nil { // 没有筛选条件
+            screenView.snp.updateConstraints { (make) in
+                make.height.equalTo(0)
+            }
+        } else {
+            screenView.snp.updateConstraints { (make) in
+                make.height.equalTo(44)
+            }
+            var startStr = "以前"
+            var endStr = "至今"
+            var timeStr = ""
+            if startTimeStamp != nil {
+                startStr = Date(timeIntervalSince1970: TimeInterval(startTimeStamp)).customTimeStr(customStr: "yyyy.MM.dd")
+            }
+            if endTimeStamp != nil {
+                endStr = Date(timeIntervalSince1970: TimeInterval(endTimeStamp)).customTimeStr(customStr: "yyyy.MM.dd")
+            }
+            if startStr.count > 2 && endStr.count > 2 {
+                timeStr = startStr + "-" + endStr
+            } else if startStr.count > 2 {
+                timeStr = startStr + endStr
+            } else if endStr.count > 2 {
+                timeStr = endStr + startStr
+            }
+            
+            if timeStr.count == 0 { // 没有筛选时间
+                timeScreenView.isHidden = true
+                noneTimeConstraint.activate()
+                timeConstraint.deactivate()
+            } else {
+                timeScreenView.isHidden = false
+                noneTimeConstraint.deactivate()
+                timeConstraint.activate()
+                timeScreenView.contentStr = timeStr
+            }
+            
+            typeScreenView.isHidden = visitType == 0
+            let typeArray = ["全部", "我发起的", "我接手的", "工作组"]
+            typeScreenView.contentStr = typeArray[visitType]
+        }
+    }
+    
     /// 设置无数据信息
     ///
     /// - Parameters:
@@ -168,7 +266,7 @@ class VisitHomeController: UIViewController {
         if data.count == 0 {
             let searchStr = searchBar.text ?? ""
             if searchStr.count == 0 {
-                setNoneData(str: "暂无拜访", imageStr: "nonData2")
+                setNoneData(str: "暂无拜访", imageStr: "noneData2")
             } else {
                 setNoneData(str: "搜索不到相关内容！", imageStr: "noneData4")
             }
@@ -242,6 +340,7 @@ class VisitHomeController: UIViewController {
             self?.endTimeStamp = end
             self?.visitType = index
             self?.visitList(isMore: false)
+            self?.setScreenView()
         }
         showView.show()
     }
