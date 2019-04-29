@@ -33,7 +33,18 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
                     }
                 }
             } else {
+                nameBtn.setTitleColor(blackColor, for: .normal)
                 nameBtn.setTitleColor(.white, for: .normal)
+                positionLabel.isHidden = true
+            }
+        }
+    }
+    
+    /// 申请详情中的数据
+    var detailsData: NotifyCheckUserListData? {
+        didSet {
+            if let data = detailsData {
+                nameBtn.setTitle(data.checkUserName, for: .normal)
                 positionLabel.isHidden = true
             }
         }
@@ -58,7 +69,7 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
     private func initSubViews() {
         nameBtn = UIButton().taxi.adhere(toSuperView: contentView) // 名称/会签
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalToSuperview().offset(-10).priority(800)
+                make.width.lessThanOrEqualToSuperview().offset(-10).priority(800)
                 make.top.equalToSuperview().offset(5)
                 make.centerX.equalToSuperview()
             })
@@ -70,6 +81,7 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
         
         positionLabel = UILabel().taxi.adhere(toSuperView: contentView) // 职位
             .taxi.layout(snapKitMaker: { (make) in
+                make.width.lessThanOrEqualToSuperview().offset(-10).priority(800)
                 make.bottom.equalToSuperview().offset(-10).priority(800)
                 make.top.equalToSuperview().offset(40)
                 make.height.equalTo(20).priority(800)

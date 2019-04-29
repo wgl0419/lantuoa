@@ -13,10 +13,10 @@ class ProjectDetailsHeaderView: UIView {
     var data: (ProjectListStatisticsData, Int)? {
         didSet {
             if let projectData = data?.0, let type = data?.1 {
-                projectNameLabel.text = projectData.fullName
-                customerNameLabel.text = projectData.customerName
-                addressLabel.text = projectData.address
-                manageLabel.text = projectData.manageUserName
+                projectNameLabel.text = (projectData.fullName ?? "").count == 0 ? " " : projectData.fullName ?? ""
+                customerNameLabel.text = (projectData.customerName ?? "").count == 0 ? " " : projectData.customerName ?? ""
+                addressLabel.text = (projectData.address ?? "").count == 0 ? " " : projectData.address ?? ""
+                manageLabel.text = (projectData.manageUserName ?? "").count == 0 ? "未选择" : projectData.manageUserName ?? "未选择"
                 if type == 2 {
                     lockImageView.image = UIImage()
                     lockLabel.text = ""

@@ -10,11 +10,12 @@ import UIKit
 
 class NewlyBuildSeleCell: UITableViewCell {
 
-    var data: (String, Bool)? {
+    var data: (String, String, Bool)? {
         didSet {
             if let data = data {
                 contentLabel.text = data.0
-                seleImageView.image = UIImage(named: data.1 ? "sele" : "unsele")
+                positionLabel.text = data.1
+                seleImageView.image = UIImage(named: data.2 ? "sele" : "unsele")
             }
         }
     }
@@ -23,6 +24,8 @@ class NewlyBuildSeleCell: UITableViewCell {
     private var seleImageView: UIImageView!
     /// 内容
     private var contentLabel: UILabel!
+    /// 职位
+    private var positionLabel: UILabel!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -48,12 +51,25 @@ class NewlyBuildSeleCell: UITableViewCell {
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.bottom.equalToSuperview()
                 make.height.equalTo(50).priority(800)
-                make.right.equalToSuperview().offset(-15)
                 make.left.equalTo(seleImageView.snp.right).offset(10)
             })
             .taxi.config({ (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+            })
+        
+        positionLabel = UILabel().taxi.adhere(toSuperView: contentView) // 职位
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalTo(contentLabel.snp.right).offset(5)
+                make.right.equalToSuperview().offset(-15)
+                make.centerY.equalTo(contentLabel)
+            })
+            .taxi.config({ (label) in
+                label.textAlignment = .right
+                label.font = UIFont.medium(size: 14)
+                label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
     }
 }

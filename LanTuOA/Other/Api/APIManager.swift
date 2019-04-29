@@ -20,6 +20,8 @@ enum APIManager {
     case usersPermissions() // 获取权限
     case version() // 获取版本信息 (1.安卓2.iOS3.web)
     case startupSum() // 首页统计
+    case code() // 获取验证码
+    case passwordReset() // 找回密码
     
     
     // MARK: - 客户
@@ -82,11 +84,11 @@ enum APIManager {
     case departmentsUsers(Int, String?, Int?) // 获取部门人员列表 （ 部门id  keyword:搜索内容   type:部门员工类型（默认1）：1 普通员工；2 副主管；3 主管；4 上级领导。选填。）
     case departmentsCreate(String, Int) // 新增部门 (name:部门名称  parentId:上级部门id,如果是顶级部门，则传0或不传)
     case departmentsAddUsers(Int, [Int]) // 新增部门人员 （id：部门id   userIds：新增人员）
-    case departmentsChange(Int, Int, Int) // 修改部门 （userid:用户id   oldDeptId:旧部门id     newDeptId:新部门）
+    case departmentsChange(Int, [Int]) // 修改部门 （userid:用户id   newDeptIds:新部门ID数组）
     
     
     // mARK: - 工作申请
-    case processHistory(Int, Int, Int) // 历史申请列表 (status:1.申请中，2.通过，3.被拒绝   page:页码  limit:一页数据)
+    case processHistory(Int?, Int, Int) // 历史申请列表 (status:1.申请中，2.通过，3.被拒绝   page:页码  limit:一页数据)
     case processList() // 流程列表
     case processParams(Int) // 获取流程内容
     case processUsers(Int) // 获取流程默认审批/抄送人
@@ -123,6 +125,8 @@ extension APIManager: TargetType {
         case .usersPermissions: return "/api/users/permissions"
         case .version: return "/api/version"
         case .startupSum: return "/api/startup/sum"
+        case .code: return "/api/code"
+        case .passwordReset: return "/password/reset"
             
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"
@@ -179,7 +183,7 @@ extension APIManager: TargetType {
         case .departmentsUsers(let deptId, _, _): return "/api/departments/\(deptId)/users"
         case .departmentsCreate: return "/api/departments"
         case .departmentsAddUsers(let id, _): return "/api/departments/\(id)/addUsers"
-        case .departmentsChange(let id, _, _): return "/api/departments/change/\(id)"
+        case .departmentsChange(let id, _): return "/api/departments/change/\(id)"
             
         case .processHistory: return "/api/process/history"
         case .processList: return "/api/process/list"
@@ -220,7 +224,7 @@ extension APIManager: TargetType {
             return .post
         case .workExtendExtend, .departmentsCreate, .departmentsAddUsers, .contractPaybackAdd, .processCommit:
             return .post
-        case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate:
+        case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate, .passwordReset:
             return .put
         case .projectMemberDelete:
             return .delete
@@ -342,12 +346,13 @@ extension APIManager: TargetType {
             params = ["name": name, "parentId": parentId]
         case .departmentsAddUsers(_, let userIds): // 新增部门人员
             params = ["userIds": userIds]
-        case let .departmentsChange(_ , oldDeptId, newDeptId): // 修改部门
-            params = ["oldDeptId": oldDeptId, "newDeptId": newDeptId]
+        case let .departmentsChange(_ , newDeptIds): // 修改部门
+            params = ["newDeptIds": newDeptIds]
             
             
         case let .processHistory(status, page, limit): // 历史申请列表
-            params = ["status": status, "page": page, "limit": limit]
+            params = ["page": page, "limit": limit]
+            if status != nil { params["status"] = status! }
         case let .processCommit(processId, data, member, ccUsers):
             params = ["processId": processId, "data": data]
             if member.count > 0 { params["member"] = member }

@@ -67,6 +67,10 @@
 		180533DC226071E100B785B7 /* DepartmentEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180533DB226071E100B785B7 /* DepartmentEjectView.swift */; };
 		180533DE2260898100B785B7 /* DepartmentalGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180533DD2260898100B785B7 /* DepartmentalGroupCell.swift */; };
 		1805F3B52275500B00AF0AF7 /* ScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805F3B42275500B00AF0AF7 /* ScreenView.swift */; };
+		1805F3B722758C9500AF0AF7 /* ReplacementDepartmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805F3B622758C9500AF0AF7 /* ReplacementDepartmentController.swift */; };
+		1805FC3A2276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805FC392276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift */; };
+		1805FC3C2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805FC3B2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift */; };
+		1805FC3E2276F369001A2FF5 /* RetrievePasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805FC3D2276F369001A2FF5 /* RetrievePasswordController.swift */; };
 		1806FBD92243305A005A4A77 /* ProjectDetailsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBD82243305A005A4A77 /* ProjectDetailsTableView.swift */; };
 		1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */; };
 		1806FBDD2243637D005A4A77 /* ProjectDetailsSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */; };
@@ -256,6 +260,10 @@
 		180533DB226071E100B785B7 /* DepartmentEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentEjectView.swift; sourceTree = "<group>"; };
 		180533DD2260898100B785B7 /* DepartmentalGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentalGroupCell.swift; sourceTree = "<group>"; };
 		1805F3B42275500B00AF0AF7 /* ScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenView.swift; sourceTree = "<group>"; };
+		1805F3B622758C9500AF0AF7 /* ReplacementDepartmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplacementDepartmentController.swift; sourceTree = "<group>"; };
+		1805FC392276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsSmallCell.swift; sourceTree = "<group>"; };
+		1805FC3B2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsCarbonCopyCell.swift; sourceTree = "<group>"; };
+		1805FC3D2276F369001A2FF5 /* RetrievePasswordController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrievePasswordController.swift; sourceTree = "<group>"; };
 		1806FBD82243305A005A4A77 /* ProjectDetailsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsTableView.swift; sourceTree = "<group>"; };
 		1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsPersonnelCell.swift; sourceTree = "<group>"; };
 		1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsSegmentedView.swift; sourceTree = "<group>"; };
@@ -542,6 +550,7 @@
 			children = (
 				1838BC45225C68B400978E72 /* DepartmentManagementController.swift */,
 				1838BC4B225C825F00978E72 /* DepartmentalStaffController.swift */,
+				1805F3B622758C9500AF0AF7 /* ReplacementDepartmentController.swift */,
 			);
 			path = Department;
 			sourceTree = "<group>";
@@ -571,6 +580,7 @@
 			isa = PBXGroup;
 			children = (
 				180B7706223A21D50096403B /* LoginController.swift */,
+				1805FC3D2276F369001A2FF5 /* RetrievePasswordController.swift */,
 			);
 			path = Conertoller;
 			sourceTree = "<group>";
@@ -607,6 +617,8 @@
 			children = (
 				1809E3FB225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift */,
 				180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */,
+				1805FC392276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift */,
+				1805FC3B2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift */,
 			);
 			path = ToExamine;
 			sourceTree = "<group>";
@@ -1211,10 +1223,12 @@
 				1803A32E225F426400B86F20 /* FillInApplyController.swift in Sources */,
 				1802B0062254410100E94341 /* VisitDetailsHeaderCell.swift in Sources */,
 				181FF96622714E9600ED5A2A /* ModifyNoticeEjectView.swift in Sources */,
+				1805F3B722758C9500AF0AF7 /* ReplacementDepartmentController.swift in Sources */,
 				18050D5D224B16C200C9DB9A /* ToExamineController.swift in Sources */,
 				180B76FD2239DFCC0096403B /* VisitHomeCell.swift in Sources */,
 				18026DEF223B9F7E00993B66 /* NewlyBuildVisitController.swift in Sources */,
 				181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */,
+				1805FC3E2276F369001A2FF5 /* RetrievePasswordController.swift in Sources */,
 				180B8FA3227300A200E6FDE5 /* NotifyNumberModel.swift in Sources */,
 				180533DE2260898100B785B7 /* DepartmentalGroupCell.swift in Sources */,
 				1801AE94223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift in Sources */,
@@ -1223,6 +1237,7 @@
 				1810EC76222F5D4100CF6488 /* NamespaceWrappable.swift in Sources */,
 				183383012251B4650053F2BF /* WorkGroupListModel.swift in Sources */,
 				18050D6F224B5B2D00C9DB9A /* HandoverStaffSeleController.swift in Sources */,
+				1805FC3C2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift in Sources */,
 				180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */,
 				180BFB352265B49F001879BD /* CostomerDetailsContractCell.swift in Sources */,
 				180B7707223A21D50096403B /* LoginController.swift in Sources */,
@@ -1284,6 +1299,7 @@
 				180533D422601F7100B785B7 /* ProcessParamsModel.swift in Sources */,
 				180018872253679500832E60 /* VisitDetailsController.swift in Sources */,
 				180736C522706A4F001F1FA6 /* CustomerSaveRequireModel.swift in Sources */,
+				1805FC3A2276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift in Sources */,
 				1810EC90222F5F2F00CF6488 /* DispatchQueueExtension.swift in Sources */,
 				180233662244C6640064A50E /* MeHomeCell.swift in Sources */,
 				1876A8EA22672850002EBDB2 /* MoreTimeSeleEjectView.swift in Sources */,

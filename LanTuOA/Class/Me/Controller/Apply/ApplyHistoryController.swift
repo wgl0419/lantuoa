@@ -18,11 +18,11 @@ class ApplyHistoryController: UIViewController {
     private var scrollView: UIScrollView!
     
     /// 页码
-    private var page = [1, 1, 1]
+    private var page = [1, 1, 1, 1]
     /// 数据
-    private var data = [[ProcessHistoryData](), [ProcessHistoryData](), [ProcessHistoryData]()]
+    private var data = [[ProcessHistoryData](), [ProcessHistoryData](), [ProcessHistoryData](), [ProcessHistoryData]()]
     /// 是否加载过
-    private var isLoaded = [true, false, false]
+    private var isLoaded = [true, false, false, false]
     /// tableview集合
     private var tableViewArray = [UITableView]()
     
@@ -38,8 +38,7 @@ class ApplyHistoryController: UIViewController {
         title = "申请记录"
         view.backgroundColor = .white
         
-//        let titleArray = ["全部", "申请中", "已通过", "未通过"]
-        let titleArray = ["申请中", "已通过", "未通过"]
+        let titleArray = ["全部", "申请中", "已通过", "未通过"]
         segmentView = ProjectSegmentView(title: titleArray)
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
@@ -104,7 +103,11 @@ class ApplyHistoryController: UIViewController {
     private func processHistory(isMore: Bool, tag: Int) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page[tag] + 1 : 1
-        _ = APIService.shared.getData(.processHistory(tag + 1, newPage, 10), t: ProcessHistoryModel.self, successHandle: { (result) in
+        var status: Int!
+        if tag != 0 {
+            status = tag
+        }
+        _ = APIService.shared.getData(.processHistory(status, newPage, 10), t: ProcessHistoryModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -193,5 +196,14 @@ extension ApplyHistoryController: UIScrollViewDelegate {
                 }
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = ToExamineDetailsController()
+        vc.checkListId = data[tableView.tag][indexPath.row].id
+//        vc.changeBlock = { [weak self] in
+//            self?.notifyCheckList(isMore: false)
+//        }
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

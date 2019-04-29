@@ -44,36 +44,40 @@ class DepartmentalStaffCell: UITableViewCell {
     /// 初始化子控件
     private func initSubViews() {
         
-        nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 员工名称
+        nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名字
             .taxi.layout(snapKitMaker: { (make) in
+                make.width.equalTo(ScreenWidth / 4 - 10)
                 make.left.equalToSuperview().offset(15)
-                make.height.equalTo(50).priority(800)
-                make.top.bottom.equalToSuperview()
+                make.top.equalToSuperview().offset(10)
             })
             .taxi.config({ (label) in
                 label.textColor = blackColor
-                label.font = UIFont.boldSystemFont(ofSize: 14)
+                label.font = UIFont.medium(size: 14)
             })
         
         positionLabel = UILabel().taxi.adhere(toSuperView: contentView) // 职位
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.equalTo(nameLabel.snp.right).offset(15)
-                make.left.greaterThanOrEqualToSuperview().offset(70)
-                make.centerY.equalToSuperview()
+                make.width.equalTo(ScreenWidth / 3)
+                make.top.equalToSuperview().offset(10)
+                make.bottom.equalToSuperview().offset(-10)
+                make.left.equalToSuperview().offset(ScreenWidth / 4)
             })
             .taxi.config({ (label) in
+                label.numberOfLines = 0
                 label.textColor = blackColor
-                label.font = UIFont.boldSystemFont(ofSize: 14)
+                label.font = UIFont.medium(size: 14)
             })
         
         phoneLabel = UILabel().taxi.adhere(toSuperView: contentView) // 电话号码
             .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalToSuperview()
-                make.left.equalTo(positionLabel.snp.right).offset(15)
+                make.width.equalTo(ScreenWidth / 3)
+                make.top.equalToSuperview().offset(10)
+                make.left.equalTo(positionLabel.snp.right).offset(5)
             })
             .taxi.config({ (label) in
+                label.text = "123456789011"
                 label.textColor = blackColor
-                label.font = UIFont.boldSystemFont(ofSize: 14)
+                label.font = UIFont.medium(size: 14)
             })
         
         if Jurisdiction.share.isModifyPerson || Jurisdiction.share.isLeavePerson { // 有修改部门或离职员工权限

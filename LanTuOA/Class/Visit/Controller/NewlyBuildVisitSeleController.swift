@@ -417,7 +417,7 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
             }
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildSeleCell", for: indexPath) as! NewlyBuildSeleCell
-        cell.data = (name, seleIndex == indexPath.row)
+        cell.data = (name, "", seleIndex == indexPath.row)
         return cell
     }
     

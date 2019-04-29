@@ -10,12 +10,13 @@ import UIKit
 
 class SelePersonnelCell: UITableViewCell {
     
-    /// 数据 （名称 + 是否选中）
-    var data: (String, Bool)? {
+    /// 数据 （名称  职位  是否选中）
+    var data: (String, String, Bool)? {
         didSet {
             if let data = data {
                 nameLabel.text = data.0
-                seleBtn.isSelected = data.1
+                positionLabel.text = data.1
+                seleBtn.isSelected = data.2
             }
         }
     }
@@ -24,6 +25,8 @@ class SelePersonnelCell: UITableViewCell {
     private var seleBtn: UIButton!
     /// 名称
     private var nameLabel: UILabel!
+    /// 职位
+    private var positionLabel: UILabel!
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -58,6 +61,20 @@ class SelePersonnelCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+            })
+        
+        positionLabel = UILabel().taxi.adhere(toSuperView: contentView) // 职位
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalTo(nameLabel.snp.right).offset(5)
+                make.right.equalToSuperview().offset(-15)
+                make.centerY.equalTo(nameLabel)
+            })
+            .taxi.config({ (label) in
+                label.textAlignment = .right
+                label.font = UIFont.medium(size: 14)
+                label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
     }
 }

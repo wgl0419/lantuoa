@@ -10,27 +10,58 @@ import UIKit
 
 class ToExamineDetailsCell: UITableViewCell {
     
-    /// 数据 (审批人姓名;时间戳;status;位置: -1：顶部  0：中间   1：底部)
-    var data: (String, Int, Int, Int)? {
+    /// 发起人数据
+    var notifyCheckListData: NotifyCheckListData? {
         didSet {
-            if let data = data {
-                nameLabel.text = data.0
-                statusLabel.text = data.2 == 0 ? "(发起申请)" : data.2 == 1 ? "(审批中)" : data.2 == 2 ? "(同意)" : "(拒绝)"
-                if data.3 == -1 { // 都写  防止复用
-                    topLineView.isHidden = true
-                    bottomLineView.isHidden = false
-                } else if data.3 == 0 {
-                    topLineView.isHidden = false
-                    bottomLineView.isHidden = false
+            if let data = notifyCheckListData {
+                topLineView.isHidden = true
+                topLineView.snp.updateConstraints { (make) in
+                    make.height.equalTo(12)
+                }
+                statusLabel.text = "(发起申请)"
+                statusLabel.textColor = blackColor
+                nameLabel.text = data.createdUserName ?? ""
+                timeLabel.text = Date(timeIntervalSince1970: TimeInterval(data.createdTime)).getCommentTimeString()
+            }
+        }
+    }
+    /// 数据 (审批人数据  是否轮到这条数据审批  是否最后一个   是否展开)
+    var data: ([NotifyCheckUserListData], Bool, Bool, Bool)? {
+        didSet {
+            if let listModel = data?.0, let approval = data?.1, let isLast = data?.2, let isOpen = data?.3 {
+                var status: Int!
+                // 处理是显示名称  还是  多人或签
+                var model = listModel.filter { (model) -> Bool in
+                    return model.status == 2 || model.status == 3
+                }
+                if model.count == 0 && listModel.count > 1 { // 多人或签状态下 还没有人处理
+                    nameLabel.text = "\(listModel.count)人或签"
+                    openBtn.isHidden = false
+                    status = listModel[0].status
                 } else {
-                    topLineView.isHidden = false
-                    bottomLineView.isHidden = true
+                    if model.count == 0 { // 单人状态下  没有处理
+                        model = listModel
+                    }
+                    nameLabel.text = model[0].checkUserName ?? ""
+                    status = model[0].status
+                }
+                // 处理状态
+                if !approval {
+                    statusLabel.text = "(未审批)"
+                    statusLabel.textColor = blackColor
+                } else {
+                    statusLabel.text = status == 0 ? "(发起申请)" : status == 1 ? "(审批中)" : status == 2 ? "(已同意)" : "(已拒绝)"
+                    statusLabel.textColor = status == 0 ? blackColor : status == 1 ? UIColor(hex: "#FF7744") : status == 2 ? UIColor(hex: "#5FB9A1") : UIColor(hex: "#FF4444")
                 }
                 
-                if data.1 != 0 {
-                    timeLabel.text = Date(timeIntervalSince1970: TimeInterval(data.1)).getCommentTimeString()
+                if listModel[0].checkedTime != 0 {
+                    timeLabel.text = Date(timeIntervalSince1970: TimeInterval(listModel[0].checkedTime)).getCommentTimeString()
                 } else {
                     timeLabel.text = ""
+                }
+                openBtn.isSelected = isOpen
+                statusLabel.snp.updateConstraints { (make) in
+                    make.bottom.equalToSuperview().offset(isLast && !isOpen ? -15 : -3)
                 }
             }
         }
@@ -45,8 +76,8 @@ class ToExamineDetailsCell: UITableViewCell {
     private var timeLabel: UILabel!
     /// 顶部线
     private var topLineView: UIView!
-    /// 底部线
-    private var bottomLineView: UIView!
+    /// 展开按钮
+    private var openBtn: UIButton!
     
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -59,62 +90,75 @@ class ToExamineDetailsCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        topLineView.isHidden = false
+        topLineView.snp.updateConstraints { (make) in
+            make.height.equalTo(30)
+        }
+        statusLabel.snp.updateConstraints { (make) in
+            make.bottom.equalToSuperview().offset(-3)
+        }
+        openBtn.isHidden = true
+    }
+    
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
         
+        topLineView = UIView().taxi.adhere(toSuperView: contentView) // 顶部线
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalToSuperview().offset(23)
+                make.top.equalToSuperview()
+                make.height.equalTo(30)
+                make.width.equalTo(3)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#E5E5E5")
+            })
+        
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名称
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalToSuperview().offset(18)
+                make.top.equalTo(topLineView.snp.bottom).offset(3)
                 make.left.equalToSuperview().offset(15)
-                make.bottom.equalToSuperview().offset(-18)
             })
             .taxi.config({ (label) in
-                label.text = "测试"
                 label.textColor = UIColor(hex: "#2E4695")
                 label.font = UIFont.boldSystemFont(ofSize: 18)
             })
         
-        statusLabel = UILabel().taxi.adhere(toSuperView: contentView) // 状态
+        openBtn = UIButton().taxi.adhere(toSuperView: contentView) // 展开按钮
             .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalTo(nameLabel)
                 make.left.equalTo(nameLabel.snp.right).offset(5)
+                make.centerY.equalTo(nameLabel)
             })
-            .taxi.config({ (label) in
-                label.textColor = blackColor
-                label.font = UIFont.boldSystemFont(ofSize: 10)
+            .taxi.config({ (btn) in
+                btn.isHidden = true
+                btn.isUserInteractionEnabled = false
+                btn.setImage(UIImage(named: "toExamineDetails_arrow"), for: .normal)
+                btn.setImage(UIImage(named: "toExamineDetails_arrow1"), for: .selected)
             })
         
-        timeLabel = UILabel().taxi.adhere(toSuperView: contentView)
+        timeLabel = UILabel().taxi.adhere(toSuperView: contentView) // 时间
             .taxi.layout(snapKitMaker: { (make) in
                 make.right.equalToSuperview().offset(-15)
                 make.centerY.equalTo(nameLabel)
             })
             .taxi.config({ (label) in
+                label.textColor = blackColor
                 label.font = UIFont.medium(size: 10)
-                label.textColor = UIColor(hex: "#999999")
             })
         
-        topLineView = UIView().taxi.adhere(toSuperView: contentView) // 顶部线
+        statusLabel = UILabel().taxi.adhere(toSuperView: contentView) // 状态
             .taxi.layout(snapKitMaker: { (make) in
-                make.bottom.equalTo(nameLabel.snp.top).offset(-3)
-                make.left.equalTo(nameLabel).offset(8)
-                make.top.equalToSuperview()
-                make.width.equalTo(3)
+                make.top.equalTo(nameLabel.snp.bottom).offset(2)
+                make.left.equalToSuperview().offset(15)
+                make.bottom.equalToSuperview().offset(-3)
             })
-            .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E5E5E5")
+            .taxi.config({ (label) in
+                label.font = UIFont.boldSystemFont(ofSize: 10)
             })
         
-        bottomLineView = UIView().taxi.adhere(toSuperView: contentView) // 底部线
-            .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(nameLabel.snp.bottom).offset(3)
-                make.left.equalTo(nameLabel).offset(8)
-                make.bottom.equalToSuperview()
-                make.width.equalTo(3)
-            })
-            .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E5E5E5")
-            })
+        
     }
 }

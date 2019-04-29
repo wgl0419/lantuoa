@@ -13,7 +13,7 @@ import MBProgressHUD
 class ToExamineDetailsController: UIViewController {
 
     /// 审批数据
-    var checkListData: NotifyCheckListData!
+    var checkListId = 0
     /// 修改回调
     var changeBlock: (() -> ())?
     
@@ -23,13 +23,20 @@ class ToExamineDetailsController: UIViewController {
     /// 按钮框
     private var btnView: UIView!
     
-    /// 审批详情数据
-    private var data = [NotifyCheckUserListData]()
+    /// 审批数据
+    private var checkListData: NotifyCheckListData!
+    /// 审批人数据
+    private var checkUserData = [[NotifyCheckUserListData]]()
+    /// 是否展开
+    private var openArray = [Bool]()
+    /// 抄送人数据
+    private var carbonCopyData = [NotifyCheckUserListData]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
+        notifyCheckDetail()
         notifyCheckUserList()
     }
     
@@ -93,9 +100,11 @@ class ToExamineDetailsController: UIViewController {
                 tableView.dataSource = self
                 tableView.separatorStyle = .none
                 tableView.estimatedRowHeight = 50
-                tableView.backgroundColor = .white
+                tableView.backgroundColor = UIColor(hex: "#F3F3F3")
                 tableView.register(ToExamineDetailsHeaderCell.self, forCellReuseIdentifier: "ToExamineDetailsHeaderCell")
                 tableView.register(ToExamineDetailsCell.self, forCellReuseIdentifier: "ToExamineDetailsCell")
+                tableView.register(ToExamineDetailsSmallCell.self, forCellReuseIdentifier: "ToExamineDetailsSmallCell")
+                tableView.register(ToExamineDetailsCarbonCopyCell.self, forCellReuseIdentifier: "ToExamineDetailsCarbonCopyCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     self?.notifyCheckUserList()
                 })
@@ -126,10 +135,31 @@ class ToExamineDetailsController: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
     
+    /// 审批人列表数据处理
+    private func checkUserListHandle(data: [NotifyCheckUserListData]) {
+        for index in 1...data.count {
+            var checkUser = [NotifyCheckUserListData]()
+            checkUser = data.filter({ (model) -> Bool in
+                return model.sort == index && model.type == 1
+            })
+            if checkUser.count > 0 {
+                checkUserData.append(checkUser)
+                openArray.append(false)
+            }
+        }
+        let aa = data.filter({ (model) -> Bool in
+            return model.type == 2
+        })
+        print(aa)
+        carbonCopyData = data.filter({ (model) -> Bool in
+            return model.type == 2
+        })
+    }
+    
     // MARK: - APi
     /// 获取审批详情
     private func notifyCheckDetail() {
-        _ = APIService.shared.getData(.notifyCheckDetail(checkListData.id), t: NotifyCheckDetailModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckDetail(checkListId), t: NotifyCheckDetailModel.self, successHandle: { (result) in
             self.checkListData = result.data
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
@@ -141,8 +171,9 @@ class ToExamineDetailsController: UIViewController {
     /// 审批人列表
     private func  notifyCheckUserList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.notifyCheckUserList(checkListData.id), t: NotifyCheckUserListModel.self, successHandle: { (result) in
-            self.data = result.data
+        // TODO:
+        _ = APIService.shared.getData(.notifyCheckUserList(4), t: NotifyCheckUserListModel.self, successHandle: { (result) in
+            self.checkUserListHandle(data: result.data)
             self.tableView.mj_header.endRefreshing()
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
@@ -249,14 +280,18 @@ class ToExamineDetailsController: UIViewController {
 
 extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        if checkListData == nil { // 没有获取到详情 不显示
+            return 0
+        }
+        return (checkUserData.count > 0 ? checkUserData.count + 1 : 0) + (checkListData != nil ? 2 : 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        if section < 2 || section > checkUserData.count + 1 {
             return 1
         } else {
-            return data.count + 1
+            let isOpen = openArray[section - 2]
+            return isOpen ? checkUserData[section - 2].count + 1 : 1
         }
     }
     
@@ -267,28 +302,51 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsHeaderCell", for: indexPath) as! ToExamineDetailsHeaderCell
             cell.data = checkListData
             return cell
-        } else {
+        } else if section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
-            if row == 0 {
-                cell.data = (checkListData.createdUserName ?? "", checkListData.createdTime, 0, -1)
-            } else {
-                cell.data = (data[row - 1].checkUserName ?? "", data[row - 1].checkedTime, data[row - 1].status, row == data.count ? 1 : 0)
-            }
+            cell.notifyCheckListData = checkListData
             return cell
+        } else if section > checkUserData.count + 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCarbonCopyCell", for: indexPath) as! ToExamineDetailsCarbonCopyCell
+            cell.carbonCopyData = carbonCopyData
+            return cell
+        } else {
+            if row == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
+                let step = checkListData != nil ? checkListData.step : 0
+                cell.data = (checkUserData[section - 2], step <= checkUserData[section - 2][0].sort, section - 1 == checkUserData.count, openArray[section - 2])
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsSmallCell", for: indexPath) as! ToExamineDetailsSmallCell
+                let userListModel = checkUserData[section - 2]
+                cell.data = (userListModel[row - 1], row == userListModel.count, checkListData.step <= userListModel[0].sort)
+                return cell
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return section == 0 ? 10 : 0
+        return section == 0 || section == checkUserData.count + 1 ? 10 : 0
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 0 {
+        if section == 0 || section == checkUserData.count + 1 {
             let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
             footerView.backgroundColor = UIColor(hex: "#F3F3F3")
             return footerView
         } else {
             return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let section = indexPath.section
+        if section >= 2 && section < checkUserData.count + 2 && indexPath.row == 0 {
+            let model = checkUserData[section - 2]
+            if model.count > 1 { // 多人或签
+                openArray[section - 2] = !openArray[section - 2]
+                tableView.reloadSections(IndexSet(integer: section), with: .fade)
+            }
         }
     }
 }

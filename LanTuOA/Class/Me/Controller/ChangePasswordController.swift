@@ -68,12 +68,13 @@ class ChangePasswordController: UIViewController {
                 make.bottom.equalTo(confirmView.snp.top)
             })
             .taxi.config({ (tableView) in
+                tableView.bounces = false
                 tableView.delegate = self
                 tableView.dataSource = self
                 tableView.estimatedRowHeight = 50
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
-                tableView.register(CustomerTextViewCell.self, forCellReuseIdentifier: "CustomerTextViewCell")
+                tableView.register(FillInApplyFieldViewCell.self, forCellReuseIdentifier: "FillInApplyFieldViewCell")
             })
     }
 
@@ -121,25 +122,20 @@ class ChangePasswordController: UIViewController {
 
 extension ChangePasswordController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return titleArray.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else {
-            return 2
-        }
+        return titleArray[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
         let section = indexPath.section
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerTextViewCell", for: indexPath) as! CustomerTextViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyFieldViewCell", for: indexPath) as! FillInApplyFieldViewCell
         cell.data = (titleArray[section][row], placeholderArray[section][row])
         cell.contentStr = contentStrArray[section][row]
-        cell.tableView = tableView
-        cell.stopBlock = { [weak self] (str) in
+        cell.inputBlock = { [weak self] (str) in
             self?.contentStrArray[section][row] = str
             self?.judgeEnabled()
         }

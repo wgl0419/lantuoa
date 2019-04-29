@@ -20,18 +20,8 @@ class CustomerHomeCell: UITableViewCell {
                 titleAttriMuStr.changeFont(str: industryStr, font: UIFont.medium(size: 12))
                 titleLabel.attributedText = titleAttriMuStr
                 
-                // TODO: 框颜色 和 背景颜色  没有
-                let customerTypeStr = data.type == 1 ? "公司" : data.type == 2 ? "普通" : "开发中"
-//                let layerColor = data.type == 1 ? "公司" : data.type == 2 ? "普通" : "开发中"
-//                let backColor = data.type == 1 ? "公司" : data.type == 2 ? "普通" : "开发中"
-
-                let width = customerTypeStr.getTextSize(font: UIFont.medium(size: 10), maxSize: CGSize(width: ScreenWidth, height: ScreenHeight)).width
-                customerTypeBtn.snp.updateConstraints { (make) in
-                    make.width.equalTo(width + 10)
-                }
-                customerTypeBtn.setTitle(customerTypeStr, for: .normal)
-//                customerTypeBtn.layer.borderColor = layerColor.cgColor
-//                customerTypeBtn.backgroundColor = backColor
+                let customerTypeName = data.type == 1 ? "customer_company" : data.type == 2 ? "customer_ordinary" : "customer_development"
+                customerTypeImageView.image = UIImage(named: customerTypeName)
                 
                 let allAttriMuStr = setAttriMuStr(contentStr: "在线  \(data.onlineProjectNum)", highlightStr: "在线", highlightColor:  UIColor(hex: "#999999"))
                 allLabel.attributedText = allAttriMuStr
@@ -86,7 +76,7 @@ class CustomerHomeCell: UITableViewCell {
     /// 标题
     private var titleLabel: UILabel!
     /// 客户类型
-    private var customerTypeBtn : UIButton!
+    private var customerTypeImageView : UIImageView!
     /// 最新拜访人
     private var visitLabel: UILabel!
     /// 最新拜访时间
@@ -181,23 +171,10 @@ class CustomerHomeCell: UITableViewCell {
                 label.textColor = UIColor(hex: "#999999")
         }
         
-        customerTypeBtn = UIButton().taxi.adhere(toSuperView: arrowView) // 客户类型按钮
+        customerTypeImageView = UIImageView().taxi.adhere(toSuperView: arrowView) // 客户类型按钮
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalTo(33)
-                make.height.equalTo(18)
                 make.centerY.equalTo(customerType)
                 make.left.equalTo(customerType.snp.right)
-            })
-            .taxi.config({ (btn) in
-                btn.isEnabled = false
-                btn.layer.borderWidth = 1
-                btn.layer.cornerRadius = 4
-                btn.layer.masksToBounds = true
-                btn.layer.borderColor = UIColor(hex: "#5FB9A1").cgColor
-                
-                btn.backgroundColor = UIColor(hex: "#E4F0ED")
-                btn.titleLabel?.font = UIFont.medium(size: 10)
-                btn.setTitleColor(UIColor(hex: "#2F9B7F"), for: .normal)
             })
         
         _ = UIImageView().taxi.adhere(toSuperView: arrowView) // 箭头

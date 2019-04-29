@@ -107,7 +107,7 @@ extension MultipleSeleController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
-        cell.data = (contentArray[row], isSele)
+        cell.data = (contentArray[row], "", isSele)
         return cell
     }
     

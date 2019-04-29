@@ -159,8 +159,10 @@ class ContractDetailsController: UIViewController {
     private func contractDetail() {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.contractDetail(contractListData.id), t: ContractDetailModel.self, successHandle: { (result) in
+            let name = self.contractListData.name
             let contractUsersData = self.contractListData.contractUsers
             self.contractListData = result.data
+            self.contractListData.name = name
             self.contractListData.contractUsers = contractUsersData
             self.reloadData()
             MBProgressHUD.dismiss()

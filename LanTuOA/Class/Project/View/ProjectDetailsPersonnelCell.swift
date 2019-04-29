@@ -58,8 +58,7 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
             .taxi.layout(snapKitMaker: { (make) in
                 make.width.equalTo(ScreenWidth / 4 - 10)
                 make.left.equalToSuperview().offset(15)
-                make.height.equalTo(45).priority(800)
-                make.top.bottom.equalToSuperview()
+                make.top.equalToSuperview().offset(10)
             })
             .taxi.config({ (label) in
                 label.textColor = blackColor
@@ -68,19 +67,21 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
         
         departmentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 部门
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.equalToSuperview().offset(ScreenWidth / 4)
                 make.width.equalTo(ScreenWidth / 3)
-                make.top.bottom.equalToSuperview()
+                make.top.equalToSuperview().offset(10)
+                make.bottom.equalToSuperview().offset(-10)
+                make.left.equalToSuperview().offset(ScreenWidth / 4)
             })
             .taxi.config({ (label) in
+                label.numberOfLines = 0
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
             })
         
         phoneLabel = UILabel().taxi.adhere(toSuperView: contentView) // 电话号码
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.bottom.equalToSuperview()
                 make.width.equalTo(ScreenWidth / 3)
+                make.top.equalToSuperview().offset(10)
                 make.left.equalTo(departmentLabel.snp.right).offset(5)
             })
             .taxi.config({ (label) in

@@ -200,10 +200,12 @@ extension ProjectManageSeleController: UITableViewDelegate, UITableViewDataSourc
                     break
                 }
             }
-            cell.data = (data[indexPath.row].realname ?? "", isSele)
+            let position = data[indexPath.row].roleList.count == 0 ? "员工" : data[indexPath.row].roleList[0].name ?? ""
+            cell.data = (data[indexPath.row].realname ?? "", position, isSele)
         } else {
             let seleIndex = seleContentArray.first?.0 ?? -1
-            cell.data = (data[indexPath.row].realname ?? "", seleIndex == indexPath.row)
+            let position = data[indexPath.row].roleList.count == 0 ? "员工" : data[indexPath.row].roleList[0].name ?? ""
+            cell.data = (data[indexPath.row].realname ?? "", position, seleIndex == indexPath.row)
         }
         
         return cell

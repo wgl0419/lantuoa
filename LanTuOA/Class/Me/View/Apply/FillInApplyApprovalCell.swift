@@ -13,11 +13,7 @@ class FillInApplyApprovalCell: UITableViewCell {
     /// 添加回调
     var addBlock: (() -> ())?
     /// 是审批人
-    var isApproval: Bool! {
-        didSet {
-            print("修改", isApproval)
-        }
-    }
+    var isApproval: Bool!
     /// 数据
     var data: [ProcessUsersCheckUsers]! {
         didSet {

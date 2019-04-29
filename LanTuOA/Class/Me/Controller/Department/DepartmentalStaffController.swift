@@ -129,11 +129,18 @@ class DepartmentalStaffController: UIViewController {
         var actionArray = [YCMenuAction]()
         if Jurisdiction.share.isModifyPerson {
             let replaceAction = YCMenuAction(title: "   更换部门", image: nil) { (_) in
-                if self.otherDepartmentsData.count == 0 {
-                    self.departments(parentId: -1)
-                } else {
-                    self.reloadDataHandle()
+//                if self.otherDepartmentsData.count == 0 {
+//                    self.departments(parentId: -1)
+//                } else {
+//                    self.seleDepartmentsHandle()
+//                }
+                let vc = ReplacementDepartmentController()
+                vc.userId = self.userId
+                vc.departmentsId = self.departmentsData.id
+                vc.changeBlock = { [weak self] in
+                    self?.departmentsUsers()
                 }
+                self.navigationController?.pushViewController(vc, animated: true)
             }
             actionArray.append(replaceAction!)
         }
@@ -215,14 +222,14 @@ class DepartmentalStaffController: UIViewController {
     
     /// 修改部门
     private func departmentsChange(newDeptId: Int) {
-        MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.departmentsChange(userId, departmentsData.id, newDeptId), t: LoginModel.self, successHandle: { (result) in
-            self.departmentsUsers()
-            self.departments(parentId: self.departmentsData.id)
-            MBProgressHUD.dismiss()
-        }, errorHandle: { (error) in
-            MBProgressHUD.showError(error ?? "修改部门失败")
-        })
+//        MBProgressHUD.showWait("")
+//        _ = APIService.shared.getData(.departmentsChange(userId, departmentsData.id, newDeptId), t: LoginModel.self, successHandle: { (result) in
+//            self.departmentsUsers()
+//            self.departments(parentId: self.departmentsData.id)
+//            MBProgressHUD.dismiss()
+//        }, errorHandle: { (error) in
+//            MBProgressHUD.showError(error ?? "修改部门失败")
+//        })
     }
     
     /// 离职员工

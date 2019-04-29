@@ -15,9 +15,12 @@ class ApplyHistoryCell: UITableViewCell {
     var data: ProcessHistoryData? {
         didSet {
             if let data = data {
-                nameLabel.text = data.name
-                contentLabel.text = data.content
-                checkNameLabel.text = data.check_users
+                let name = data.name ?? ""
+                nameLabel.text = name.count == 0 ? " " : name
+                let content = data.content ?? ""
+                contentLabel.text = content.count == 0 ? " " : content
+                let check_users = data.check_users ?? ""
+                checkNameLabel.text = check_users.count == 0 ? " " : check_users
                 let statusStr = data.status == 1 ? "申请中" : data.status == 2 ? "已通过" : "未通过"
                 let statusColor = data.status == 1 ? UIColor(hex: "#2E4695") : data.status == 2 ? UIColor(hex: "#5FB9A1") : UIColor(hex: "#FF4444")
                 let newStatusStr = data.status == 1 ? "审批中" : data.status == 2 ? "已同意" : "未拒绝"
@@ -103,9 +106,9 @@ class ApplyHistoryCell: UITableViewCell {
                 label.font = UIFont.medium(size: 12)
             })
         
-        let content = setTitle(titleStr: "申请内容：", contentLabel: contentLabel, lastView: nameLabel, position: -1)
-        let checkName = setTitle(titleStr: "当前处理人：", contentLabel: checkNameLabel, lastView: content)
-        _ = setTitle(titleStr: "当前状态：", contentLabel: newStatusLabel, lastView: checkName, position: 1)
+        _ = setTitle(titleStr: "申请内容：", contentLabel: contentLabel, lastView: nameLabel, position: -1)
+        _ = setTitle(titleStr: "当前处理人：", contentLabel: checkNameLabel, lastView: contentLabel)
+        _ = setTitle(titleStr: "当前状态：", contentLabel: newStatusLabel, lastView: checkNameLabel, position: 1)
     }
     
     /// 设置标题和内容
@@ -128,9 +131,6 @@ class ApplyHistoryCell: UITableViewCell {
             } else {
                 make.top.equalTo(lastView.snp.bottom).offset(5)
             }
-            if position == 1 {
-                make.bottom.equalToSuperview().offset(-15)
-            }
         }
             .taxi.config { (label) in
                 label.text = titleStr
@@ -143,8 +143,12 @@ class ApplyHistoryCell: UITableViewCell {
             make.top.equalTo(titleLabel)
             make.left.equalTo(titleLabel.snp.right)
             make.right.lessThanOrEqualToSuperview().offset(-15)
+            if position == 1 {
+                make.bottom.equalToSuperview().offset(-15)
+            }
         }
             .taxi.config { (label) in
+                label.numberOfLines = 0
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
                 label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)

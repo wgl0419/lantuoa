@@ -10,8 +10,6 @@ import UIKit
 
 class MeHomeHeaderCell: UITableViewCell {
     
-    /// 头像
-    private var headImageView: UIImageView!
     /// 名称
     private var nameLabel: UILabel!
     
@@ -48,22 +46,11 @@ class MeHomeHeaderCell: UITableViewCell {
                 view.layer.shadowOffset = CGSize(width: 0, height: 5)
         }
         
-        headImageView = UIImageView().taxi.adhere(toSuperView: whiteView) // 头像
-            .taxi.layout(snapKitMaker: { (make) in
-                make.width.height.equalTo(60)
-                make.centerY.equalToSuperview()
-                make.left.equalToSuperview().offset(15)
-            })
-            .taxi.config({ (imageView) in
-                imageView.layer.cornerRadius = 30
-                imageView.layer.masksToBounds = true
-                imageView.backgroundColor = UIColor(hex: "#B8B8B8")
-            })
         
         nameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 名字
             .taxi.layout(snapKitMaker: { (make) in
                 make.centerY.equalToSuperview()
-                make.left.equalTo(headImageView.snp.right).offset(15)
+                make.left.equalToSuperview().offset(15)
             })
             .taxi.config({ (label) in
                 label.textColor = blackColor

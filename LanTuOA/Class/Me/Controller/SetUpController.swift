@@ -30,11 +30,28 @@ class SetUpController: UIViewController {
                 make.edges.equalToSuperview()
             })
             .taxi.config({ (tableView) in
+                tableView.rowHeight = 50
                 tableView.delegate = self
                 tableView.dataSource = self
-                tableView.sectionHeaderHeight = 45
+                tableView.sectionHeaderHeight = 0.01
                 tableView.tableFooterView = UIView()
             })
+    }
+    
+    /// 退出登录处理
+    private func logoutHandle() {
+        let alertController = UIAlertController(title: "提示", message: "是否退出登录?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
+        alertController.addAction(cancelAction)
+        let agreeAction = UIAlertAction(title: "退出", style: .default, handler: { (_) in
+            UserInfo.share.userRemve() // 清除数据
+            let vc = LoginController()
+            let nav = MainNavigationController(rootViewController: vc)
+            self.view.window?.rootViewController = nav
+        })
+        alertController.addAction(agreeAction)
+        present(alertController, animated: true, completion: nil)
+        
     }
 }
 
@@ -65,10 +82,7 @@ extension SetUpController: UITableViewDelegate, UITableViewDataSource {
             let vc = ChangePasswordController()
             navigationController?.pushViewController(vc, animated: true)
         } else {
-            UserInfo.share.userRemve() // 清除数据
-            let vc = LoginController()
-            let nav = MainNavigationController(rootViewController: vc)
-            self.view.window?.rootViewController = nav
+            logoutHandle()
         }
     }
 }

@@ -78,7 +78,7 @@ class FillInApplyFieldViewCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 16)
-                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+                label.setContentHuggingPriority(.required, for: .horizontal)
             })
         
         starLabel = UILabel().taxi.adhere(toSuperView: contentView) // 星号
@@ -105,7 +105,6 @@ class FillInApplyFieldViewCell: UITableViewCell {
                 textField.textColor = blackColor
                 textField.delegate = self
                 textField.font = UIFont.medium(size: 16)
-                textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
                 textField.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
             })
     }

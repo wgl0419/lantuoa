@@ -241,9 +241,9 @@ class NoticeHomeController: UIViewController {
             } else {
                 self.systemTableView.mj_footer.resetNoMoreData()
             }
-            self.setTips()
             self.systemTableView.reloadData()
             MBProgressHUD.dismiss()
+            self.setTips()
         }, errorHandle: { (error) in
             if isMore {
                 self.systemTableView.mj_footer.endRefreshing()
@@ -261,9 +261,12 @@ class NoticeHomeController: UIViewController {
         MBProgressHUD.showWait("")
         let checkId = pendingData[index.row].id
         _ = APIService.shared.getData(.notifyCheckReject(checkId, ""), t: LoginModel.self, successHandle: { (result) in
+            self.pendingTableView.beginUpdates()
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
+            self.pendingTableView.endUpdates()
             MBProgressHUD.dismiss()
+            self.setTips()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "拒绝失败")
         })
@@ -296,10 +299,12 @@ class NoticeHomeController: UIViewController {
         MBProgressHUD.showWait("")
         let checkId = pendingData[index.row].id
         _ = APIService.shared.getData(.notifyCheckCusRejectExist(checkId, id[0], id[1]), t: LoginModel.self, successHandle: { (result) in
+            self.pendingTableView.beginUpdates()
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
-            self.setTips()
+            self.pendingTableView.endUpdates()
             MBProgressHUD.dismiss()
+            self.setTips()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "拒绝失败")
         })
@@ -310,10 +315,12 @@ class NoticeHomeController: UIViewController {
         MBProgressHUD.showWait("")
         let checkId = pendingData[index.row].id
         _ = APIService.shared.getData(.notifyCheckCusRejectMistake(checkId, conten[0], conten[1]), t: LoginModel.self, successHandle: { (result) in
+            self.pendingTableView.beginUpdates()
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
-            self.setTips()
+            self.pendingTableView.endUpdates()
             MBProgressHUD.dismiss()
+            self.setTips()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "拒绝失败")
         })
@@ -324,9 +331,12 @@ class NoticeHomeController: UIViewController {
         MBProgressHUD.showWait("")
         let checkId = pendingData[index.row].id
         _ = APIService.shared.getData(.notifyCheckAgree(checkId, ""), t: LoginModel.self, successHandle: { (result) in
+            self.pendingTableView.beginUpdates()
             self.pendingData.remove(at: index.row)
             self.pendingTableView.deleteRows(at: [index], with: .fade)
+            self.pendingTableView.endUpdates()
             MBProgressHUD.dismiss()
+            self.setTips()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "同意失败")
         })
@@ -375,7 +385,7 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == pendingTableView {
             let vc = ToExamineDetailsController()
-            vc.checkListData = pendingData[indexPath.row]
+            vc.checkListId = pendingData[indexPath.row].id
             vc.changeBlock = { [weak self] in
                 self?.notifyCheckList(isMore: false)
             }

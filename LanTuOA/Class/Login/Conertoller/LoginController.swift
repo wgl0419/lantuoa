@@ -237,6 +237,7 @@ class LoginController: UIViewController {
     
     /// 点击忘记密码
     @objc private func forgetClick() {
-        
+        let vc = RetrievePasswordController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

@@ -104,6 +104,17 @@ extension MeHomeController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section != 0 {
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
+            headerView.backgroundColor = UIColor(hex: "#F3F3F3")
+            return headerView
+        } else {
+            return nil
+        }
+        
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row

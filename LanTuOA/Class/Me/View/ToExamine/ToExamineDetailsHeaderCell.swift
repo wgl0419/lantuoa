@@ -127,10 +127,10 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
                 }
             }
             .taxi.config { (label) in
-                label.text = contentStr
                 label.numberOfLines = 0
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
+                label.text = contentStr.count == 0 ? " " : contentStr
                 label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         

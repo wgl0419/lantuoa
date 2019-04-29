@@ -337,7 +337,8 @@ extension SelePersonnelController: UITableViewDelegate, UITableViewDataSource {
                 isSele = selectedIds[0] == seleModel.id
             }
         }
-        cell.data = (seleModel.realname ?? "", isSele)
+        let position = seleModel.roleList.count == 0 ? "员工" : seleModel.roleList[0].name ?? "员工"
+        cell.data = (seleModel.realname ?? "", position, isSele)
         return cell
     }
     
