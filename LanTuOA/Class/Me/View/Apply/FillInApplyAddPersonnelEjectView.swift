@@ -7,6 +7,7 @@
 //  新增合同人员
 
 import UIKit
+import MBProgressHUD
 
 class FillInApplyAddPersonnelEjectView: UIView {
 
@@ -34,11 +35,12 @@ class FillInApplyAddPersonnelEjectView: UIView {
                 } else if tenPlace == 1 { // 10 ~ 19
                     regexStr = "^(^(\\d|1[0-\(bit)])$"
                 } else if tenPlace == 0 { // 0 ~ 9
-                    regexStr = "^[0-\(bit)$"
+                    regexStr = "^[0-\(bit)]$"
                 } else { // 20 ~ 99
                     regexStr = "^(\\d|[1-1]\\d)|^(\\d|[1-\(tenPlace)][0-\(bit)])$"
                 }
                 regexArray[index] = regexStr
+                placeholderArray[index] = "最大值\(max)"
                 tableView.reloadData()
             }
         }
@@ -56,7 +58,7 @@ class FillInApplyAddPersonnelEjectView: UIView {
     /// 标题
     private let titleArray = ["合同人员", "业绩（%）", "提成（%）"]
     /// 提示
-    private let placeholderArray = ["请选择", "请输入", "请输入"]
+    private var placeholderArray = ["请选择", "请输入", "请输入"]
     /// 内容
     private var contentArray = ["", "", ""]
     /// 数量限制
@@ -192,6 +194,12 @@ class FillInApplyAddPersonnelEjectView: UIView {
     
     /// 点击确定
     @objc private func determineClick() {
+        for str in contentArray {
+            if str.count == 0 {
+                MBProgressHUD.showError("请填写完整")
+                return
+            }
+        }
         if determineBlock != nil {
             determineBlock!(userData, contentArray[1], contentArray[2])
         }

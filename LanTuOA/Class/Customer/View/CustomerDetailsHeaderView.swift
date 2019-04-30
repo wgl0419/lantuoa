@@ -28,12 +28,8 @@ class CustomerDetailsHeaderView: UIView {
                 companyLabel.text = data.fullName ?? " "
                 addressLabel.text = data.address ?? " "
                 
-                let customerTypeStr = data.type == 1 ? "公司" : data.type == 2 ? "普通" : "开发中"
-                let width = customerTypeStr.getTextSize(font: UIFont.medium(size: 10), maxSize: CGSize(width: ScreenWidth, height: ScreenHeight)).width
-                typeBtn.snp.updateConstraints { (make) in
-                    make.width.equalTo(width + 10)
-                }
-                typeBtn.setTitle(customerTypeStr, for: .normal)
+                let customerTypeName = data.type == 1 ? "customer_company" : data.type == 2 ? "customer_ordinary" : "customer_development"
+                typeBtn.setImage(UIImage(named: customerTypeName), for: .normal)
             }
         }
     }
@@ -149,21 +145,11 @@ class CustomerDetailsHeaderView: UIView {
         if content is UIButton {
             let btn: UIButton = content as! UIButton
             btn.taxi.layout { (make) in
-                make.width.equalTo(33)
-                make.height.equalTo(18)
                 make.centerY.equalTo(titleLabel)
                 make.left.equalTo(titleLabel.snp.right)
             }
                 .taxi.config { (btn) in
-                    btn.isEnabled = false
-                    btn.layer.borderWidth = 1
-                    btn.layer.cornerRadius = 4
-                    btn.layer.masksToBounds = true
-                    btn.layer.borderColor = UIColor(hex: "#6B83D1").cgColor
-                    
-                    btn.backgroundColor = UIColor(hex: "#E9EDF9")
-                    btn.titleLabel?.font = UIFont.medium(size: 10)
-                    btn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
+                    btn.isUserInteractionEnabled = false
             }
         } else {
             let label: UILabel = content as! UILabel

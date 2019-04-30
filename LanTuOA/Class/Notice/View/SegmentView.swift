@@ -115,7 +115,8 @@ class SegmentView: UIView {
                 .taxi.layout { (make) in
                     make.left.equalTo(btn.titleLabel!.snp.right).offset(5)
                     make.centerY.equalTo(btn)
-                    make.width.equalTo(10)
+                    make.height.equalTo(15)
+                    make.width.equalTo(15)
             }
                 .taxi.config { (label) in
                     label.isHidden = true

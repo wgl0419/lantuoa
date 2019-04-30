@@ -23,6 +23,7 @@ class ContractDetailsHeaderView: UIView {
                 contributionLabel.text = String(format: "%.2f元", data.rebate)
                 totalLabel.text = String(format: "%.2f元", data.totalMoney)
                 moneyBackLabel.text = String(format: "%.2f元", data.paybackMoney)
+                productionLabel.text = String(format: "%.2f元", data.makeMoney)
                 
                 // 时间
                 let startTimeStr = Date(timeIntervalSince1970: TimeInterval(data.startTime)).customTimeStr(customStr: "yyyy-MM-dd")
@@ -41,7 +42,7 @@ class ContractDetailsHeaderView: UIView {
     }
     
     /// 标题数组
-    private let titleArray = ["实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "参与人员："]
+    private let titleArray = ["实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "制作费：", "参与人员："]
     /// 内容控件数组
     private var contentLabelArray = [UILabel]()
     /// 合同名称
@@ -56,6 +57,8 @@ class ContractDetailsHeaderView: UIView {
     private var totalLabel = UILabel()
     /// 回款
     private var moneyBackLabel = UILabel()
+    /// 制作费
+    private var productionLabel = UILabel()
     /// 参与人员
     private var participateLabel = UILabel()
     
@@ -121,7 +124,7 @@ class ContractDetailsHeaderView: UIView {
             })
         
         
-        contentLabelArray = [timeLabel, contributionLabel, totalLabel, moneyBackLabel, participateLabel]
+        contentLabelArray = [timeLabel, contributionLabel, totalLabel, moneyBackLabel, productionLabel, participateLabel]
         for index in 0..<titleArray.count {
             let lastLabel: UILabel! = index == 0 ? numberLabel : contentLabelArray[index - 1]
             setTitle(titleStr: titleArray[index], contentLabel: contentLabelArray[index], lastLabel: lastLabel, isLast: index == titleArray.count - 1)

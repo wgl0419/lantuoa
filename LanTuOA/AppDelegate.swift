@@ -31,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        configJPush(launchOptions: launchOptions)
         setDifferenceForIOS11()
         setIQKeyboardManager()
         setMainController()
@@ -66,6 +67,24 @@ extension AppDelegate {
         // 会tableview在"键盘弹起"并"上移"状态下  点击其他位置  出现键盘隐藏后进行二次点击（本来是点击空白的  然后变成点击tableview滚动回来时的位置cell）未解决
         //        IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         IQKeyboardManager.shared.enable = true
+    }
+    
+    /// 极光推送处理
+    private func configJPush(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
+        if (Double(UIDevice.current.systemVersion) ?? 0) >= 10.0 {
+            let entity = JPUSHRegisterEntity()
+            entity.types = 0|1|2
+            JPUSHService.register(forRemoteNotificationConfig: entity, delegate: self)
+        } else {
+            JPUSHService.register(forRemoteNotificationTypes:0|1|2, categories: nil)
+        }
+        JPUSHService.setup(withOption: launchOptions, appKey: "65903c371debbb3aac77d566", channel: "App Store", apsForProduction: true)
+        JPUSHService.setLogOFF() // 关闭日志打印
+        JPUSHService.registrationIDCompletionHandler { (resCode: Int32, registrationID: String?) in
+            if resCode == 0  { // 获取到 registrationID
+                UserInfo.share.setRegistrationID(registrationID!)
+            }
+        }
     }
     
     /// 设置主视图
@@ -114,5 +133,48 @@ extension AppDelegate {
             }
         }
         net?.startListening()
+    }
+}
+
+extension AppDelegate { // 推送处理
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) { // 注册 DeviceToken
+        JPUSHService.registerDeviceToken(deviceToken)
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) { // 实现注册 APNs 失败接口（可选）
+
+    }
+}
+
+extension AppDelegate: JPUSHRegisterDelegate {
+    @available(iOS 10.0, *)
+    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, openSettingsFor notification: UNNotification?) {
+
+    }
+
+    @available(iOS 10.0, *) // 程序关闭后, 通过点击推送弹出的通知
+    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, didReceive response: UNNotificationResponse!, withCompletionHandler completionHandler: (() -> Void)!) {
+        if response.notification.request.trigger is UNPushNotificationTrigger {
+            let userInfo = response.notification.request.content.userInfo
+            JPUSHService.handleRemoteNotification(userInfo)
+        }
+        completionHandler() // 系统要求执行这个方法
+    }
+
+    @available(iOS 10.0, *) // 当程序在前台时, 收到推送弹出的通知
+    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, willPresent notification: UNNotification!, withCompletionHandler completionHandler: ((Int) -> Void)!) {
+        let userInfo = notification.request.content.userInfo
+        let task = userInfo["task"] as? String
+        if task == "1" {
+            return
+        }
+        if (notification.request.trigger?.isKind(of: UNPushNotificationTrigger.self))!{
+            print("iOS10 前台收到远程通知:\(userInfo)")
+            JPUSHService.handleRemoteNotification(userInfo)
+        }else {
+            // 判断为本地通知
+            print("iOS10 前台收到本地通知:\(userInfo)")
+        completionHandler(Int(UNAuthorizationOptions.alert.rawValue | UNAuthorizationOptions.sound.rawValue | UNAuthorizationOptions.badge.rawValue))// 需要执行这个方法，选择是否提醒用户，有badge、sound、alert三种类型可以选择设置
+        }
     }
 }

@@ -98,6 +98,16 @@ class ApplyHistoryController: UIViewController {
         }
     }
     
+    /// 刷新数据
+    private func reloadData() {
+        for index in 0..<isLoaded.count {
+            let load = isLoaded[index]
+            if load {
+                processHistory(isMore: false, tag: index)
+            }
+        }
+    }
+    
     // MARK: - Api
     /// 历史申请列表
     private func processHistory(isMore: Bool, tag: Int) {
@@ -201,9 +211,10 @@ extension ApplyHistoryController: UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = ToExamineDetailsController()
         vc.checkListId = data[tableView.tag][indexPath.row].id
-//        vc.changeBlock = { [weak self] in
-//            self?.notifyCheckList(isMore: false)
-//        }
+        vc.checkListName = data[tableView.tag][indexPath.row].name ?? ""
+        vc.changeBlock = { [weak self] in
+            self?.reloadData()
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
 }

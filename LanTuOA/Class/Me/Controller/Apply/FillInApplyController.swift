@@ -249,14 +249,20 @@ class FillInApplyController: UIViewController {
     
     /// 处理添加人员
     private func addPersonnelHandle() {
-        let ejectView = FillInApplyAddPersonnelEjectView()
-        /// 剩余的业绩百分比和提成百分比
+        // 剩余的业绩百分比和提成百分比
         var achievemenhtsPercentage = 100
         var royaltyPercentage = 100
         for model in contractData {
             achievemenhtsPercentage -= Int(model.1) ?? 0
             royaltyPercentage -= Int(model.2) ?? 0
         }
+        
+        if achievemenhtsPercentage == 0 && royaltyPercentage == 0 {
+            MBProgressHUD.showError("分配完毕，无法继续添")
+            return
+        }
+        
+        let ejectView = FillInApplyAddPersonnelEjectView()
         
         ejectView.maxInput = [achievemenhtsPercentage, royaltyPercentage]
         ejectView.determineBlock = { [weak self] (userData, achievemenhts, royalty) in

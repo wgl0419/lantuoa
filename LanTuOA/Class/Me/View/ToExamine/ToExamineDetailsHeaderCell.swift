@@ -16,7 +16,7 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
             if let data = data {
                 initSubViews()
                 
-                titleLabel.text = data.processName
+                titleLabel.text = data.createdUserName
                 
                 let smallData = data.data
                 if smallData.count == 1 {

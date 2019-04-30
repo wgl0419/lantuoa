@@ -242,7 +242,7 @@ extension APIManager: TargetType {
         var params: [String : Any]
         switch self {
         case let .login(phone, pwd): // 登录
-            params = ["phone":phone, "pwd": pwd]
+            params = ["phone":phone, "pwd": pwd, "os": 2, "registrationId": UserInfo.share.registrationID]
         case let .users(page, limit, realname, used): // 用户列表
             params = ["page": page, "limit": limit, "realname": realname, "used": used, "status": 1]
         case let .usersPwd(oldPwd, newPwd): // 修改密码

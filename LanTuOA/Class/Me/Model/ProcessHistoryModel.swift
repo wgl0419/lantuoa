@@ -23,4 +23,5 @@ struct ProcessHistoryData: HandyJSON {
     var created_time: Int = 0
     var id: Int = 0
     var name: String?
+    var processName: String?
 }

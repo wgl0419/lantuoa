@@ -42,7 +42,7 @@ class ToExamineDetailsCell: UITableViewCell {
                     if model.count == 0 { // 单人状态下  没有处理
                         model = listModel
                     }
-                    nameLabel.text = model[0].checkUserName ?? ""
+                    nameLabel.text = model[0].`self` == 1 ? "我" : model[0].checkUserName ?? ""
                     status = model[0].status
                 }
                 // 处理状态

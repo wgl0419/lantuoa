@@ -26,5 +26,7 @@ pod 'YYText', '~> 1.0.7'
 pod 'BMKLocationKit'
 ############     日历    ############
 pod 'FSCalendar'
+############     推送    ############
+pod 'JPush', '3.1.0'
 end
 

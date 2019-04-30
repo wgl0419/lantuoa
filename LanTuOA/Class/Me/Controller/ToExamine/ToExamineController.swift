@@ -223,7 +223,8 @@ extension ToExamineController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = ToExamineDetailsController()
-        vc.checkListId = 4//data[indexPath.row].id
+        vc.checkListId = data[indexPath.row].id
+        vc.checkListName = data[indexPath.row].processName ?? ""
         vc.changeBlock = { [weak self] in
             self?.notifyCheckList(isMore: false)
         }

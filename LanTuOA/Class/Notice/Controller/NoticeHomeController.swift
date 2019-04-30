@@ -167,8 +167,13 @@ class NoticeHomeController: UIViewController {
         segmentView.setNumber(index: 0, number: pendingData.count)
         
         tabBarController?.tabBar.items?[3].badgeValue = pendingData.count > 0 ? "\(pendingData.count)" : nil
+        
         if systemData.count > 0 && !isCheckSystem { // 有数量  并且为读
-            tabBarController?.tabBar.showBadgeOnItemIndex(index: 3)
+            if pendingData.count == 0 {
+                tabBarController?.tabBar.showBadgeOnItemIndex(index: 3)
+            } else {
+                tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
+            }
             segmentView.setTips(index: 1, show: systemData.count > 0)
         } else {
             tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
@@ -386,6 +391,7 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
         if tableView == pendingTableView {
             let vc = ToExamineDetailsController()
             vc.checkListId = pendingData[indexPath.row].id
+            vc.checkListName = pendingData[indexPath.row].processName ?? ""
             vc.changeBlock = { [weak self] in
                 self?.notifyCheckList(isMore: false)
             }

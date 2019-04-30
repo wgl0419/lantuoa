@@ -14,6 +14,8 @@ class ToExamineDetailsController: UIViewController {
 
     /// 审批数据
     var checkListId = 0
+    /// 审批名称
+    var checkListName = ""
     /// 修改回调
     var changeBlock: (() -> ())?
     
@@ -43,13 +45,13 @@ class ToExamineDetailsController: UIViewController {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        title = "审核详情"
+        title = checkListName
         view.backgroundColor = .white
         
         btnView = UIView().taxi.adhere(toSuperView: view) // 按钮框
             .taxi.layout(snapKitMaker: { (make) in
                 make.bottom.left.right.equalToSuperview()
-                make.height.equalTo(62 + (isIphoneX ? SafeH : 18))
+                make.height.equalTo(0)
             })
             .taxi.config({ (view) in
                 view.backgroundColor = .white
@@ -137,6 +139,8 @@ class ToExamineDetailsController: UIViewController {
     
     /// 审批人列表数据处理
     private func checkUserListHandle(data: [NotifyCheckUserListData]) {
+        checkUserData = []
+        openArray = []
         for index in 1...data.count {
             var checkUser = [NotifyCheckUserListData]()
             checkUser = data.filter({ (model) -> Bool in
@@ -147,13 +151,32 @@ class ToExamineDetailsController: UIViewController {
                 openArray.append(false)
             }
         }
-        let aa = data.filter({ (model) -> Bool in
-            return model.type == 2
-        })
-        print(aa)
+        
         carbonCopyData = data.filter({ (model) -> Bool in
             return model.type == 2
         })
+        judgeStage()
+    }
+    
+    // 判断是否是自己处理阶段
+    private func judgeStage() {
+        if checkListData != nil && checkUserData.count != 0 { // 顶部数据和审核人数据并存状态
+            let currentData = checkUserData.filter { (model) -> Bool in // 当前的数据
+                return model[0].sort == checkListData.step
+            }
+            let currentModel = currentData[0].filter { (model) -> Bool in
+                return model.`self` == 1
+            }
+            if currentModel.count != 0 && checkListData.status != 2 && checkListData.status != 3 { // 到自己处理的阶段   展开同意拒绝按钮
+                btnView.snp.updateConstraints { (make) in
+                    make.height.equalTo(62 + (isIphoneX ? SafeH : 18))
+                }
+            } else {
+                btnView.snp.updateConstraints { (make) in
+                    make.height.equalTo(0)
+                }
+            }
+        }
     }
     
     // MARK: - APi
@@ -163,6 +186,7 @@ class ToExamineDetailsController: UIViewController {
             self.checkListData = result.data
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
+            self.judgeStage()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取审批人失败")
         })
@@ -297,28 +321,28 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
         let row = indexPath.row
-        if section == 0 {
+        if section == 0 { // 顶部信息
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsHeaderCell", for: indexPath) as! ToExamineDetailsHeaderCell
             cell.data = checkListData
             return cell
-        } else if section == 1 {
+        } else if section == 1 { // 发起人信息
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
             cell.notifyCheckListData = checkListData
             return cell
-        } else if section > checkUserData.count + 1 {
+        } else if section > checkUserData.count + 1 { // 抄送人信息
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCarbonCopyCell", for: indexPath) as! ToExamineDetailsCarbonCopyCell
             cell.carbonCopyData = carbonCopyData
             return cell
         } else {
-            if row == 0 {
+            if row == 0 { // 审核人信息 or 多人或签
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
                 let step = checkListData != nil ? checkListData.step : 0
-                cell.data = (checkUserData[section - 2], step <= checkUserData[section - 2][0].sort, section - 1 == checkUserData.count, openArray[section - 2])
+                cell.data = (checkUserData[section - 2], step >= checkUserData[section - 2][0].sort, section - 1 == checkUserData.count, openArray[section - 2])
                 return cell
-            } else {
+            } else { // 展开的审核人
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsSmallCell", for: indexPath) as! ToExamineDetailsSmallCell
                 let userListModel = checkUserData[section - 2]
-                cell.data = (userListModel[row - 1], row == userListModel.count, checkListData.step <= userListModel[0].sort)
+                cell.data = (userListModel[row - 1], row == userListModel.count, checkListData.step >= userListModel[0].sort)
                 return cell
             }
         }
@@ -342,9 +366,14 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
         let section = indexPath.section
         if section >= 2 && section < checkUserData.count + 2 && indexPath.row == 0 {
             let model = checkUserData[section - 2]
-            if model.count > 1 { // 多人或签
-                openArray[section - 2] = !openArray[section - 2]
-                tableView.reloadSections(IndexSet(integer: section), with: .fade)
+            if model.count > 1 {
+                let processedModel = model.filter { (model1) -> Bool in // 处理过数据
+                    return model1.status == 2 || model1.status == 3
+                }
+                if processedModel.count == 0 {
+                    openArray[section - 2] = !openArray[section - 2]
+                    tableView.reloadSections(IndexSet(integer: section), with: .fade)
+                }
             }
         }
     }

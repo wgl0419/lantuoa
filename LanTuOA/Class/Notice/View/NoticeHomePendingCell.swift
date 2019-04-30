@@ -18,7 +18,7 @@ class NoticeHomePendingCell: UITableViewCell {
                 let date = Date(timeIntervalSince1970: TimeInterval(data.createdTime))
                 timeLabel.text = timeHandle(date: date)
                 
-                titleLabel.text = data.processName
+                titleLabel.text = data.title
                 titleLabel.textColor = UIColor(hex: "#FF7744")
                 
                 let smallData = data.data
@@ -92,6 +92,7 @@ class NoticeHomePendingCell: UITableViewCell {
                 make.right.equalToSuperview().offset(-20)
             })
             .taxi.config({ (label) in
+                label.numberOfLines = 0
                 label.font = UIFont.boldSystemFont(ofSize: 16)
             })
         

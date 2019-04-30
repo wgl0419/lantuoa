@@ -11,4 +11,7 @@
 
 #import <CommonCrypto/CommonHMAC.h>
 
+#import "JPUSHService.h"
+#import <UserNotifications/UserNotifications.h>
+
 #endif /* Header_h */

@@ -97,7 +97,7 @@ class DepartmentalStaffController: UIViewController {
                 make.edges.equalToSuperview()
             })
             .taxi.config({ (btn) in
-                btn.setTitle(" 邀请成员加入", for: .normal)
+                btn.setTitle(" 添加成员", for: .normal)
                 btn.titleLabel?.font = UIFont.medium(size: 14)
                 btn.setImage(UIImage(named: "add"), for: .normal)
                 btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
