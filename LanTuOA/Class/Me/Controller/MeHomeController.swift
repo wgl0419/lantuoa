@@ -19,6 +19,16 @@ class MeHomeController: UIViewController {
     /// 图标
     private var iconArray = [["", "me_approval", "me_achievements", "me_jobApplication"], ["me_departmentManagement"], ["me_setUp"]]
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setNav()
@@ -51,6 +61,9 @@ class MeHomeController: UIViewController {
                 tableView.estimatedRowHeight = 45
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                if #available(iOS 11.0, *) {
+                    tableView.contentInsetAdjustmentBehavior = .never
+                }
                 tableView.register(MeHomeCell.self, forCellReuseIdentifier: "MeHomeCell")
                 tableView.register(MeHomeHeaderCell.self, forCellReuseIdentifier: "MeHomeHeaderCell")
             })
@@ -63,6 +76,8 @@ class MeHomeController: UIViewController {
         _ = APIService.shared.getData(.loginUser(), t: LoginUserModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             UserInfo.share.setUserName(result.data?.realname ?? "")
+            let positio = (result.data?.roleList.count ?? 0) > 0 ? result.data?.roleList[0].name ?? "" : "员工"
+            UserInfo.share.setPosition(positio)
             Jurisdiction.share.setJurisdiction(data: result.data?.privilegeList ?? [])
             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
         }, errorHandle: { (error) in

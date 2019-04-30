@@ -12,6 +12,8 @@ class MeHomeHeaderCell: UITableViewCell {
     
     /// 名称
     private var nameLabel: UILabel!
+    /// 职位
+    private var positionLabel: UILabel!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -23,49 +25,66 @@ class MeHomeHeaderCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        nameLabel.text = UserInfo.share.userName
+        positionLabel.text = UserInfo.share.position
+    }
+    
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
         backgroundColor = .white
         
-        let whiteView = UIView().taxi.adhere(toSuperView: contentView) // 白色背景的cell
-            .taxi.layout { (make) in
-                make.right.equalToSuperview().offset(-15).priority(800)
-                make.top.left.equalToSuperview().offset(15)
-                make.bottom.equalToSuperview().offset(-22)
-                make.height.equalTo(100).priority(800)
-        }
-            .taxi.config { (view) in
-                view.layer.borderWidth = 1
-                view.layer.cornerRadius = 4
-                view.layer.shadowRadius = 10
-                view.layer.shadowOpacity = 1
-                view.backgroundColor = .white
-                view.layer.borderColor = UIColor(hex: "#D8D8D8", alpha: 0.6).cgColor
-                view.layer.shadowColor = UIColor(hex: "#666666", alpha: 0.2).cgColor
-                view.layer.shadowOffset = CGSize(width: 0, height: 5)
-        }
-        
-        
-        nameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 名字
+        _ = UIImageView().taxi.adhere(toSuperView: contentView) // 背景图
             .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalToSuperview()
-                make.left.equalToSuperview().offset(15)
-            })
-            .taxi.config({ (label) in
-                label.textColor = blackColor
-                label.text = UserInfo.share.userName
-                label.font = UIFont.boldSystemFont(ofSize: 18)
-            })
-        
-        _ = UIImageView().taxi.adhere(toSuperView: whiteView) // 箭头
-            .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalToSuperview()
-                make.right.equalToSuperview().offset(-15)
+                make.height.equalTo(159).priority(800) // 没有这句会出现一条灰色分割线
+                make.edges.equalToSuperview()
             })
             .taxi.config({ (imageView) in
-                imageView.image = UIImage(named: "arrow")
+                imageView.image = UIImage(named: "me_background")
             })
+        
+        
+        nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名字
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalToSuperview().offset(65)
+                make.left.equalToSuperview().offset(30)
+            })
+            .taxi.config({ (label) in
+                label.textColor = .white
+                label.text = UserInfo.share.userName
+                label.font = UIFont.boldSystemFont(ofSize: 24)
+            })
+        
+        positionLabel = UILabel().taxi.adhere(toSuperView: contentView) // 职位
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalToSuperview().offset(30)
+                make.top.equalTo(nameLabel.snp.bottom).offset(5)
+            })
+            .taxi.config({ (label) in
+                label.textColor = .white
+                label.font = UIFont.medium(size: 14)
+                label.text = UserInfo.share.position
+            })
+        
+        let filletView = UIView().taxi.adhere(toSuperView: contentView) // 圆角
+            .taxi.layout { (make) in
+                make.left.right.bottom.equalToSuperview()
+                make.height.equalTo(16)
+        }
+            .taxi.config { (view) in
+                view.backgroundColor = .white
+        }
+        self.perform(#selector(addClipRectCorner(view:)), with: filletView, afterDelay: 0.01)
     }
+    
+    // MARK: 定时触发
+    /// 设置上面两个脚的圆角
+    @objc private func addClipRectCorner(view: UIView) {
+        let rectCorner = UIRectCorner.topLeft.rawValue | UIRectCorner.topRight.rawValue
+        view.clipRectCorner(UIRectCorner(rawValue: rectCorner), cornerRadius: 8)
+    }
+
 }
 

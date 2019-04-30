@@ -70,6 +70,7 @@ class ProjectDetailsController: UIViewController {
                 scrollView.bounces = false
                 scrollView.delegate = self
                 scrollView.isPagingEnabled = true
+                scrollView.showsHorizontalScrollIndicator = false
             })
         
         headerView = ProjectDetailsHeaderView(state: lockState)
@@ -142,7 +143,7 @@ class ProjectDetailsController: UIViewController {
                         make.left.equalTo(lastTableView.snp.right)
                     }
                     make.width.top.height.equalToSuperview()
-                    if index == 2 {
+                    if index == 3 {
                         make.right.equalToSuperview()
                     }
                 }

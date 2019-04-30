@@ -15,7 +15,6 @@ class ToExamineController: UIViewController {
     /// tableview
     private var tableView: UITableView!
     
-    
     /// 页码
     private var page = 1
     /// 审核列表数据
@@ -54,6 +53,13 @@ class ToExamineController: UIViewController {
                     self?.notifyCheckList(isMore: true)
                 })
             })
+        
+        let str = "暂无审批！"
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        tableView.noDataLabel?.attributedText = attriMuStr
+        tableView.noDataImageView?.image = UIImage(named: "noneData1")
     }
     
     /// 点击同意处理
@@ -104,6 +110,7 @@ class ToExamineController: UIViewController {
             } else {
                 self.tableView.mj_footer.resetNoMoreData()
             }
+            self.tableView.isNoData = self.data.count == 0
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in

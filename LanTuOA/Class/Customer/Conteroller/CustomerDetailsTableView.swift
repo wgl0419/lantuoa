@@ -133,6 +133,15 @@ class CustomerDetailsTableView: UITableView {
             })
         }
         
+        if cellStyle == .history { // 拜访历史
+            setNoneData(str: "暂无拜访历史", imageStr: "noneData")
+        } else if cellStyle == .project { // 在线项目
+            setNoneData(str: "暂无在线项目", imageStr: "noneData")
+        } else if cellStyle == .visitor { // 联系人
+            setNoneData(str: "暂无拜访人", imageStr: "noneData")
+        } else { // 合同
+            setNoneData(str: "暂无历史合同", imageStr: "noneData")
+        }
     }
     
     /// 设置尾视图
@@ -205,6 +214,26 @@ class CustomerDetailsTableView: UITableView {
         return footerView
     }
     
+    /// 设置无数据信息
+    ///
+    /// - Parameters:
+    ///   - str: 提示内容
+    ///   - imageStr: 提示图片名称
+    private func setNoneData(str: String, imageStr: String) {
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        noDataLabel?.attributedText = attriMuStr
+        noDataImageView?.image = UIImage(named: imageStr)
+        
+        noDataLabel?.snp.updateConstraints({ (make) in
+            make.bottom.equalTo(self.snp.centerY).offset(-offsetY / 2)
+        })
+        noDataImageView?.snp.updateConstraints({ (make) in
+            make.bottom.equalTo(self.snp.centerY).offset(-55 + spacing * 2 - offsetY / 2)
+        })
+    }
+    
     // MARK: - Api
     /// 获取项目统计列表
     private func projectListStatistics() {
@@ -214,9 +243,11 @@ class CustomerDetailsTableView: UITableView {
             self.projectData = result.data
             self.mj_header.endRefreshing()
             self.reloadData()
+            self.isNoData = self.projectData.count == 0
             self.setTableFooterView()
         }, errorHandle: { (error) in
             self.mj_header.endRefreshing()
+            self.isNoData = self.projectData.count == 0
             MBProgressHUD.showError(error ?? "获取在线项目失败")
         })
     }
@@ -228,9 +259,11 @@ class CustomerDetailsTableView: UITableView {
             self.contactListData = result.data
             self.mj_header.endRefreshing()
             self.reloadData()
+            self.isNoData = self.contactListData.count == 0
             self.setTableFooterView()
         }, errorHandle: { (error) in
             self.mj_header.endRefreshing()
+            self.isNoData = self.contactListData.count == 0
             MBProgressHUD.showError(error ?? "获取拜访人失败")
         })
     }
@@ -261,6 +294,7 @@ class CustomerDetailsTableView: UITableView {
             } else {
                 self.mj_footer.resetNoMoreData()
             }
+            self.isNoData = self.visitData.count == 0
             self.reloadData()
             self.setTableFooterView()
         }, errorHandle: { (error) in
@@ -271,6 +305,7 @@ class CustomerDetailsTableView: UITableView {
                 self.mj_header.endRefreshing()
                 self.mj_footer.isHidden = false
             }
+            self.isNoData = self.visitData.count == 0
             MBProgressHUD.showError(error ?? "获取历史拜访失败")
         })
     }
@@ -299,6 +334,7 @@ class CustomerDetailsTableView: UITableView {
             } else {
                 self.mj_footer.resetNoMoreData()
             }
+            self.isNoData = self.contractListData.count == 0
             self.reloadData()
             self.setTableFooterView()
         }, errorHandle: { (error) in
@@ -309,6 +345,7 @@ class CustomerDetailsTableView: UITableView {
                 self.mj_header.endRefreshing()
                 self.mj_footer.isHidden = false
             }
+            self.isNoData = self.contractListData.count == 0
             MBProgressHUD.showError(error ?? "获取历史合同失败")
         })
     }

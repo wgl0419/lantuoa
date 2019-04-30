@@ -228,6 +228,7 @@ class LoginController: UIViewController {
         let accountStr = accountTextField.text ?? ""
         _ = APIService.shared.getData(.login(accountStr, pwdStr), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
+            UserInfo.share.setPhone(accountStr)
             UserInfo.share.setToken(result.data?.token ?? "")
             self.loginUser()
         }, errorHandle: { (error) in

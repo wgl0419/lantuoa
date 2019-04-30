@@ -45,6 +45,15 @@ class FillInApplyFieldViewCell: UITableViewCell {
         didSet {
             if let isNumber = isNumber {
                 textField.keyboardType = isNumber ? .decimalPad : .default
+                
+            }
+        }
+    }
+    /// 显示类型是密码
+    var isSecureTextEntry: Bool? {
+        didSet {
+            if let isSecureTextEntry = isSecureTextEntry {
+                textField.isSecureTextEntry = isSecureTextEntry
             }
         }
     }

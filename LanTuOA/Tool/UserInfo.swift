@@ -24,6 +24,10 @@ class UserInfo: NSObject, NSCoding {
     private(set) var token = ""
     /// 用户名
     private(set) var userName = ""
+    /// 手机号 -> 登录账号
+    private(set) var phone = ""
+    /// 职位
+    private(set) var position = ""
     
     private override init() {
 //        super.init()
@@ -34,6 +38,8 @@ class UserInfo: NSObject, NSCoding {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(token, forKey: "token")
         aCoder.encode(userName, forKey: "userName")
+        aCoder.encode(phone, forKey: "phone")
+        aCoder.encode(position, forKey: "position")
     }
     
     /// 解档
@@ -41,6 +47,8 @@ class UserInfo: NSObject, NSCoding {
         super.init()
         token = aDecoder.decodeObject(forKey: "token") as? String ?? ""
         userName = aDecoder.decodeObject(forKey: "userName") as? String ?? ""
+        phone = aDecoder.decodeObject(forKey: "phone") as? String ?? ""
+        position = aDecoder.decodeObject(forKey: "position") as? String ?? ""
     }
     
     // MARK: - 数据修改
@@ -68,6 +76,8 @@ class UserInfo: NSObject, NSCoding {
     func userRemve() {
         token = ""
         userName = ""
+        phone = ""
+        position = ""
         userSave()
     }
     
@@ -80,6 +90,18 @@ class UserInfo: NSObject, NSCoding {
     /// 修改用户名称
     func setUserName(_ userName: String) {
         self.userName = userName
+        userSave()
+    }
+    
+    /// 记录手机号
+    func setPhone(_ phone: String) {
+        self.phone = phone
+        userSave()
+    }
+    
+    /// 记录职位
+    func setPosition(_ position: String) {
+        self.position = position
         userSave()
     }
 }

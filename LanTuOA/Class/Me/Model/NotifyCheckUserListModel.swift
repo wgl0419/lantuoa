@@ -25,4 +25,5 @@ struct NotifyCheckUserListData: HandyJSON {
     var checkId: Int = 0
     var checkedTime: Int = 0
     var type: Int = 0
+    var `self`: Int = 0
 }

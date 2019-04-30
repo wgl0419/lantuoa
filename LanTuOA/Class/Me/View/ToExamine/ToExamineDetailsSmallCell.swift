@@ -14,7 +14,11 @@ class ToExamineDetailsSmallCell: UITableViewCell {
     var data: (NotifyCheckUserListData, Bool, Bool)? {
         didSet {
             if let userData = data?.0, let isLast = data?.1, let approval = data?.2 {
-                nameLabel.text = userData.checkUserName
+                if userData.`self` == 1 {
+                    nameLabel.text = "我"
+                } else {
+                    nameLabel.text = userData.checkUserName
+                }
                 // 处理状态
                 if !approval {
                     statusLabel.text = "(未审批)"

@@ -14,9 +14,9 @@ class HomePageVisitCell: UITableViewCell {
         didSet {
             if let data = data {
                 visitCompanyLabel.text = "\(data.monthVisitNum)"
-                projectLabel.text = String(format: "%.2f元", data.monthPerform)
+                projectLabel.text = String(format: "%.2f", data.monthPerform)
                 visitNumberLabel.text = "\(data.monthContract)"
-                visitLabel.text = String(format: "%.2f元", data.monthMoney)
+                visitLabel.text = String(format: "%.2f", data.monthMoney)
             }
         }
     }
@@ -87,7 +87,7 @@ class HomePageVisitCell: UITableViewCell {
                 make.bottom.equalTo(projectLabel.snp.top).offset(-7)
             })
             .taxi.config({ (label) in
-                label.text = "绩效"
+                label.text = "绩效(元)"
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
             })
@@ -102,7 +102,9 @@ class HomePageVisitCell: UITableViewCell {
                 label.text = "0"
                 label.textColor = blackColor
                 label.textAlignment = .center
+                label.minimumScaleFactor = 0.5
                 label.font = UIFont.medium(size: 14)
+                label.adjustsFontSizeToFitWidth = true
             })
         
         _ = UILabel().taxi.adhere(toSuperView: contentView) // ”拜访公司“
@@ -126,7 +128,9 @@ class HomePageVisitCell: UITableViewCell {
                 label.text = "0"
                 label.textColor = blackColor
                 label.textAlignment = .center
+                label.minimumScaleFactor = 0.5
                 label.font = UIFont.medium(size: 14)
+                label.adjustsFontSizeToFitWidth = true
             })
         
         _ = UILabel().taxi.adhere(toSuperView: contentView) // ”拜访人数“
@@ -135,7 +139,7 @@ class HomePageVisitCell: UITableViewCell {
                 make.bottom.equalTo(visitLabel.snp.top).offset(-7)
             })
             .taxi.config({ (label) in
-                label.text = "签约金额"
+                label.text = "签约金额(元)"
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
             })

@@ -104,6 +104,18 @@ class ChangePasswordController: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.usersPwd(contentStrArray[0][0], contentStrArray[1][0]), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.showSuccess("修改成功")
+            self.login() // token变化   还需自行调用登录接口获取token
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "修改失败")
+        })
+    }
+    
+    /// 登录
+    private func login() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.login(UserInfo.share.phone, contentStrArray[1][0]), t: LoginModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            UserInfo.share.setToken(result.data?.token ?? "")
             self.navigationController?.popViewController(animated: true)
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "修改失败")
@@ -135,6 +147,7 @@ extension ChangePasswordController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyFieldViewCell", for: indexPath) as! FillInApplyFieldViewCell
         cell.data = (titleArray[section][row], placeholderArray[section][row])
         cell.contentStr = contentStrArray[section][row]
+        cell.isSecureTextEntry = section == 1
         cell.inputBlock = { [weak self] (str) in
             self?.contentStrArray[section][row] = str
             self?.judgeEnabled()

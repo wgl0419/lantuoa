@@ -171,8 +171,7 @@ class ToExamineDetailsController: UIViewController {
     /// 审批人列表
     private func  notifyCheckUserList() {
         MBProgressHUD.showWait("")
-        // TODO:
-        _ = APIService.shared.getData(.notifyCheckUserList(4), t: NotifyCheckUserListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckUserList(checkListId), t: NotifyCheckUserListModel.self, successHandle: { (result) in
             self.checkUserListHandle(data: result.data)
             self.tableView.mj_header.endRefreshing()
             self.tableView.reloadData()

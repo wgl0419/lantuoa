@@ -135,6 +135,17 @@ class ProjectDetailsTableView: UITableView {
             })
         }
         
+        
+        if cellStyle == .history {
+            setNoneData(str: "暂无拜访历史", imageStr: "noneData")
+        } else if cellStyle == .personnel {
+            setNoneData(str: "暂无参与人员", imageStr: "noneData")
+        } else if cellStyle == .workingGroup {
+            setNoneData(str: "暂无工作组", imageStr: "noneData")
+        } else {
+            setNoneData(str: "暂无历史合同", imageStr: "noneData")
+        }
+        
     }
     
     /// 设置尾视图
@@ -207,6 +218,26 @@ class ProjectDetailsTableView: UITableView {
         return footerView
     }
     
+    /// 设置无数据信息
+    ///
+    /// - Parameters:
+    ///   - str: 提示内容
+    ///   - imageStr: 提示图片名称
+    private func setNoneData(str: String, imageStr: String) {
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        noDataLabel?.attributedText = attriMuStr
+        noDataImageView?.image = UIImage(named: imageStr)
+        
+        noDataLabel?.snp.updateConstraints({ (make) in
+            make.bottom.equalTo(self.snp.centerY).offset(-offsetY / 2)
+        })
+        noDataImageView?.snp.updateConstraints({ (make) in
+            make.bottom.equalTo(self.snp.centerY).offset(-55 + spacing * 2 - offsetY / 2)
+        })
+    }
+    
     // MARK: - Api
     /// 获取项目成员列表
     private func projectMemberList() {
@@ -218,10 +249,12 @@ class ProjectDetailsTableView: UITableView {
             if result.data.count == 0 {
                 MBProgressHUD.showError("该项目没有成员")
             }
+            self.isNoData = self.memberData.count == 0
             self.reloadData()
             self.setTableFooterView()
         }, errorHandle: { (error) in
             self.mj_header.endRefreshing()
+            self.isNoData = self.memberData.count == 0
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }
@@ -252,6 +285,7 @@ class ProjectDetailsTableView: UITableView {
             } else {
                 self.mj_footer.resetNoMoreData()
             }
+            self.isNoData = self.visitData.count == 0
             self.reloadData()
             self.setTableFooterView()
         }, errorHandle: { (error) in
@@ -262,6 +296,7 @@ class ProjectDetailsTableView: UITableView {
                 self.mj_header.endRefreshing()
                 self.mj_footer.isHidden = false
             }
+            self.isNoData = self.visitData.count == 0
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }
@@ -277,9 +312,11 @@ class ProjectDetailsTableView: UITableView {
                 MBProgressHUD.showError("该项目没有工作组")
             }
             self.reloadData()
+            self.isNoData = self.groupData.count == 0
             self.setTableFooterView()
         }, errorHandle: { (error) in
             self.mj_header.endRefreshing()
+            self.isNoData = self.groupData.count == 0
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }
@@ -308,6 +345,7 @@ class ProjectDetailsTableView: UITableView {
             } else {
                 self.mj_footer.resetNoMoreData()
             }
+            self.isNoData = self.contractListData.count == 0
             self.reloadData()
             self.setTableFooterView()
         }, errorHandle: { (error) in
@@ -318,6 +356,7 @@ class ProjectDetailsTableView: UITableView {
                 self.mj_header.endRefreshing()
                 self.mj_footer.isHidden = false
             }
+            self.isNoData = self.contractListData.count == 0
             MBProgressHUD.showError(error ?? "获取历史合同失败")
         })
     }

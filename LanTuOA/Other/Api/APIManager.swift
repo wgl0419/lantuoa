@@ -20,8 +20,8 @@ enum APIManager {
     case usersPermissions() // 获取权限
     case version() // 获取版本信息 (1.安卓2.iOS3.web)
     case startupSum() // 首页统计
-    case code() // 获取验证码
-    case passwordReset() // 找回密码
+    case code(String) // 获取验证码
+    case passwordReset(String, String, String) // 找回密码
     
     
     // MARK: - 客户
@@ -249,6 +249,10 @@ extension APIManager: TargetType {
             params = ["oldPwd": oldPwd, "newPwd": newPwd]
         case .version():
             params = ["os": 2]
+        case .code(let phone): // 获取验证码
+            params = ["phone": phone]
+        case let .passwordReset(phone, code, newPwd): // 忘记密码
+            params = ["phone": phone, "code": code, "newPwd": newPwd]
             
             
         case let .customerSave(name, full_name, address, type, industry): // 新建客户
