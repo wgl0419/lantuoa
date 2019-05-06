@@ -64,6 +64,13 @@ class ApplyControllers: UIViewController {
                 collectionView.register(ApplyHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ApplyHeaderView")
                 collectionView.register(ApplyFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "ApplyFooterView")
             })
+        
+        let str = "暂无申请选项！"
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        collectionView.noDataLabel?.attributedText = attriMuStr
+        collectionView.noDataImageView?.image = UIImage(named: "noneData")
     }
     
     
@@ -83,6 +90,7 @@ class ApplyControllers: UIViewController {
             }
             self.openArray = moreArray
             self.collectionView.reloadData()
+            self.collectionView.isNoData = self.openArray.count == 0
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取失败")
         })

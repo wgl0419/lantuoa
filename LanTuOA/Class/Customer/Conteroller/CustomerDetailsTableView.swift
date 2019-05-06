@@ -442,7 +442,12 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return 0
         } else if cellStyle == .history {
             return 30
-        } else if cellStyle == .project || cellStyle == .visitor {
+        } else if cellStyle == .project {
+            if Jurisdiction.share.isAddProject {
+                return 40
+            }
+            return 0
+        } else if cellStyle == .visitor {
             return 40
         } else {
             return 0
@@ -454,7 +459,12 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return nil
         } else if cellStyle == .history {
             return timeFooterViewHandle()
-        } else if cellStyle == .project || cellStyle == .visitor {
+        } else if cellStyle == .project {
+            if Jurisdiction.share.isAddProject {
+                return addFooterViewHandle()
+            }
+            return nil
+        } else if cellStyle == .visitor {
             return addFooterViewHandle()
         } else {
             return nil

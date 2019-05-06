@@ -16,10 +16,15 @@ class VisitHomeCell: UITableViewCell {
             if let data = data {
                 titleLabel.text = data.projectName
                 visitNameLabel.text = data.contactInfo
-                initiateLabel.text = data.createUserName
+                
                 stateLabel.text = data.result
                 let timeStr = Date(timeIntervalSince1970: TimeInterval(data.visitTime)).yearTimeStr()
                 timeLabel.text = timeStr
+                
+                let str = "业务人员：" + (data.createUserName ?? "")
+                let attriMuStr = NSMutableAttributedString(string: str)
+                attriMuStr.changeColor(str: "业务人员：", color: UIColor(hex: "#999999"))
+                initiateLabel.attributedText = attriMuStr
             }
         }
     }
@@ -100,6 +105,17 @@ class VisitHomeCell: UITableViewCell {
                 view.backgroundColor = UIColor(hex: "#FF7744")
             })
         
+        _ = UIView().taxi.adhere(toSuperView: whiteView) // 分割线
+            .taxi.layout(snapKitMaker: { (make) in
+                make.height.equalTo(1)
+                make.right.equalToSuperview()
+                make.left.equalToSuperview().offset(15)
+                make.top.equalTo(titleLabel.snp.bottom).offset(14)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+            })
+        
         _ = UIImageView().taxi.adhere(toSuperView: whiteView) // 箭头
             .taxi.layout(snapKitMaker: { (make) in
                 make.centerY.equalToSuperview()
@@ -111,13 +127,13 @@ class VisitHomeCell: UITableViewCell {
         
         let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “拜访对象”
         visitNameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 拜访对象
-        setTitle(title: visitName, content: visitNameLabel, lastLabel: titleLabel)
+        setTitle(title: visitName, content: visitNameLabel, lastLabel: titleLabel, isFirst: true)
         visitName.text = "拜访对象："
         
         let state = UILabel().taxi.adhere(toSuperView: whiteView) // “状态“
         stateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 状态
         setTitle(title: state, content: stateLabel, lastLabel: visitNameLabel)
-        state.text = "最新状态："
+        state.text = "拜访结果："
         
         timeLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 时间
             .taxi.layout(snapKitMaker: { (make) in
@@ -136,14 +152,15 @@ class VisitHomeCell: UITableViewCell {
     /// - Parameters:
     ///   - title: 标题
     ///   - content: 内容
-    ///   - lastLabel: 跟随的最后一个控件
-    private func setTitle(title: UILabel, content: UILabel, lastLabel: UILabel) {
+    ///   - lastLabel: 跟随控件
+    ///   - isFirst: 是否是第一个控件
+    private func setTitle(title: UILabel, content: UILabel, lastLabel: UILabel, isFirst: Bool = false) {
         title.taxi.layout { (make) in
             make.left.equalToSuperview().offset(15)
-            make.top.equalTo(lastLabel.snp.bottom).offset(5)
+            make.top.equalTo(lastLabel.snp.bottom).offset(isFirst ? 27 : 5)
         }
             .taxi.config { (label) in
-                label.font = UIFont.medium(size: 12)
+                label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#2E4695")
                 label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
@@ -156,7 +173,7 @@ class VisitHomeCell: UITableViewCell {
             .taxi.config { (label) in
                 label.numberOfLines = 0
                 label.textColor = blackColor
-                label.font = UIFont.medium(size: 12)
+                label.font = UIFont.medium(size: 14)
                 label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
     }

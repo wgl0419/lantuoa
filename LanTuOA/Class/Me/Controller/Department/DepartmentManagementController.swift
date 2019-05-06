@@ -101,6 +101,13 @@ class DepartmentManagementController: UIViewController {
                     self?.departments()
                 })
             })
+        
+        let str = "暂无部门！"
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        tableView.noDataLabel?.attributedText = attriMuStr
+        tableView.noDataImageView?.image = UIImage(named: "noneData4")
     }
     
     /// 区分出搜索的内容
@@ -148,6 +155,7 @@ class DepartmentManagementController: UIViewController {
     // MARK: - 按钮点击
     /// 点击添加部门
     @objc private func rightClick() {
+        UIApplication.shared.keyWindow?.endEditing(true)
         let ejectView = DepartmentEjectView()
         ejectView.createBlock = { [weak self] in
             self?.departments()

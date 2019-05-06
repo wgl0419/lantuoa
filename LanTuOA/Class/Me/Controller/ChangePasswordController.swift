@@ -98,13 +98,23 @@ class ChangePasswordController: UIViewController {
         }
     }
     
+    /// 退出登录处理
+    private func logoutHandle() {
+        UserInfo.share.userRemve() // 清除数据
+        let vc = LoginController()
+        let nav = MainNavigationController(rootViewController: vc)
+        self.view.window?.rootViewController = nav
+        MBProgressHUD.showSuccess("请重新登录")
+    }
+    
     // MARK: - Api
     /// 修改密码
     private func usersPwd() {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.usersPwd(contentStrArray[0][0], contentStrArray[1][0]), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.showSuccess("修改成功")
-            self.login() // token变化   还需自行调用登录接口获取token
+//            self.login() // token变化   还需自行调用登录接口获取token (后端未处理好  导致修改密码后 重新获取token 无效)
+            self.logoutHandle()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "修改失败")
         })

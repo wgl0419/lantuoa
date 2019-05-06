@@ -98,6 +98,13 @@ class CustomerHomeController: UIViewController {
                     self?.customerListStatistics(isMore: true)
                 })
             })
+        
+        let str = "暂无客户！"
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        tableView.noDataLabel?.attributedText = attriMuStr
+        tableView.noDataImageView?.image = UIImage(named: "noneData4")
     }
     
     /// 区分出搜索的内容
@@ -138,6 +145,7 @@ class CustomerHomeController: UIViewController {
             } else {
                 self.tableView.mj_footer.resetNoMoreData()
             }
+            self.tableView.isNoData = self.data.count == 0
             self.tableView.reloadData()
         }, errorHandle: { (error) in
             if isMore {

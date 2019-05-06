@@ -15,7 +15,7 @@ class JobHandoverController: UIViewController {
     /// 搜索框
     private var searchBar: UISearchBar!
     /// tableview
-    private var tableview: UITableView!
+    private var tableView: UITableView!
     
     /// 数据
     private var data = [WorkExtendListData]()
@@ -59,7 +59,7 @@ class JobHandoverController: UIViewController {
                 searchBar.returnKeyType = .done
             })
         
-        tableview = UITableView().taxi.adhere(toSuperView: view) // tableview
+        tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
                 make.edges.equalToSuperview()
             })
@@ -73,6 +73,13 @@ class JobHandoverController: UIViewController {
                     self?.workExtendList()
                 })
             })
+        
+        let str = "暂无交接人员！"
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        tableView.noDataLabel?.attributedText = attriMuStr
+        tableView.noDataImageView?.image = UIImage(named: "noneData2")
     }
     
     /// 区分出搜索的内容
@@ -91,10 +98,11 @@ class JobHandoverController: UIViewController {
         _ = APIService.shared.getData(.workExtendList(searchBar.text ?? ""), t: WorkExtendListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.data = result.data
-            self.tableview.mj_header.endRefreshing()
-            self.tableview.reloadData()
+            self.tableView.mj_header.endRefreshing()
+            self.tableView.isNoData = self.data.count == 0
+            self.tableView.reloadData()
         }, errorHandle: { (error) in
-            self.tableview.mj_header.endRefreshing()
+            self.tableView.mj_header.endRefreshing()
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }

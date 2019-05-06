@@ -92,6 +92,13 @@ class ApplyHistoryController: UIViewController {
                         tableView.mj_header.isHidden = true
                         self?.processHistory(isMore: true, tag: index)
                     })
+                    
+                    let str = "暂无记录！"
+                    let attriMuStr = NSMutableAttributedString(string: str)
+                    attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+                    attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+                    tableView.noDataLabel?.attributedText = attriMuStr
+                    tableView.noDataImageView?.image = UIImage(named: "noneData2")
             }
             tableViewArray.append(tableView)
             lastTableView = tableView
@@ -137,6 +144,7 @@ class ApplyHistoryController: UIViewController {
                 self.tableViewArray[tag].mj_header.endRefreshing()
                 self.tableViewArray[tag].mj_footer.isHidden = false
             }
+            self.tableViewArray[tag].isNoData = self.data[tag].count == 0
             self.tableViewArray[tag].reloadData()
         }, errorHandle: { (error) in
             if isMore {

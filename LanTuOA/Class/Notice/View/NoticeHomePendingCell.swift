@@ -93,6 +93,7 @@ class NoticeHomePendingCell: UITableViewCell {
             })
             .taxi.config({ (label) in
                 label.numberOfLines = 0
+                label.textColor = UIColor(hex: "#FF7744")
                 label.font = UIFont.boldSystemFont(ofSize: 16)
             })
         

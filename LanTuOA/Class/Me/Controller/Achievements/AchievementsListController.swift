@@ -72,6 +72,13 @@ class AchievementsListController: UIViewController {
                 tableView.tableFooterView = UIView()
                 tableView.register(AchievementsListCell.self, forCellReuseIdentifier: "AchievementsListCell")
             })
+        
+        let str = "暂无绩效！"
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        tableView.noDataLabel?.attributedText = attriMuStr
+        tableView.noDataImageView?.image = UIImage(named: "noneData2")
     }
     
     /// 区分出搜索的内容
@@ -89,6 +96,7 @@ class AchievementsListController: UIViewController {
         _ =  APIService.shared.getData(.performUnder(searchBar.text ?? ""), t: PerformUnderModel.self, successHandle: { (result) in
             self.data = result.data
             self.tableView.reloadData()
+            self.tableView.isNoData = self.data.count == 0
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取失败")
