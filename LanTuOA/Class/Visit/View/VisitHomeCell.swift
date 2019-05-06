@@ -67,25 +67,37 @@ class VisitHomeCell: UITableViewCell {
         
         titleLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 标题
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(whiteView).offset(13)
-                make.left.equalTo(whiteView).offset(15)
-                make.right.equalTo(whiteView).offset(-15)
+                make.top.equalToSuperview().offset(13)
+                make.left.equalToSuperview().offset(15)
+                make.right.equalTo(whiteView.snp.centerX)
             })
             .taxi.config({ (label) in
-                label.text = "火力全开世界巡回演唱会"
-                label.textColor = blackColor
-                label.font = UIFont.medium(size: 16)
+                label.numberOfLines = 0
+                label.textColor = UIColor(hex: "#FF7744")
+                label.font = UIFont.boldSystemFont(ofSize: 16)
             })
         
-        _ = UIView().taxi.adhere(toSuperView: whiteView) // 蓝色线条
+        initiateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 业务人员
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalToSuperview().offset(16)
+                make.right.equalToSuperview().offset(-15)
+                make.left.equalTo(whiteView.snp.centerX).offset(10)
+            })
+            .taxi.config({ (label) in
+                label.textAlignment = .right
+                label.textColor = blackColor
+                label.font = UIFont.medium(size: 12)
+            })
+        
+        _ = UIView().taxi.adhere(toSuperView: whiteView) // 橙色线条
             .taxi.layout(snapKitMaker: { (make) in
                 make.width.equalTo(2)
                 make.height.equalTo(15)
                 make.left.equalTo(whiteView)
-                make.centerY.equalTo(titleLabel)
+                make.centerY.equalTo(initiateLabel)
             })
             .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#2E4695")
+                view.backgroundColor = UIColor(hex: "#FF7744")
             })
         
         _ = UIImageView().taxi.adhere(toSuperView: whiteView) // 箭头
@@ -102,20 +114,21 @@ class VisitHomeCell: UITableViewCell {
         setTitle(title: visitName, content: visitNameLabel, lastLabel: titleLabel)
         visitName.text = "拜访对象："
         
-        let initiate = UILabel().taxi.adhere(toSuperView: whiteView) // "业务人员"
-        initiateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 业务人员
-        setTitle(title: initiate, content: initiateLabel, lastLabel: visitNameLabel)
-        initiate.text = "业务人员："
-        
-        let time = UILabel().taxi.adhere(toSuperView: whiteView) // “时间”
-        timeLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 时间
-        setTitle(title: time, content: timeLabel, lastLabel: initiateLabel)
-        time.text = "拜访时间："
-        
         let state = UILabel().taxi.adhere(toSuperView: whiteView) // “状态“
         stateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 状态
-        setTitle(title: state, content: stateLabel, lastLabel: timeLabel, isLast: true)
+        setTitle(title: state, content: stateLabel, lastLabel: visitNameLabel)
         state.text = "最新状态："
+        
+        timeLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 时间
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalToSuperview().offset(15)
+                make.bottom.equalToSuperview().offset(-13)
+                make.top.equalTo(stateLabel.snp.bottom).offset(13)
+            })
+            .taxi.config({ (label) in
+                label.font = UIFont.regular(size: 12)
+                label.textColor = UIColor(hex: "#999999")
+            })
     }
     
     /// 设置标题和内容
@@ -124,18 +137,14 @@ class VisitHomeCell: UITableViewCell {
     ///   - title: 标题
     ///   - content: 内容
     ///   - lastLabel: 跟随的最后一个控件
-    ///   - isLast: 是否是最后一个
-    private func setTitle(title: UILabel, content: UILabel, lastLabel: UILabel, isLast: Bool = false) {
+    private func setTitle(title: UILabel, content: UILabel, lastLabel: UILabel) {
         title.taxi.layout { (make) in
             make.left.equalToSuperview().offset(15)
             make.top.equalTo(lastLabel.snp.bottom).offset(5)
-            if isLast {
-                make.bottom.equalToSuperview().offset(-13)
-            }
         }
             .taxi.config { (label) in
                 label.font = UIFont.medium(size: 12)
-                label.textColor = UIColor(hex: "#999999")
+                label.textColor = UIColor(hex: "#2E4695")
                 label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         

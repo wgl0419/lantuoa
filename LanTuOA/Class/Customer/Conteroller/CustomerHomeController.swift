@@ -154,6 +154,7 @@ class CustomerHomeController: UIViewController {
     // MARK: - 按钮点击
     /// 点击右按钮
     @objc private func rightClick() {
+        UIApplication.shared.keyWindow?.endEditing(true)
         let ejectView = AddCustomerEjectView()
         ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
             self?.customerListStatistics(isMore: false)

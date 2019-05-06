@@ -74,6 +74,7 @@ class LoginController: UIViewController {
             })
             .taxi.config({ (textField) in
                 textField.textColor = blackColor
+                textField.keyboardType = .phonePad
                 textField.clearButtonMode = .always
                 textField.font = UIFont.medium(size: 16)
                 let attriMuStr = NSMutableAttributedString(string: "请输入您的账号")

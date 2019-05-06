@@ -333,6 +333,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     // MARK: - 按钮点击
     /// 点击导航栏右按钮
     @objc private func rightClick() {
+        UIApplication.shared.keyWindow?.endEditing(true)
         switch type {
         case .customer:
             let ejectView = AddCustomerEjectView()

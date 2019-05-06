@@ -40,10 +40,16 @@ class VisitSeleTimeView: UIView {
     
     /// 客户数据
     private var customerData = [CustomerListStatisticsData]()
-    /// 客户数据
+    /// 项目数据
     private var projectData = [ProjectListStatisticsData]()
     /// 业务人员数据
     private var usersData = [UsersData]()
+    /// 加载过客户数据
+    private var isCustomerData = false
+    /// 加载或项目数据
+    private var isProjectData = false
+    /// 是否加载过客户数据
+    private var isUsersData = false
     
     
     override init(frame: CGRect) {
@@ -191,9 +197,13 @@ class VisitSeleTimeView: UIView {
     
     /// 客户筛选
     private func customerScreening() {
-        if customerData.count == 0 {
+        if !isCustomerData {
             customerList()
         } else {
+            if customerData.count == 0 {
+                MBProgressHUD.showError("暂无客户")
+                return
+            }
             let ejectView = ScreenEjectView(data: customerData)
             ejectView.seleBlock = { [weak self] (name, id) in
                 if self?.idArray[1] == id { // 点击原本的数据
@@ -214,9 +224,13 @@ class VisitSeleTimeView: UIView {
     
     /// 项目筛选
     private func projectScreening() {
-        if projectData.count == 0 {
+        if !isProjectData {
             projectList()
         } else {
+            if projectData.count == 0 {
+                MBProgressHUD.showError("暂无项目")
+                return
+            }
             let ejectView = ScreenEjectView(data: projectData)
             ejectView.seleBlock = { [weak self] (name, id) in
                 self?.idArray[2] = id
@@ -228,9 +242,13 @@ class VisitSeleTimeView: UIView {
     }
     
     private func usersScreening() {
-        if usersData.count == 0 {
+        if !isUsersData {
             users()
         } else {
+            if usersData.count == 0 {
+                MBProgressHUD.showError("暂无业务人员")
+                return
+            }
             let ejectView = ScreenEjectView(data: usersData)
             ejectView.seleBlock = { [weak self] (name, id) in
                 self?.idArray[3] = id
@@ -265,6 +283,7 @@ class VisitSeleTimeView: UIView {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.customerListStatistics("", nil, nil, 1, 99999), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
+            self.isCustomerData = true
             self.customerData = result.data
             self.customerScreening()
         }, errorHandle: { (error) in
@@ -282,6 +301,7 @@ class VisitSeleTimeView: UIView {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.projectList("", customerId, 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
+            self.isProjectData = true
             self.projectData = result.data
             self.projectScreening()
         }, errorHandle: { (error) in
@@ -294,6 +314,7 @@ class VisitSeleTimeView: UIView {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.users(1, 99999, "", 1), t: UsersModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
+            self.isUsersData = true
             self.usersData = result.data
             self.usersScreening()
         }, errorHandle: { (error) in

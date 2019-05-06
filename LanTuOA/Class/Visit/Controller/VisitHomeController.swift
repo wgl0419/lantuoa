@@ -273,6 +273,7 @@ class VisitHomeController: UIViewController {
     
     /// 点击筛选
     @objc private func screenClick() {
+        UIApplication.shared.keyWindow?.endEditing(true)
         let showView = VisitSeleTimeView()
         showView.setDefault(start: startTimeStamp, end: endTimeStamp, id: idArray, content: contentArray)
         showView.confirmBlock = { [weak self] (start, end, id, content) in

@@ -257,7 +257,8 @@ public extension UIView {
         }
         
         if _IQcanBecomeFirstResponder == true {
-            _IQcanBecomeFirstResponder = isUserInteractionEnabled == true && isHidden == false && alpha != 0.0 && isAlertViewTextField() == false && textFieldSearchBar() == nil
+            _IQcanBecomeFirstResponder = isUserInteractionEnabled == true && isHidden == false && alpha != 0.0 && isAlertViewTextField() == false// && textFieldSearchBar() == nil
+
         }
 
         return _IQcanBecomeFirstResponder
