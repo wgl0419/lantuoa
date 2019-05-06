@@ -181,6 +181,13 @@
 		1838BC54225C9BC700978E72 /* CostomerDetailsProjectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1838BC53225C9BC700978E72 /* CostomerDetailsProjectCell.swift */; };
 		1838BC56225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1838BC55225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift */; };
 		184407162264889300F10D83 /* NotifyCheckDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184407152264889300F10D83 /* NotifyCheckDetailModel.swift */; };
+		1849C1BD227E6E8200883C61 /* BMChineseSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1BC227E6E8200883C61 /* BMChineseSort.swift */; };
+		1849C1BF227E728800883C61 /* ScreenOtherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1BE227E728800883C61 /* ScreenOtherCell.swift */; };
+		1849C1C1227E782000883C61 /* ScreenTimeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C0227E782000883C61 /* ScreenTimeCell.swift */; };
+		1849C1C3227E8A1600883C61 /* ScreenEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C2227E8A1600883C61 /* ScreenEjectView.swift */; };
+		1849C1C5227EC11100883C61 /* SeleTimeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C4227EC11100883C61 /* SeleTimeEjectView.swift */; };
+		1849C1C7227ED85400883C61 /* ScreenViewCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C6227ED85400883C61 /* ScreenViewCollectionCell.swift */; };
+		1849C1CA227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C9227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift */; };
 		1876A8DC2266B376002EBDB2 /* ContractPaybackListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */; };
 		1876A8DE2266BA52002EBDB2 /* PerformListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */; };
 		1876A8E02266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DF2266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift */; };
@@ -378,6 +385,13 @@
 		1838BC53225C9BC700978E72 /* CostomerDetailsProjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostomerDetailsProjectCell.swift; sourceTree = "<group>"; };
 		1838BC55225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostomerDetailsVisitorCell.swift; sourceTree = "<group>"; };
 		184407152264889300F10D83 /* NotifyCheckDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCheckDetailModel.swift; sourceTree = "<group>"; };
+		1849C1BC227E6E8200883C61 /* BMChineseSort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BMChineseSort.swift; sourceTree = "<group>"; };
+		1849C1BE227E728800883C61 /* ScreenOtherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenOtherCell.swift; sourceTree = "<group>"; };
+		1849C1C0227E782000883C61 /* ScreenTimeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeCell.swift; sourceTree = "<group>"; };
+		1849C1C2227E8A1600883C61 /* ScreenEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEjectView.swift; sourceTree = "<group>"; };
+		1849C1C4227EC11100883C61 /* SeleTimeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeleTimeEjectView.swift; sourceTree = "<group>"; };
+		1849C1C6227ED85400883C61 /* ScreenViewCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenViewCollectionCell.swift; sourceTree = "<group>"; };
+		1849C1C9227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYEqualCellSpaceFlowLayout.swift; sourceTree = "<group>"; };
 		1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPaybackListModel.swift; sourceTree = "<group>"; };
 		1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformListModel.swift; sourceTree = "<group>"; };
 		1876A8DF2266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPerformanceHeaderView.swift; sourceTree = "<group>"; };
@@ -712,6 +726,8 @@
 		1810EC5F222F5BC600CF6488 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				1849C1C8227EEB3200883C61 /* JYEqualCellSpaceFlowLayout */,
+				1849C1BB227E6E7700883C61 /* BMChineseSort */,
 				1810EC60222F5BCC00CF6488 /* Api */,
 				1810EC8A222F5F2E00CF6488 /* Nav */,
 				1810EC94222F5F6F00CF6488 /* GlobalData.swift */,
@@ -976,6 +992,11 @@
 				1802B0052254410100E94341 /* VisitDetailsHeaderCell.swift */,
 				181FF96522714E9600ED5A2A /* ModifyNoticeEjectView.swift */,
 				1805F3B42275500B00AF0AF7 /* ScreenView.swift */,
+				1849C1BE227E728800883C61 /* ScreenOtherCell.swift */,
+				1849C1C0227E782000883C61 /* ScreenTimeCell.swift */,
+				1849C1C2227E8A1600883C61 /* ScreenEjectView.swift */,
+				1849C1C4227EC11100883C61 /* SeleTimeEjectView.swift */,
+				1849C1C6227ED85400883C61 /* ScreenViewCollectionCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1030,6 +1051,22 @@
 				181788532238E5F60015DC30 /* HomePageVisitCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		1849C1BB227E6E7700883C61 /* BMChineseSort */ = {
+			isa = PBXGroup;
+			children = (
+				1849C1BC227E6E8200883C61 /* BMChineseSort.swift */,
+			);
+			path = BMChineseSort;
+			sourceTree = "<group>";
+		};
+		1849C1C8227EEB3200883C61 /* JYEqualCellSpaceFlowLayout */ = {
+			isa = PBXGroup;
+			children = (
+				1849C1C9227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift */,
+			);
+			path = JYEqualCellSpaceFlowLayout;
 			sourceTree = "<group>";
 		};
 		ADCDBC03F8C03A90CC14FFCB /* Frameworks */ = {
@@ -1198,6 +1235,7 @@
 				180BFB332265B14C001879BD /* ContractListModel.swift in Sources */,
 				1801AE92223F2FE60027A5DB /* CustomerListStatisticsModel.swift in Sources */,
 				1810EC74222F5D4100CF6488 /* UiView.swift in Sources */,
+				1849C1C1227E782000883C61 /* ScreenTimeCell.swift in Sources */,
 				180736BB226EFF83001F1FA6 /* UpdateHintsEjectView.swift in Sources */,
 				1809E400225DC4D400B615A8 /* DepartmentsUsersModel.swift in Sources */,
 				180736C3227067FF001F1FA6 /* ProjectSaveRequireModel.swift in Sources */,
@@ -1253,6 +1291,7 @@
 				184407162264889300F10D83 /* NotifyCheckDetailModel.swift in Sources */,
 				1876A8E22266D92B002EBDB2 /* ContractPerformanceCell.swift in Sources */,
 				1827ED9E2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift in Sources */,
+				1849C1CA227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift in Sources */,
 				180233682244D7EA0064A50E /* AddCustomerEjectView.swift in Sources */,
 				1833DD3E2241F27700730FB9 /* ProjectDetailsHeaderView.swift in Sources */,
 				180018832252FB6100832E60 /* NewWorkingGroupController.swift in Sources */,
@@ -1269,9 +1308,11 @@
 				1806FBDF22436E06005A4A77 /* ProjectDetailsCollectionCell.swift in Sources */,
 				1802335C2244710B0064A50E /* ProjectMemberListModel.swift in Sources */,
 				183383072251EF190053F2BF /* ProjectManageSeleController.swift in Sources */,
+				1849C1C5227EC11100883C61 /* SeleTimeEjectView.swift in Sources */,
 				1817884C2238ABE40015DC30 /* WrokHomeController.swift in Sources */,
 				180273E5223B5A410033E083 /* ProjectListCell.swift in Sources */,
 				1803A321225EF07300B86F20 /* ProcessListModel.swift in Sources */,
+				1849C1C3227E8A1600883C61 /* ScreenEjectView.swift in Sources */,
 				1827ED882268223700EFF889 /* AchievementsDetailsController.swift in Sources */,
 				1827ED982269660700EFF889 /* FillInApplyApprovalCollectionCell.swift in Sources */,
 				1838BC56225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift in Sources */,
@@ -1314,8 +1355,10 @@
 				1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */,
 				1827ED902268620B00EFF889 /* AchievementsDetailsEjectCell.swift in Sources */,
 				181788502238D73F0015DC30 /* HomePageNoticeCell.swift in Sources */,
+				1849C1BF227E728800883C61 /* ScreenOtherCell.swift in Sources */,
 				1802B01022549D1300E94341 /* JobHandoverController.swift in Sources */,
 				18026DF1223BA3B300993B66 /* NewlyBuildVisitSeleCell.swift in Sources */,
+				1849C1C7227ED85400883C61 /* ScreenViewCollectionCell.swift in Sources */,
 				180B77012239F8770096403B /* ProjectSegmentView.swift in Sources */,
 				1810EC93222F5F5300CF6488 /* MainNavigationController.swift in Sources */,
 				18026DEA223B8DB300993B66 /* CustomerHomeController.swift in Sources */,
@@ -1366,6 +1409,7 @@
 				1817884E2238ADC00015DC30 /* MeHomeController.swift in Sources */,
 				1827ED842268076D00EFF889 /* ContractRepaymentEjectView.swift in Sources */,
 				1802CDA0224CC3D3005997F1 /* VisitSeleTimeView.swift in Sources */,
+				1849C1BD227E6E8200883C61 /* BMChineseSort.swift in Sources */,
 				1827ED8E22685E9600EFF889 /* AchievementsDetailsEjectView.swift in Sources */,
 				180B8FA72273191B00E6FDE5 /* UIResponder.swift in Sources */,
 				18A7C96F223F9828000B4007 /* SeleVisitModelView.swift in Sources */,

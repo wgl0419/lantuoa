@@ -44,22 +44,43 @@ class VisitDetailsController: UIViewController {
 }
 
 extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = indexPath.row
-        if row == 0 {
+        let section = indexPath.section
+        if section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "VisitDetailsHeaderCell", for: indexPath) as! VisitDetailsHeaderCell
             cell.data = visitListData
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "VisitDetailsCell", for: indexPath) as! VisitDetailsCell
-            let type: VisitDetailsCell.visitType = row == 1 ? .details : row == 2 ? .content : .result
+            let type: VisitDetailsCell.visitType = section == 1 ? .details : section == 2 ? .content : .result
             cell.visitListData = (visitListData, type)
             return cell
         }
     }
     
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section < 2 {
+            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
+            footerView.backgroundColor = UIColor(hex: "#F3F3F3")
+            return footerView
+        } else {
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section < 2 {
+            return 10
+        } else {
+            return 0
+        }
+    }
 }

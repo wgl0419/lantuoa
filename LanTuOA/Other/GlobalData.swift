@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - 各种高度
 /// 状态栏高度
-let StateH: CGFloat = isIphoneX ? 40 : 20
+let StateH: CGFloat = isIphoneX ? 44 : 20
 /// 导航栏高度
 let NavigationH: CGFloat = isIphoneX ? 88 : 64
 /// tabbar高度

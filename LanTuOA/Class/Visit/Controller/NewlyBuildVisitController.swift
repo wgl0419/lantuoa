@@ -20,15 +20,15 @@ class NewlyBuildVisitController: UIViewController {
     private var confirmBtn: UIButton!
     
     /// 标题
-//    private let titleArray = ["客户", "拜访人", "项目", "拜访方式", "拜访时间", "内容", "结果", "所在位置"]
-    private let titleArray = ["客户", "拜访人", "项目", "拜访方式", "拜访时间", "内容", "结果"]
+//    private let titleArray = ["客户", "拜访对象", "项目", "拜访方式", "拜访时间", "内容", "结果", "所在位置"]
+    private let titleArray = ["客户", "拜访对象", "项目", "拜访方式", "拜访时间", "内容", "结果"]
     /// 提示
 //    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请输入拜访结果", "请选择"]
     private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请输入拜访结果"]
     /// 选中id
 //    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1, -1]
     private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1]
-    /// 拜访人id数组
+    /// 拜访对象id数组
     private var contactArray = [Int]()
     /// 选中内容
 //    private var seleStrArray = ["", "", "", "", "", "", "", ""]
@@ -92,7 +92,7 @@ class NewlyBuildVisitController: UIViewController {
         vc.seleBlock = { [weak self] (customerArray) in
             self?.seleIdArray[0] = customerArray.first?.0 ?? -1
             self?.seleStrArray[0] = customerArray.first?.1 ?? ""
-            // 重置数据 -> 防止出现选择拜访人、项目后 修改客户
+            // 重置数据 -> 防止出现选择拜访对象、项目后 修改客户
             self?.seleIdArray[1] = -1
             self?.seleStrArray[1] = ""
             self?.seleStrArray[2] = ""

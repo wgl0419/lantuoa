@@ -200,7 +200,7 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
             if cell == nil {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "HomePageProjectCell")
                 cell?.accessoryType = .disclosureIndicator
-                cell?.textLabel?.textColor = blackColor
+                cell?.textLabel?.textColor = UIColor(hex: "#FF7744")
                 cell?.textLabel?.font = UIFont.medium(size: 16)
                 
                 cell?.detailTextLabel?.font = UIFont.medium(size: 12)
@@ -225,9 +225,11 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
         let header = HomePageHeaderView(frame: CGRect(x: 0, y: 10, width: ScreenWidth, height: 44))
         var logoName = "visit"
         var attriMuStr = NSMutableAttributedString(string: "本月统计")
+        attriMuStr.changeColor(str: "我的项目", color: UIColor(hex: "#2E4695"))
         if section == 1 {
             logoName = "project"
             attriMuStr = NSMutableAttributedString(string: "我的项目")
+            attriMuStr.changeColor(str: "我的项目", color: UIColor(hex: "#2E4695"))
         }
         header.setContent(logoName: logoName, attriMuStr: attriMuStr)
         headerView.addSubview(header)

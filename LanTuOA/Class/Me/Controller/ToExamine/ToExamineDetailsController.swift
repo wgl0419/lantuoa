@@ -269,7 +269,7 @@ class ToExamineDetailsController: UIViewController {
     /// 点击拒绝
     @objc private func refuseClick() {
         if checkListData.processType == 1 || checkListData.processType == 2 {
-            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户/拜访人", "名字不合理"])
+            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户/拜访对象", "名字不合理"])
             view.didBlock = { [weak self] (seleIndex) in
                 self?.modifyEjectView(type: seleIndex)
             }
@@ -325,7 +325,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsHeaderCell", for: indexPath) as! ToExamineDetailsHeaderCell
             cell.data = checkListData
             return cell
-        } else if section == 1 { // 发起人信息
+        } else if section == 1 { // 业务人员信息
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
             cell.notifyCheckListData = checkListData
             return cell
@@ -334,7 +334,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
             cell.carbonCopyData = carbonCopyData
             return cell
         } else {
-            if row == 0 { // 审核人信息 or 多人或签
+            if row == 0 { // 审核人信息 or 多人会签
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
                 let step = checkListData != nil ? checkListData.step : 0
                 cell.data = (checkUserData[section - 2], step >= checkUserData[section - 2][0].sort, section - 1 == checkUserData.count, openArray[section - 2])

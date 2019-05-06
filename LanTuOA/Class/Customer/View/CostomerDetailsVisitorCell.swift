@@ -4,7 +4,7 @@
 //
 //  Created by HYH on 2019/4/9.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  客户详情  拜访人  cell
+//  客户详情  拜访对象  cell
 
 import UIKit
 

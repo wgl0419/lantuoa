@@ -16,7 +16,7 @@ class CustomerDetailsTableView: UITableView {
     enum CellStyle: Int {
         /// 在线项目
         case project = 0
-        /// 拜访人
+        /// 拜访对象
         case visitor = 1
         /// 拜访历史
         case history = 2
@@ -138,7 +138,7 @@ class CustomerDetailsTableView: UITableView {
         } else if cellStyle == .project { // 在线项目
             setNoneData(str: "暂无在线项目", imageStr: "noneData")
         } else if cellStyle == .visitor { // 联系人
-            setNoneData(str: "暂无拜访人", imageStr: "noneData")
+            setNoneData(str: "暂无拜访对象", imageStr: "noneData")
         } else { // 合同
             setNoneData(str: "暂无历史合同", imageStr: "noneData")
         }
@@ -167,7 +167,7 @@ class CustomerDetailsTableView: UITableView {
             .taxi.config({ (btn) in
                 var str =  " 添加项目"
                 if cellStyle == .visitor {
-                    str = " 新增拜访人"
+                    str = " 新增拜访对象"
                 }
                 btn.setTitle(str, for: .normal)
                 btn.titleLabel?.font = UIFont.medium(size: 14)
@@ -264,7 +264,7 @@ class CustomerDetailsTableView: UITableView {
         }, errorHandle: { (error) in
             self.mj_header.endRefreshing()
             self.isNoData = self.contactListData.count == 0
-            MBProgressHUD.showError(error ?? "获取拜访人失败")
+            MBProgressHUD.showError(error ?? "获取拜访对象失败")
         })
     }
     
@@ -274,7 +274,7 @@ class CustomerDetailsTableView: UITableView {
     private func visitList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.visitList("", timeStamp, nil, 2, newPage, 10, customerId, nil), t: VisitListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.visitList("", timeStamp, nil, 2, newPage, 10, customerId, nil, nil), t: VisitListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -397,7 +397,7 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if cellStyle == .project { // 在线项目
             return projectData.count
-        } else if cellStyle == .visitor { // 拜访人
+        } else if cellStyle == .visitor { // 拜访对象
             return contactListData.count
         } else if cellStyle == .history { // 拜访历史
             return section == 0 ? 0 : visitData.count
@@ -412,13 +412,13 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsProjectCell", for: indexPath) as! CostomerDetailsProjectCell
             cell.data = projectData[row]
             return cell
-        } else if cellStyle == .visitor { // 拜访人
+        } else if cellStyle == .visitor { // 拜访对象
             let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsVisitorCell", for: indexPath) as! CostomerDetailsVisitorCell
             let data = contactListData[row]
             cell.editBlock = {
                 let ejectView = AddVisitorEjectView()
                 let contentArray = [data.name ?? "", data.phone ?? "", data.position ?? ""]
-                ejectView.modifyData = ("修改拜访人信息", contentArray, data.id)
+                ejectView.modifyData = ("修改拜访对象信息", contentArray, data.id)
                 ejectView.addBlock = { // 添加成功 -> 刷新
                     self.reload()
                 }

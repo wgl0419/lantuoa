@@ -23,9 +23,9 @@ class ProjectDetailsVisitCell: UITableViewCell {
         }
     }
     
-    /// 拜访人
+    /// 拜访对象
     private var nameLabel: UILabel!
-    /// 发起人
+    /// 业务人员
     private var initiatedLabel: UILabel!
     /// 拜访方式
     private var modeLabel = UILabel()
@@ -48,46 +48,46 @@ class ProjectDetailsVisitCell: UITableViewCell {
     /// 初始化子控件
     private func initSubViews() {
         
-        let name = UILabel().taxi.adhere(toSuperView: contentView) // “拜访人”
+        let name = UILabel().taxi.adhere(toSuperView: contentView) // “拜访对象”
             .taxi.layout { (make) in
                 make.top.left.equalToSuperview().offset(15)
         }
             .taxi.config { (label) in
-                label.text = "拜访人："
+                label.text = "拜访对象："
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
         }
 
-        nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 拜访人名称
+        nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 拜访对象名称
             .taxi.layout(snapKitMaker: { (make) in
                 make.centerY.equalTo(name)
                 make.left.equalTo(name.snp.right)
             })
             .taxi.config({ (label) in
-                label.text = "拜访人"
+                label.text = "拜访对象"
                 label.textColor = blackColor
                 label.font = UIFont.boldSystemFont(ofSize: 12)
             })
 
-        let initiated = UILabel().taxi.adhere(toSuperView: contentView) // “发起人”
+        let initiated = UILabel().taxi.adhere(toSuperView: contentView) // “业务人员”
             .taxi.layout { (make) in
                 make.left.greaterThanOrEqualToSuperview().offset(115)
                 make.left.equalTo(nameLabel.snp.right).offset(5)
                 make.top.equalToSuperview().offset(15)
         }
             .taxi.config { (label) in
-                label.text = "发起人："
+                label.text = "业务人员："
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
         }
 
-        initiatedLabel = UILabel().taxi.adhere(toSuperView: contentView) // 发起人
+        initiatedLabel = UILabel().taxi.adhere(toSuperView: contentView) // 业务人员
             .taxi.layout(snapKitMaker: { (make) in
                 make.centerY.equalTo(initiated)
                 make.left.equalTo(initiated.snp.right)
             })
             .taxi.config({ (label) in
-                label.text = "发起人"
+                label.text = "业务人员"
                 label.textColor = blackColor
                 label.font = UIFont.boldSystemFont(ofSize: 12)
             })

@@ -10,7 +10,7 @@ import UIKit
 
 class ToExamineDetailsCell: UITableViewCell {
     
-    /// 发起人数据
+    /// 业务人员数据
     var notifyCheckListData: NotifyCheckListData? {
         didSet {
             if let data = notifyCheckListData {
@@ -30,12 +30,12 @@ class ToExamineDetailsCell: UITableViewCell {
         didSet {
             if let listModel = data?.0, let approval = data?.1, let isLast = data?.2, let isOpen = data?.3 {
                 var status: Int!
-                // 处理是显示名称  还是  多人或签
+                // 处理是显示名称  还是  多人会签
                 var model = listModel.filter { (model) -> Bool in
                     return model.status == 2 || model.status == 3
                 }
-                if model.count == 0 && listModel.count > 1 { // 多人或签状态下 还没有人处理
-                    nameLabel.text = "\(listModel.count)人或签"
+                if model.count == 0 && listModel.count > 1 { // 多人会签状态下 还没有人处理
+                    nameLabel.text = "\(listModel.count)人会签"
                     openBtn.isHidden = false
                     status = listModel[0].status
                 } else {

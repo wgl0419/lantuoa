@@ -30,12 +30,12 @@ class VisitDetailsCell: UITableViewCell {
                     let visitStr = data.contactInfo ?? ""
                     let typeStr = data.type == 1 ? "面谈" : data.type == 2 ? "电话沟通" : "网络聊天"
                     let time = Date(timeIntervalSince1970: TimeInterval(data.createdTime)).yearTimeStr()
-                    let create = setTitleAndContent("发起人：", contentStr: createStr, lastLabel: nil, position: -1)
-                    let visit = setTitleAndContent("拜访人：", contentStr: visitStr, lastLabel: create, position: 0)
+                    let create = setTitleAndContent("业务人员：", contentStr: createStr, lastLabel: nil, position: -1)
+                    let visit = setTitleAndContent("拜访对象：", contentStr: visitStr, lastLabel: create, position: 0)
                     let type = setTitleAndContent("拜访方式：", contentStr: typeStr, lastLabel: visit, position: 0)
                     _ = setTitleAndContent("拜访时间：", contentStr: time, lastLabel: type, position: 1)
                 case .content:
-                    _ = setTitleAndContent("拜访时间：", contentStr: data.content ?? " ", lastLabel: nil, position: 2)
+                    _ = setTitleAndContent("拜访内容：", contentStr: data.content ?? " ", lastLabel: nil, position: 2)
                 case .result:
                     _ = setTitleAndContent("拜访结果：", contentStr: data.result ?? " ", lastLabel: nil, position: 2)
                 }

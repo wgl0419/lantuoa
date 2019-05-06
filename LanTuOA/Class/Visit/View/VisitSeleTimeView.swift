@@ -7,23 +7,43 @@
 //  拜访 选择时间 侧边弹出视图
 
 import UIKit
+import MBProgressHUD
 
 class VisitSeleTimeView: UIView {
 
-    /// 点击确定回调 (开始时间戳   结束时间戳  选中条件index)
-    var confirmBlock: ((Int?, Int?, Int) -> ())?
+    /// 点击确定回调 (开始时间戳   结束时间戳  选中条件id数组  选中条件内容)
+    var confirmBlock: ((Int?, Int?, [Int], [String]) -> ())?
     
     /// 白色背景图
     private var whiteView: UIView!
+    /// tableview
+    private var tableView: UITableView!
     /// 开始时间
     private var startBtn = UIButton()
     /// 结束时间
     private var endBtn = UIButton()
     
-    /// 记录按钮
-    private var btnArray = [UIButton]()
-    /// 标记选中按钮 tag -> index + 100
-    private var seleTag = 0
+//    /// 记录按钮
+//    private var btnArray = [UIButton]()
+//    /// 标记选中按钮 tag -> index + 100
+//    private var seleTag = 0
+    /// 标题
+    private let titleArray = ["条件", "客户", "项目", "业务人员"]
+    /// 内容
+    private var contentArray = ["", "", "", ""]
+    /// 选中的id
+    private var idArray = [-1, -1, -1, -1]
+    /// 开始时间
+    private var startTimeStamp: Int!
+    /// 结束时间
+    private var endTimeStamp: Int!
+    
+    /// 客户数据
+    private var customerData = [CustomerListStatisticsData]()
+    /// 客户数据
+    private var projectData = [ProjectListStatisticsData]()
+    /// 业务人员数据
+    private var usersData = [UsersData]()
     
     
     override init(frame: CGRect) {
@@ -68,23 +88,12 @@ class VisitSeleTimeView: UIView {
     ///   - start: 开始时间戳
     ///   - end: 结束时间戳
     ///   - sele: 选中条件index
-    func setDefault(start: Int?, end: Int?, sele: Int) {
-        var startStr = ""
-        if start != nil {
-            startStr = Date(timeIntervalSince1970: TimeInterval(start!)).yearTimeStr()
-        }
-        startBtn.setTitle(startStr, for: .normal)
-        
-        var endStr = ""
-        if end != nil {
-            endStr = Date(timeIntervalSince1970: TimeInterval(end!)).yearTimeStr()
-        }
-        endBtn.setTitle(endStr, for: .normal)
-        
-        if btnArray.count == 4 { // 有按钮
-            let btn = btnArray[sele]
-            seleClick(btn: btn)
-        }
+    func setDefault(start: Int?, end: Int?, id: [Int], content: [String]) {
+        startTimeStamp = start
+        endTimeStamp = end
+        idArray = id
+        contentArray = content
+        tableView.reloadData()
     }
     
     // MARK: - 自定义私有方法
@@ -106,40 +115,23 @@ class VisitSeleTimeView: UIView {
                 view.backgroundColor = .white
             })
         
-        /**************  时间块  **************/
-        let time = setModularHeader(titleStr: "时间", lastBtn: nil) // “时间”
-        setTime(titleStr: "开始", btn: startBtn, lastView: time)
-        setTime(titleStr: "结束", btn: endBtn, lastView: startBtn)
+        tableView = UITableView().taxi.adhere(toSuperView: whiteView) // tableview
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.right.equalToSuperview()
+                make.top.equalToSuperview().offset(SafeH)
+                make.bottom.equalToSuperview().offset(-SafeH - 50)
+            })
+            .taxi.config({ (tableView) in
+                tableView.delegate = self
+                tableView.dataSource = self
+                tableView.estimatedRowHeight = 50
+                tableView.tableFooterView = UIView()
+                tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                tableView.register(ScreenTimeCell.self, forCellReuseIdentifier: "ScreenTimeCell")
+                tableView.register(ScreenOtherCell.self, forCellReuseIdentifier: "ScreenOtherCell")
+            })
         
-        /**************  条件块  **************/
-            let condition = setModularHeader(titleStr: "条件", lastBtn: endBtn) // ”条件“
-            
-            let titleArray = ["全部", "我发起的", "我接手的", "工作组"]
-            for index in 0..<4 {
-                let row = index % 2
-                let section = index / 2
-                let btn = UIButton().taxi.adhere(toSuperView: whiteView)
-                    .taxi.layout { (make) in
-                        make.top.equalTo(condition.snp.bottom).offset(section == 0 ? 30 : 72)
-                        make.left.equalToSuperview().offset(row == 0 ? 15 : 104)
-                        make.height.equalTo(26)
-                        make.width.equalTo(74)
-                    }
-                    .taxi.config { (btn) in
-                        btn.tag = index + 100
-                        btn.layer.borderWidth = 1
-                        btn.layer.cornerRadius = 4
-                        btn.setTitleColor(.white, for: .selected)
-                        btn.setTitle(titleArray[index], for: .normal)
-                        btn.titleLabel?.font = UIFont.medium(size: 12)
-                        btn.layer.borderColor = UIColor(hex: "#CCCCCC").cgColor
-                        btn.setTitleColor(UIColor(hex: "#787E82"), for: .normal)
-                        btn.addTarget(self, action: #selector(seleClick(btn:)), for: .touchUpInside)
-                }
-                btnArray.append(btn)
-        }
-        
-        /**************  顶部块 **************/
+        /**************  底部块 **************/
         _ = UIButton().taxi.adhere(toSuperView: whiteView) // "重置"
             .taxi.layout(snapKitMaker: { (make) in
                 make.bottom.equalToSuperview().offset(-SafeH)
@@ -154,7 +146,7 @@ class VisitSeleTimeView: UIView {
                 btn.setTitleColor(UIColor(hex: "#999999"), for: .normal)
                 btn.addTarget(self, action: #selector(resetClick), for: .touchUpInside)
             })
-        
+
         _ = UIButton().taxi.adhere(toSuperView: whiteView) // “确定”
             .taxi.layout(snapKitMaker: { (make) in
                 make.height.equalTo(50)
@@ -171,143 +163,146 @@ class VisitSeleTimeView: UIView {
             })
     }
     
-    /// 设置模块头部
-    ///
-    /// - Parameters:
-    ///   - titleStr: 标题
-    ///   - lastBtn: 跟随的按钮
-    /// - Returns: 标题label
-    private func setModularHeader(titleStr: String, lastBtn: UIButton?) -> UILabel {
-        let titleLabel = UILabel().taxi.adhere(toSuperView: whiteView) // “时间”
-            .taxi.layout { (make) in
-                if lastBtn == nil {
-                    make.top.equalToSuperview().offset(22 + SafeH)
-                } else {
-                    make.top.equalTo(lastBtn!.snp.bottom).offset(38)
-                }
-                make.left.equalToSuperview().offset(15)
+    /// 选择时间
+    private func seleTimeHandle(_ timeType: Int) {
+        let ejectView = SeleTimeEjectView(timeStamp: timeType == 0 ? startTimeStamp : endTimeStamp , titleStr: timeType == 0 ? "选择开始时间：" : "选择结束时间：")
+        ejectView.determineBlock = { [weak self] (timeStamp) in
+            if timeType == 0 {
+                self?.startTimeStamp = timeStamp
+            } else {
+                self?.endTimeStamp = timeStamp
             }
-            .taxi.config { (label) in
-                label.text = titleStr
-                label.font = UIFont.medium(size: 12)
-                label.textColor = UIColor(hex: "#999999")
-        }
-        
-        _ = UIView().taxi.adhere(toSuperView: whiteView) // 分割线
-            .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(titleLabel.snp.bottom).offset(7)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(1)
-            })
-            .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
-            })
-        
-        return titleLabel
-    }
-    
-    /// 设置时间块
-    ///
-    /// - Parameters:
-    ///   - titleStr: 标题
-    ///   - btn: 按钮
-    ///   - lastView: 跟随的控件
-    private func setTime(titleStr: String, btn: UIButton, lastView: UIView) {
-        let titleLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 标题
-            .taxi.layout { (make) in
-                if lastView is UILabel {
-                    make.top.equalTo(lastView.snp.bottom).offset(22)
-                } else {
-                    make.top.equalTo(lastView.snp.bottom).offset(15)
-                }
-                make.left.equalToSuperview().offset(15)
-        }
-            .taxi.config { (label) in
-                label.text = titleStr
-                label.textColor = blackColor
-                label.font = UIFont.medium(size: 12)
-        }
-        
-        btn.taxi.adhere(toSuperView: whiteView) // 按钮
-            .taxi.layout { (make) in
-                make.height.equalTo(30)
-                make.left.equalToSuperview().offset(15)
-                make.right.equalToSuperview().offset(-15)
-                make.top.equalTo(titleLabel.snp.bottom).offset(5)
-        }
-            .taxi.config { (btn) in
-                btn.layer.borderWidth = 1
-                btn.layer.cornerRadius = 4
-                btn.setTitleColor(blackColor, for: .normal)
-                btn.titleLabel?.font = UIFont.medium(size: 14)
-                btn.layer.borderColor = UIColor(hex: "#CCCCCC").cgColor
-                btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: -7, bottom: 0, right: 7)
-                btn.addTarget(self, action: #selector(setTimeClick(btn:)), for: .touchUpInside)
-        }
-
-        _ = UIImageView().taxi.adhere(toSuperView: whiteView) // 图标
-            .taxi.layout(snapKitMaker: { (make) in
-                make.right.equalTo(btn).offset(-10)
-                make.width.height.equalTo(14)
-                make.centerY.equalTo(btn)
-            })
-            .taxi.config({ (imageView) in
-                imageView.image = UIImage(named: "date")
-            })
-    }
-    
-    // MAKR: - 按钮点击
-    /// 设置选中时间
-    @objc private func setTimeClick(btn: UIButton) {
-        let ejectView = SeleVisitTimeView(limit: true)
-        ejectView.seleBlock = { (timeStr) in
-            btn.setTitle(timeStr, for: .normal)
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
         }
         ejectView.show()
     }
     
-    /// 选中按钮
-    @objc private func seleClick(btn: UIButton) {
-        if seleTag != btn.tag + 100 {
-            if seleTag != 0 {
-                let oldBnt = btnArray[seleTag - 100]
-                oldBnt.isSelected = false
-                oldBnt.backgroundColor = .white
-                oldBnt.layer.borderColor = UIColor(hex: "#CCCCCC").cgColor
+    /// 条件筛选
+    private func conditionScreening() {
+        let contentStrArray = ["全部", "我发起的", "我接收的", "工作组"]
+        let view = SeleVisitModelView(title: "条件筛选", content: contentStrArray)
+        view.didBlock = { [weak self] (seleIndex) in
+            self?.contentArray[0] = contentStrArray[seleIndex]
+            self?.idArray[0] = seleIndex
+            self?.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+        }
+        view.show()
+    }
+    
+    /// 客户筛选
+    private func customerScreening() {
+        if customerData.count == 0 {
+            customerList()
+        } else {
+            let ejectView = ScreenEjectView(data: customerData)
+            ejectView.seleBlock = { [weak self] (name, id) in
+                if self?.idArray[1] == id { // 点击原本的数据
+                    return
+                } else {
+                    self?.idArray[1] = id
+                    self?.contentArray[1] = name
+                    // 清空项目数据
+                    self?.projectData = []
+                    self?.idArray[2] = -1
+                    self?.contentArray[2] = ""
+                    self?.tableView.reloadRows(at: [IndexPath(row: 2, section: 0), IndexPath(row: 3, section: 0)], with: .none)
+                }
             }
-            btn.isSelected = true
-            btn.backgroundColor = UIColor(hex: "#2E4695")
-            btn.layer.borderColor = UIColor(hex: "#2E4695").cgColor
-            seleTag = btn.tag
+            ejectView.show()
         }
     }
     
+    /// 项目筛选
+    private func projectScreening() {
+        if projectData.count == 0 {
+            projectList()
+        } else {
+            let ejectView = ScreenEjectView(data: projectData)
+            ejectView.seleBlock = { [weak self] (name, id) in
+                self?.idArray[2] = id
+                self?.contentArray[2] = name
+                self?.tableView.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .none)
+            }
+            ejectView.show()
+        }
+    }
+    
+    private func usersScreening() {
+        if usersData.count == 0 {
+            users()
+        } else {
+            let ejectView = ScreenEjectView(data: usersData)
+            ejectView.seleBlock = { [weak self] (name, id) in
+                self?.idArray[3] = id
+                self?.contentArray[3] = name
+                self?.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: .none)
+            }
+            ejectView.show()
+        }
+    }
+    
+    // MAKR: - 按钮点击
     /// 点击重置
     @objc private func resetClick() {
-        setDefault(start: nil, end: nil, sele: 0)
+        startTimeStamp = nil
+        endTimeStamp = nil
+        contentArray = ["全部", "", "", ""]
+        idArray = [0, -1, -1, -1]
+        tableView.reloadData()
     }
     
     /// 点击确定
     @objc private func confirmClick() {
         if confirmBlock != nil {
-            var startTimeStamp: Int! // 开始时间戳
-            let startStr = startBtn.title(for: .normal) ?? ""
-            if startStr.count > 0 {
-                startTimeStamp = startStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm")
-            }
-            
-            var endTimeStamp: Int! // 结束时间戳
-            let endStr = endBtn.title(for: .normal) ?? ""
-            if endStr.count > 0 {
-                endTimeStamp = endStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm")
-            }
-            confirmBlock!(startTimeStamp, endTimeStamp, seleTag - 100)
+            confirmBlock!(startTimeStamp, endTimeStamp, idArray, contentArray)
         }
         hidden()
     }
+    
+    // MARK: - Api
+    /// 客户列表
+    private func customerList() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.customerListStatistics("", nil, nil, 1, 99999), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            self.customerData = result.data
+            self.customerScreening()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取客户列表失败，请重试")
+        })
+    }
+    
+    /// 项目列表
+    private func projectList() {
+        let customerId = idArray[1]
+        if customerId == -1 {
+            MBProgressHUD.showError("请先选择客户")
+            return 
+        }
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.projectList("", customerId, 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            self.projectData = result.data
+            self.projectScreening()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取项目失败，请重试")
+        })
+    }
+    
+    /// 业务人员列表
+    private func users() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.users(1, 99999, "", 1), t: UsersModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+            self.usersData = result.data
+            self.usersScreening()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取业务人员失败，请重试")
+        })
+    }
 }
 
-extension VisitSeleTimeView : UIGestureRecognizerDelegate {
+extension VisitSeleTimeView: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         let touchPoint = touch.location(in: self)
         let frame = whiteView.convert(whiteView.bounds, to: self)
@@ -316,5 +311,35 @@ extension VisitSeleTimeView : UIGestureRecognizerDelegate {
         } else {
             return true
         }
+    }
+}
+
+extension VisitSeleTimeView: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let row = indexPath.row
+        if row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ScreenTimeCell", for: indexPath) as! ScreenTimeCell
+            cell.data = (startTimeStamp, endTimeStamp)
+            cell.clickBlock = { [weak self] (timeType) in
+                self?.seleTimeHandle(timeType)
+            }
+            return cell
+        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ScreenOtherCell", for: indexPath) as! ScreenOtherCell
+        cell.data = (titleArray[row - 1], "请选择", contentArray[row - 1])
+        cell.screenBlock = { [weak self] in
+            switch row {
+            case 1: self?.conditionScreening()
+            case 2: self?.customerScreening()
+            case 3: self?.projectScreening()
+            case 4: self?.usersScreening()
+            default: break
+            }
+        }
+        return cell
     }
 }

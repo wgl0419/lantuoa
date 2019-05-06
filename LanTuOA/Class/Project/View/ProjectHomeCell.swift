@@ -31,9 +31,9 @@ class ProjectHomeCell: UITableViewCell {
     private var titleLabel: UILabel!
     /// 客户
     private var customerLabel: UILabel!
-    /// 发起人
+    /// 业务人员
     private var initiateLabel: UILabel!
-    /// 拜访人
+    /// 拜访对象
     private var visitNameLabel: UILabel!
     /// 拜访时间
     private var timeLabel: UILabel!
@@ -106,15 +106,15 @@ class ProjectHomeCell: UITableViewCell {
         setTitle(title: customer, content: customerLabel, lastLabel: titleLabel)
         customer.text = "客户："
         
-        let initiate = UILabel().taxi.adhere(toSuperView: whiteView) // "发起人"
-        initiateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 发起人
+        let initiate = UILabel().taxi.adhere(toSuperView: whiteView) // "业务人员"
+        initiateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 业务人员
         setTitle(title: initiate, content: initiateLabel, lastLabel: customer)
-        initiate.text = "发起人："
+        initiate.text = "业务人员："
         
-        let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “拜访人”
-        visitNameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 拜访人
+        let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “拜访对象”
+        visitNameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 拜访对象
         setTitle(title: visitName, content: visitNameLabel, lastLabel: initiate)
-        visitName.text = "最新拜访人："
+        visitName.text = "最新拜访对象："
         
         let time = UILabel().taxi.adhere(toSuperView: whiteView) // “时间”
         timeLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 时间

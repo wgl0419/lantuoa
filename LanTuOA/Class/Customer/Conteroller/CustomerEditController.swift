@@ -74,7 +74,7 @@ class CustomerEditController: UIViewController {
         headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
         headerHeight = headerView.height // 并保存
         
-        let titleArray = ["在线项目", "拜访人", "历史拜访", "历史合同"]
+        let titleArray = ["在线项目", "拜访对象", "历史拜访", "历史合同"]
         segment = ProjectDetailsSegmentedView(title: titleArray) // 选择器
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
@@ -173,7 +173,7 @@ class CustomerEditController: UIViewController {
     }
     
     // MARK: - 按钮点击
-    /// 点击添加拜访人
+    /// 点击添加拜访对象
     @objc private func addVisitorClick() {
         
     }

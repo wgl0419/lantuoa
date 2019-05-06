@@ -26,9 +26,9 @@ class VisitHomeCell: UITableViewCell {
     
     /// 标题
     private var titleLabel: UILabel!
-    /// 拜访人
+    /// 拜访对象
     private var visitNameLabel: UILabel!
-    /// 发起人
+    /// 业务人员
     private var initiateLabel: UILabel!
     /// 拜访时间
     private var timeLabel: UILabel!
@@ -97,15 +97,15 @@ class VisitHomeCell: UITableViewCell {
                 imageView.image = UIImage(named: "arrow")
             })
         
-        let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “拜访人”
-        visitNameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 拜访人
+        let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “拜访对象”
+        visitNameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 拜访对象
         setTitle(title: visitName, content: visitNameLabel, lastLabel: titleLabel)
-        visitName.text = "拜访人："
+        visitName.text = "拜访对象："
         
-        let initiate = UILabel().taxi.adhere(toSuperView: whiteView) // "发起人"
-        initiateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 发起人
+        let initiate = UILabel().taxi.adhere(toSuperView: whiteView) // "业务人员"
+        initiateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 业务人员
         setTitle(title: initiate, content: initiateLabel, lastLabel: visitNameLabel)
-        initiate.text = "发起人："
+        initiate.text = "业务人员："
         
         let time = UILabel().taxi.adhere(toSuperView: whiteView) // “时间”
         timeLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 时间

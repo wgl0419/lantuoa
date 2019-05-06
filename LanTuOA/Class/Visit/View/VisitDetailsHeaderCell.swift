@@ -50,11 +50,11 @@ class VisitDetailsHeaderCell: UITableViewCell {
             })
             .taxi.config({ (label) in
                 label.numberOfLines = 0
-                label.textColor = UIColor(hex: "#2E4695")
+                label.textColor = UIColor(hex: "#FF7744")
                 label.font = UIFont.boldSystemFont(ofSize: 24)
             })
         
-        _ = UIView().taxi.adhere(toSuperView: contentView) // 项目名称前的蓝色块
+        _ = UIView().taxi.adhere(toSuperView: contentView) // 项目名称前的橙色块
             .taxi.layout(snapKitMaker: { (make) in
                 make.centerY.equalTo(projectNameLabel)
                 make.left.equalToSuperview()
@@ -62,7 +62,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
                 make.width.equalTo(2)
             })
             .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#2E4695")
+                view.backgroundColor = UIColor(hex: "#FF7744")
             })
         
         let customer = UILabel().taxi.adhere(toSuperView: contentView) // “客户”

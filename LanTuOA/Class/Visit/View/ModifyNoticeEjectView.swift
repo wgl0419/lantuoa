@@ -185,7 +185,7 @@ class ModifyNoticeEjectView: UIView {
         vc.seleBlock = { [weak self] (customerArray) in
             self?.idArray[0] = customerArray.first?.0 ?? -1
             self?.contentArray[0] = customerArray.first?.1 ?? ""
-            // 重置数据 -> 防止出现选择拜访人、项目后 修改客户
+            // 重置数据 -> 防止出现选择拜访对象、项目后 修改客户
             self?.idArray[1] = 0
             self?.contentArray[1] = ""
             self?.tableView.reloadData()

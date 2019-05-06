@@ -30,7 +30,7 @@ class ToExamineController: UIViewController {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        title = "我的审核"
+        title = "我的审批"
         view.backgroundColor = .white
         
         tableView = UITableView().taxi.adhere(toSuperView: view) // 用于显示数据的tableview

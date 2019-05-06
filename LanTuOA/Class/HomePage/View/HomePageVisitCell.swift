@@ -27,7 +27,7 @@ class HomePageVisitCell: UITableViewCell {
     private var projectLabel: UILabel!
     /// 拜访次数
     private var visitNumberLabel: UILabel!
-    /// 拜访人数
+    /// 拜访对象数
     private var visitLabel: UILabel!
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -118,7 +118,7 @@ class HomePageVisitCell: UITableViewCell {
                 label.textColor = UIColor(hex: "#999999")
             })
         
-        visitLabel = UILabel().taxi.adhere(toSuperView: contentView) // 拜访人数
+        visitLabel = UILabel().taxi.adhere(toSuperView: contentView) // 拜访对象数
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalTo(contentView).offset(38)
                 make.width.equalTo(ScreenWidth / 4 - 10)
@@ -133,7 +133,7 @@ class HomePageVisitCell: UITableViewCell {
                 label.adjustsFontSizeToFitWidth = true
             })
         
-        _ = UILabel().taxi.adhere(toSuperView: contentView) // ”拜访人数“
+        _ = UILabel().taxi.adhere(toSuperView: contentView) // ”拜访对象数“
             .taxi.layout(snapKitMaker: { (make) in
                 make.centerX.equalTo(visitLabel)
                 make.bottom.equalTo(visitLabel.snp.top).offset(-7)

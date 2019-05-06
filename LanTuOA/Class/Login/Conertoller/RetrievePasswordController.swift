@@ -290,7 +290,7 @@ class RetrievePasswordController: UIViewController {
         }
     }
     
-    // MAKR: - Api
+    // MARK: - Api
     /// 获取验证码
     private func code() {
         MBProgressHUD.showWait("")

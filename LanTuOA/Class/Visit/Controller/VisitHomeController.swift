@@ -20,15 +20,7 @@ class VisitHomeController: UIViewController {
     /// 搜索框
     private var searchBar: UISearchBar!
     /// 筛选内容
-    private var screenView: UIView!
-    /// 时间筛选视图
-    private var timeScreenView: ScreenView!
-    /// 类型筛选视图
-    private var typeScreenView: ScreenView!
-    /// 有选中时间条件约束
-    private var timeConstraint: Constraint!
-    /// 无选中时间条件约束
-    private var noneTimeConstraint: Constraint!
+    private var screenView: ScreenView!
     
     /// 列表数据
     private var data = [VisitListData]()
@@ -36,12 +28,16 @@ class VisitHomeController: UIViewController {
     private var inputCout = 0
     /// 页码
     private var page = 1
-    /// 选择类型
-    private var visitType = 0
+//    /// 选择类型
+//    private var visitType = 0
     /// 开始时间戳
     private var startTimeStamp: Int!
     /// 结束时间戳
     private var endTimeStamp: Int!
+    /// 内容
+    private var contentArray = ["全部", "", "", ""]
+    /// 选中的id
+    private var idArray = [0, -1, -1, -1]
     
     
     override func viewDidLoad() {
@@ -108,49 +104,28 @@ class VisitHomeController: UIViewController {
             })
         screenBtn.setSpacing()
         
-        screenView = UIView().taxi.adhere(toSuperView: view) // 筛选视图
+        screenView = ScreenView().taxi.adhere(toSuperView: view) // 筛选视图
             .taxi.layout(snapKitMaker: { (make) in
-                make.height.equalTo(0)
                 make.top.equalTo(barView.snp.bottom)
                 make.left.right.equalToSuperview()
             })
             .taxi.config({ (view) in
                 view.backgroundColor = .white
                 view.layer.masksToBounds = true
-            })
-        
-        timeScreenView = ScreenView().taxi.adhere(toSuperView: screenView) // 时间筛选视图
-            .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalToSuperview().offset(-5)
-                make.left.equalToSuperview().offset(15)
-            })
-            .taxi.config({ (view) in
-                view.deleteBlock = { [weak self] in
-                    self?.startTimeStamp = nil
-                    self?.endTimeStamp = nil
-                    self?.setScreenView()
+                view.deleteBlock = { [weak self] (index) in
+                    if index == 10086 { // 删除时间
+                        self?.startTimeStamp = nil
+                        self?.endTimeStamp = nil
+                    } else if index == 0 { // 删除条件 -> 变回默认选项 id:0  str:全部
+                        self?.idArray[0] = 0
+                        self?.contentArray[0] = "全部"
+                    } else {
+                        self?.idArray[index] = -1
+                        self?.contentArray[index] = ""
+                    }
                     self?.visitList(isMore: false)
                 }
             })
-        
-        typeScreenView = ScreenView().taxi.adhere(toSuperView: screenView) // 类型筛选视图
-            .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalToSuperview().offset(-5)
-                noneTimeConstraint = make.left.equalToSuperview().offset(15).priority(800).constraint
-                timeConstraint = make.left.equalTo(timeScreenView.snp.right).offset(15).constraint
-                
-            })
-            .taxi.config({ (view) in
-                noneTimeConstraint.activate()
-                timeConstraint.deactivate()
-                view.deleteBlock = { [weak self] in
-                    self?.visitType = 0
-                    self?.setScreenView()
-                    self?.visitList(isMore: false)
-                }
-            })
-        
-        setScreenView()
         
         tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
@@ -205,46 +180,7 @@ class VisitHomeController: UIViewController {
     
     /// 处理筛选视图
     private func setScreenView() {
-        if visitType == 0 && startTimeStamp == nil && endTimeStamp == nil { // 没有筛选条件
-            screenView.snp.updateConstraints { (make) in
-                make.height.equalTo(0)
-            }
-        } else {
-            screenView.snp.updateConstraints { (make) in
-                make.height.equalTo(44)
-            }
-            var startStr = "以前"
-            var endStr = "至今"
-            var timeStr = ""
-            if startTimeStamp != nil {
-                startStr = Date(timeIntervalSince1970: TimeInterval(startTimeStamp)).customTimeStr(customStr: "yyyy.MM.dd")
-            }
-            if endTimeStamp != nil {
-                endStr = Date(timeIntervalSince1970: TimeInterval(endTimeStamp)).customTimeStr(customStr: "yyyy.MM.dd")
-            }
-            if startStr.count > 2 && endStr.count > 2 {
-                timeStr = startStr + "-" + endStr
-            } else if startStr.count > 2 {
-                timeStr = startStr + endStr
-            } else if endStr.count > 2 {
-                timeStr = endStr + startStr
-            }
-            
-            if timeStr.count == 0 { // 没有筛选时间
-                timeScreenView.isHidden = true
-                noneTimeConstraint.activate()
-                timeConstraint.deactivate()
-            } else {
-                timeScreenView.isHidden = false
-                noneTimeConstraint.deactivate()
-                timeConstraint.activate()
-                timeScreenView.contentStr = timeStr
-            }
-            
-            typeScreenView.isHidden = visitType == 0
-            let typeArray = ["全部", "我发起的", "我接手的", "工作组"]
-            typeScreenView.contentStr = typeArray[visitType]
-        }
+        screenView.data = (startTimeStamp, endTimeStamp, contentArray)
     }
     
     /// 设置无数据信息
@@ -281,7 +217,11 @@ class VisitHomeController: UIViewController {
     private func visitList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.visitList(searchBar.text ?? "", startTimeStamp, endTimeStamp, visitType + 1, newPage, 10, nil, nil), t: VisitListModel.self, successHandle: { (result) in
+        let queryType = idArray[0] + 1 // 选择类型
+        let cutomerId = idArray[1] == -1 ? nil : idArray[1] // 客户id
+        let projectId = idArray[2] == -1 ? nil : idArray[2] // 项目id
+        let createdUser = idArray[3] == -1 ? nil : idArray[3] // 用户id
+        _ = APIService.shared.getData(.visitList(searchBar.text ?? "", startTimeStamp, endTimeStamp, queryType, newPage, 10, cutomerId, projectId, createdUser), t: VisitListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -334,11 +274,12 @@ class VisitHomeController: UIViewController {
     /// 点击筛选
     @objc private func screenClick() {
         let showView = VisitSeleTimeView()
-        showView.setDefault(start: startTimeStamp, end: endTimeStamp, sele: visitType)
-        showView.confirmBlock = { [weak self] (start, end, index) in
+        showView.setDefault(start: startTimeStamp, end: endTimeStamp, id: idArray, content: contentArray)
+        showView.confirmBlock = { [weak self] (start, end, id, content) in
             self?.startTimeStamp = start
             self?.endTimeStamp = end
-            self?.visitType = index
+            self?.idArray = id
+            self?.contentArray = content
             self?.visitList(isMore: false)
             self?.setScreenView()
         }

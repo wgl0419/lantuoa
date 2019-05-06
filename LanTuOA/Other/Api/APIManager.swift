@@ -52,8 +52,8 @@ enum APIManager {
     
     
     // MARK: - 拜访
-    case visitSave(Int, Int, Int, String, String, Int, Array<Int>) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级   contact:拜访人id数组)
-    case visitList(String, Int?, Int?, Int, Int, Int, Int?, Int?) // 拜访查询 (name:关键词，客户名称/项目名称  startTime:开始时间，秒级  endTime:结束时间，秒级  queryType:1.全部，2.只看自己，3.工作组，4.接手  page:页码  limit:一页几条数据  customerId:客户id     projectId:项目id)
+    case visitSave(Int, Int, Int, String, String, Int, Array<Int>) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级   contact:拜访对象id数组)
+    case visitList(String, Int?, Int?, Int, Int, Int, Int?, Int?, Int?) // 拜访查询 (name:关键词，客户名称/项目名称  startTime:开始时间，秒级  endTime:结束时间，秒级  queryType:1.全部，2.只看自己，3.工作组，4.接手  page:页码  limit:一页几条数据  customerId:客户id   projectId:项目id     createdUser: 用户id)
     
     // MARK: - 工作组
     case workGroupCreate(String, [Int], Int) // 新建工作组 (name:工作组名称  members:成员id  projectId:项目id)
@@ -126,7 +126,7 @@ extension APIManager: TargetType {
         case .version: return "/api/version"
         case .startupSum: return "/api/startup/sum"
         case .code: return "/api/code"
-        case .passwordReset: return "/password/reset"
+        case .passwordReset: return "/api/password/reset"
             
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"
@@ -303,12 +303,13 @@ extension APIManager: TargetType {
             
         case let .visitSave(customerId, projectId, type, content, result, visitTime, contact): // 新增拜访
             params = ["customerId": customerId, "projectId": projectId, "type": type, "content": content, "result": result, "visitTime": visitTime, "contact": contact]
-        case let .visitList(name, startTime, endTime, queryType, page, limit, cutomerId, projectId): // 拜访查询
+        case let .visitList(name, startTime, endTime, queryType, page, limit, cutomerId, projectId, createdUser): // 拜访查询
             params = ["name": name, "queryType": queryType, "page": page, "limit": limit]
             if startTime != nil { params["startTime"] = startTime! }
             if endTime != nil { params["endTime"] = endTime! }
             if cutomerId != nil { params["cutomerId"] = cutomerId! }
             if projectId != nil { params["projectId"] = projectId! }
+            if createdUser != nil { params["createdUser"] = createdUser! }
             
             
         case let .workGroupCreate(name, members, projectId): // 新建工作组
