@@ -74,24 +74,25 @@ class VisitHomeCell: UITableViewCell {
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalToSuperview().offset(13)
                 make.left.equalToSuperview().offset(15)
-                make.right.equalTo(whiteView.snp.centerX)
             })
             .taxi.config({ (label) in
                 label.numberOfLines = 0
                 label.textColor = UIColor(hex: "#FF7744")
                 label.font = UIFont.boldSystemFont(ofSize: 16)
+                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
             })
         
         initiateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 业务人员
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalToSuperview().offset(16)
                 make.right.equalToSuperview().offset(-15)
-                make.left.equalTo(whiteView.snp.centerX).offset(10)
+                make.left.equalTo(titleLabel.snp.right).offset(5)
             })
             .taxi.config({ (label) in
                 label.textAlignment = .right
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
+                label.setContentHuggingPriority(.defaultLow, for: .horizontal)
             })
         
         _ = UIView().taxi.adhere(toSuperView: whiteView) // 橙色线条

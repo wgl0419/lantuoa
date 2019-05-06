@@ -202,6 +202,7 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
                 cell?.accessoryType = .disclosureIndicator
                 cell?.textLabel?.textColor = UIColor(hex: "#FF7744")
                 cell?.textLabel?.font = UIFont.medium(size: 16)
+                cell?.textLabel?.numberOfLines = 0
                 
                 cell?.detailTextLabel?.font = UIFont.medium(size: 12)
                 cell?.detailTextLabel?.textColor = UIColor(hex: "#999999")

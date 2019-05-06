@@ -90,9 +90,6 @@ class NewlyBuildVisitSeleController: UIViewController {
             title = "客户"
             rightStr = "新增客户"
             searchStr = "客户名称"
-            guard Jurisdiction.share.isAddProject else {
-                return
-            }
         case .visitor(let id):
             customerId = id
             isMultiple = true
@@ -104,9 +101,6 @@ class NewlyBuildVisitSeleController: UIViewController {
             title = "项目"
             rightStr = "新增项目"
             searchStr = "项目名称"
-            guard Jurisdiction.share.isAddProject else {
-                return
-            }
         }
         if isAdd {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightStr,

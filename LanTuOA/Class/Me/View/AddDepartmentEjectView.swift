@@ -62,7 +62,7 @@ class AddDepartmentEjectView: UIView {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(UIResponder.keyboardWillChangeFrameNotification)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         IQKeyboardManager.shared.previousNextDisplayMode = .Default
     }
     
@@ -115,7 +115,7 @@ class AddDepartmentEjectView: UIView {
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalTo(titleLabel.snp.bottom)
                 make.left.right.equalTo(grayView)
-                make.height.equalTo(250)
+                make.height.equalTo(250).priority(800)
             })
             .taxi.config({ (tableView) in
                 tableView.bounces = false
@@ -153,10 +153,19 @@ class AddDepartmentEjectView: UIView {
             })
         
         layoutIfNeeded()
-        tableView.snp.updateConstraints { (make) in
-            make.height.equalTo(tableView.contentSize.height)
-        }
+    }
+    
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        perform(#selector(tableViewHandle), with: nil, afterDelay: 0.1)
         
+    }
+    
+    /// 处理tableview高度
+    @objc private func tableViewHandle() {
+        tableView.snp.updateConstraints { (make) in
+            make.height.equalTo(tableView.contentSize.height).priority(800)
+        }
     }
     
     

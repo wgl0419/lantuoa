@@ -71,13 +71,14 @@ class ProjectDetailsHeaderView: UIView {
                 make.right.equalToSuperview().offset(lockState == 2 ? -15 : -55).priority(800)
             })
             .taxi.config({ (label) in
+                label.numberOfLines = 0
                 label.textColor = UIColor(hex: "#FF7744")
                 label.font = UIFont.boldSystemFont(ofSize: 24)
             })
         
         _ = UIView().taxi.adhere(toSuperView: self) // 橙色线条
             .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalTo(projectNameLabel)
+                make.top.equalToSuperview().offset(25)
                 make.height.equalTo(20)
                 make.width.equalTo(2)
             })

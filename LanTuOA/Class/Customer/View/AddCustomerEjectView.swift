@@ -46,10 +46,7 @@ class AddCustomerEjectView: UIView {
                 seleStrArray.remove(at: 1)
                 titleArray.remove(at: 1)
                 tableView.reloadData()
-                layoutIfNeeded()
-                tableView.snp.updateConstraints { (make) in
-                    make.height.equalTo(tableView.contentSize.height)
-                }
+                setNeedsLayout()
                 confirmBtn.setTitle("提交申请", for: .normal)
             }
         }
@@ -96,7 +93,7 @@ class AddCustomerEjectView: UIView {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(UIResponder.keyboardWillChangeFrameNotification)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         IQKeyboardManager.shared.previousNextDisplayMode = .Default
     }
     
@@ -149,8 +146,8 @@ class AddCustomerEjectView: UIView {
         tableView = UITableView().taxi.adhere(toSuperView: grayView) // tableview
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalTo(titleLabel.snp.bottom)
+                make.height.equalTo(250).priority(800)
                 make.left.right.equalTo(grayView)
-                make.height.equalTo(250)
             })
             .taxi.config({ (tableView) in
                 tableView.bounces = false
@@ -199,11 +196,20 @@ class AddCustomerEjectView: UIView {
             })
         
         layoutIfNeeded()
-        tableView.snp.updateConstraints { (make) in
-            make.height.equalTo(tableView.contentSize.height)
-        }
     }
     
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        perform(#selector(tableViewHandle), with: nil, afterDelay: 0.1)
+        
+    }
+    
+    /// 处理tableview高度
+    @objc private func tableViewHandle() {
+        tableView.snp.updateConstraints { (make) in
+            make.height.equalTo(tableView.contentSize.height).priority(800)
+        }
+    }
     
     // MARK: - 通知
     /// 添加键盘通知
@@ -232,7 +238,6 @@ class AddCustomerEjectView: UIView {
             }
             self.layoutIfNeeded()
         }
-        
     }
     
     // MARK: - Api
@@ -359,9 +364,7 @@ extension AddCustomerEjectView: UITableViewDelegate, UITableViewDataSource {
             }
             cell.stopBlock = { [weak self] (str) in
                 self?.seleStrArray[row] = str
-                tableView.snp.updateConstraints { (make) in
-                    make.height.equalTo(tableView.contentSize.height)
-                }
+                self?.layoutIfNeeded()
             }
             return cell
         }

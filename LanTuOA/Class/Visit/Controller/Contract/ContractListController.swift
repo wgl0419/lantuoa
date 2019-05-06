@@ -12,10 +12,21 @@ import MBProgressHUD
 
 class ContractListController: UIViewController {
 
+    /// 筛选按钮
+    private var screenBtn: UIButton!
     /// 搜索框
     private var searchBar: UISearchBar!
+    /// 筛选内容
+    private var screenView: ScreenView!
     /// tableview
     private var tableView: UITableView!
+    
+    /// 内容
+    private var contentArray = ["", "", ""]
+    /// 选中的id
+    private var idArray = [-1, -1, -1]
+    /// 发布时间
+    private var releaseTimeStamp: Int!
     
     
     /// 记录输入次数  -> 用于减少计算次数
@@ -47,10 +58,10 @@ class ContractListController: UIViewController {
         
         searchBar = UISearchBar().taxi.adhere(toSuperView: barView)
             .taxi.layout(snapKitMaker: { (make) in
+                make.bottom.equalToSuperview()
                 make.top.equalToSuperview().offset(5)
                 make.left.equalTo(barView).offset(10)
-                make.right.equalTo(barView).offset(-5)
-                make.bottom.equalToSuperview().offset(-5)
+                make.right.equalTo(barView).offset(-55)
             })
             .taxi.config({ (searchBar) in
                 searchBar.sizeToFit()
@@ -61,10 +72,44 @@ class ContractListController: UIViewController {
                 searchBar.returnKeyType = .done
             })
         
+        screenBtn = UIButton().taxi.adhere(toSuperView: barView) // 筛选按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.bottom.right.equalToSuperview()
+                make.top.equalToSuperview().offset(5)
+                make.width.equalTo(barView.snp.height)
+            })
+            .taxi.config({ (btn) in
+                btn.setTitle("筛选", for: .normal)
+                btn.setTitleColor(blackColor, for: .normal)
+                btn.titleLabel?.font = UIFont.medium(size: 10)
+                btn.setImage(UIImage(named: "screen"), for: .normal)
+                btn.addTarget(self, action: #selector(screenClick), for: .touchUpInside)
+            })
+        screenBtn.setSpacing()
+        
+        screenView = ScreenView().taxi.adhere(toSuperView: view) // 筛选视图
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalTo(barView.snp.bottom)
+                make.left.right.equalToSuperview()
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = .white
+                view.layer.masksToBounds = true
+                view.deleteBlock = { [weak self] (index) in
+                    if index == 10086 { // 删除时间
+                        self?.releaseTimeStamp = nil
+                    } else { // 删除条件
+                        self?.idArray[index] = -1
+                        self?.contentArray[index] = ""
+                    }
+                    self?.contractList(isMore: false)
+                }
+            })
+        
         tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.bottom.right.equalToSuperview()
-                make.top.equalTo(barView.snp.bottom).offset(10)
+                make.top.equalTo(screenView.snp.bottom)
+                make.left.right.bottom.equalTo(view)
             })
             .taxi.config({ (tableView) in
                 tableView.delegate = self
@@ -82,6 +127,13 @@ class ContractListController: UIViewController {
                     self?.contractList(isMore: true)
                 })
             })
+        
+        let str = "暂无合同！"
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        tableView.noDataLabel?.attributedText = attriMuStr
+        tableView.noDataImageView?.image = UIImage(named: "noneData1")
     }
     
     /// 区分出搜索的内容
@@ -93,12 +145,20 @@ class ContractListController: UIViewController {
         }
     }
     
+    /// 处理筛选视图
+    private func setScreenView() {
+        screenView.data = (releaseTimeStamp, nil, contentArray)
+    }
+    
     // MARK: - Api
     /// 历史合同
     private func contractList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.contractList(searchBar.text ?? "", nil, nil, nil, newPage, 10), t: ContractListModel.self, successHandle: { (result) in
+        let customerId = idArray[0] == -1 ? nil : idArray[0] // 客户id
+        let projectId = idArray[1] == -1 ? nil : idArray[1] // 项目id
+        let userId = idArray[2] == -1 ? nil : idArray[2] // 用户id
+        _ = APIService.shared.getData(.contractList(searchBar.text ?? "", customerId, projectId, userId, newPage, 10), t: ContractListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -119,6 +179,7 @@ class ContractListController: UIViewController {
                 self.tableView.mj_footer.resetNoMoreData()
             }
             self.tableView.reloadData()
+            self.tableView.isNoData = self.data.count == 0
         }, errorHandle: { (error) in
             if isMore {
                 self.tableView.mj_footer.endRefreshing()
@@ -129,6 +190,22 @@ class ContractListController: UIViewController {
             }
             MBProgressHUD.showError(error ?? "获取历史合同失败")
         })
+    }
+    
+    // MARK: - 按钮点击
+    /// 点击筛选
+    @objc private func screenClick() {
+        UIApplication.shared.keyWindow?.endEditing(true)
+        let showView = ContractScreenView()
+        showView.setDefault(release: releaseTimeStamp, id: idArray, content: contentArray)
+        showView.confirmBlock = { [weak self] (release, id, content) in
+            self?.releaseTimeStamp = release
+            self?.idArray = id
+            self?.contentArray = content
+            self?.contractList(isMore: false)
+            self?.setScreenView()
+        }
+        showView.show()
     }
 }
 

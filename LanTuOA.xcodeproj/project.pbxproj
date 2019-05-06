@@ -71,6 +71,8 @@
 		1805FC3A2276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805FC392276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift */; };
 		1805FC3C2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805FC3B2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift */; };
 		1805FC3E2276F369001A2FF5 /* RetrievePasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805FC3D2276F369001A2FF5 /* RetrievePasswordController.swift */; };
+		18067C2922801E42005D26AC /* ContractScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18067C2822801E42005D26AC /* ContractScreenView.swift */; };
+		18067C2B22801EFF005D26AC /* ContractScreenTimeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18067C2A22801EFF005D26AC /* ContractScreenTimeCell.swift */; };
 		1806FBD92243305A005A4A77 /* ProjectDetailsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBD82243305A005A4A77 /* ProjectDetailsTableView.swift */; };
 		1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */; };
 		1806FBDD2243637D005A4A77 /* ProjectDetailsSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */; };
@@ -271,6 +273,8 @@
 		1805FC392276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsSmallCell.swift; sourceTree = "<group>"; };
 		1805FC3B2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsCarbonCopyCell.swift; sourceTree = "<group>"; };
 		1805FC3D2276F369001A2FF5 /* RetrievePasswordController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrievePasswordController.swift; sourceTree = "<group>"; };
+		18067C2822801E42005D26AC /* ContractScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractScreenView.swift; sourceTree = "<group>"; };
+		18067C2A22801EFF005D26AC /* ContractScreenTimeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractScreenTimeCell.swift; sourceTree = "<group>"; };
 		1806FBD82243305A005A4A77 /* ProjectDetailsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsTableView.swift; sourceTree = "<group>"; };
 		1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsPersonnelCell.swift; sourceTree = "<group>"; };
 		1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsSegmentedView.swift; sourceTree = "<group>"; };
@@ -997,6 +1001,8 @@
 				1849C1C2227E8A1600883C61 /* ScreenEjectView.swift */,
 				1849C1C4227EC11100883C61 /* SeleTimeEjectView.swift */,
 				1849C1C6227ED85400883C61 /* ScreenViewCollectionCell.swift */,
+				18067C2822801E42005D26AC /* ContractScreenView.swift */,
+				18067C2A22801EFF005D26AC /* ContractScreenTimeCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1267,6 +1273,7 @@
 				1811AA90224075010073A794 /* SeleVisitModelCell.swift in Sources */,
 				1803A32E225F426400B86F20 /* FillInApplyController.swift in Sources */,
 				1802B0062254410100E94341 /* VisitDetailsHeaderCell.swift in Sources */,
+				18067C2922801E42005D26AC /* ContractScreenView.swift in Sources */,
 				181FF96622714E9600ED5A2A /* ModifyNoticeEjectView.swift in Sources */,
 				1805F3B722758C9500AF0AF7 /* ReplacementDepartmentController.swift in Sources */,
 				18050D5D224B16C200C9DB9A /* ToExamineController.swift in Sources */,
@@ -1282,6 +1289,7 @@
 				1810EC76222F5D4100CF6488 /* NamespaceWrappable.swift in Sources */,
 				183383012251B4650053F2BF /* WorkGroupListModel.swift in Sources */,
 				18050D6F224B5B2D00C9DB9A /* HandoverStaffSeleController.swift in Sources */,
+				18067C2B22801EFF005D26AC /* ContractScreenTimeCell.swift in Sources */,
 				1805FC3C2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift in Sources */,
 				180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */,
 				180BFB352265B49F001879BD /* CostomerDetailsContractCell.swift in Sources */,
