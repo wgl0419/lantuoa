@@ -28,8 +28,6 @@ class VisitHomeController: UIViewController {
     private var inputCout = 0
     /// 页码
     private var page = 1
-//    /// 选择类型
-//    private var visitType = 0
     /// 开始时间戳
     private var startTimeStamp: Int!
     /// 结束时间戳
@@ -130,7 +128,12 @@ class VisitHomeController: UIViewController {
         tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalTo(screenView.snp.bottom)
-                make.left.right.bottom.equalTo(view)
+                if #available(iOS 9.0, *) {
+                    make.left.right.bottom.equalToSuperview()
+                } else {
+                    make.left.right.equalToSuperview()
+                    make.bottom.equalToSuperview().offset(-TabbarH)
+                }
             })
             .taxi.config({ (tableView) in
                 tableView.delegate = self

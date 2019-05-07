@@ -37,12 +37,19 @@ class ContractDetailsHeaderView: UIView {
                 }
                 if participateStr.count > 0 { participateStr.remove(at: participateStr.startIndex) }
                 participateLabel.text = participateStr.count == 0 ? " " : participateStr
+                
+                if data.signTime == 0 {
+                    let signingTimeStr = Date(timeIntervalSince1970: TimeInterval(data.signTime)).customTimeStr(customStr: "yyyy-MM-dd")
+                    signingTimeLabel.text = signingTimeStr
+                } else {
+                    signingTimeLabel.text = "未设置"
+                }
             }
         }
     }
     
     /// 标题数组
-    private let titleArray = ["实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "制作费：", "参与人员："]
+    private let titleArray = ["实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "制作费：", "参与人员：", "签约时间："]
     /// 内容控件数组
     private var contentLabelArray = [UILabel]()
     /// 合同名称
@@ -61,6 +68,8 @@ class ContractDetailsHeaderView: UIView {
     private var productionLabel = UILabel()
     /// 参与人员
     private var participateLabel = UILabel()
+    /// 签约时间
+    private var signingTimeLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -89,7 +98,7 @@ class ContractDetailsHeaderView: UIView {
         
         _ = UIView().taxi.adhere(toSuperView: self) // 蓝色块
             .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalTo(nameLabel)
+                make.top.equalToSuperview().offset(25)
                 make.left.equalToSuperview()
                 make.height.equalTo(18)
                 make.width.equalTo(2)
@@ -124,7 +133,7 @@ class ContractDetailsHeaderView: UIView {
             })
         
         
-        contentLabelArray = [timeLabel, contributionLabel, totalLabel, moneyBackLabel, productionLabel, participateLabel]
+        contentLabelArray = [timeLabel, contributionLabel, totalLabel, moneyBackLabel, productionLabel, participateLabel, signingTimeLabel]
         for index in 0..<titleArray.count {
             let lastLabel: UILabel! = index == 0 ? numberLabel : contentLabelArray[index - 1]
             setTitle(titleStr: titleArray[index], contentLabel: contentLabelArray[index], lastLabel: lastLabel, isLast: index == titleArray.count - 1)
@@ -179,9 +188,9 @@ class ContractDetailsHeaderView: UIView {
     
     // MARK: - Api
     /// 修改合同内容
-    private func contractUpdate(totalMoney: Float?, rebate: Float?, startTime: Int?, endTime: Int?) {
+    private func contractUpdate(totalMoney: Float?, rebate: Float?, startTime: Int?, endTime: Int?, signTime: Int?) {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.contractUpdate(data?.id ?? 0, totalMoney, rebate, startTime, endTime), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.contractUpdate(data?.id ?? 0, totalMoney, rebate, startTime, endTime, signTime), t: LoginModel.self, successHandle: { (result) in
             if self.editBlock != nil {
                 self.editBlock!()
             }
@@ -194,29 +203,35 @@ class ContractDetailsHeaderView: UIView {
     // MARK: - 按钮点击
     /// 点击修改
     @objc private func modifyClick() {
-        let view = SeleVisitModelView(title: "选择修改内容", content: ["实际发布时间", "组稿费总额", "合同总额"])
+        let view = SeleVisitModelView(title: "选择修改内容", content: ["实际发布时间", "组稿费总额", "合同总额", "签约时间"])
         view.didBlock = { [weak self] (seleIndex) in
             switch seleIndex {
             case 0:
                 let showView = MoreTimeSeleEjectView()
                 showView.seleBlock = { (start, end) in
-                    self?.contractUpdate(totalMoney: nil, rebate: nil, startTime: start, endTime: end)
+                    self?.contractUpdate(totalMoney: nil, rebate: nil, startTime: start, endTime: end, signTime: nil)
                 }
                 showView.show()
             case 1:
                 let showView = ContractMoneyEjectView()
                 showView.data = ("修改组稿费", "组稿费（元）：")
                 showView.seleBlock = { (money) in
-                    self?.contractUpdate(totalMoney: nil, rebate: money, startTime: nil, endTime: nil)
+                    self?.contractUpdate(totalMoney: nil, rebate: money, startTime: nil, endTime: nil, signTime: nil)
                 }
                 showView.show()
             case 2:
                 let showView = ContractMoneyEjectView()
                 showView.data = ("修改合同总额", "合同总额（元）：")
                 showView.seleBlock = { (money) in
-                    self?.contractUpdate(totalMoney: money, rebate: nil, startTime: nil, endTime: nil)
+                    self?.contractUpdate(totalMoney: money, rebate: nil, startTime: nil, endTime: nil, signTime: nil)
                 }
                 showView.show()
+            case 3:
+                let ejectView = SeleTimeEjectView(timeStamp: nil, titleStr: "选择签约时间")
+                ejectView.determineBlock = { [weak self] (timeStamp) in
+                    self?.contractUpdate(totalMoney: nil, rebate: nil, startTime: nil, endTime: nil, signTime: timeStamp)
+                }
+                ejectView.show()
             default:
                 break
             }

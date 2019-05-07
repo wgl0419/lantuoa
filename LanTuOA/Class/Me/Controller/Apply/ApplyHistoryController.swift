@@ -66,7 +66,7 @@ class ApplyHistoryController: UIViewController {
         for index in 0..<titleArray.count {
             let tableView = UITableView().taxi.adhere(toSuperView: scrollView) // tableview
                 .taxi.layout { (make) in
-                    make.width.height.equalToSuperview()
+                    make.top.width.height.equalToSuperview()
                     if index == 0 {
                         make.left.equalToSuperview()
                     } else {

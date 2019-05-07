@@ -15,6 +15,15 @@ class CostomerDetailsProjectCell: UITableViewCell {
         didSet {
             if let data = data {
                 nameLabel.text = data.fullName ?? " "
+                let attriMuStr = NSMutableAttributedString(string: (data.fullName ?? "") + "  ")
+                if data.isLock == 1 { // 添加锁图标
+                    let attachment = NSTextAttachment()
+                    attachment.image = UIImage(named: "project_lock")
+                    attachment.bounds = CGRect(x: 5, y: -2, width: 13, height: 15)
+                    let attriStr = NSAttributedString(attachment: attachment)
+                    attriMuStr.append(attriStr)
+                }
+                nameLabel.attributedText = attriMuStr
                 stateLabel.text = "最新状态：" + (data.lastVisitResult ?? "")
             }
         }

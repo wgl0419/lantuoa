@@ -46,6 +46,9 @@ class MeHomeController: UIViewController {
     
     /// 初始化子控件
     private func initSubViews() {
+        view.backgroundColor = .white
+        automaticallyAdjustsScrollViewInsets = false
+        
         if Jurisdiction.share.isViewWorkextend { // 有无工作交接权限
             titleArray[0].append("工作交接")
             iconArray[0].append("me_handover")
@@ -53,7 +56,12 @@ class MeHomeController: UIViewController {
         
         tableView = UITableView().taxi.adhere(toSuperView: view) // 主要显示数据的tableview
             .taxi.layout(snapKitMaker: { (make) in
-                make.edges.equalToSuperview()
+                if #available(iOS 9.0, *) {
+                    make.edges.equalToSuperview()
+                } else {
+                    make.top.left.right.equalToSuperview()
+                    make.bottom.equalToSuperview().offset(-TabbarH)
+                }
             })
             .taxi.config({ (tableView) in
                 tableView.delegate = self

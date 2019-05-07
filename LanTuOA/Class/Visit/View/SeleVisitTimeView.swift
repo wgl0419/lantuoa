@@ -162,6 +162,9 @@ class SeleVisitTimeView: UIView {
                 make.top.right.bottom.width.equalToSuperview()
             })
             .taxi.config({ (datePicker) in
+                if limit {
+                    datePicker.maximumDate = Date()
+                }
                 datePicker.datePickerMode = .time
                 datePicker.addTarget(self, action: #selector(dateChange), for: .valueChanged)
             })

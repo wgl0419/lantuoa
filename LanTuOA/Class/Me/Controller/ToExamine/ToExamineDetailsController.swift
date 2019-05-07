@@ -164,16 +164,18 @@ class ToExamineDetailsController: UIViewController {
             let currentData = checkUserData.filter { (model) -> Bool in // 当前的数据
                 return model[0].sort == checkListData.step
             }
-            let currentModel = currentData[0].filter { (model) -> Bool in
-                return model.`self` == 1
-            }
-            if currentModel.count != 0 && checkListData.status != 2 && checkListData.status != 3 { // 到自己处理的阶段   展开同意拒绝按钮
-                btnView.snp.updateConstraints { (make) in
-                    make.height.equalTo(62 + (isIphoneX ? SafeH : 18))
+            if currentData.count > 0 {
+                let currentModel = currentData[0].filter { (model) -> Bool in
+                    return model.`self` == 1
                 }
-            } else {
-                btnView.snp.updateConstraints { (make) in
-                    make.height.equalTo(0)
+                if currentModel.count != 0 && checkListData.status != 2 && checkListData.status != 3 { // 到自己处理的阶段   展开同意拒绝按钮
+                    btnView.snp.updateConstraints { (make) in
+                        make.height.equalTo(62 + (isIphoneX ? SafeH : 18))
+                    }
+                } else {
+                    btnView.snp.updateConstraints { (make) in
+                        make.height.equalTo(0)
+                    }
                 }
             }
         }

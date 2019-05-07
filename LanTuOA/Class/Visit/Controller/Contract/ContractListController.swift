@@ -158,7 +158,8 @@ class ContractListController: UIViewController {
         let customerId = idArray[0] == -1 ? nil : idArray[0] // 客户id
         let projectId = idArray[1] == -1 ? nil : idArray[1] // 项目id
         let userId = idArray[2] == -1 ? nil : idArray[2] // 用户id
-        _ = APIService.shared.getData(.contractList(searchBar.text ?? "", customerId, projectId, userId, newPage, 10), t: ContractListModel.self, successHandle: { (result) in
+        let startTimeStamp = releaseTimeStamp == 0 ? nil : releaseTimeStamp
+        _ = APIService.shared.getData(.contractList(searchBar.text ?? "", customerId, projectId, userId, newPage, 10, startTimeStamp, nil), t: ContractListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

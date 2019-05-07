@@ -133,7 +133,7 @@ class HandoverStaffSeleController: UIViewController {
     /// 获取下级成员列表
     private func workExtendList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.workExtendList(searchBar.text ?? ""), t: WorkExtendListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.workExtendList(searchBar.text ?? "", 1), t: WorkExtendListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.data = result.data
             self.tableView.mj_header.endRefreshing()

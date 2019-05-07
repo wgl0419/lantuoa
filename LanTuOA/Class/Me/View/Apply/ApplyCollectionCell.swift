@@ -46,7 +46,7 @@ class ApplyCollectionCell: UICollectionViewCell {
         
         imageView = UIImageView().taxi.adhere(toSuperView: contentView) // 图标
             .taxi.layout(snapKitMaker: { (make) in
-                make.bottom.equalToSuperview().offset(-50)
+                make.bottom.equalToSuperview().offset(-50).priority(800)
                 make.top.equalToSuperview().offset(12)
                 make.height.equalTo(40).priority(800)
                 make.centerX.equalToSuperview()
@@ -55,9 +55,9 @@ class ApplyCollectionCell: UICollectionViewCell {
         
         titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
             .taxi.layout(snapKitMaker: { (make) in
+                make.width.equalToSuperview().offset(-30).priority(800)
                 make.width.equalTo(ScreenWidth / 4 - 31).priority(800)
                 make.top.equalTo(imageView.snp.bottom).offset(7)
-                make.width.equalToSuperview().offset(-30)
                 make.centerX.equalToSuperview()
             })
             .taxi.config({ (label) in

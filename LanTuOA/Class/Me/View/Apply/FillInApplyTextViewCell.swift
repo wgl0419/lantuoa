@@ -77,7 +77,7 @@ class FillInApplyTextViewCell: UITableViewCell {
         let lineFragmentPadding = UITextView().textContainer.lineFragmentPadding
         textView = UITextView().taxi.adhere(toSuperView: contentView) // 输入框
             .taxi.layout(snapKitMaker: { (make) in
-                make.height.equalTo(90)
+                make.height.equalTo(90).priority(800)
                 make.bottom.equalToSuperview().offset(-10 + top)
                 make.top.equalTo(titleLabel.snp.bottom).offset(10 - top)
                 make.left.equalToSuperview().offset(15 - lineFragmentPadding)

@@ -85,6 +85,7 @@ class NoticeHomeController: UIViewController {
                 tableView.delegate = self
                 tableView.dataSource = self
                 tableView.separatorStyle = .none
+                tableView.estimatedRowHeight = 50
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
                 
@@ -116,6 +117,7 @@ class NoticeHomeController: UIViewController {
                 tableView.delegate = self
                 tableView.dataSource = self
                 tableView.separatorStyle = .none
+                tableView.estimatedRowHeight = 50
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
                 
@@ -189,7 +191,7 @@ class NoticeHomeController: UIViewController {
     private func notifyCheckList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? pendingPage + 1 : 1
-        _ = APIService.shared.getData(.notifyCheckList(newPage, 10), t: NotifyCheckListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckList(nil, newPage, 10), t: NotifyCheckListModel.self, successHandle: { (result) in
             if isMore {
                 for model in result.data {
                     self.pendingData.append(model)
@@ -367,7 +369,7 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == pendingTableView { // 待处理tableview
             let cell = tableView.dequeueReusableCell(withIdentifier: "NoticeHomePendingCell", for: indexPath) as! NoticeHomePendingCell
-            cell.data = pendingData[indexPath.row]
+            cell.data = (pendingData[indexPath.row], true)
             cell.agreeBlock = { [weak self] in // 同意
                 self?.agreeHandle(indexPath: indexPath)
             }

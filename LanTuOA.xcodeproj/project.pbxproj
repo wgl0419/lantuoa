@@ -366,7 +366,7 @@
 		1827ED8F2268620B00EFF889 /* AchievementsDetailsEjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsDetailsEjectCell.swift; sourceTree = "<group>"; };
 		1827ED9122686DE000EFF889 /* PerformDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformDetailModel.swift; sourceTree = "<group>"; };
 		1827ED9322695F8700EFF889 /* ProcessUsersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessUsersModel.swift; sourceTree = "<group>"; };
-		1827ED952269603900EFF889 /* FillInApplyApprovalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyApprovalCell.swift; sourceTree = "<group>"; };
+		1827ED952269603900EFF889 /* FillInApplyApprovalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyApprovalCell.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		1827ED972269660700EFF889 /* FillInApplyApprovalCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyApprovalCollectionCell.swift; sourceTree = "<group>"; };
 		1827ED9922696E0400EFF889 /* FillInApplyArrowCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyArrowCollectionCell.swift; sourceTree = "<group>"; };
 		1827ED9D2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyCarbonCopyAddCell.swift; sourceTree = "<group>"; };

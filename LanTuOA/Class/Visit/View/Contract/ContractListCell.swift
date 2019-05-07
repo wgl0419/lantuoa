@@ -33,12 +33,19 @@ class ContractListCell: UITableViewCell {
                 }
                 if participateStr.count > 0 { participateStr.remove(at: participateStr.startIndex) }
                 participateLabel.text = participateStr
+                
+                if data.signTime == 0 {
+                    let signingTimeStr = Date(timeIntervalSince1970: TimeInterval(data.signTime)).customTimeStr(customStr: "yyyy-MM-dd")
+                    signingTimeLabel.text = signingTimeStr
+                } else {
+                    signingTimeLabel.text = "未设置"
+                }
             }
         }
     }
 
     /// 标题数组
-    private let titleArray = ["合同编号：", "实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "参与人员："]
+    private let titleArray = ["合同编号：", "实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "签约时间：", "参与人员："]
     /// 内容控件数组
     private var contentLabelArray = [UILabel]()
     /// 白色背景框
@@ -55,6 +62,8 @@ class ContractListCell: UITableViewCell {
     private var totalLabel = UILabel()
     /// 回款
     private var moneyBackLabel = UILabel()
+    /// 签约时间
+    private var signingTimeLabel = UILabel()
     /// 参与人员
     private var participateLabel = UILabel()
     
@@ -91,15 +100,17 @@ class ContractListCell: UITableViewCell {
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalToSuperview().offset(13)
                 make.left.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-15)
             })
             .taxi.config({ (label) in
+                label.numberOfLines = 0
                 label.textColor = UIColor(hex: "#2E4695")
                 label.font = UIFont.boldSystemFont(ofSize: 16)
             })
         
         _ = UIView().taxi.adhere(toSuperView: whiteView) // 蓝色块
             .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalTo(nameLabel)
+                make.top.equalToSuperview().offset(14)
                 make.left.equalToSuperview()
                 make.height.equalTo(18)
                 make.width.equalTo(3)
@@ -117,7 +128,7 @@ class ContractListCell: UITableViewCell {
                 imageView.image = UIImage(named: "arrow")
             })
         
-        contentLabelArray = [numberLabel, timeLabel, contributionLabel, totalLabel, moneyBackLabel, participateLabel]
+        contentLabelArray = [numberLabel, timeLabel, contributionLabel, totalLabel, moneyBackLabel, signingTimeLabel, participateLabel]
         for index in 0..<titleArray.count {
             let lastLabel: UILabel! = index == 0 ? nameLabel : contentLabelArray[index - 1]
             setTitle(titleStr: titleArray[index], contentLabel: contentLabelArray[index], lastLabel: lastLabel, isLast: index == titleArray.count - 1)

@@ -10,7 +10,6 @@ import UIKit
 
 class ApplyHistoryCell: UITableViewCell {
 
-    
     /// 数据
     var data: ProcessHistoryData? {
         didSet {

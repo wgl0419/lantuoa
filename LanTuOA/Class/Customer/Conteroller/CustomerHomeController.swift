@@ -79,8 +79,13 @@ class CustomerHomeController: UIViewController {
         
         tableView = UITableView().taxi.adhere(toSuperView: view) // 主要tableview
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.right.bottom.equalToSuperview()
                 make.top.equalTo(barView.snp.bottom)
+                if #available(iOS 9.0, *) {
+                    make.left.right.bottom.equalToSuperview()
+                } else {
+                    make.left.right.equalToSuperview()
+                    make.bottom.equalToSuperview().offset(-TabbarH)
+                }
             })
             .taxi.config({ (tableView) in
                 tableView.delegate = self

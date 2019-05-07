@@ -10,18 +10,19 @@ import UIKit
 
 class NoticeHomePendingCell: UITableViewCell {
     
-    /// 数据
-    var data: NotifyCheckListData? {
+    /// 数据 (数据 + 是否是待审批)
+    var data: (NotifyCheckListData, Bool)! {
         didSet {
-            if let data = data {
+            let checkListData = data.0
+            let isCheck = data.1
                 initSubViews()
-                let date = Date(timeIntervalSince1970: TimeInterval(data.createdTime))
+                let date = Date(timeIntervalSince1970: TimeInterval(checkListData.createdTime))
                 timeLabel.text = timeHandle(date: date)
                 
-                titleLabel.text = data.title
+                titleLabel.text = checkListData.title
                 titleLabel.textColor = UIColor(hex: "#FF7744")
                 
-                let smallData = data.data
+                let smallData = checkListData.data
                 if smallData.count == 1 {
                     let model = smallData.first!
                     _ = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: titleLabel, isLast: true)
@@ -32,7 +33,12 @@ class NoticeHomePendingCell: UITableViewCell {
                     let label = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: lastLabel, isLast: index == smallData.count - 1)
                     lastLabel = label
                 }
-            }
+            
+            agreeBtn.isHidden = !isCheck
+            refuseBtn.isHidden = !isCheck
+            statusLabel.isHidden = isCheck
+            statusLabel.text = checkListData.status == 2 ? "已同意" : "已拒绝"
+            statusLabel.textColor = checkListData.status == 2 ? UIColor(hex: "#5FB9A1") : UIColor(hex: "#5FB9A1")
         }
     }
     /// 拒绝回调
@@ -48,6 +54,8 @@ class NoticeHomePendingCell: UITableViewCell {
     private var agreeBtn: UIButton!
     /// 拒绝按钮
     private var refuseBtn: UIButton!
+    /// 状态
+    private var statusLabel: UILabel!
     /// 时间
     private var timeLabel: UILabel!
 
@@ -112,6 +120,14 @@ class NoticeHomePendingCell: UITableViewCell {
                 btn.backgroundColor = UIColor(hex: "#2E4695")
                 btn.titleLabel?.font = UIFont.medium(size: 12)
                 btn.addTarget(self, action: #selector(agreeClick), for: .touchUpInside)
+            })
+        
+        statusLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 状态
+            .taxi.layout(snapKitMaker: { (make) in
+                make.right.bottom.equalToSuperview().offset(-15)
+            })
+            .taxi.config({ (label) in
+                label.font = UIFont.medium(size: 16)
             })
         
         refuseBtn = UIButton().taxi.adhere(toSuperView: whiteView) // 拒绝按钮
@@ -202,7 +218,7 @@ class NoticeHomePendingCell: UITableViewCell {
     // MARK: - 按钮点击
     /// 点击拒绝
     @objc private func refuseClick() {
-        if data!.processType == 1 || data!.processType == 2 {
+        if data.0.processType == 1 || data.0.processType == 2 {
             let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户", "名字不合理"])
             view.didBlock = { [weak self] (seleIndex) in
                 if self?.refuseBlock != nil {

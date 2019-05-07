@@ -81,7 +81,7 @@ class VisitDetailsCell: UITableViewCell {
         
         let contentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 内容
             .taxi.layout { (make) in
-                make.top.equalTo(titleLabel.snp.bottom)
+                make.top.equalTo(titleLabel.snp.bottom).offset(3)
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-15)
                 if position == 1 || position == 2 {

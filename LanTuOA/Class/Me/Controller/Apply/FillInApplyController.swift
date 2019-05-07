@@ -123,14 +123,19 @@ class FillInApplyController: UIViewController {
     
     /// 选择时间
     private func seleTimeHandle(section: Int) {
-        let view = SingleSeleTimeEjectView()
-        view.titleStr = (data[section].title ?? "") + "："
-        view.seleBlock = { [weak self] (timeStr) in
+        let timeStr = seleStrArray[section]
+        var timeStamp: Int!
+        if timeStr.count > 0 {
+            timeStamp = timeStr.getTimeStamp(customStr: "yyyy-MM-dd")
+        }
+        let ejectView = SeleTimeEjectView(timeStamp: timeStamp, titleStr: data[section].title ?? "")
+        ejectView.determineBlock = { [weak self] (timeStamp) in
+            let timeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).customTimeStr(customStr: "yyyy-MM-dd")
             self?.seleStrArray[section] = timeStr
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .fade)
             self?.confirmHandle()
         }
-        view.show()
+        ejectView.show()
     }
     
     /// 单选

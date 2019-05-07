@@ -108,6 +108,9 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
         for model in data {
             contentArray.append(model.realname ?? "")
         }
+        guard contentArray.count > 1 else {
+            return
+        }
         let view = SeleVisitModelView(title: "\(data.count)人会签", content: contentArray)
         view.isClick = false
         view.show()

@@ -56,7 +56,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
         
         _ = UIView().taxi.adhere(toSuperView: contentView) // 项目名称前的橙色块
             .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalTo(projectNameLabel)
+                make.top.equalToSuperview().offset(25)
                 make.left.equalToSuperview()
                 make.height.equalTo(18)
                 make.width.equalTo(2)
@@ -78,7 +78,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
         
         customerNameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 客户名称
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(customer.snp.bottom)
+                make.top.equalTo(customer.snp.bottom).offset(3)
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-15)
             })
@@ -103,8 +103,8 @@ class VisitDetailsHeaderCell: UITableViewCell {
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-15)
-                make.top.equalTo(projectAddress.snp.bottom)
                 make.bottom.equalToSuperview().offset(-15)
+                make.top.equalTo(projectAddress.snp.bottom).offset(3)
             })
             .taxi.config({ (label) in
                 label.numberOfLines = 0

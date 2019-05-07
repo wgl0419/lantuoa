@@ -16,12 +16,14 @@ class HandoverStaffCell: UITableViewCell {
             if let data = data {
                 var nameStr = data.name ?? ""
                 let newUserStr = data.lastExtend?.newUserName ?? ""
+                let timeStr = Date(timeIntervalSince1970: TimeInterval(data.lastExtend?.createdTime ?? 0)).customTimeStr(customStr: "yyyy-MM-dd")
                 if newUserStr.count > 0 {
-                    nameStr = nameStr + "（已交接\(newUserStr)）"
+                    let changeStr = "（已交接\(newUserStr)\(timeStr)）"
+                    nameStr = nameStr + changeStr
                     
                     let attriMuStr = NSMutableAttributedString(string: nameStr)
-                    attriMuStr.changeColor(str: "（已交接\(newUserStr)）", color: UIColor(hex: "#5FB9A1"))
-                    attriMuStr.changeFont(str: "（已交接\(newUserStr)）", font: UIFont.boldSystemFont(ofSize: 12))
+                    attriMuStr.changeColor(str: changeStr, color: UIColor(hex: "#5FB9A1"))
+                    attriMuStr.changeFont(str: changeStr, font: UIFont.boldSystemFont(ofSize: 12))
                     nameLabel.attributedText = attriMuStr
                 } else {
                     nameLabel.text = nameStr
@@ -51,7 +53,7 @@ class HandoverStaffCell: UITableViewCell {
         handoverBtn = UIButton().taxi.adhere(toSuperView: contentView) // 交接按钮
             .taxi.layout(snapKitMaker: { (make) in
                 make.width.equalTo(48)
-                make.centerY.equalToSuperview()
+                make.top.equalToSuperview().offset(10)
                 make.right.equalToSuperview().offset(-5)
             })
             .taxi.config({ (btn) in
@@ -63,12 +65,13 @@ class HandoverStaffCell: UITableViewCell {
         
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 项目名称
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.bottom.equalToSuperview()
-                make.height.equalTo(40).priority(800)
+                make.top.equalToSuperview().offset(10)
                 make.left.equalToSuperview().offset(15)
-                make.right.equalTo(handoverBtn.snp.right)
+                make.right.equalTo(handoverBtn.snp.left)
+                make.bottom.equalToSuperview().offset(-10)
             })
             .taxi.config({ (label) in
+                label.numberOfLines = 0
                 label.textColor = blackColor
                 label.font = UIFont.boldSystemFont(ofSize: 14)
             })

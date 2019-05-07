@@ -49,8 +49,9 @@ class ScreenView: UIView {
                     positionArray.append(index)
                 }
             }
-            setCollectionViewHeight()
-            setCollectionViewHeight()
+            
+            collectionView.reloadData()
+            layoutIfNeeded()
         }
     }
     
@@ -79,10 +80,8 @@ class ScreenView: UIView {
     /// 初始化子控件
     private func initSubViews() {
         
-//        let layout = UICollectionViewFlowLayout()
-//        layout.estimatedItemSize = CGSize(width: 10, height: 44)
-        let flowLayout = JYEqualCellSpaceFlowLayout(AlignType.left, 5.0)
-        flowLayout.estimatedItemSize = CGSize(width: 10, height: 44)
+        let flowLayout = JYEqualCellSpaceFlowLayout(AlignType.left)
+        flowLayout.estimatedItemSize = CGSize(width: 100, height: 44)
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout) // collectionView
             .taxi.adhere(toSuperView: self)
@@ -98,12 +97,17 @@ class ScreenView: UIView {
             })
         
         
-        setCollectionViewHeight()
+        layoutIfNeeded()
     }
     
-    @objc private func setCollectionViewHeight() {
-        collectionView.reloadData()
-        self.layoutIfNeeded()
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        perform(#selector(collectionViewHandle), with: nil, afterDelay: 0.1)
+        
+    }
+    
+    /// 处理collectionView高度
+    @objc private func collectionViewHandle() {
         collectionView.snp.updateConstraints { (make) in
             make.height.equalTo(collectionView.contentSize.height).priority(800)
         }
@@ -134,7 +138,8 @@ extension ScreenView: UICollectionViewDelegate, UICollectionViewDataSource {
             }
             self?.strArray.remove(at: row)
             self?.positionArray.remove(at: row)
-            self?.setCollectionViewHeight()
+            collectionView.reloadData()
+            self?.layoutIfNeeded()
         }
         return cell
     }

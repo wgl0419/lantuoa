@@ -104,7 +104,7 @@ class HomePageController: UIViewController {
         tableView = UITableView(frame: .zero, style: .grouped)
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
-                make.edges.equalTo(view)
+                make.edges.equalToSuperview()
             })
             .taxi.config({ (tableView) in
                 tableView.delegate = self
@@ -115,6 +115,7 @@ class HomePageController: UIViewController {
                 tableView.separatorInset = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
                 tableView.register(HomePageVisitCell.self, forCellReuseIdentifier: "HomePageVisitCell")
                 tableView.register(HomePageNoticeCell.self, forCellReuseIdentifier: "HomePageNoticeCell")
+                tableView.register(CostomerDetailsProjectCell.self, forCellReuseIdentifier: "CostomerDetailsProjectCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     self?.projectList()
                     self?.startupSum()
@@ -196,28 +197,9 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
             cell.data = startupSumData
             return cell
         } else {
-            var cell = tableView.dequeueReusableCell(withIdentifier: "HomePageProjectCell")
-            if cell == nil {
-                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "HomePageProjectCell")
-                cell?.accessoryType = .disclosureIndicator
-                cell?.textLabel?.textColor = UIColor(hex: "#FF7744")
-                cell?.textLabel?.font = UIFont.medium(size: 16)
-                cell?.textLabel?.numberOfLines = 0
-                
-                cell?.detailTextLabel?.font = UIFont.medium(size: 12)
-                cell?.detailTextLabel?.textColor = UIColor(hex: "#999999")
-            }
-            let attriMuStr = NSMutableAttributedString(string: data[indexPath.row].fullName ?? "" + "  ")
-            if data[indexPath.row].isLock == 1 { // 添加锁图标
-                let attachment = NSTextAttachment()
-                attachment.image = UIImage(named: "project_lock")
-                attachment.bounds = CGRect(x: 5, y: 0, width: 13, height: 15)
-                let attriStr = NSAttributedString(attachment: attachment)
-                attriMuStr.append(attriStr)
-            }
-            cell?.textLabel?.attributedText = attriMuStr
-            cell?.detailTextLabel?.text = "最新状态：" + (data[indexPath.row].lastVisitResult ?? "")
-            return cell!
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsProjectCell", for: indexPath) as! CostomerDetailsProjectCell
+            cell.data = data[indexPath.row]
+            return cell
         }
     }
     

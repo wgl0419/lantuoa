@@ -74,7 +74,7 @@ class JobHandoverController: UIViewController {
                 })
             })
         
-        let str = "暂无交接人员！"
+        let str = "暂无工作交接！"
         let attriMuStr = NSMutableAttributedString(string: str)
         attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
         attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
@@ -95,7 +95,7 @@ class JobHandoverController: UIViewController {
     /// 获取下级成员列表
     private func workExtendList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.workExtendList(searchBar.text ?? ""), t: WorkExtendListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.workExtendList(searchBar.text ?? "", nil), t: WorkExtendListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.data = result.data
             self.tableView.mj_header.endRefreshing()

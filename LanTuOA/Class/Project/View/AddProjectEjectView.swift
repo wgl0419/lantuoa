@@ -287,9 +287,7 @@ extension AddProjectEjectView: UITableViewDelegate, UITableViewDataSource {
         }
         cell.stopBlock = { [weak self] (str) in
             self?.seleStrArray[row] = str
-            tableView.snp.updateConstraints { (make) in
-                make.height.equalTo(tableView.contentSize.height)
-            }
+            self?.layoutIfNeeded()
         }
         return cell
     }

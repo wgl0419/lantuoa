@@ -79,20 +79,20 @@ class VisitHomeCell: UITableViewCell {
                 label.numberOfLines = 0
                 label.textColor = UIColor(hex: "#FF7744")
                 label.font = UIFont.boldSystemFont(ofSize: 16)
-                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+                label.setContentHuggingPriority(.defaultLow, for: .horizontal)
             })
         
         initiateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 业务人员
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalToSuperview().offset(16)
                 make.right.equalToSuperview().offset(-15)
-                make.left.equalTo(titleLabel.snp.right).offset(5)
+                make.left.greaterThanOrEqualTo(titleLabel.snp.right).offset(5)
             })
             .taxi.config({ (label) in
                 label.textAlignment = .right
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
-                label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
             })
         
         _ = UIView().taxi.adhere(toSuperView: whiteView) // 橙色线条

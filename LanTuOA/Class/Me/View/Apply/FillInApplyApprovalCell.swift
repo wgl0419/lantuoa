@@ -115,6 +115,9 @@ class FillInApplyApprovalCell: UITableViewCell {
 
 extension FillInApplyApprovalCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if isApproval == nil {
+            return 0
+        }
         if isApproval {
             if processedData.count == 1 {
                 return 2

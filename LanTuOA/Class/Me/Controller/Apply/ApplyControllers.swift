@@ -47,7 +47,7 @@ class ApplyControllers: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        layout.estimatedItemSize = CGSize(width: ScreenWidth, height: ScreenWidth)
+        layout.estimatedItemSize = CGSize(width: 20, height: 20)
         layout.footerReferenceSize = CGSize(width: ScreenWidth, height: 10)
         layout.headerReferenceSize = CGSize(width: ScreenWidth, height: 45)
         

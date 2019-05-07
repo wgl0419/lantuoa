@@ -166,8 +166,6 @@ class ContractScreenView: UIView {
         let ejectView = SeleTimeEjectView(timeStamp: releaseTimeStamp, titleStr: "发布时间")
         ejectView.determineBlock = { [weak self] (timeStamp) in
             self?.releaseTimeStamp = timeStamp
-            let timeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).customTimeStr(customStr: "yyyy-MM-dd")
-            self?.contentArray[0] = timeStr
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
         }
         ejectView.show()
