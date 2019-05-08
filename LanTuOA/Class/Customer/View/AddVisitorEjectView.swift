@@ -96,22 +96,22 @@ class AddVisitorEjectView: UIView {
             })
             .taxi.config({ (view) in
                 view.layer.cornerRadius = 4
-                view.backgroundColor = .white
                 view.layer.masksToBounds = true
+                view.backgroundColor = .white
             })
         
-        titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // 标题
-            .taxi.layout(snapKitMaker: { (make) in
+        let titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // “新增拜访对象
+            .taxi.layout { (make) in
                 make.height.equalTo(55)
                 make.top.left.right.equalToSuperview()
-            })
-            .taxi.config({ (label) in
+            }
+            .taxi.config { (label) in
                 label.text = "新增拜访对象"
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
                 label.backgroundColor = UIColor(hex: "#F1F1F1")
-            })
+        }
         
         tableView = UITableView().taxi.adhere(toSuperView: grayView) // tableview
             .taxi.layout(snapKitMaker: { (make) in
@@ -166,7 +166,7 @@ class AddVisitorEjectView: UIView {
         
         layoutIfNeeded()
     }
-        
+    
     override func layoutIfNeeded() {
         super.layoutIfNeeded()
         perform(#selector(tableViewHandle), with: nil, afterDelay: 0.1)
@@ -240,7 +240,6 @@ class AddVisitorEjectView: UIView {
             MBProgressHUD.showError(error ?? "修改失败")
         })
     }
-    
     // MARK: - 按钮点击
     /// 点击取消
     @objc private func cancelClick() {
@@ -256,7 +255,6 @@ class AddVisitorEjectView: UIView {
                 break
             }
         }
-        
         if !isCan {
             MBProgressHUD.showError("请先完成内容的输入")
         } else if !seleStrArray[1].isRegexMobile() {
@@ -283,6 +281,7 @@ extension AddVisitorEjectView: UITableViewDelegate, UITableViewDataSource {
         cell.tableView = tableView
         cell.stopBlock = { [weak self] (str) in
             self?.seleStrArray[row] = str
+            self?.layoutIfNeeded()
         }
         return cell
     }

@@ -87,6 +87,7 @@ class CustomerEditController: UIViewController {
                     self?.setTableViewOffsetY(tableView: (self?.tableViewArray[page])!)
                 }
             })
+        segment.layoutIfNeeded()
         addTableView()
     }
     
@@ -94,6 +95,7 @@ class CustomerEditController: UIViewController {
     /// 添加tableview
     private func addTableView() {
         var lastTableView: CustomerDetailsTableView!
+        self.offsetY = -headerHeight - 40
         for index in 0..<4 { // 添加3个tableview
             let tableView = CustomerDetailsTableView(style: CustomerDetailsTableView.CellStyle(rawValue: index)!, height: headerHeight, customerId: customerData.id) // tableview
                 .taxi.adhere(toSuperView: scrollView)

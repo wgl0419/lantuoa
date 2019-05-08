@@ -132,7 +132,7 @@ class FillInApplyController: UIViewController {
         ejectView.determineBlock = { [weak self] (timeStamp) in
             let timeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).customTimeStr(customStr: "yyyy-MM-dd")
             self?.seleStrArray[section] = timeStr
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .fade)
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
             self?.confirmHandle()
         }
         ejectView.show()
@@ -147,7 +147,7 @@ class FillInApplyController: UIViewController {
         let view = SeleVisitModelView(title: "选择拜访方式", content: contentArray)
         view.didBlock = { [weak self] (seleIndex) in
             self?.seleStrArray[section] = contentArray[seleIndex]
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .fade)
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
             self?.confirmHandle()
         }
         view.show()
@@ -186,10 +186,10 @@ class FillInApplyController: UIViewController {
             self?.projectId = -1
             if position != -1 {
                 self?.seleStrArray[position] = ""
-                self?.tableView.reloadRows(at: [IndexPath(row: 0, section: position)], with: .fade)
+                self?.tableView.reloadRows(at: [IndexPath(row: 0, section: position)], with: .none)
             }
             
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .fade)
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
             self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -209,7 +209,7 @@ class FillInApplyController: UIViewController {
         vc.seleBlock = { [weak self] (customerArray) in
             self?.projectId = customerArray.first?.0 ?? -1
             self?.seleStrArray[section] = customerArray.first?.1 ?? ""
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .fade)
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
             self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -284,7 +284,7 @@ class FillInApplyController: UIViewController {
         ejectView.maxInput = [achievemenhtsPercentage, royaltyPercentage]
         ejectView.determineBlock = { [weak self] (userData, achievemenhts, royalty) in
             self?.contractData.append((userData, achievemenhts, royalty))
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: self?.data.count ?? 0)], with: .fade)
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: self?.data.count ?? 0)], with: .none)
             self?.confirmHandle()
         }
         ejectView.seleBlock = { [weak self] in
@@ -315,7 +315,7 @@ class FillInApplyController: UIViewController {
         alertController.addAction(cancelAction)
         let deleteAction = UIAlertAction(title: "删除", style: .destructive) { (_) in
             self.contractData.remove(at: index)
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: self.data.count)], with: .fade)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: self.data.count)], with: .none)
             self.confirmHandle()
         }
         alertController.addAction(deleteAction)

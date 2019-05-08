@@ -133,6 +133,7 @@ class ProjectDetailsController: UIViewController {
     /// 添加tableview
     private func addTableView() {
         var lastTableView: ProjectDetailsTableView!
+        self.offsetY = -headerHeight - 40
         for index in 0..<4 { // 添加4个tableview
             let tableView = ProjectDetailsTableView(style: ProjectDetailsTableView.CellStyle(rawValue: index)!, height: headerHeight, projectId: projectData.id) // tableview
                 .taxi.adhere(toSuperView: scrollView)

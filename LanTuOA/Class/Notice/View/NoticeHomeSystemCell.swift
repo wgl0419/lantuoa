@@ -26,9 +26,9 @@ class NoticeHomeSystemCell: UITableViewCell {
                 case "2": // 审批通知
                     imageNameStr = "approval"
                 case "3": // 工作交接
-                    imageNameStr = "Invitation"
+                    imageNameStr = "invitation"
                 case "4": // 工作组
-                    imageNameStr = "Invitation"
+                    imageNameStr = "invitation"
                 default: break
                 }
                 portraitImageView.image = UIImage(named: imageNameStr)

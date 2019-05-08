@@ -141,7 +141,7 @@ class ToExamineDetailsController: UIViewController {
     private func checkUserListHandle(data: [NotifyCheckUserListData]) {
         checkUserData = []
         openArray = []
-        for index in 1...data.count {
+        for index in 0...data.count { // 本来从1开始  但是如果没有审批人时会报错
             var checkUser = [NotifyCheckUserListData]()
             checkUser = data.filter({ (model) -> Bool in
                 return model.sort == index && model.type == 1
