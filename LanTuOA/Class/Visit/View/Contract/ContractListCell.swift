@@ -17,9 +17,9 @@ class ContractListCell: UITableViewCell {
                 nameLabel.text = data.name
                 numberLabel.text = data.code
                 
-                contributionLabel.text = String(format: "%.2f元", data.rebate)
-                totalLabel.text = String(format: "%.2f元", data.totalMoney)
-                moneyBackLabel.text = String(format: "%.2f元", data.paybackMoney)
+                contributionLabel.text = data.rebate.getMoneyStr()
+                totalLabel.text = data.totalMoney.getMoneyStr()
+                moneyBackLabel.text = data.paybackMoney.getMoneyStr()
                 
                 // 时间
                 let startTimeStr = Date(timeIntervalSince1970: TimeInterval(data.startTime)).customTimeStr(customStr: "yyyy-MM-dd")

@@ -172,6 +172,16 @@ class VisitSeleTimeView: UIView {
     /// 选择时间
     private func seleTimeHandle(_ timeType: Int) {
         let ejectView = SeleTimeEjectView(timeStamp: timeType == 0 ? startTimeStamp : endTimeStamp , titleStr: timeType == 0 ? "选择开始时间：" : "选择结束时间：")
+        if timeType == 0 {
+            if endTimeStamp == nil {
+                ejectView.maxTimeStamp = Int(Date().timeIntervalSince1970)
+            } else {
+                ejectView.maxTimeStamp = endTimeStamp
+            }
+        } else {
+            ejectView.miniTimeStamp = startTimeStamp
+            ejectView.maxTimeStamp = Int(Date().timeIntervalSince1970)
+        }
         ejectView.determineBlock = { [weak self] (timeStamp) in
             if timeType == 0 {
                 self?.startTimeStamp = timeStamp

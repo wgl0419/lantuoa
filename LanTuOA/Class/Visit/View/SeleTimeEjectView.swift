@@ -12,6 +12,22 @@ class SeleTimeEjectView: UIView {
 
     /// 点击确定
     var determineBlock: ((Int) -> ())?
+    /// 最大时间
+    var maxTimeStamp: Int? {
+        didSet {
+            if let timeStamp = maxTimeStamp {
+                datePicker.maximumDate = Date(timeIntervalSince1970: TimeInterval(timeStamp))
+            }
+        }
+    }
+    /// 最小时间
+    var miniTimeStamp: Int? {
+        didSet {
+            if let timeStamp = miniTimeStamp {
+                datePicker.minimumDate = Date(timeIntervalSince1970: TimeInterval(timeStamp))
+            }
+        }
+    }
     
     /// 白色背景框
     private var whiteView: UIView!

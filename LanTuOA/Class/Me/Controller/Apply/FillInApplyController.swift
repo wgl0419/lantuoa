@@ -447,6 +447,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
             case 1: // 1.文本
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyTextViewCell", for: indexPath) as! FillInApplyTextViewCell
                 cell.data = (model.title ?? "", model.hint ?? "")
+                cell.contentStr = seleStrArray[section]
                 cell.isMust = model.isNecessary == 1
                 cell.inputBlock = { [weak self] (contentStr) in
                     self?.seleStrArray[section] = contentStr
@@ -456,8 +457,9 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
             case 2: // 2.数字
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyFieldViewCell", for: indexPath) as! FillInApplyFieldViewCell
                 cell.data = (model.title ?? "", model.hint ?? "")
+                cell.specialStr = seleStrArray[section]
                 cell.isMust = model.isNecessary == 1
-                cell.isNumber = true
+                cell.isSpecial = true
                 cell.inputBlock = { [weak self] (contentStr) in
                     self?.seleStrArray[section] = contentStr
                     self?.confirmHandle()

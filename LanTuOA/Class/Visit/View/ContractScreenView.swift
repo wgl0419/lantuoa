@@ -164,6 +164,7 @@ class ContractScreenView: UIView {
     /// 选择时间
     private func seleTimeHandle() {
         let ejectView = SeleTimeEjectView(timeStamp: releaseTimeStamp, titleStr: "发布时间")
+        ejectView.maxTimeStamp = Int(Date().timeIntervalSince1970)
         ejectView.determineBlock = { [weak self] (timeStamp) in
             self?.releaseTimeStamp = timeStamp
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)

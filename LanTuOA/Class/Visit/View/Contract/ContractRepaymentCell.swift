@@ -16,7 +16,7 @@ class ContractRepaymentCell: UITableViewCell {
     var data: ContractPaybackListData! {
         didSet {
             nameLabel.text = data.desc
-            moneyLabel.text = String(format: "%.2f元", data.money)
+            moneyLabel.text = data.money.getMoneyStr()
             
             let timeStr = Date(timeIntervalSince1970: TimeInterval(data.payTime)).customTimeStr(customStr: "yyyy-MM-dd")
             timeLabel.text = timeStr
@@ -47,7 +47,7 @@ class ContractRepaymentCell: UITableViewCell {
     private func initSubViews() {
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 摘要
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalToSuperview().dividedBy(3.5).priority(800)
+                make.width.equalToSuperview().dividedBy(4).priority(800)
                 make.left.equalToSuperview().offset(15)
                 make.height.equalTo(50).priority(800)
                 make.top.bottom.equalToSuperview()
@@ -59,11 +59,13 @@ class ContractRepaymentCell: UITableViewCell {
         
         moneyLabel = UILabel().taxi.adhere(toSuperView: contentView) // 回款
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalToSuperview().dividedBy(3.8).priority(800)
+                make.width.equalToSuperview().dividedBy(3.3).priority(800)
                 make.left.equalTo(nameLabel.snp.right).offset(5)
                 make.centerY.equalToSuperview()
             })
             .taxi.config({ (label) in
+                label.minimumScaleFactor = 0.5
+                label.adjustsFontSizeToFitWidth = true
                 label.textColor = UIColor(hex: "#FF7744")
                 label.font = UIFont.boldSystemFont(ofSize: 14)
             })

@@ -18,12 +18,15 @@ class JobHandoverCell: UITableViewCell {
                 departmentLabel.text = preventEmpty(data.departmentName)
                 phoneLabel.text = preventEmpty(data.phone)
                 jobLabel.text = preventEmpty(data.projects)
+                leavingCompanyImageView.isHidden = data.status == 1
             }
         }
     }
 
     /// 名字
     private var nameLabel: UILabel!
+    /// 离职图标
+    private var leavingCompanyImageView: UIImageView!
     /// 部门
     private var departmentLabel = UILabel()
     /// 手机号
@@ -52,6 +55,15 @@ class JobHandoverCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#2E4695")
+            })
+        
+        leavingCompanyImageView = UIImageView().taxi.adhere(toSuperView: contentView) // 离职图标
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalToSuperview().offset(5)
+                make.right.equalToSuperview().offset(-5)
+            })
+            .taxi.config({ (imageView) in
+                imageView.image = UIImage(named: "leavingCompany")
             })
         
         _ = setTitle(titleStr: "所属部门：", contentLabel: departmentLabel, lastView: nameLabel) // 部门

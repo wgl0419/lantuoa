@@ -45,7 +45,6 @@ class FillInApplyFieldViewCell: UITableViewCell {
         didSet {
             if let isNumber = isNumber {
                 textField.keyboardType = isNumber ? .decimalPad : .default
-                
             }
         }
     }
@@ -54,6 +53,16 @@ class FillInApplyFieldViewCell: UITableViewCell {
         didSet {
             if let isSecureTextEntry = isSecureTextEntry {
                 textField.isSecureTextEntry = isSecureTextEntry
+            }
+        }
+    }
+    /// 特殊模式 （输入数字  并且显示","） -> 填写申请时使用
+    var isSpecial = false
+    /// 特殊内容
+    var specialStr: String? {
+        didSet {
+            if let str = specialStr {
+                textField.text = str.getMoney()
             }
         }
     }
@@ -121,18 +130,48 @@ class FillInApplyFieldViewCell: UITableViewCell {
     /// textField 内容变化
     @objc private func textFieldChange() {
         if inputBlock != nil {
-            inputBlock!(textField.text ?? "")
+            var str = textField.text ?? ""
+            if isSpecial {
+                str = str.replacingOccurrences(of: ",", with: "")
+                textField.text = str.getMoney()
+            } else if isNumber != nil {
+                if str.count > 0 {
+                    let strArray = str.components(separatedBy: ".")
+                    var newStr = ""
+                    if strArray.count == 2 {
+                        let float = Float(str) ?? 0
+                        newStr = String(format: "%.2f", float)
+                    } else {
+                        let integer = Int(str) ?? 0
+                        newStr = String(format: "%d", integer)
+                        if str.contains(".") {
+                            newStr.append(".")
+                        }
+                    }
+                    textField.text = newStr
+                }
+            }
+            inputBlock!(str)
         }
     }
 }
 
 extension FillInApplyFieldViewCell: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if isNumber != nil {
-            if string.count == 0 { // 删除
-                return true
+        if string.count == 0 { // 删除
+            return true
+        }
+        if isSpecial {
+            if string.contains(",") {
+                return false
             }
-            let str = (textField.text ?? "") + string
+            var str = textField.text ?? ""
+            str.insert(Character(string), at: str.index(str.startIndex, offsetBy: range.location))
+            let moneyStr = str.replacingOccurrences(of: ",", with: "")
+            return moneyStr.isRegex(str: regexStr)
+        } else if isNumber != nil {
+            var str = textField.text ?? ""
+            str.insert(Character(string), at: str.index(str.startIndex, offsetBy: range.location))
             return str.isRegex(str: regexStr)
         } else {
             return true

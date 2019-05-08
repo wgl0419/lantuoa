@@ -14,16 +14,13 @@ class WrokHomeCell: UITableViewCell {
     var data: WorkGroupListData? {
         didSet {
             if let data = data {
-//                ImageView.image = UIImage(named: "")
                 nameLabel.text = data.name
                 projectLabel.text = data.projectName
                 memberLabel.text = data.members
             }
         }
     }
-
-    /// 图标
-    private var ImageView: UIImageView!
+    
     /// 名称
     private var nameLabel: UILabel!
     /// 项目
@@ -44,27 +41,16 @@ class WrokHomeCell: UITableViewCell {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        ImageView = UIImageView().taxi.adhere(toSuperView: contentView) // 图标
-            .taxi.layout(snapKitMaker: { (make) in
-                make.top.left.equalToSuperview().offset(15)
-                make.width.height.equalTo(40)
-            })
-            .taxi.config({ (imageView) in
-                imageView.layer.cornerRadius = 20
-                imageView.layer.masksToBounds = true
-                imageView.backgroundColor = UIColor(hex: "#E0E0E0")
-            })
         
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名称
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(ImageView)
+                make.top.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-5)
-                make.left.equalTo(ImageView.snp.right).offset(10)
             })
             .taxi.config({ (label) in
                 label.text = "1号小分队"
                 label.textColor = blackColor
-                label.font = UIFont.medium(size: 12)
+                label.font = UIFont.medium(size: 16)
             })
         
         let project = UILabel().taxi.adhere(toSuperView: contentView) // "项目"
@@ -74,7 +60,7 @@ class WrokHomeCell: UITableViewCell {
         }
             .taxi.config { (label) in
                 label.text = "项目："
-                label.font = UIFont.medium(size: 10)
+                label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
         }
         
@@ -87,7 +73,7 @@ class WrokHomeCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.numberOfLines = 0
                 label.textColor = blackColor
-                label.font = UIFont.medium(size: 10)
+                label.font = UIFont.medium(size: 14)
                 label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
         
@@ -98,7 +84,7 @@ class WrokHomeCell: UITableViewCell {
         }
             .taxi.config { (label) in
                 label.text = "成员："
-                label.font = UIFont.medium(size: 10)
+                label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
         }
         
@@ -112,7 +98,7 @@ class WrokHomeCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.numberOfLines = 0
                 label.textColor = blackColor
-                label.font = UIFont.medium(size: 10)
+                label.font = UIFont.medium(size: 14)
                 label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
     }

@@ -29,6 +29,14 @@ class FillInApplyTextViewCell: UITableViewCell {
             }
         }
     }
+    /// 内容
+    var contentStr: String? {
+        didSet {
+            if let str = contentStr {
+                textView.text = str
+            }
+        }
+    }
     
     /// 标题
     private var titleLabel: UILabel!

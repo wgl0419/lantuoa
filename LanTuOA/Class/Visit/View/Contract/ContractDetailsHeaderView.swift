@@ -20,10 +20,10 @@ class ContractDetailsHeaderView: UIView {
                 nameLabel.text = data.name
                 numberLabel.text = "（合同编号：\(data.code ?? "")）"
                 
-                contributionLabel.text = String(format: "%.2f元", data.rebate)
-                totalLabel.text = String(format: "%.2f元", data.totalMoney)
-                moneyBackLabel.text = String(format: "%.2f元", data.paybackMoney)
-                productionLabel.text = String(format: "%.2f元", data.makeMoney)
+                contributionLabel.text = data.rebate.getMoneyStr()
+                totalLabel.text = data.totalMoney.getMoneyStr()
+                moneyBackLabel.text = data.paybackMoney.getMoneyStr()
+                productionLabel.text = data.makeMoney.getMoneyStr()
                 
                 // 时间
                 let startTimeStr = Date(timeIntervalSince1970: TimeInterval(data.startTime)).customTimeStr(customStr: "yyyy-MM-dd")

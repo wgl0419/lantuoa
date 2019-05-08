@@ -26,7 +26,7 @@ class ContractRepaymentHeaderCell: UITableViewCell {
         backgroundColor = UIColor(hex: "#F3F3F3")
         let nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 摘要
             .taxi.layout { (make) in
-                make.width.equalToSuperview().dividedBy(3.5).priority(800)
+                make.width.equalToSuperview().dividedBy(4).priority(800)
                 make.left.equalToSuperview().offset(15)
                 make.height.equalTo(50).priority(800)
                 make.top.bottom.equalToSuperview()
@@ -39,7 +39,7 @@ class ContractRepaymentHeaderCell: UITableViewCell {
         
         let moneyLabel = UILabel().taxi.adhere(toSuperView: contentView) // 回款
             .taxi.layout { (make) in
-                make.width.equalToSuperview().dividedBy(3.8).priority(800)
+                make.width.equalToSuperview().dividedBy(3.3).priority(800)
                 make.left.equalTo(nameLabel.snp.right).offset(5)
                 make.centerY.equalToSuperview()
         }

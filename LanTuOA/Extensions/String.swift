@@ -131,4 +131,24 @@ extension String {
         let timeStamp = Int(timeDate?.timeIntervalSince1970 ?? 0)
         return timeStamp
     }
+    
+    /// 获取金额
+    ///
+    /// - Returns: 返回带","的金额
+    func getMoney() -> String {
+        let strArray = components(separatedBy: ".") // 分割小数部分和整数部分
+        let integerStr = strArray[0] // 必定有整数部分
+        if integerStr.count == 0 {
+            return ""
+        }
+        let integer = Int(integerStr) ?? 0
+        var moneyStr = integer.getMoneyStr()
+        if integerStr.count != count { // 长度不一样  有小数点
+            moneyStr = moneyStr + "."
+        }
+        if strArray.count == 2 {
+            moneyStr.append(strArray[1])
+        }
+        return moneyStr
+    }
 }
