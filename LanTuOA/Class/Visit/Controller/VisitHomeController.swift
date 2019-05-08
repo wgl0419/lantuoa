@@ -108,6 +108,7 @@ class VisitHomeController: UIViewController {
                 make.left.right.equalToSuperview()
             })
             .taxi.config({ (view) in
+                view.isVisit = true
                 view.backgroundColor = .white
                 view.layer.masksToBounds = true
                 view.deleteBlock = { [weak self] (index) in
@@ -122,7 +123,6 @@ class VisitHomeController: UIViewController {
                         self?.contentArray[1] = ""
                         self?.idArray[2] = -1
                         self?.contentArray[2] = ""
-                        self?.setScreenView()
                     } else {
                         self?.idArray[index] = -1
                         self?.contentArray[index] = ""

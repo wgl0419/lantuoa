@@ -116,6 +116,7 @@
 		180BFB412265D675001879BD /* ContractDetailsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB402265D675001879BD /* ContractDetailsTableView.swift */; };
 		180BFB432265DE70001879BD /* ContractDetailsContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB422265DE70001879BD /* ContractDetailsContentCell.swift */; };
 		180EF5F822825F8600735383 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EF5F722825F8600735383 /* Int.swift */; };
+		180EF5FA2282D93F00735383 /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EF5F92282D93F00735383 /* AlignedCollectionViewFlowLayout.swift */; };
 		1810EC4C222F597C00CF6488 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC4B222F597C00CF6488 /* AppDelegate.swift */; };
 		1810EC53222F597D00CF6488 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1810EC52222F597D00CF6488 /* Assets.xcassets */; };
 		1810EC73222F5D4100CF6488 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC65222F5D4100CF6488 /* Date.swift */; };
@@ -190,7 +191,6 @@
 		1849C1C3227E8A1600883C61 /* ScreenEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C2227E8A1600883C61 /* ScreenEjectView.swift */; };
 		1849C1C5227EC11100883C61 /* SeleTimeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C4227EC11100883C61 /* SeleTimeEjectView.swift */; };
 		1849C1C7227ED85400883C61 /* ScreenViewCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C6227ED85400883C61 /* ScreenViewCollectionCell.swift */; };
-		1849C1CA227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C9227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift */; };
 		1876A8DC2266B376002EBDB2 /* ContractPaybackListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */; };
 		1876A8DE2266BA52002EBDB2 /* PerformListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */; };
 		1876A8E02266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DF2266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift */; };
@@ -319,6 +319,7 @@
 		180BFB402265D675001879BD /* ContractDetailsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsTableView.swift; sourceTree = "<group>"; };
 		180BFB422265DE70001879BD /* ContractDetailsContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsContentCell.swift; sourceTree = "<group>"; };
 		180EF5F722825F8600735383 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		180EF5F92282D93F00735383 /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		1810EC48222F597C00CF6488 /* LanTuOA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LanTuOA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1810EC4B222F597C00CF6488 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1810EC52222F597D00CF6488 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -397,7 +398,6 @@
 		1849C1C2227E8A1600883C61 /* ScreenEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEjectView.swift; sourceTree = "<group>"; };
 		1849C1C4227EC11100883C61 /* SeleTimeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeleTimeEjectView.swift; sourceTree = "<group>"; };
 		1849C1C6227ED85400883C61 /* ScreenViewCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenViewCollectionCell.swift; sourceTree = "<group>"; };
-		1849C1C9227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYEqualCellSpaceFlowLayout.swift; sourceTree = "<group>"; };
 		1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPaybackListModel.swift; sourceTree = "<group>"; };
 		1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformListModel.swift; sourceTree = "<group>"; };
 		1876A8DF2266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPerformanceHeaderView.swift; sourceTree = "<group>"; };
@@ -732,7 +732,7 @@
 		1810EC5F222F5BC600CF6488 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				1849C1C8227EEB3200883C61 /* JYEqualCellSpaceFlowLayout */,
+				1849C1C8227EEB3200883C61 /* AlignedCollectionViewFlowLayout */,
 				1849C1BB227E6E7700883C61 /* BMChineseSort */,
 				1810EC60222F5BCC00CF6488 /* Api */,
 				1810EC8A222F5F2E00CF6488 /* Nav */,
@@ -1070,12 +1070,12 @@
 			path = BMChineseSort;
 			sourceTree = "<group>";
 		};
-		1849C1C8227EEB3200883C61 /* JYEqualCellSpaceFlowLayout */ = {
+		1849C1C8227EEB3200883C61 /* AlignedCollectionViewFlowLayout */ = {
 			isa = PBXGroup;
 			children = (
-				1849C1C9227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift */,
+				180EF5F92282D93F00735383 /* AlignedCollectionViewFlowLayout.swift */,
 			);
-			path = JYEqualCellSpaceFlowLayout;
+			path = AlignedCollectionViewFlowLayout;
 			sourceTree = "<group>";
 		};
 		ADCDBC03F8C03A90CC14FFCB /* Frameworks */ = {
@@ -1302,7 +1302,6 @@
 				184407162264889300F10D83 /* NotifyCheckDetailModel.swift in Sources */,
 				1876A8E22266D92B002EBDB2 /* ContractPerformanceCell.swift in Sources */,
 				1827ED9E2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift in Sources */,
-				1849C1CA227EEB4600883C61 /* JYEqualCellSpaceFlowLayout.swift in Sources */,
 				180233682244D7EA0064A50E /* AddCustomerEjectView.swift in Sources */,
 				1833DD3E2241F27700730FB9 /* ProjectDetailsHeaderView.swift in Sources */,
 				180018832252FB6100832E60 /* NewWorkingGroupController.swift in Sources */,
@@ -1359,6 +1358,7 @@
 				180533D422601F7100B785B7 /* ProcessParamsModel.swift in Sources */,
 				180018872253679500832E60 /* VisitDetailsController.swift in Sources */,
 				180736C522706A4F001F1FA6 /* CustomerSaveRequireModel.swift in Sources */,
+				180EF5FA2282D93F00735383 /* AlignedCollectionViewFlowLayout.swift in Sources */,
 				1805FC3A2276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift in Sources */,
 				1810EC90222F5F2F00CF6488 /* DispatchQueueExtension.swift in Sources */,
 				180233662244C6640064A50E /* MeHomeCell.swift in Sources */,

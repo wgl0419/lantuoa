@@ -13,7 +13,8 @@ class ScreenView: UIView {
 
     /// 删除回调 (删除位置  时间：10086)
     var deleteBlock: ((Int) -> ())?
-    
+    /// 是否是拜访
+    var isVisit = false
     /// 数据
     var data: (Int?, Int?, [String])! {
         didSet {
@@ -80,7 +81,9 @@ class ScreenView: UIView {
     /// 初始化子控件
     private func initSubViews() {
         
-        let flowLayout = JYEqualCellSpaceFlowLayout(AlignType.left)
+        let flowLayout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
+        flowLayout.minimumLineSpacing = 0
+        flowLayout.minimumInteritemSpacing = 0
         flowLayout.estimatedItemSize = CGSize(width: 100, height: 44)
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout) // collectionView
@@ -112,6 +115,29 @@ class ScreenView: UIView {
             make.height.equalTo(collectionView.contentSize.height).priority(800)
         }
     }
+    
+    /// 处理删除回调
+    private func deleteHandle(position: Int, row: Int) {
+        if isVisit && position == 1 {
+            strArray.remove(at: 1)
+            positionArray.remove(at: 1)
+            strArray.remove(at: 1)
+            positionArray.remove(at: 1)
+        } else if !isVisit && position == 0 {
+            strArray.remove(at: 0)
+            positionArray.remove(at: 0)
+            strArray.remove(at: 0)
+            positionArray.remove(at: 0)
+        } else {
+            strArray.remove(at: row)
+            positionArray.remove(at: row)
+        }
+        collectionView.reloadData()
+        layoutIfNeeded()
+        if deleteBlock != nil {
+            deleteBlock!(position)
+        }
+    }
 }
 
 extension ScreenView: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -133,13 +159,7 @@ extension ScreenView: UICollectionViewDelegate, UICollectionViewDataSource {
         }
         cell.deleteBlock = { [weak self] in
             let position = self?.positionArray[row] ?? 0
-            self?.strArray.remove(at: row)
-            self?.positionArray.remove(at: row)
-            collectionView.reloadData()
-            self?.layoutIfNeeded()
-            if self?.deleteBlock != nil {
-                self?.deleteBlock!(position)
-            }
+            self?.deleteHandle(position: position, row: row)
         }
         return cell
     }

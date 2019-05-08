@@ -123,6 +123,7 @@ class FillInApplyController: UIViewController {
     
     /// 选择时间
     private func seleTimeHandle(section: Int) {
+        UIApplication.shared.keyWindow?.endEditing(true)
         let timeStr = seleStrArray[section]
         var timeStamp: Int!
         if timeStr.count > 0 {
@@ -401,6 +402,23 @@ class FillInApplyController: UIViewController {
     // MARK: - 按钮点击
     /// 点击提交
     @objc private func submissionClick() {
+        if pricessType == 5 {
+            // 剩余的业绩百分比和提成百分比
+            var achievemenhtsPercentage = 100
+            var royaltyPercentage = 100
+            for model in contractData {
+                achievemenhtsPercentage -= Int(model.1) ?? 0
+                royaltyPercentage -= Int(model.2) ?? 0
+            }
+            
+            if achievemenhtsPercentage != 0 {
+                MBProgressHUD.showError("业绩比例未分配完全")
+                return
+            } else if royaltyPercentage != 0 {
+                MBProgressHUD.showError("提成比例未分配完全")
+                return
+            }
+        }
         processCommit()
     }
 }
