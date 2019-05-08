@@ -39,6 +39,12 @@ class FillInApplyController: UIViewController {
     private var customerId = -1
     /// 项目id
     private var projectId = -1
+    /// 没有审批人
+    private var isProcess = true {
+        didSet {
+            submissionBtn.setTitle("缺少审批人，不能提交", for: .normal)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,24 +106,26 @@ class FillInApplyController: UIViewController {
     
     /// 确认按钮处理
     private func confirmHandle() {
-        var isEnabled = true
-        for index in 0..<data.count {
-            let model = data[index]
-            if model.isNecessary == 1 && seleStrArray[index].count == 0 {
-                isEnabled = false
-                break
+        if isProcess {
+            var isEnabled = true
+            for index in 0..<data.count {
+                let model = data[index]
+                if model.isNecessary == 1 && seleStrArray[index].count == 0 {
+                    isEnabled = false
+                    break
+                }
             }
-        }
-        if isEnabled && pricessType == 5 {
-            isEnabled = contractData.count > 0
-        }
-        
-        if isEnabled {
-            submissionBtn.backgroundColor = UIColor(hex: "#2E4695")
-            submissionBtn.isEnabled = true
-        } else {
-            submissionBtn.isEnabled = false
-            submissionBtn.backgroundColor = UIColor(hex: "#CCCCCC")
+            if isEnabled && pricessType == 5 {
+                isEnabled = contractData.count > 0
+            }
+            
+            if isEnabled {
+                submissionBtn.backgroundColor = UIColor(hex: "#2E4695")
+                submissionBtn.isEnabled = true
+            } else {
+                submissionBtn.isEnabled = false
+                submissionBtn.backgroundColor = UIColor(hex: "#CCCCCC")
+            }
         }
     }
     
@@ -180,18 +188,20 @@ class FillInApplyController: UIViewController {
         vc.isAdd = false
         vc.type = .customer
         vc.seleBlock = { [weak self] (customerArray) in
-            let position = self?.projectPosition ?? 0
-            self?.customerId = customerArray.first?.0 ?? -1
-            self?.seleStrArray[section] = customerArray.first?.1 ?? ""
-            // 重置数据 -> 防止出现选择项目后 修改客户
-            self?.projectId = -1
-            if position != -1 {
-                self?.seleStrArray[position] = ""
-                self?.tableView.reloadRows(at: [IndexPath(row: 0, section: position)], with: .none)
+            if self?.customerId != customerArray.first?.0 ?? -1 {
+                let position = self?.projectPosition ?? 0
+                self?.customerId = customerArray.first?.0 ?? -1
+                self?.seleStrArray[section] = customerArray.first?.1 ?? ""
+                // 重置数据 -> 防止出现选择项目后 修改客户
+                self?.projectId = -1
+                if position != -1 {
+                    self?.seleStrArray[position] = ""
+                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: position)], with: .none)
+                }
+                
+                self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+                self?.confirmHandle()
             }
-            
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
-            self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -227,6 +237,15 @@ class FillInApplyController: UIViewController {
                 projectPosition = index
             }
             seleStrArray.append("")
+        }
+    }
+    
+    /// 审批人梳理
+    private func processHandld() {
+        for model in processUsersData.checkUsers {
+            if model.checkUserId == 0 {
+                isProcess = false
+            }
         }
     }
     
@@ -342,6 +361,7 @@ class FillInApplyController: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.processUsers(processId), t: ProcessUsersModel.self, successHandle: { (result) in
             self.processUsersData = result.data
+            self.processHandld()
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in

@@ -25,11 +25,17 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
                 nameBtn.setTitle("\(data.count)人会签", for: .normal)
                 nameBtn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
                 positionLabel.isHidden = true
-            } else if data.count == 1 { // 防止报错
+            } else if data.count == 1 {
                 let model = data[0]
                 nameBtn.setTitleColor(blackColor, for: .normal)
                 nameBtn.setTitle(model.realname ?? "", for: .normal)
                 positionLabel.isHidden = false
+                if model.checkUserId == 0 {
+                    nameBtn.setTitleColor(UIColor(hex: "#FF4444"), for: .normal)
+                } else {
+                    nameBtn.setTitleColor(blackColor, for: .normal)
+                    positionLabel.isHidden = true
+                }
                 let str = model.roleName ?? ""
                 if str.count == 0 {
                     positionLabel.isHidden = true

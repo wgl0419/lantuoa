@@ -131,13 +131,12 @@ class SelePersonnelController: UIViewController {
                 tableView.tableFooterView = UIView()
                 tableView.register(SelePersonnelCell.self, forCellReuseIdentifier: "SelePersonnelCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
-                    tableView.mj_footer.isHidden = true
                     self?.users(isMore: false)
                 })
-                tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
-                    tableView.mj_header.isHidden = true
-                    self?.users(isMore: true)
-                })
+//                tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
+//                    tableView.mj_header.isHidden = true
+//                    self?.users(isMore: true)
+//                })
             })
     }
     
@@ -241,36 +240,15 @@ class SelePersonnelController: UIViewController {
     private func users(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.users(newPage, 10, searchBar.text ?? "", 1), t: UsersModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.users(newPage, 99999, searchBar.text ?? "", 1), t: UsersModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
-            if isMore {
-                for model in result.data {
-                    self.sourceData.append(model)
-                }
-                self.tableView.mj_footer.endRefreshing()
-                self.tableView.mj_header.isHidden = false
-                self.page += 1
-            } else {
-                self.page = 1
-                self.sourceData = result.data
-                self.tableView.mj_header.endRefreshing()
-                self.tableView.mj_footer.isHidden = false
-            }
-            if newPage == result.max_page {
-                self.tableView.mj_footer.endRefreshingWithNoMoreData()
-            } else {
-                self.tableView.mj_footer.resetNoMoreData()
-            }
+            self.page = 1
+            self.sourceData = result.data
+            self.tableView.mj_header.endRefreshing()
             self.dataHandle(isMore: isMore)
             self.tableView.reloadData()
         }, errorHandle: { (error) in
-            if isMore {
-                self.tableView.mj_footer.endRefreshing()
-                self.tableView.mj_header.isHidden = false
-            } else {
-                self.tableView.mj_header.endRefreshing()
-                self.tableView.mj_footer.isHidden = false
-            }
+            self.tableView.mj_header.endRefreshing()
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }
