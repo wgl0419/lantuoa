@@ -243,6 +243,8 @@ class FillInApplyController: UIViewController {
                 var newModel = ProcessUsersCheckUsers()
                 newModel.checkUserId = model.id
                 newModel.realname = model.realname
+                let position = model.roleList.count == 0 ? "员工" : model.roleList[0].name ?? "员工"
+                newModel.roleName = position
                 self?.carbonCopyData.append(newModel)
                 self?.processUsersData.ccUsers.append(newModel)
             }
@@ -250,6 +252,16 @@ class FillInApplyController: UIViewController {
             self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /// 删除抄送人处理
+    private func deleteCarbonCopyHandle(indexPath: IndexPath, row: Int) {
+        let oldCount = processUsersData.ccUsers.count - carbonCopyData.count
+        let deleteRow = row - oldCount
+        carbonCopyData.remove(at: deleteRow)
+        processUsersData.ccUsers.remove(at: row)
+        tableView.reloadRows(at: [indexPath], with: .none)
+        confirmHandle()
     }
     
     /// 处理添加人员
@@ -426,18 +438,23 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                 cell.data = processUsersData.checkUsers
                 return cell
             }
-        } else if section > data.count { // 抄送
+        } else if section > data.count {
             if pricessType == 5 && section == data.count + 1 { // 审批人
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
                 cell.isApproval = true
                 cell.data = processUsersData.checkUsers
                 return cell
-            } else {
+            } else { // 抄送
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
                 cell.isApproval = false
+                let oldCount = processUsersData.ccUsers.count - carbonCopyData.count // 原本的抄送人数量
+                cell.oldCount = oldCount
                 cell.data = processUsersData.ccUsers
                 cell.addBlock = { [weak self] in
                     self?.addCarbonCopyHandle(indexPath: indexPath)
+                }
+                cell.deleteBlock = { [weak self] (row) in
+                    self?.deleteCarbonCopyHandle(indexPath: indexPath, row: row)
                 }
                 return cell
             }

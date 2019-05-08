@@ -10,6 +10,14 @@ import UIKit
 
 class FillInApplyApprovalCollectionCell: UICollectionViewCell {
     
+    /// 点击删除回调
+    var deleteBlock: (() -> ())?
+    /// 是否显示删除
+    var isCanDelete = false {
+        didSet {
+            deleteBtn.isHidden = !isCanDelete
+        }
+    }
     /// 数据
     var data: [ProcessUsersCheckUsers] = [] {
         didSet {
@@ -54,6 +62,8 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
     private var nameBtn: UIButton!
     /// 职位
     private var positionLabel: UILabel!
+    /// 删除按钮
+    private var deleteBtn: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -96,6 +106,15 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
                 label.font = UIFont.boldSystemFont(ofSize: 10)
                 label.backgroundColor = UIColor(hex: "#DCE4FF")
             })
+        
+        deleteBtn = UIButton().taxi.adhere(toSuperView: contentView) // 删除按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.right.equalToSuperview()
+            })
+            .taxi.config({ (btn) in
+                btn.setImage(UIImage(named: "cc_delete"), for: .normal)
+                btn.addTarget(self, action: #selector(deleteClick), for: .touchUpInside)
+            })
     }
     
     // MARK: - 按钮点击
@@ -114,5 +133,12 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
         let view = SeleVisitModelView(title: "\(data.count)人会签", content: contentArray)
         view.isClick = false
         view.show()
+    }
+    
+    /// 删除
+    @objc private func deleteClick() {
+        if deleteBlock != nil {
+            deleteBlock!()
+        }
     }
 }

@@ -88,6 +88,7 @@ extension ToExamineDetailsCarbonCopyCell: UICollectionViewDelegate, UICollection
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FillInApplyApprovalCollectionCell", for: indexPath) as! FillInApplyApprovalCollectionCell
+            cell.isCanDelete = false
             cell.detailsData = carbonCopyData[row]
             return cell
         }

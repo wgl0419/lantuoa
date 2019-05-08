@@ -22,7 +22,7 @@ class ApplyHistoryCell: UITableViewCell {
                 checkNameLabel.text = check_users.count == 0 ? " " : check_users
                 let statusStr = data.status == 1 ? "申请中" : data.status == 2 ? "已通过" : "未通过"
                 let statusColor = data.status == 1 ? UIColor(hex: "#2E4695") : data.status == 2 ? UIColor(hex: "#5FB9A1") : UIColor(hex: "#FF4444")
-                let newStatusStr = data.status == 1 ? "审批中" : data.status == 2 ? "已同意" : "未拒绝"
+                let newStatusStr = data.status == 1 ? "审批中" : data.status == 2 ? "已同意" : "已拒绝"
                 statusLabel.text = statusStr
                 statusLabel.textColor = statusColor
                 newStatusLabel.text = (data.check_users ?? "") + newStatusStr

@@ -12,8 +12,12 @@ class FillInApplyApprovalCell: UITableViewCell {
     
     /// 添加回调
     var addBlock: (() -> ())?
+    /// 点击删除回调
+    var deleteBlock: ((Int) -> ())?
     /// 是审批人
     var isApproval: Bool!
+    /// 原本的抄送人数量
+    var oldCount = 0
     /// 数据
     var data: [ProcessUsersCheckUsers]! {
         didSet {
@@ -133,6 +137,7 @@ extension FillInApplyApprovalCell: UICollectionViewDelegate, UICollectionViewDat
         if isApproval {
             if indexPath.row % 2 == 0 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FillInApplyApprovalCollectionCell", for: indexPath) as! FillInApplyApprovalCollectionCell
+                cell.isCanDelete = false
                 let row = indexPath.row / 2
                 cell.data = processedData[row]
                 return cell
@@ -157,7 +162,13 @@ extension FillInApplyApprovalCell: UICollectionViewDelegate, UICollectionViewDat
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FillInApplyApprovalCollectionCell", for: indexPath) as! FillInApplyApprovalCollectionCell
+                cell.isCanDelete = indexPath.row >= oldCount // 是否能删除
                 cell.data = processedData[row]
+                cell.deleteBlock = { [weak self] in
+                    if self?.deleteBlock != nil {
+                        self?.deleteBlock!(row)
+                    }
+                }
                 return cell
             }
             

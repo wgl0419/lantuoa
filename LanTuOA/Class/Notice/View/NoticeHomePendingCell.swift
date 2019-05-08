@@ -38,7 +38,7 @@ class NoticeHomePendingCell: UITableViewCell {
             refuseBtn.isHidden = !isCheck
             statusLabel.isHidden = isCheck
             statusLabel.text = checkListData.personStatus == 2 ? "已同意" : "已拒绝"
-            statusLabel.textColor = checkListData.personStatus == 2 ? UIColor(hex: "#5FB9A1") : UIColor(hex: "#5FB9A1")
+            statusLabel.textColor = checkListData.personStatus == 2 ? UIColor(hex: "#5FB9A1") : UIColor(hex: "#FF4444")
         }
     }
     /// 拒绝回调
