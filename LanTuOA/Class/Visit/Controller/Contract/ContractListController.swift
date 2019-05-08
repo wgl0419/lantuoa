@@ -98,6 +98,12 @@ class ContractListController: UIViewController {
                 view.deleteBlock = { [weak self] (index) in
                     if index == 10086 { // 删除时间
                         self?.releaseTimeStamp = nil
+                    } else if index == 0 { // 删除客户 -> 删除项目
+                        self?.idArray[0] = -1
+                        self?.contentArray[0] = ""
+                        self?.idArray[1] = -1
+                        self?.contentArray[1] = ""
+                        self?.setScreenView()
                     } else { // 删除条件
                         self?.idArray[index] = -1
                         self?.contentArray[index] = ""

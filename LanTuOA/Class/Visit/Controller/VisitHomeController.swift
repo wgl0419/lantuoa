@@ -117,6 +117,12 @@ class VisitHomeController: UIViewController {
                     } else if index == 0 { // 删除条件 -> 变回默认选项 id:0  str:全部
                         self?.idArray[0] = 0
                         self?.contentArray[0] = "全部"
+                    } else if index == 1 { // 删除客户 -> 一起删除项目
+                        self?.idArray[1] = -1
+                        self?.contentArray[1] = ""
+                        self?.idArray[2] = -1
+                        self?.contentArray[2] = ""
+                        self?.setScreenView()
                     } else {
                         self?.idArray[index] = -1
                         self?.contentArray[index] = ""

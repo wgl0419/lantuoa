@@ -303,11 +303,11 @@ extension APIManager: TargetType {
             
         case let .visitSave(customerId, projectId, type, content, result, visitTime, contact): // 新增拜访
             params = ["customerId": customerId, "projectId": projectId, "type": type, "content": content, "result": result, "visitTime": visitTime, "contact": contact]
-        case let .visitList(name, startTime, endTime, queryType, page, limit, cutomerId, projectId, createdUser): // 拜访查询
+        case let .visitList(name, startTime, endTime, queryType, page, limit, customerId, projectId, createdUser): // 拜访查询
             params = ["name": name, "queryType": queryType, "page": page, "limit": limit]
             if startTime != nil { params["startTime"] = startTime! }
             if endTime != nil { params["endTime"] = endTime! }
-            if cutomerId != nil { params["cutomerId"] = cutomerId! }
+            if customerId != nil { params["customerId"] = customerId! }
             if projectId != nil { params["projectId"] = projectId! }
             if createdUser != nil { params["createdUser"] = createdUser! }
             
@@ -372,8 +372,8 @@ extension APIManager: TargetType {
             if customerId != nil { params["customerId"] = customerId! }
             if projectId != nil { params["projectId"] = projectId! }
             if userId != nil { params["userId"] = userId! }
-            if userId != nil { params["startTime"] = startTime! }
-            if userId != nil { params["endTime"] = endTime! }
+            if startTime != nil { params["startTime"] = startTime! }
+            if endTime != nil { params["endTime"] = endTime! }
         case let .performList(queryType, userId, `self`, contractId): // 业绩列表
             params = ["queryType": queryType]
             if userId != nil { params["userId"] = userId! }

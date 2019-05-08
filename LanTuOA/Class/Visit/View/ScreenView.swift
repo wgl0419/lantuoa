@@ -133,13 +133,13 @@ extension ScreenView: UICollectionViewDelegate, UICollectionViewDataSource {
         }
         cell.deleteBlock = { [weak self] in
             let position = self?.positionArray[row] ?? 0
-            if self?.deleteBlock != nil {
-                self?.deleteBlock!(position)
-            }
             self?.strArray.remove(at: row)
             self?.positionArray.remove(at: row)
             collectionView.reloadData()
             self?.layoutIfNeeded()
+            if self?.deleteBlock != nil {
+                self?.deleteBlock!(position)
+            }
         }
         return cell
     }
