@@ -283,6 +283,13 @@ extension AddVisitorEjectView: UITableViewDelegate, UITableViewDataSource {
             self?.seleStrArray[row] = str
             self?.layoutIfNeeded()
         }
+        if row == 0 { // 名称
+            cell.limit = 10
+        } else if row == 1 { // 联系号码
+            cell.limit = 11
+        } else { // 职位
+            cell.limit = 10
+        }
         return cell
     }
 }

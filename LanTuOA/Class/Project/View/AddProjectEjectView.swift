@@ -282,7 +282,9 @@ extension AddProjectEjectView: UITableViewDelegate, UITableViewDataSource {
         cell.contentStr = seleStrArray[row]
         cell.isEdit = row != 2
         cell.tableView = tableView
-        if row == 1 { // 地址可输入2行
+        if row == 0 { // 项目名称
+            cell.limit = 25
+        } else if row == 1 { // 地址
             cell.limitRow = 2
         }
         cell.stopBlock = { [weak self] (str) in

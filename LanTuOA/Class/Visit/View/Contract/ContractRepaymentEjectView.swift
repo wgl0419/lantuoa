@@ -207,6 +207,9 @@ extension ContractRepaymentEjectView: UITableViewDelegate, UITableViewDataSource
             cell.data = (titleArray[row], placeholderArray[row])
             cell.contentStr = contentArray[row]
             cell.tableView = tableView
+            if row == 0 {
+                cell.limit = 25
+            }
             cell.stopBlock = { [weak self] (str) in
                 self?.contentArray[row] = str
                 tableView.snp.updateConstraints { (make) in
@@ -227,6 +230,8 @@ extension ContractRepaymentEjectView: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
         if indexPath.row == 2 { // 点击选择时间
             let view = SeleVisitTimeView(limit: true)
             view.seleBlock = { (timeStr) in

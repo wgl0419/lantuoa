@@ -34,6 +34,7 @@ class FillInApplyTextViewCell: UITableViewCell {
         didSet {
             if let str = contentStr {
                 textView.text = str
+                textView.placeHolderLabel?.isHidden = str.count > 0
             }
         }
     }

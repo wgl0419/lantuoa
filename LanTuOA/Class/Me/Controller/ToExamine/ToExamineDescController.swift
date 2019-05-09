@@ -24,7 +24,7 @@ class ToExamineDescController: UIViewController {
     /// 备注类型
     var descType: DescType = .agree
     /// 修改回调
-    var  changeBlock: (() -> ())?
+    var changeBlock: (() -> ())?
     
     /// 输入框
     private var textView: UITextView!
@@ -134,5 +134,17 @@ class ToExamineDescController: UIViewController {
 extension ToExamineDescController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         textView.placeHolderLabel?.isHidden = textView.text.count > 0
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text.count == 0 { // 删除
+            return false
+        }
+        var str = textView.text ?? ""
+        str.insert(Character(text), at: str.index(str.startIndex, offsetBy: range.location))
+        if str.count > 127 {
+            return false
+        }
+        return true
     }
 }

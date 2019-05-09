@@ -16,9 +16,12 @@ class ToExamineDetailsCarbonCopyCell: UITableViewCell {
         didSet {
             collectionView.reloadData()
             
-            contentView.layoutIfNeeded()
+            collectionView.reloadData()
+            layoutIfNeeded()
+            var collectionHeight = collectionView.contentSize.height
+            collectionHeight = collectionHeight == 0 ? 15 : collectionHeight
             collectionView.snp.updateConstraints { (make) in
-                make.height.equalTo(collectionView.contentSize.height)
+                make.height.equalTo(collectionHeight).priority(800)
             }
         }
     }
@@ -41,9 +44,7 @@ class ToExamineDetailsCarbonCopyCell: UITableViewCell {
     private func initSubViews() {
         let titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
             .taxi.layout { (make) in
-                make.left.equalToSuperview().offset(15)
-                make.height.equalTo(44).priority(800)
-                make.top.equalToSuperview()
+                make.top.left.equalToSuperview().offset(15)
         }
             .taxi.config { (label) in
                 label.text = "抄送人"
@@ -59,9 +60,10 @@ class ToExamineDetailsCarbonCopyCell: UITableViewCell {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout) // collectionview
             .taxi.adhere(toSuperView: contentView)
             .taxi.layout(snapKitMaker: { (make) in
+                make.height.equalTo(200).priority(800)
                 make.top.equalTo(titleLabel.snp.bottom)
-                make.left.right.bottom.equalToSuperview()
-                make.height.equalTo(0)
+                make.left.right.equalToSuperview()
+                make.bottom.equalToSuperview()
             })
             .taxi.config({ (collectionView) in
                 collectionView.delegate = self
@@ -72,6 +74,7 @@ class ToExamineDetailsCarbonCopyCell: UITableViewCell {
                 collectionView.register(FillInApplyArrowCollectionCell.self, forCellWithReuseIdentifier: "FillInApplyArrowCollectionCell")
             })
     }
+    
 }
 
 extension ToExamineDetailsCarbonCopyCell: UICollectionViewDelegate, UICollectionViewDataSource {

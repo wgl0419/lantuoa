@@ -30,6 +30,15 @@ class NewlyBuildVisitTextViewCell: UITableViewCell {
             }
         }
     }
+    /// 内容
+    var contentStr: String? {
+        didSet {
+            if let str = contentStr {
+                textView.text = str
+                textView.placeHolderLabel?.isHidden = str.count > 0
+            }
+        }
+    }
     /// 必选(默认非必选)
     var isMust: Bool? {
         didSet {
@@ -38,6 +47,8 @@ class NewlyBuildVisitTextViewCell: UITableViewCell {
             }
         }
     }
+    /// 限制长度
+    var limit: Int!
     
     /// 标题
     private var titleLabel: UILabel!
@@ -54,6 +65,11 @@ class NewlyBuildVisitTextViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        limit = nil
     }
     
     // MARK: - 自定义私有方法
@@ -103,5 +119,19 @@ extension NewlyBuildVisitTextViewCell: UITextViewDelegate {
         if textBlock != nil {
             textBlock!(textView.text)
         }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text.count == 0 { // 删除
+            return true
+        }
+        if limit != nil {
+            var str = textView.text ?? ""
+            str.insert(Character(text), at: str.index(str.startIndex, offsetBy: range.location))
+            if str.count > limit {
+                return false
+            }
+        }
+        return true
     }
 }

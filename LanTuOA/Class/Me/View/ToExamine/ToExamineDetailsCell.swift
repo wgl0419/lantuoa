@@ -7,6 +7,7 @@
 //  审批详情  cell
 
 import UIKit
+import SnapKit
 
 class ToExamineDetailsCell: UITableViewCell {
     
@@ -34,16 +35,27 @@ class ToExamineDetailsCell: UITableViewCell {
                 var model = listModel.filter { (model) -> Bool in
                     return model.status == 2 || model.status == 3
                 }
+                
                 if model.count == 0 && listModel.count > 1 { // 多人会签状态下 还没有人处理
                     nameLabel.text = "\(listModel.count)人会签"
                     openBtn.isHidden = false
                     status = listModel[0].status
+                    
+                    
                 } else {
                     if model.count == 0 { // 单人状态下  没有处理
                         model = listModel
                     }
                     nameLabel.text = model[0].`self` == 1 ? "我" : model[0].checkUserName ?? ""
                     status = model[0].status
+                    
+                    let desc = model[0].desc ?? ""
+                    if desc.count > 0 {
+                        contentLabel.text = desc
+                        contentLabel.isHidden = false
+                        statusConstraint.deactivate()
+                        contentConstraint.activate()
+                    }
                 }
                 // 处理状态
                 if !approval {
@@ -60,9 +72,12 @@ class ToExamineDetailsCell: UITableViewCell {
                     timeLabel.text = ""
                 }
                 openBtn.isSelected = isOpen
-                statusLabel.snp.updateConstraints { (make) in
-                    make.bottom.equalToSuperview().offset(isLast && !isOpen ? -15 : -3)
+                if statusConstraint.isActive {
+                    statusConstraint.update(offset: (isLast && !isOpen ? -15 : -3))
+                } else {
+                    contentConstraint.update(offset: (isLast && !isOpen ? -15 : -3))
                 }
+            
             }
         }
     }
@@ -78,6 +93,12 @@ class ToExamineDetailsCell: UITableViewCell {
     private var topLineView: UIView!
     /// 展开按钮
     private var openBtn: UIButton!
+    /// 审批内容
+    private var contentLabel: UILabel!
+    /// 状态底部约束
+    private var statusConstraint: Constraint!
+    /// 内容底部约束
+    private var contentConstraint: Constraint!
     
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -96,9 +117,9 @@ class ToExamineDetailsCell: UITableViewCell {
         topLineView.snp.updateConstraints { (make) in
             make.height.equalTo(30)
         }
-        statusLabel.snp.updateConstraints { (make) in
-            make.bottom.equalToSuperview().offset(-3)
-        }
+        statusConstraint.activate()
+        contentLabel.isHidden = true
+        contentConstraint.deactivate()
         openBtn.isHidden = true
     }
     
@@ -151,14 +172,27 @@ class ToExamineDetailsCell: UITableViewCell {
         
         statusLabel = UILabel().taxi.adhere(toSuperView: contentView) // 状态
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(nameLabel.snp.bottom).offset(2)
                 make.left.equalToSuperview().offset(15)
-                make.bottom.equalToSuperview().offset(-3)
+                make.top.equalTo(nameLabel.snp.bottom).offset(2)
+                statusConstraint = make.bottom.equalToSuperview().offset(-3).constraint
             })
             .taxi.config({ (label) in
+                statusConstraint.activate()
                 label.font = UIFont.boldSystemFont(ofSize: 10)
             })
         
-        
+        contentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 审批内容
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-15)
+                make.top.equalTo(statusLabel.snp.bottom).offset(5).priority(800)
+                contentConstraint = make.bottom.equalToSuperview().offset(-3).constraint
+            })
+            .taxi.config({ (label) in
+                contentConstraint.deactivate()
+                label.numberOfLines = 0
+                label.textColor = blackColor
+                label.font = UIFont.boldSystemFont(ofSize: 10)
+            })
     }
 }

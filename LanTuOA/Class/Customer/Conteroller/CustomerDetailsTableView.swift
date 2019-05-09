@@ -274,7 +274,7 @@ class CustomerDetailsTableView: UITableView {
     private func visitList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.visitList("", timeStamp, nil, 2, newPage, 10, customerId, nil, nil), t: VisitListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.visitList("", timeStamp, nil, 1, newPage, 10, customerId, nil, nil), t: VisitListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

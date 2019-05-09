@@ -230,9 +230,11 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let vc = ProjectDetailsController()
-        vc.lockState = 1
-        vc.projectData = data[indexPath.row]
-        navigationController?.pushViewController(vc, animated: true)
+        if indexPath.section == 1 {
+            let vc = ProjectDetailsController()
+            vc.lockState = 1
+            vc.projectData = data[indexPath.row]
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }

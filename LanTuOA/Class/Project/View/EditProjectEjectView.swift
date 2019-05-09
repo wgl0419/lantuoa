@@ -119,7 +119,7 @@ class EditProjectEjectView: UIView {
             .taxi.config({ (view) in
                 view.layer.cornerRadius = 4
                 view.layer.masksToBounds = true
-                view.backgroundColor = UIColor(hex: "#F1F1F1")
+                view.backgroundColor = .white
             })
         
         titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // 标题
@@ -132,6 +132,7 @@ class EditProjectEjectView: UIView {
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
+                label.backgroundColor = UIColor(hex: "#F1F1F1")
             })
         
         tableView = UITableView().taxi.adhere(toSuperView: grayView) // tableview
@@ -144,6 +145,7 @@ class EditProjectEjectView: UIView {
                 tableView.bounces = false
                 tableView.delegate = self
                 tableView.dataSource = self
+                tableView.estimatedRowHeight = 50
                 tableView.register(CustomerTextViewCell.self, forCellReuseIdentifier: "CustomerTextViewCell")
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
             })
@@ -279,9 +281,7 @@ extension EditProjectEjectView: UITableViewDelegate, UITableViewDataSource {
             cell.stopBlock = { [weak self] (str) in
                 self?.layoutIfNeeded()
                 self?.seleStrArray[row] = str
-                tableView.snp.updateConstraints { (make) in
-                    make.height.equalTo(tableView.contentSize.height)
-                }
+                self?.layoutIfNeeded()
             }
             return cell
         }

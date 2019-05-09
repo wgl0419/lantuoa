@@ -26,7 +26,7 @@ class AddCustomerEjectView: UIView {
                 let data = modifyData.1
                 let type = data.type
                 seleStrArray[0] = data.name ?? ""
-                seleStrArray[1] = type == 1 ? "公司客户" : "开发中客户"
+                seleStrArray[1] = type == 1 ? "公司客户" : "普通客户"
                 seleStrArray[2] = data.industryName ?? ""
                 seleStrArray[3] = data.address ?? ""
                 seleStrArray[4] = data.fullName ?? ""
@@ -357,9 +357,12 @@ extension AddCustomerEjectView: UITableViewDelegate, UITableViewDataSource {
             cell.contentStr = seleStrArray[row]
             cell.tableView = tableView
             let str = titleArray[row]
-            if str == "公司地址" { // 地址可输入2行
+            if str == "客户名称" { // 客户名称 不超过25字
+                cell.limit = 25
+            } else if str == "公司地址" { // 地址可输入2行
                 cell.limitRow = 2
             } else if str == "公司全名" { // 公司全称可输入2行
+                cell.limit = 127
                 cell.limitRow = 2
             }
             cell.stopBlock = { [weak self] (str) in

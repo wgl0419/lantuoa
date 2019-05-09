@@ -140,6 +140,9 @@ extension NewWorkingGroupController: UITableViewDelegate, UITableViewDataSource 
             cell.contentStr = seleStrArray[section]
             cell.tableView = tableView
             cell.isMust = true
+            if section == 0 {
+                cell.limit = 50
+            }
             cell.stopBlock = { [weak self] (str) in
                 self?.seleStrArray[section] = str
                 self?.determineHandle()

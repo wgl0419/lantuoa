@@ -223,6 +223,10 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitTextViewCell", for: indexPath) as! NewlyBuildVisitTextViewCell
             cell.data = (titleArray[section], placeholderArray[section])
+            cell.contentStr = seleStrArray[section]
+            if indexPath.row == 6 { // 拜访结果
+                cell.limit = 50
+            }
             cell.textBlock = { [weak self] (str) in
                 self?.seleStrArray[section] = str
                 self?.confirmHandle()

@@ -61,6 +61,8 @@ class CustomerTextViewCell: UITableViewCell {
             }
         }
     }
+    /// 限制长度
+    var limit: Int!
     
     /// 父tableview
     var tableView: UITableView!
@@ -84,6 +86,11 @@ class CustomerTextViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        limit = nil
     }
     
     // MARK: - 自定义私有方法
@@ -185,6 +192,15 @@ extension CustomerTextViewCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text.count == 0 && textView.text.count == 0 { // 删除
             return false
+        } else if text.count == 0 && textView.text.count != 0 { // 删除
+            return true
+        }
+        if limit != nil {
+            var str = textView.text ?? ""
+            str.insert(Character(text), at: str.index(str.startIndex, offsetBy: range.location))
+            if str.count > limit {
+                return false
+            }
         }
         return true
     }

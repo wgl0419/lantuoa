@@ -220,10 +220,10 @@ static NSString *const menuCellID = @"YCMenuCell";
         }else{
             _refView = view;
         }
-        _actions = [actions copy];
         _menuWidth = width;
         [self defaultConfiguration];
         [self setupSubView];
+        _actions = [actions copy];
     }
     return self;
 }
@@ -250,13 +250,14 @@ static NSString *const menuCellID = @"YCMenuCell";
     [self calculateArrowAndFrame];
     [self setupMaskLayer];
     [self addSubview:self.contentView];
+    [self reloadTableView];
 }
 
 - (void)reloadData{
     [self.contentView removeFromSuperview];
-    [self.tableView removeFromSuperview];
+//    [self.tableView removeFromSuperview];
     self.contentView = nil;
-    self.tableView = nil;
+//    self.tableView = nil;
     [self setupSubView];
 }
 
@@ -451,6 +452,12 @@ static NSString *const menuCellID = @"YCMenuCell";
     }
     return _tableView;
 }
+- (void)reloadTableView {
+    _tableView.frame = CGRectMake(0, _topMargin, self.width, self.height - kArrowHeight);
+    _tableView.bounces = _actions.count > _maxDisplayCount? YES : NO;
+    _tableView.rowHeight = _menuCellHeight;
+}
+
 - (UIView *)bgView{
     if (!_bgView) {
         _bgView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];

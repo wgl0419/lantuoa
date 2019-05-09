@@ -116,6 +116,7 @@ class ReplacementDepartmentController: UIViewController {
             self.departmentsData = result.data
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
+            self.determineHandle()
         }, errorHandle: { (error) in
             self.tableView.mj_header.endRefreshing()
             MBProgressHUD.showError(error ?? "获取部门列表失败")
