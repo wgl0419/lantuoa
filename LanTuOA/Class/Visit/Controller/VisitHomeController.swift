@@ -230,7 +230,7 @@ class VisitHomeController: UIViewController {
         let cutomerId = idArray[1] == -1 ? nil : idArray[1] // 客户id
         let projectId = idArray[2] == -1 ? nil : idArray[2] // 项目id
         let createdUser = idArray[3] == -1 ? nil : idArray[3] // 用户id
-        _ = APIService.shared.getData(.visitList(searchBar.text ?? "", startTimeStamp, endTimeStamp, queryType, newPage, 10, cutomerId, projectId, createdUser), t: VisitListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.visitList(searchBar.text ?? "", startTimeStamp, endTimeStamp, queryType, newPage, 50, cutomerId, projectId, createdUser), t: VisitListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

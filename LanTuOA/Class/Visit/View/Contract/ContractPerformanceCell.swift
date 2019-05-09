@@ -14,7 +14,7 @@ class ContractPerformanceCell: UITableViewCell {
     var data: (String, Int, Float)! {
         didSet {
             yearLabel.text = String(format: "%@年%d月", data.0, data.1)
-            moneyLabel.text = data.2.getMoneyStr()
+            moneyLabel.text = data.2.getAllMoneyStr()
         }
     }
     

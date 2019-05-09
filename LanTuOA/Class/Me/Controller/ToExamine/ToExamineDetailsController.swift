@@ -14,8 +14,6 @@ class ToExamineDetailsController: UIViewController {
 
     /// 审批数据
     var checkListId = 0
-    /// 审批名称
-    var checkListName = ""
     /// 修改回调
     var changeBlock: (() -> ())?
     
@@ -45,7 +43,6 @@ class ToExamineDetailsController: UIViewController {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        title = checkListName
         view.backgroundColor = .white
         
         btnView = UIView().taxi.adhere(toSuperView: view) // 按钮框
@@ -186,6 +183,7 @@ class ToExamineDetailsController: UIViewController {
     private func notifyCheckDetail() {
         _ = APIService.shared.getData(.notifyCheckDetail(checkListId), t: NotifyCheckDetailModel.self, successHandle: { (result) in
             self.checkListData = result.data
+            self.title = result.data?.processName ?? ""
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
             self.judgeStage()

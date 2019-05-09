@@ -7,12 +7,15 @@
 //  拜访详情  控制器
 
 import UIKit
+import MBProgressHUD
 
 class VisitDetailsController: UIViewController {
 
     
-    /// 数据
+    /// 拜访数据
     var visitListData: VisitListData!
+    /// 拜访id
+    var visitListId: Int!
     
     /// tableview
     private var tableView: UITableView!
@@ -20,6 +23,9 @@ class VisitDetailsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
+        if visitListId != nil {
+            visitDetail()
+        }
     }
     
     // MARK: - 自定义私有方法
@@ -40,6 +46,19 @@ class VisitDetailsController: UIViewController {
                 tableView.register(VisitDetailsCell.self, forCellReuseIdentifier: "VisitDetailsCell")
                 tableView.register(VisitDetailsHeaderCell.self, forCellReuseIdentifier: "VisitDetailsHeaderCell")
             })
+    }
+    
+    // MARK: - Api
+    /// 项目详情
+    private func visitDetail() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.visitDetail(visitListId), t: VisitDetailModel.self, successHandle: { (result) in
+            self.visitListData = result.data
+            self.tableView.reloadData()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取失败")
+        })
     }
 }
 

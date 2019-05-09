@@ -18,11 +18,11 @@ class ContractPerformanceHeaderView: UIView {
     var data: (Float, String, Int, Float)? {
         didSet {
             if let data = data {
-                totalLabel.text = data.0.getMoneyStr()
+                totalLabel.text = data.0.getAllMoneyStr()
                 let seleStr = "选择参与人：\(data.1)（\(data.2)%）"
                 seleBtn.setTitle(seleStr, for: .normal)
                 seleLabel.text = "\(data.1)业绩详情："
-                totalPerformanceLabel.text = data.3.getMoneyStr()
+                totalPerformanceLabel.text = data.3.getAllMoneyStr()
             }
         }
     }

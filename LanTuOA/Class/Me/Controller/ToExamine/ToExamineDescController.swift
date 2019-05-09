@@ -140,8 +140,7 @@ extension ToExamineDescController: UITextViewDelegate {
         if text.count == 0 { // 删除
             return false
         }
-        var str = textView.text ?? ""
-        str.insert(Character(text), at: str.index(str.startIndex, offsetBy: range.location))
+        let str = (textView.text as NSString).replacingCharacters(in: range, with: text)
         if str.count > 127 {
             return false
         }

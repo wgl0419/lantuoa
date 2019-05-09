@@ -14,7 +14,7 @@ class ContractPerformanceHeaderCell: UITableViewCell {
     var data: (String, Float, Bool)! {
         didSet {
             yearLabel.text = String(format: "%@年", data.0)
-            moneyLabel.text = data.1.getMoneyStr()
+            moneyLabel.text = data.1.getSpotMoneyStr()
             arrowBtn.isSelected = data.2
             setArrow()
         }

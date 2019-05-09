@@ -16,7 +16,7 @@ class ContractRepaymentCell: UITableViewCell {
     var data: ContractPaybackListData! {
         didSet {
             nameLabel.text = data.desc
-            moneyLabel.text = data.money.getMoneyStr()
+            moneyLabel.text = data.money.getAllMoneyStr()
             
             let timeStr = Date(timeIntervalSince1970: TimeInterval(data.payTime)).customTimeStr(customStr: "yyyy-MM-dd")
             timeLabel.text = timeStr

@@ -195,7 +195,7 @@ class VisitSeleTimeView: UIView {
     
     /// 条件筛选
     private func conditionScreening() {
-        let contentStrArray = ["全部", "我发起的", "我接收的", "工作组"]
+        let contentStrArray = ["全部", "我发起的", "我接手的", "工作组"]
         let view = SeleVisitModelView(title: "条件筛选", content: contentStrArray)
         view.didBlock = { [weak self] (seleIndex) in
             self?.contentArray[0] = contentStrArray[seleIndex]

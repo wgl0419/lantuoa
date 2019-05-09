@@ -126,8 +126,7 @@ extension NewlyBuildVisitTextViewCell: UITextViewDelegate {
             return true
         }
         if limit != nil {
-            var str = textView.text ?? ""
-            str.insert(Character(text), at: str.index(str.startIndex, offsetBy: range.location))
+            let str = (textView.text as NSString).replacingCharacters(in: range, with: text)
             if str.count > limit {
                 return false
             }

@@ -17,6 +17,8 @@ class ProjectDetailsController: UIViewController {
     var lockState = 1
     /// 项目数据 (从项目列表进入)
     var projectData: ProjectListStatisticsData!
+    /// 项目id 只有从通知进入  -> 直接显示工作组
+    var projectId = 0
     
     /// 顶部视图
     private var headerView: ProjectDetailsHeaderView!
@@ -38,8 +40,11 @@ class ProjectDetailsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initSubViews()
-        
+        if projectData != nil {
+            initSubViews()
+        } else {
+            projectDetail()
+        }
     }
     
     // MARK: - 自定义私有方法
@@ -340,17 +345,19 @@ class ProjectDetailsController: UIViewController {
         })
     }
     
-//    /// 获取项目详情
-//    private func projectDetail() {
-//        MBProgressHUD.showWait("")
-//        _ = APIService.shared.getData(.projectDetail(projectId), t: ProjectDetailModel.self, successHandle: { (result) in
-//            self.projectData = result.data
-//            self.initSubViews()
-//            MBProgressHUD.dismiss()
-//        }, errorHandle: { (error) in
-//            MBProgressHUD.showError(error ?? "获取项目详情失败")
-//        })
-//    }
+    /// 获取项目详情
+    private func projectDetail() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.projectDetail(projectId), t: ProjectDetailModel.self, successHandle: { (result) in
+            self.projectData = result.data
+            MBProgressHUD.dismiss()
+            self.initSubViews()
+            self.scrollView.setContentOffset(CGPoint(x: ScreenWidth * 2, y: 0), animated: false)
+            self.segment.changeBtn(page: 2)
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取项目详情失败")
+        })
+    }
     
     // MARK: - 按钮点击
     /// 点击新增项目

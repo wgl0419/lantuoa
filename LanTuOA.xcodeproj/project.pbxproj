@@ -88,6 +88,7 @@
 		180736BD22700FAA001F1FA6 /* LoginUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736BC22700FAA001F1FA6 /* LoginUserModel.swift */; };
 		180736C3227067FF001F1FA6 /* ProjectSaveRequireModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736C2227067FF001F1FA6 /* ProjectSaveRequireModel.swift */; };
 		180736C522706A4F001F1FA6 /* CustomerSaveRequireModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736C422706A4F001F1FA6 /* CustomerSaveRequireModel.swift */; };
+		1807B6BD228413B800B21A14 /* VisitDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1807B6BC228413B800B21A14 /* VisitDetailModel.swift */; };
 		1809E3F8225D865000B615A8 /* ToExamineDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E3F7225D865000B615A8 /* ToExamineDetailsController.swift */; };
 		1809E3FC225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E3FB225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift */; };
 		1809E3FE225DBB9700B615A8 /* AddDepartmentEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E3FD225DBB9700B615A8 /* AddDepartmentEjectView.swift */; };
@@ -291,6 +292,7 @@
 		180736BC22700FAA001F1FA6 /* LoginUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserModel.swift; sourceTree = "<group>"; };
 		180736C2227067FF001F1FA6 /* ProjectSaveRequireModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSaveRequireModel.swift; sourceTree = "<group>"; };
 		180736C422706A4F001F1FA6 /* CustomerSaveRequireModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerSaveRequireModel.swift; sourceTree = "<group>"; };
+		1807B6BC228413B800B21A14 /* VisitDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitDetailModel.swift; sourceTree = "<group>"; };
 		1809E3F7225D865000B615A8 /* ToExamineDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsController.swift; sourceTree = "<group>"; };
 		1809E3FB225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsHeaderCell.swift; sourceTree = "<group>"; };
 		1809E3FD225DBB9700B615A8 /* AddDepartmentEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDepartmentEjectView.swift; sourceTree = "<group>"; };
@@ -1019,6 +1021,7 @@
 				1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */,
 				1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */,
 				1827ED81226802E800EFF889 /* ContractDetailModel.swift */,
+				1807B6BC228413B800B21A14 /* VisitDetailModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1366,6 +1369,7 @@
 				1803A31B225EE73900B86F20 /* AchievementsListController.swift in Sources */,
 				1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */,
 				1827ED902268620B00EFF889 /* AchievementsDetailsEjectCell.swift in Sources */,
+				1807B6BD228413B800B21A14 /* VisitDetailModel.swift in Sources */,
 				181788502238D73F0015DC30 /* HomePageNoticeCell.swift in Sources */,
 				1849C1BF227E728800883C61 /* ScreenOtherCell.swift in Sources */,
 				1802B01022549D1300E94341 /* JobHandoverController.swift in Sources */,

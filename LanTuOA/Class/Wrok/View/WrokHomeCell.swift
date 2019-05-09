@@ -79,7 +79,7 @@ class WrokHomeCell: UITableViewCell {
         
         let member = UILabel().taxi.adhere(toSuperView: contentView) // ”成员“
             .taxi.layout { (make) in
-                make.top.equalTo(project.snp.bottom).offset(3)
+                make.top.equalTo(projectLabel.snp.bottom).offset(3)
                 make.left.equalTo(nameLabel)
         }
             .taxi.config { (label) in

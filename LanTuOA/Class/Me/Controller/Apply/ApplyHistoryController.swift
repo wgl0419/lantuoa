@@ -219,7 +219,6 @@ extension ApplyHistoryController: UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = ToExamineDetailsController()
         vc.checkListId = data[tableView.tag][indexPath.row].id
-        vc.checkListName = data[tableView.tag][indexPath.row].name ?? ""
         vc.changeBlock = { [weak self] in
             self?.reloadData()
         }

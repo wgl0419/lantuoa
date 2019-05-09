@@ -307,10 +307,8 @@ extension ToExamineController: UITableViewDelegate, UITableViewDataSource {
         let vc = ToExamineDetailsController()
         if tableView.tag == 0 {
             vc.checkListId = awaitingAuditData[indexPath.row].id
-            vc.checkListName = awaitingAuditData[indexPath.row].processName ?? ""
         } else {
             vc.checkListId = auditedData[indexPath.row].id
-            vc.checkListName = auditedData[indexPath.row].processName ?? ""
         }
         
         vc.changeBlock = { [weak self] in

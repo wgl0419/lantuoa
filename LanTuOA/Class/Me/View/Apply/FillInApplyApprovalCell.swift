@@ -56,13 +56,22 @@ class FillInApplyApprovalCell: UITableViewCell {
                 label.font = UIFont.medium(size: 16)
             })
         
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        layout.estimatedItemSize = CGSize(width: 50, height: 50)
         
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout) // collectionView
-            .taxi.adhere(toSuperView: contentView)
+        if #available(iOS 9.0, *) {
+            let layout = UICollectionViewFlowLayout()
+            layout.minimumLineSpacing = 0
+            layout.minimumInteritemSpacing = 0
+            layout.estimatedItemSize = CGSize(width: 50, height: 50)
+            collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout) // collectionView
+        } else {
+            let flowLayout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
+            flowLayout.minimumLineSpacing = 0
+            flowLayout.minimumInteritemSpacing = 0
+            flowLayout.estimatedItemSize = CGSize(width: 100, height: 44)
+            collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout) // collectionView
+        }
+        
+        collectionView.taxi.adhere(toSuperView: contentView)
             .taxi.layout(snapKitMaker: { (make) in
                 make.height.equalTo(200).priority(800)
                 make.top.equalTo(titleLabel.snp.bottom)

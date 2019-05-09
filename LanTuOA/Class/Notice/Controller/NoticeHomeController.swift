@@ -338,10 +338,8 @@ class NoticeHomeController: UIViewController {
         MBProgressHUD.showWait("")
         let checkId = pendingData[index.row].id
         _ = APIService.shared.getData(.notifyCheckAgree(checkId, ""), t: LoginModel.self, successHandle: { (result) in
-            self.pendingTableView.beginUpdates()
             self.pendingData.remove(at: index.row)
-            self.pendingTableView.deleteRows(at: [index], with: .fade)
-            self.pendingTableView.endUpdates()
+            self.pendingTableView.reloadData()
             MBProgressHUD.dismiss()
             self.setTips()
         }, errorHandle: { (error) in
@@ -393,11 +391,33 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
         if tableView == pendingTableView {
             let vc = ToExamineDetailsController()
             vc.checkListId = pendingData[indexPath.row].id
-            vc.checkListName = pendingData[indexPath.row].processName ?? ""
             vc.changeBlock = { [weak self] in
                 self?.notifyCheckList(isMore: false)
             }
             navigationController?.pushViewController(vc, animated: true)
+        } else {
+            let model = systemData[indexPath.row]
+            switch model.type {
+            case "1": break // 系统通知 无跳转
+            case "2": // 审批通知 -> 审批详情
+                let vc = ToExamineDetailsController()
+                vc.checkListId = systemData[indexPath.row].checkId
+                vc.changeBlock = { [weak self] in
+                    self?.notifyCheckList(isMore: false)
+                }
+                navigationController?.pushViewController(vc, animated: true)
+            case "3": break // 工作交接 无跳转
+            case "4": // 工作组 -> 项目详情，工作组选项卡
+                let vc = ProjectDetailsController()
+                vc.lockState = 1
+                vc.projectId = systemData[indexPath.row].checkId
+                navigationController?.pushViewController(vc, animated: true)
+            case "5": // 拜访 -> 拜访详情
+                let vc = VisitDetailsController()
+                vc.visitListId = systemData[indexPath.row].checkId
+                navigationController?.pushViewController(vc, animated: true)
+            default: break
+            }
         }
     }
 }

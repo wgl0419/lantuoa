@@ -31,19 +31,29 @@ extension Int {
 
 extension Float {
     
-    /// 金额添加 ,
-    func getMoneyStr() -> String {
+    /// 全格式金额 带“，” 并且显示万元
+    func getAllMoneyStr() -> String {
+        let moneyStr = getSpotMoneyStr() + " (" + getAbbreviationMoney() + ")"
+        return moneyStr
+    }
+    
+    /// 带点的金额
+    func getSpotMoneyStr() -> String {
         let integer = Int(floorf(self))
-        let abbreviationStr = String(format: "（%.2f万）", self / 10000)
         let integerStr = integer.getMoneyStr()
         let surplus = self - Float(integer)
         if surplus == 0 {
-            return integerStr + "元 " + abbreviationStr
+            return integerStr + "元"
         } else {
             var surplusStr = String(format: "%.2f", surplus)
             surplusStr.remove(at: surplusStr.startIndex) // 去掉0
-            let moneyStr = integerStr + surplusStr + "元 " + abbreviationStr
+            let moneyStr = integerStr + surplusStr + "元"
             return moneyStr
         }
+    }
+    
+    /// 万元
+    func getAbbreviationMoney() -> String {
+        return String(format: "%.2f万", self / 10000)
     }
 }

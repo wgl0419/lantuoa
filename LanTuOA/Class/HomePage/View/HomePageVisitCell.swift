@@ -14,9 +14,13 @@ class HomePageVisitCell: UITableViewCell {
         didSet {
             if let data = data {
                 visitCompanyLabel.text = "\(data.monthVisitNum)"
-                projectLabel.text = String(format: "%.2f", data.monthPerform)
+                var priectStr = data.monthPerform.getSpotMoneyStr()
+                priectStr.removeLast()
+                projectLabel.text = priectStr
                 visitNumberLabel.text = "\(data.monthContract)"
-                visitLabel.text = String(format: "%.2f", data.monthMoney)
+                var visitStr = data.monthMoney.getSpotMoneyStr()
+                visitStr.removeLast()
+                visitLabel.text = visitStr
             }
         }
     }

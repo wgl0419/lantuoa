@@ -47,13 +47,14 @@ enum APIManager {
     case projectMemberDelete(Int, Int) // 删除项目成员  （projectId:项目id  userId:用户id）
     case projectListStatistics(String, Int, Int, Int, Int?) // 项目统计列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据  manageUser:管理人Id)
     case projectList(String, Int?, Int, Int) // 项目信息列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据)
-//    case projectDetail(Int) // 项目详情 (项目id)
+    case projectDetail(Int) // 项目详情 (项目id)
     case projectSaveRequire(String, Int, String) // 申请新增项目（拜访页面） （name:项目名称  customerId:客户id  address:地址）
     
     
     // MARK: - 拜访
     case visitSave(Int, Int, Int, String, String, Int, Array<Int>) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级   contact:拜访对象id数组)
     case visitList(String, Int?, Int?, Int, Int, Int, Int?, Int?, Int?) // 拜访查询 (name:关键词，客户名称/项目名称  startTime:开始时间，秒级  endTime:结束时间，秒级  queryType:1.全部，2.只看自己，3.工作组，4.接手  page:页码  limit:一页几条数据  customerId:客户id   projectId:项目id     createdUser: 用户id)
+    case visitDetail(Int) // 拜访详情
     
     // MARK: - 工作组
     case workGroupCreate(String, [Int], Int) // 新建工作组 (name:工作组名称  members:成员id  projectId:项目id)
@@ -148,12 +149,13 @@ extension APIManager: TargetType {
         case .projectMemberDelete: return "/api/project/member/delete"
         case .projectListStatistics: return "/api/project/list/statistics"
         case .projectList: return "/api/project/list"
-//        case .projectDetail(let id): return "/api/project/detail/\(id)"
+        case .projectDetail(let id): return "/api/project/detail/\(id)"
         case .projectSaveRequire: return "/api/project/save/require"
 
             
         case .visitSave: return "/api/visit/save"
         case .visitList: return "/api/visit/list"
+        case .visitDetail(let id): return "/api/visit/detail/\(id)"
             
             
         case .workGroupCreate: return "/api/workGroup/create"
@@ -321,7 +323,7 @@ extension APIManager: TargetType {
             
             
         case let .notifyList(page, limit): // 通知列表
-            params = ["page": page, "limit": limit]
+            params = ["page": page, "limit": limit, "status": 0]
         case let .notifyCheckReject(checkId, desc): // 拒绝审批-非创建客户/项目
             params = ["checkId": checkId, "desc": desc]
         case let .notifyCheckCusRejectExist(checkId, customerId, projectId): // 拒绝创建客户/项目-客户已存在

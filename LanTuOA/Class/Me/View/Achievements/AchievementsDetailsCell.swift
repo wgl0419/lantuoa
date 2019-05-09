@@ -19,10 +19,10 @@ class AchievementsDetailsCell: UITableViewCell {
         didSet {
             timeLabel.text = String(format: "%@年%d月", data.0, data.1)
             
-            let attriStr = String(format: "%.2f元", data.2)
+            let attriStr = data.2.getSpotMoneyStr()
             let attriMuStr = NSMutableAttributedString(string: attriStr)
             attriMuStr.changeColor(str: attriStr, color: UIColor(hex: "#FF7744"))
-            attriMuStr.addUnderline(color: UIColor(hex: "#FF7744"), range: NSRange(location: 0, length: attriMuStr.length - 1))
+            attriMuStr.addUnderline(color: UIColor(hex: "#FF7744"), range: NSRange(location: 0, length: attriMuStr.length))
             moneyBtn.setAttributedTitle(attriMuStr, for: .normal)
         }
     }

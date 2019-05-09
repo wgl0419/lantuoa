@@ -147,7 +147,9 @@ class ApplyHistoryCell: UITableViewCell {
             }
         }
             .taxi.config { (label) in
-                label.numberOfLines = 0
+                if #available(iOS 9.0, *) {
+                    label.numberOfLines = 0
+                }
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
                 label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)

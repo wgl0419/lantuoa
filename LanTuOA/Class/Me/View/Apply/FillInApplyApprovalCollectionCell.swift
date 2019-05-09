@@ -32,9 +32,9 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
                 positionLabel.isHidden = false
                 if model.checkUserId == 0 {
                     nameBtn.setTitleColor(UIColor(hex: "#FF4444"), for: .normal)
+                    positionLabel.isHidden = true
                 } else {
                     nameBtn.setTitleColor(blackColor, for: .normal)
-                    positionLabel.isHidden = true
                 }
                 let str = model.roleName ?? ""
                 if str.count == 0 {
