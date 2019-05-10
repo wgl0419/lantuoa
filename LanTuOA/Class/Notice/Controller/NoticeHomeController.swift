@@ -170,17 +170,17 @@ class NoticeHomeController: UIViewController {
         
         tabBarController?.tabBar.items?[3].badgeValue = pendingData.count > 0 ? "\(pendingData.count)" : nil
         
-        if systemData.count > 0 && !isCheckSystem { // 有数量  并且为读
-            if pendingData.count == 0 {
-                tabBarController?.tabBar.showBadgeOnItemIndex(index: 3)
-            } else {
-                tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
-            }
-            segmentView.setTips(index: 1, show: systemData.count > 0)
-        } else {
-            tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
-            segmentView.setTips(index: 1, show: false)
-        }
+//        if systemData.count > 0 && !isCheckSystem { // 有数量  并且为读
+//            if pendingData.count == 0 {
+//                tabBarController?.tabBar.showBadgeOnItemIndex(index: 3)
+//            } else {
+//                tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
+//            }
+//            segmentView.setTips(index: 1, show: systemData.count > 0)
+//        } else {
+//            tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
+//            segmentView.setTips(index: 1, show: false)
+//        }
         
         pendingTableView.isNoData = pendingData.count == 0
         systemTableView.isNoData = systemData.count == 0

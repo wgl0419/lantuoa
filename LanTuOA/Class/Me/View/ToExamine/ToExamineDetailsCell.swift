@@ -51,7 +51,7 @@ class ToExamineDetailsCell: UITableViewCell {
                     
                     let desc = model[0].desc ?? ""
                     if desc.count > 0 {
-                        contentLabel.text = desc
+                        contentLabel.text = "\"" + desc + "\""
                         contentLabel.isHidden = false
                         statusConstraint.deactivate()
                         contentConstraint.activate()

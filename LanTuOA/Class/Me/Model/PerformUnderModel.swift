@@ -4,7 +4,7 @@
 //
 //  Created by HYH on 2019/4/18.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  查询绩效 -> 绩效列表    数据模型
+//  绩效查询 -> 绩效列表    数据模型
 
 import UIKit
 import HandyJSON

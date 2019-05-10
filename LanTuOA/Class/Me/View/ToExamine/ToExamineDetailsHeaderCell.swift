@@ -29,14 +29,6 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
                     let label = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: lastLabel, isLast: index == smallData.count - 1)
                     lastLabel = label
                 }
-                
-                if data.status == 1 {
-                    statusImageView.image = UIImage()
-                } else if data.status == 2 {
-                    statusImageView.image = UIImage(named: "approval_agree")
-                } else {
-                    statusImageView.image = UIImage(named: "approval_refuse")
-                }
             }
         }
     }
@@ -44,8 +36,6 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
     
     /// 标题
     private var titleLabel: UILabel!
-    /// 状态图标
-    private var statusImageView: UIImageView!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -85,12 +75,6 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
             })
             .taxi.config({ (view) in
                 view.backgroundColor = UIColor(hex: "#2E4695")
-            })
-        
-        statusImageView = UIImageView().taxi.adhere(toSuperView: contentView) // 状态图标
-            .taxi.layout(snapKitMaker: { (make) in
-                make.right.equalToSuperview().offset(-7)
-                make.top.equalToSuperview().offset(8)
             })
     }
     

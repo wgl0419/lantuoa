@@ -22,4 +22,5 @@ struct ContractPaybackListData: HandyJSON {
     var id: Int = 0
     var money: Float = 0
     var contractId: Int = 0
+    var status: Int = 0
 }

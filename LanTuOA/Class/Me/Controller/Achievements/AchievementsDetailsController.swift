@@ -65,7 +65,7 @@ class AchievementsDetailsController: UIViewController {
         })
     }
     
-    /// 查询绩效-详情-月份绩效
+    /// 绩效查询-详情-月份绩效
     private func performDetail(setion: Int, row: Int) {
         MBProgressHUD.showWait("")
         let month = data[setion].children[row].title ?? ""

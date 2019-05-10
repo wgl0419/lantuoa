@@ -39,10 +39,10 @@ class ContractDetailsHeaderView: UIView {
                 participateLabel.text = participateStr.count == 0 ? " " : participateStr
                 
                 if data.signTime == 0 {
+                    signingTimeLabel.text = "未设置"
+                } else {
                     let signingTimeStr = Date(timeIntervalSince1970: TimeInterval(data.signTime)).customTimeStr(customStr: "yyyy-MM-dd")
                     signingTimeLabel.text = signingTimeStr
-                } else {
-                    signingTimeLabel.text = "未设置"
                 }
             }
         }

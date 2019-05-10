@@ -39,7 +39,7 @@ class ContractRepaymentHeaderCell: UITableViewCell {
         
         let moneyLabel = UILabel().taxi.adhere(toSuperView: contentView) // 回款
             .taxi.layout { (make) in
-                make.width.equalToSuperview().dividedBy(3.3).priority(800)
+                make.width.equalToSuperview().dividedBy(2.5).priority(800)
                 make.left.equalTo(nameLabel.snp.right).offset(5)
                 make.centerY.equalToSuperview()
         }

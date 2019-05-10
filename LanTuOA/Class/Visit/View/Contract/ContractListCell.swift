@@ -15,11 +15,21 @@ class ContractListCell: UITableViewCell {
         didSet {
             if let data = data {
                 nameLabel.text = data.name
-                numberLabel.text = data.code
+                numberLabel.text = "(合同编号：\(data.code ?? ""))"
                 
-                contributionLabel.text = data.rebate.getAllMoneyStr()
-                totalLabel.text = data.totalMoney.getAllMoneyStr()
-                moneyBackLabel.text = data.paybackMoney.getAllMoneyStr()
+                contributionLabel.text = data.rebate.getSpotMoneyStr()
+                totalLabel.text = data.totalMoney.getSpotMoneyStr()
+                
+                let moneyBackStr = data.paybackMoney.getSpotMoneyStr()
+                if data.paybackMoney < data.totalMoney {
+                    moneyBackLabel.textColor = UIColor(hex: "#FF4444")
+                    let attriMuStr = NSMutableAttributedString(string: moneyBackStr)
+                    attriMuStr.changeColor(str: "元", color: blackColor)
+                    moneyBackLabel.attributedText = attriMuStr
+                } else {
+                    moneyBackLabel.textColor = blackColor
+                    moneyBackLabel.text = moneyBackStr
+                }
                 
                 // 时间
                 let startTimeStr = Date(timeIntervalSince1970: TimeInterval(data.startTime)).customTimeStr(customStr: "yyyy-MM-dd")
@@ -35,17 +45,17 @@ class ContractListCell: UITableViewCell {
                 participateLabel.text = participateStr
                 
                 if data.signTime == 0 {
+                    signingTimeLabel.text = "未设置"
+                } else {
                     let signingTimeStr = Date(timeIntervalSince1970: TimeInterval(data.signTime)).customTimeStr(customStr: "yyyy-MM-dd")
                     signingTimeLabel.text = signingTimeStr
-                } else {
-                    signingTimeLabel.text = "未设置"
                 }
             }
         }
     }
 
     /// 标题数组
-    private let titleArray = ["合同编号：", "实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "签约时间：", "参与人员："]
+    private let titleArray = ["实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "签约时间：", "参与人员："]
     /// 内容控件数组
     private var contentLabelArray = [UILabel]()
     /// 白色背景框
@@ -128,41 +138,52 @@ class ContractListCell: UITableViewCell {
                 imageView.image = UIImage(named: "arrow")
             })
         
-        contentLabelArray = [numberLabel, timeLabel, contributionLabel, totalLabel, moneyBackLabel, signingTimeLabel, participateLabel]
+        numberLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 合同编号
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalTo(nameLabel.snp.bottom).offset(5)
+                make.left.equalToSuperview().offset(15)
+            })
+            .taxi.config({ (label) in
+                label.textColor = UIColor(hex: "#2E4695")
+                label.font = UIFont.boldSystemFont(ofSize: 12)
+            })
+        
+        contentLabelArray = [timeLabel, contributionLabel, totalLabel, moneyBackLabel, signingTimeLabel, participateLabel]
         for index in 0..<titleArray.count {
-            let lastLabel: UILabel! = index == 0 ? nameLabel : contentLabelArray[index - 1]
-            setTitle(titleStr: titleArray[index], contentLabel: contentLabelArray[index], lastLabel: lastLabel, isLast: index == titleArray.count - 1)
+            let lastLabel: UILabel! = index == 0 ? numberLabel : contentLabelArray[index - 1]
+            let label = UILabel().taxi.adhere(toSuperView: whiteView)
+            label.text  = titleArray[index]
+            let content = contentLabelArray[index]
+            _ = content.taxi.adhere(toSuperView: whiteView)
+            setTitle(title: label, content: content, lastLabel: lastLabel, isFirst: index == titleArray.count - 1)
         }
     }
     
-    /// 设置文本
+    /// 设置标题和内容
     ///
     /// - Parameters:
-    ///   - titleStr: 标题
-    ///   - contentLabel: 内容控件
-    ///   - lastLabel: 跟随的文本
-    ///   - isLast: 是否是最后一行
-    private func setTitle(titleStr: String, contentLabel: UILabel, lastLabel: UILabel, isLast: Bool) {
-        let titleLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 标题
-            .taxi.layout { (make) in
-                make.top.equalTo(lastLabel.snp.bottom).offset(5)
-                make.left.equalToSuperview().offset(15)
+    ///   - title: 标题
+    ///   - content: 内容
+    ///   - lastLabel: 跟随控件
+    ///   - isFirst: 是否是第一个控件
+    private func setTitle(title: UILabel, content: UILabel, lastLabel: UILabel, isFirst: Bool = false) {
+        title.taxi.layout { (make) in
+            make.left.equalToSuperview().offset(15)
+            make.top.equalTo(lastLabel.snp.bottom).offset(5)
         }
             .taxi.config { (label) in
-                label.text = titleStr
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
                 label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
-        contentLabel.taxi.adhere(toSuperView: whiteView) // 内容
-            .taxi.layout { (make) in
-                make.top.equalTo(titleLabel)
-                make.left.equalTo(titleLabel.snp.right)
-                make.right.equalToSuperview().offset(-23)
-                if isLast {
-                    make.bottom.equalToSuperview().offset(-15)
-                }
+        content.taxi.layout { (make) in
+            make.top.equalTo(title)
+            make.left.equalTo(title.snp.right)
+            make.right.lessThanOrEqualToSuperview().offset(-23)
+            if isFirst {
+                make.bottom.equalToSuperview().offset(-15)
+            }
         }
             .taxi.config { (label) in
                 label.numberOfLines = 0

@@ -120,6 +120,7 @@ class ContractListController: UIViewController {
             .taxi.config({ (tableView) in
                 tableView.delegate = self
                 tableView.dataSource = self
+                tableView.separatorStyle = .none
                 tableView.estimatedRowHeight = 50
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")

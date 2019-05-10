@@ -20,6 +20,8 @@ class ToExamineDetailsController: UIViewController {
     
     /// tableview
     private var tableView: UITableView!
+    /// 状态图标
+    private var statusImageView: UIImageView!
     /// 按钮框
     private var btnView: UIView!
     
@@ -108,6 +110,12 @@ class ToExamineDetailsController: UIViewController {
                     self?.notifyCheckUserList()
                 })
             })
+        
+        statusImageView = UIImageView().taxi.adhere(toSuperView: tableView) // 状态图标
+            .taxi.layout(snapKitMaker: { (make) in
+                make.right.equalTo(view).offset(-7)
+                make.top.equalToSuperview().offset(9)
+            })
     }
     
     /// 修改处理
@@ -155,6 +163,17 @@ class ToExamineDetailsController: UIViewController {
         judgeStage()
     }
     
+    /// 状态图片处理
+    private func statusHandle() {
+        if checkListData.status == 1 {
+            statusImageView.image = UIImage()
+        } else if checkListData.status == 2 {
+            statusImageView.image = UIImage(named: "approval_agree")
+        } else {
+            statusImageView.image = UIImage(named: "approval_refuse")
+        }
+    }
+    
     // 判断是否是自己处理阶段
     private func judgeStage() {
         if checkListData != nil && checkUserData.count != 0 { // 顶部数据和审核人数据并存状态
@@ -186,6 +205,7 @@ class ToExamineDetailsController: UIViewController {
             self.title = result.data?.processName ?? ""
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
+            self.statusHandle()
             self.judgeStage()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取审批人失败")
@@ -355,7 +375,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 0 || section == checkUserData.count + 1 {
             let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
-            footerView.backgroundColor = UIColor(hex: "#F3F3F3")
+            footerView.backgroundColor = .clear
             return footerView
         } else {
             return nil

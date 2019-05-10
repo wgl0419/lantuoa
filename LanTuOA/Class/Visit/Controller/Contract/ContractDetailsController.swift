@@ -69,8 +69,10 @@ class ContractDetailsController: UIViewController {
         headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
         headerHeight = headerView.height // 并保存
         
-        
-        let titleArray = ["发布内容", "回款情况", "业绩详情"]
+        var titleArray = ["发布内容", "回款情况", "业绩详情"]
+        if Jurisdiction.share.isViewContractDesc {
+            titleArray.append("备注信息")
+        }
         segment = ProjectDetailsSegmentedView(title: titleArray) // 选择器
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
@@ -90,7 +92,11 @@ class ContractDetailsController: UIViewController {
     private func addTableView() {
         offsetY = -headerHeight - 40
         var lastTableView: ContractDetailsTableView!
-        for index in 0..<3 {
+        var maxCount = 3
+        if Jurisdiction.share.isViewContractDesc {
+            maxCount = 4
+        }
+        for index in 0..<maxCount {
             let tableView = ContractDetailsTableView(style: ContractDetailsTableView.CellStyle(rawValue: index)!, height: headerHeight, contractId: contractListData.id).taxi.adhere(toSuperView: scrollView) // tableview
                 .taxi.layout { (make) in
                     if index == 0 {
@@ -99,7 +105,7 @@ class ContractDetailsController: UIViewController {
                         make.left.equalTo(lastTableView.snp.right)
                     }
                     make.width.top.height.equalToSuperview()
-                    if index == 2 {
+                    if index == maxCount - 1 {
                         make.right.equalToSuperview()
                     }
             }

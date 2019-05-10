@@ -120,6 +120,9 @@
 		180E4D5B228524160042FA87 /* FillInApplyMoneyBackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D5A228524160042FA87 /* FillInApplyMoneyBackCell.swift */; };
 		180E4D5D228527AB0042FA87 /* AddMoneyBackEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D5C228527AB0042FA87 /* AddMoneyBackEjectView.swift */; };
 		180E4D5F22855B1E0042FA87 /* ContractTypeListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D5E22855B1E0042FA87 /* ContractTypeListModel.swift */; };
+		180E4D61228561400042FA87 /* ContractRemarksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D60228561400042FA87 /* ContractRemarksCell.swift */; };
+		180E4D63228564A20042FA87 /* ContractDescListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D62228564A20042FA87 /* ContractDescListModel.swift */; };
+		180E4D6522856CDE0042FA87 /* AddRemarksEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D6422856CDE0042FA87 /* AddRemarksEjectView.swift */; };
 		180EF5F822825F8600735383 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EF5F722825F8600735383 /* Int.swift */; };
 		180EF5FA2282D93F00735383 /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EF5F92282D93F00735383 /* AlignedCollectionViewFlowLayout.swift */; };
 		1810EC4C222F597C00CF6488 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC4B222F597C00CF6488 /* AppDelegate.swift */; };
@@ -328,6 +331,9 @@
 		180E4D5A228524160042FA87 /* FillInApplyMoneyBackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyMoneyBackCell.swift; sourceTree = "<group>"; };
 		180E4D5C228527AB0042FA87 /* AddMoneyBackEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoneyBackEjectView.swift; sourceTree = "<group>"; };
 		180E4D5E22855B1E0042FA87 /* ContractTypeListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractTypeListModel.swift; sourceTree = "<group>"; };
+		180E4D60228561400042FA87 /* ContractRemarksCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractRemarksCell.swift; sourceTree = "<group>"; };
+		180E4D62228564A20042FA87 /* ContractDescListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDescListModel.swift; sourceTree = "<group>"; };
+		180E4D6422856CDE0042FA87 /* AddRemarksEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRemarksEjectView.swift; sourceTree = "<group>"; };
 		180EF5F722825F8600735383 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		180EF5F92282D93F00735383 /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		1810EC48222F597C00CF6488 /* LanTuOA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LanTuOA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -681,6 +687,8 @@
 				1876A8E922672850002EBDB2 /* MoreTimeSeleEjectView.swift */,
 				1876A8EB226736DF002EBDB2 /* ContractMoneyEjectView.swift */,
 				1827ED832268076D00EFF889 /* ContractRepaymentEjectView.swift */,
+				180E4D60228561400042FA87 /* ContractRemarksCell.swift */,
+				180E4D6422856CDE0042FA87 /* AddRemarksEjectView.swift */,
 			);
 			path = Contract;
 			sourceTree = "<group>";
@@ -1034,6 +1042,7 @@
 				1827ED81226802E800EFF889 /* ContractDetailModel.swift */,
 				1807B6BC228413B800B21A14 /* VisitDetailModel.swift */,
 				180E4D5E22855B1E0042FA87 /* ContractTypeListModel.swift */,
+				180E4D62228564A20042FA87 /* ContractDescListModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1308,6 +1317,7 @@
 				180E4D5B228524160042FA87 /* FillInApplyMoneyBackCell.swift in Sources */,
 				183383012251B4650053F2BF /* WorkGroupListModel.swift in Sources */,
 				18050D6F224B5B2D00C9DB9A /* HandoverStaffSeleController.swift in Sources */,
+				180E4D6522856CDE0042FA87 /* AddRemarksEjectView.swift in Sources */,
 				18067C2B22801EFF005D26AC /* ContractScreenTimeCell.swift in Sources */,
 				1805FC3C2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift in Sources */,
 				180E4D5F22855B1E0042FA87 /* ContractTypeListModel.swift in Sources */,
@@ -1316,6 +1326,7 @@
 				180B7707223A21D50096403B /* LoginController.swift in Sources */,
 				180BFB3122658A0D001879BD /* ToExamineDescController.swift in Sources */,
 				18050D71224B5CA300C9DB9A /* HandoverStaffSeleCell.swift in Sources */,
+				180E4D61228561400042FA87 /* ContractRemarksCell.swift in Sources */,
 				184407162264889300F10D83 /* NotifyCheckDetailModel.swift in Sources */,
 				1876A8E22266D92B002EBDB2 /* ContractPerformanceCell.swift in Sources */,
 				1827ED9E2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift in Sources */,
@@ -1426,6 +1437,7 @@
 				1833DD3A2241D9F600730FB9 /* VisitListModel.swift in Sources */,
 				180B8F9F2272B09700E6FDE5 /* ApplyHeaderView.swift in Sources */,
 				180736B5226EB3E7001F1FA6 /* Jurisdiction.swift in Sources */,
+				180E4D63228564A20042FA87 /* ContractDescListModel.swift in Sources */,
 				180533D22260188200B785B7 /* FillInApplyTextViewCell.swift in Sources */,
 				180B8F9D2272AE9C00E6FDE5 /* ApplyFooterView.swift in Sources */,
 				1876A8DE2266BA52002EBDB2 /* PerformListModel.swift in Sources */,

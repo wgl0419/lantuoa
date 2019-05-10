@@ -4,7 +4,7 @@
 //
 //  Created by HYH on 2019/4/11.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  查询绩效  控制器
+//  绩效查询  控制器
 
 import UIKit
 import MBProgressHUD
@@ -33,7 +33,7 @@ class AchievementsListController: UIViewController {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        title = "查询绩效"
+        title = "绩效查询"
         view.backgroundColor = UIColor(hex: "#F3F3F3")
         
         let barView = UIView().taxi.adhere(toSuperView: view) // bar背景view

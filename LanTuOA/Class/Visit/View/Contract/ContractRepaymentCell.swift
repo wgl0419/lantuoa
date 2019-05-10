@@ -10,13 +10,14 @@ import UIKit
 
 class ContractRepaymentCell: UITableViewCell {
     
-    /// 修改回调
-    var editBlock: (() -> ())?
+//    /// 修改回调
+//    var editBlock: (() -> ())?
     /// 数据
     var data: ContractPaybackListData! {
         didSet {
             nameLabel.text = data.desc
             moneyLabel.text = data.money.getAllMoneyStr()
+            moneyLabel.textColor = data.status == 1 ? UIColor(hex: "#999999") : UIColor(hex: "#5FB9A1")
             
             let timeStr = Date(timeIntervalSince1970: TimeInterval(data.payTime)).customTimeStr(customStr: "yyyy-MM-dd")
             timeLabel.text = timeStr
@@ -59,7 +60,7 @@ class ContractRepaymentCell: UITableViewCell {
         
         moneyLabel = UILabel().taxi.adhere(toSuperView: contentView) // 回款
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalToSuperview().dividedBy(3.3).priority(800)
+                make.width.equalToSuperview().dividedBy(2.5).priority(800)
                 make.left.equalTo(nameLabel.snp.right).offset(5)
                 make.centerY.equalToSuperview()
             })
@@ -73,6 +74,7 @@ class ContractRepaymentCell: UITableViewCell {
         timeLabel = UILabel().taxi.adhere(toSuperView: contentView) // 时间
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalTo(moneyLabel.snp.right).offset(5)
+                make.right.equalToSuperview().offset(-5)
                 make.centerY.equalToSuperview()
             })
             .taxi.config({ (label) in
@@ -80,25 +82,25 @@ class ContractRepaymentCell: UITableViewCell {
                 label.textColor = UIColor(hex: "#999999")
             })
         
-        editBtn = UIButton().taxi.adhere(toSuperView: contentView) // 修改按钮
-            .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalToSuperview()
-                make.right.equalToSuperview().offset(-5)
-            })
-            .taxi.config({ (btn) in
-                btn.setTitle(" 修改", for: .normal)
-                btn.titleLabel?.font = UIFont.medium(size: 14)
-                btn.setImage(UIImage(named: "edit"), for: .normal)
-                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
-                btn.addTarget(self, action: #selector(editClick), for: .touchUpInside)
-            })
+//        editBtn = UIButton().taxi.adhere(toSuperView: contentView) // 修改按钮
+//            .taxi.layout(snapKitMaker: { (make) in
+//                make.centerY.equalToSuperview()
+//                make.right.equalToSuperview().offset(-5)
+//            })
+//            .taxi.config({ (btn) in
+//                btn.setTitle(" 修改", for: .normal)
+//                btn.titleLabel?.font = UIFont.medium(size: 14)
+//                btn.setImage(UIImage(named: "edit"), for: .normal)
+//                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+//                btn.addTarget(self, action: #selector(editClick), for: .touchUpInside)
+//            })
     }
     
-    // MARK: - 按钮点击
-    /// 点击修改
-    @objc private func editClick() {
-        if editBlock != nil {
-            editBlock!()
-        }
-    }
+//    // MARK: - 按钮点击
+//    /// 点击修改
+//    @objc private func editClick() {
+//        if editBlock != nil {
+//            editBlock!()
+//        }
+//    }
 }

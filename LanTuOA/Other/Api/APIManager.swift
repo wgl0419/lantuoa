@@ -104,9 +104,11 @@ enum APIManager {
     case contractDetail(Int) // 合同详情 (合同id)
     case contractPaybackUpdate(Int, String, Float, Int) // 修改回款 (回款id  desc:备注  money:金额  payTime:回款时间)
     case contractPaybackAdd(Int, String, Float, Int) // 添加回款 (contractId:合同id  desc:备注  money:金额  payTime:回款时间)
-    case performUnder(String) // 查询绩效 (name:查询名称)
-    case performDetail(Int?, Int?, String) // 查询绩效-详情-月份绩效 （userId:用户id  self:是否是自己  month:月份,格式yyyy-MM）
+    case performUnder(String) // 绩效查询 (name:查询名称)
+    case performDetail(Int?, Int?, String) // 绩效查询-详情-月份绩效 （userId:用户id  self:是否是自己  month:月份,格式yyyy-MM）
     case contractTypeList() // 合同类型列表
+    case contractDescList(Int) // 合同备注信息列表
+    case contractDescCreate(Int, String) // 新建合同备注 （contractIdL: 合同id   desc: 备注信息）
 
     
     case x // MARK: 补位 -> 暂时代替一些没有使用的类型
@@ -207,6 +209,8 @@ extension APIManager: TargetType {
         case .performUnder: return "/api/perform/under"
         case .performDetail: return "/api/perform/detail"
         case .contractTypeList: return "/api/contract/type/list"
+        case .contractDescList(let id): return "/api/contract/desc/list/\(id)"
+        case .contractDescCreate: return "api/contract/desc/create"
             
         default: return ""
         }
@@ -216,7 +220,7 @@ extension APIManager: TargetType {
         switch self {
         case .login:
             return .post
-        case  .customerSave, .customerUpdate, .customerContactSave, .customerContactUpdate, .customerSaveRequire:
+        case  .customerSave, .customerUpdate, .customerContactSave, .customerContactUpdate, .customerSaveRequire, .contractDescCreate:
             return .post
         case  .projectSave, .projectUpdate, .projectOffline, .projectMemberAdd, .projectSaveRequire:
             return .post
@@ -327,7 +331,7 @@ extension APIManager: TargetType {
             
             
         case let .notifyList(page, limit): // 通知列表
-            params = ["page": page, "limit": limit, "status": 0]
+            params = ["page": page, "limit": limit]
         case let .notifyCheckReject(checkId, desc): // 拒绝审批-非创建客户/项目
             params = ["checkId": checkId, "desc": desc]
         case let .notifyCheckCusRejectExist(checkId, customerId, projectId): // 拒绝创建客户/项目-客户已存在
@@ -398,12 +402,14 @@ extension APIManager: TargetType {
             params = ["desc": desc, "money": money, "payTime": payTime]
         case let .contractPaybackAdd(contractId, desc, money, payTime): // 新增回款
             params = ["contractId": contractId, "desc": desc, "money": money, "payTime": payTime]
-        case .performUnder(let name): // 查询绩效
+        case .performUnder(let name): // 绩效查询
             params = ["name": name]
-        case let .performDetail(userId, `self`, month):
+        case let .performDetail(userId, `self`, month): // 绩效查询-详情-月份绩效
             params = ["month": month]
             if userId != nil { params["userId"] = userId! }
             if `self` != nil { params["self"] = `self`! }
+        case let .contractDescCreate(contractId, desc): // 新建合同备注
+            params = ["contractId": contractId, "desc": desc]
             
             
         default: params = [:] 
