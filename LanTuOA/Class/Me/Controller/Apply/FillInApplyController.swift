@@ -31,6 +31,8 @@ class FillInApplyController: UIViewController {
     private var carbonCopyData = [ProcessUsersCheckUsers]()
     /// 添加合同人员数据
     private var contractData = [(UsersData, String, String)]()
+    /// 添加回款设置数据
+    private var moneyBackData = [(Float, Int)]()
     /// 选中内容
     private var seleStrArray = [String]()
     /// 项目所在section
@@ -101,6 +103,7 @@ class FillInApplyController: UIViewController {
                 tableView.register(FillInApplyFieldViewCell.self, forCellReuseIdentifier: "FillInApplyFieldViewCell")
                 tableView.register(FillInApplyApprovalCell.self, forCellReuseIdentifier: "FillInApplyApprovalCell")
                 tableView.register(FillInApplyPersonnelCell.self, forCellReuseIdentifier: "FillInApplyPersonnelCell")
+                tableView.register(FillInApplyMoneyBackCell.self, forCellReuseIdentifier: "FillInApplyMoneyBackCell")
             })
     }
     
@@ -116,7 +119,7 @@ class FillInApplyController: UIViewController {
                 }
             }
             if isEnabled && pricessType == 5 {
-                isEnabled = contractData.count > 0
+                isEnabled = contractData.count > 0 && moneyBackData.count > 0
             }
             
             if isEnabled {
@@ -329,6 +332,18 @@ class FillInApplyController: UIViewController {
     }
     
     /// 处理添加人员
+    private func addMoneyBackHandle() {
+        let ejectView = AddMoneyBackEjectView()
+        ejectView.titleStr = "新增回款时间"
+        ejectView.addBlock = { [weak self] (money, timeStamp) in
+            self?.moneyBackData.append((money, timeStamp))
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: (self?.data.count ?? 0) + 1)], with: .none)
+            self?.confirmHandle()
+        }
+        ejectView.show()
+    }
+    
+    /// 处理添加人员
     private func deletePersonnelHandle(index: Int) {
         let alertController = UIAlertController(title: "提示", message: "是否删除该合同人员", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
@@ -340,6 +355,44 @@ class FillInApplyController: UIViewController {
         }
         alertController.addAction(deleteAction)
         present(alertController, animated: true, completion: nil)
+    }
+    
+    /// 处理添加人员
+    private func deleteMoneyBackHandle(index: Int) {
+        let alertController = UIAlertController(title: "提示", message: "是否该回款设置", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        let deleteAction = UIAlertAction(title: "删除", style: .destructive) { (_) in
+            self.moneyBackData.remove(at: index)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: self.data.count + 1)], with: .none)
+            self.confirmHandle()
+        }
+        alertController.addAction(deleteAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    /// 审批人cell
+    private func getApprovalCell(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
+        cell.isApproval = true
+        cell.data = processUsersData.checkUsers
+        return cell
+    }
+    
+    /// 抄送人cell
+    private func getCarbonCopyCell(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
+        cell.isApproval = false
+        let oldCount = processUsersData.ccUsers.count - carbonCopyData.count // 原本的抄送人数量
+        cell.oldCount = oldCount
+        cell.data = processUsersData.ccUsers
+        cell.addBlock = { [weak self] in
+            self?.addCarbonCopyHandle(indexPath: indexPath)
+        }
+        cell.deleteBlock = { [weak self] (row) in
+            self?.deleteCarbonCopyHandle(indexPath: indexPath, row: row)
+        }
+        return cell
     }
     
     // MARK: - Api
@@ -411,7 +464,17 @@ class FillInApplyController: UIViewController {
             ccUsersArray.append(dic)
         }
         
-        _ = APIService.shared.getData(.processCommit(processId, dataDic, memberArray, ccUsersArray), t: LoginModel.self, successHandle: { (result) in
+        /// 金额设置
+        var moneyBackArray = [[String:String]]()
+        for index in 0..<moneyBackData.count {
+            let model = moneyBackData[index]
+            var dic: [String:String] = [:]
+            dic["money"] = "\(model.0)"
+            dic["payTime"] = "\(model.1)"
+            moneyBackArray.append(dic)
+        }
+        
+        _ = APIService.shared.getData(.processCommit(processId, dataDic, memberArray, ccUsersArray, moneyBackArray), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.showSuccess("申请成功")
             self.navigationController?.popViewController(animated: true)
         }, errorHandle: { (error) in
@@ -446,7 +509,7 @@ class FillInApplyController: UIViewController {
 extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if processUsersData != nil {
-            return pricessType == 5 ? data.count + 3 : data.count + 2
+            return pricessType == 5 ? data.count + 4 : data.count + 2
         } else {
             return data.count
         }
@@ -471,30 +534,28 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                 }
                 return cell
             } else { // 审批人
-                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
-                cell.isApproval = true
-                cell.data = processUsersData.checkUsers
+                return getApprovalCell(indexPath)
+            }
+        } else if section == data.count + 1 {
+            if pricessType == 5 { // 回款设置
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyMoneyBackCell", for: indexPath) as! FillInApplyMoneyBackCell
+                cell.data = moneyBackData
+                cell.addBlock = { [weak self] in
+                    self?.addMoneyBackHandle()
+                    self?.confirmHandle()
+                }
+                cell.deleteBlock = { [weak self] (index) in
+                    self?.deleteMoneyBackHandle(index: index)
+                }
                 return cell
+            } else { // 审批人
+                return getCarbonCopyCell(indexPath)
             }
         } else if section > data.count {
-            if pricessType == 5 && section == data.count + 1 { // 审批人
-                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
-                cell.isApproval = true
-                cell.data = processUsersData.checkUsers
-                return cell
+            if pricessType == 5 && section == data.count + 2 { // 审批人
+                return getApprovalCell(indexPath)
             } else { // 抄送
-                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
-                cell.isApproval = false
-                let oldCount = processUsersData.ccUsers.count - carbonCopyData.count // 原本的抄送人数量
-                cell.oldCount = oldCount
-                cell.data = processUsersData.ccUsers
-                cell.addBlock = { [weak self] in
-                    self?.addCarbonCopyHandle(indexPath: indexPath)
-                }
-                cell.deleteBlock = { [weak self] (row) in
-                    self?.deleteCarbonCopyHandle(indexPath: indexPath, row: row)
-                }
-                return cell
+                return getCarbonCopyCell(indexPath)
             }
         } else {
             let model = data[section]

@@ -117,6 +117,8 @@
 		180BFB412265D675001879BD /* ContractDetailsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB402265D675001879BD /* ContractDetailsTableView.swift */; };
 		180BFB432265DE70001879BD /* ContractDetailsContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB422265DE70001879BD /* ContractDetailsContentCell.swift */; };
 		180E4D59228516AF0042FA87 /* CustomerMembersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D58228516AF0042FA87 /* CustomerMembersModel.swift */; };
+		180E4D5B228524160042FA87 /* FillInApplyMoneyBackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D5A228524160042FA87 /* FillInApplyMoneyBackCell.swift */; };
+		180E4D5D228527AB0042FA87 /* AddMoneyBackEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D5C228527AB0042FA87 /* AddMoneyBackEjectView.swift */; };
 		180EF5F822825F8600735383 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EF5F722825F8600735383 /* Int.swift */; };
 		180EF5FA2282D93F00735383 /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EF5F92282D93F00735383 /* AlignedCollectionViewFlowLayout.swift */; };
 		1810EC4C222F597C00CF6488 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC4B222F597C00CF6488 /* AppDelegate.swift */; };
@@ -322,6 +324,8 @@
 		180BFB402265D675001879BD /* ContractDetailsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsTableView.swift; sourceTree = "<group>"; };
 		180BFB422265DE70001879BD /* ContractDetailsContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsContentCell.swift; sourceTree = "<group>"; };
 		180E4D58228516AF0042FA87 /* CustomerMembersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerMembersModel.swift; sourceTree = "<group>"; };
+		180E4D5A228524160042FA87 /* FillInApplyMoneyBackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyMoneyBackCell.swift; sourceTree = "<group>"; };
+		180E4D5C228527AB0042FA87 /* AddMoneyBackEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoneyBackEjectView.swift; sourceTree = "<group>"; };
 		180EF5F722825F8600735383 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		180EF5F92282D93F00735383 /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		1810EC48222F597C00CF6488 /* LanTuOA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LanTuOA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -567,6 +571,8 @@
 				18070724226DAE2F00E6C36C /* SingleSeleTimeEjectView.swift */,
 				180B8F9C2272AE9C00E6FDE5 /* ApplyFooterView.swift */,
 				180B8F9E2272B09700E6FDE5 /* ApplyHeaderView.swift */,
+				180E4D5A228524160042FA87 /* FillInApplyMoneyBackCell.swift */,
+				180E4D5C228527AB0042FA87 /* AddMoneyBackEjectView.swift */,
 			);
 			path = Apply;
 			sourceTree = "<group>";
@@ -1296,6 +1302,7 @@
 				1810EC75222F5D4100CF6488 /* Array.swift in Sources */,
 				1810EC78222F5D4100CF6488 /* UITabBar.swift in Sources */,
 				1810EC76222F5D4100CF6488 /* NamespaceWrappable.swift in Sources */,
+				180E4D5B228524160042FA87 /* FillInApplyMoneyBackCell.swift in Sources */,
 				183383012251B4650053F2BF /* WorkGroupListModel.swift in Sources */,
 				18050D6F224B5B2D00C9DB9A /* HandoverStaffSeleController.swift in Sources */,
 				18067C2B22801EFF005D26AC /* ContractScreenTimeCell.swift in Sources */,
@@ -1399,6 +1406,7 @@
 				1809E406225DD5FC00B615A8 /* SelePersonnelCell.swift in Sources */,
 				1817884A2238ABA90015DC30 /* ProjectHomeController.swift in Sources */,
 				18050D6B224B4E8500C9DB9A /* HandoverStaffHeaderCell.swift in Sources */,
+				180E4D5D228527AB0042FA87 /* AddMoneyBackEjectView.swift in Sources */,
 				180736BD22700FAA001F1FA6 /* LoginUserModel.swift in Sources */,
 				1805F3B52275500B00AF0AF7 /* ScreenView.swift in Sources */,
 				180273E7223B7ACC0033E083 /* WrokHomeCell.swift in Sources */,

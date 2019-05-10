@@ -94,7 +94,7 @@ enum APIManager {
     case processList() // 流程列表
     case processParams(Int) // 获取流程内容
     case processUsers(Int) // 获取流程默认审批/抄送人
-    case processCommit(Int, [String:String], [[String:String]],[[String:String]]) // 提交流程
+    case processCommit(Int, [String:String], [[String:String]], [[String:String]], [[String:String]]) // 提交流程
     
     // MARK: - 合同
     case contractList(String, Int?, Int?, Int?, Int, Int, Int?, Int?) // 合同列表/查询合同 (name:客户名称/项目名称/合同编码   customerId:客户id  projectId:项目id   userId:用户id，查询他人合同时使用  page:页码   limit:一页数据)
@@ -364,10 +364,11 @@ extension APIManager: TargetType {
         case let .processHistory(status, page, limit): // 历史申请列表
             params = ["page": page, "limit": limit]
             if status != nil { params["status"] = status! }
-        case let .processCommit(processId, data, member, ccUsers):
+        case let .processCommit(processId, data, member, ccUsers, payback):
             params = ["processId": processId, "data": data]
             if member.count > 0 { params["member"] = member }
             if ccUsers.count > 0 { params["ccUsers"] = ccUsers }
+            if payback.count > 0 { params["payback"] = payback }
             return .requestParameters(parameters: params, encoding: JSONEncoding.default)
             
             
