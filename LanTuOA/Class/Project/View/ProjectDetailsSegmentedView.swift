@@ -15,10 +15,8 @@ class ProjectDetailsSegmentedView: UIView {
     /// 默认选择第几个(默认第一个)
     var seleIndex = 0
     
-    /// 参与人员按钮
-    private var personnelBtn: UIButton!
-    /// 拜访历史
-    private var historyBtn: UIButton!
+    /// 滚动视图
+    private var scrollView: UIScrollView!
     /// 滑杆
     private var slideView: UIView!
     
@@ -43,12 +41,25 @@ class ProjectDetailsSegmentedView: UIView {
     private func initSubViews(titleArray: [String]) {
         backgroundColor = .white
         
+        scrollView = UIScrollView().taxi.adhere(toSuperView: self) // 滚动视图
+            .taxi.layout(snapKitMaker: { (make) in
+                make.edges.equalToSuperview()
+                make.height.equalTo(40).priority(800)
+            })
+        
         var lastBtn: UIButton!
         for index in 0..<titleArray.count {
             let title = titleArray[index]
-            let btn = UIButton().taxi.adhere(toSuperView: self)
+            let btn = UIButton().taxi.adhere(toSuperView: scrollView)
                 .taxi.layout { (make) in
-                    make.left.equalTo(lastBtn != nil ? lastBtn.snp.right : self).offset(15)
+                    if index == 0 {
+                        make.left.equalToSuperview().offset(15)
+                    } else {
+                        make.left.equalTo(lastBtn.snp.right).offset(15)
+                    }
+                    if index == titleArray.count - 1 {
+                        make.right.equalToSuperview().offset(-15)
+                    }
                     make.height.equalTo(40).priority(800)
                     make.top.bottom.equalToSuperview()
             }
@@ -66,7 +77,7 @@ class ProjectDetailsSegmentedView: UIView {
             btnArray.append(btn)
         }
         
-        slideView = UIView().taxi.adhere(toSuperView: self)
+        slideView = UIView().taxi.adhere(toSuperView: scrollView)
             .taxi.layout(snapKitMaker: { (make) in
                 make.height.equalTo(3)
                 make.bottom.equalToSuperview()
@@ -86,6 +97,28 @@ class ProjectDetailsSegmentedView: UIView {
             })
     }
     
+    /// 按钮动效处理
+    private func btnAnimateHandle(btn: UIButton) {
+        let btnFrame = btn.convert(btn.bounds, to: self)
+        
+        if btnFrame.maxX > width {
+            let showX = scrollView.contentOffset.x + (btnFrame.maxX - width) + 15
+            scrollView.setContentOffset(CGPoint(x: showX, y: 0), animated: true)
+        } else if btnFrame.minX < 0 {
+            let showX = scrollView.contentOffset.x + btnFrame.minX - 15
+            scrollView.setContentOffset(CGPoint(x: showX, y: 0), animated: true)
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.slideView.snp.remakeConstraints({ (make) in
+                make.height.equalTo(3)
+                make.left.width.equalTo(btn)
+                make.bottom.equalToSuperview()
+            })
+            self.layoutIfNeeded()
+        }
+    }
+    
     /// 修改按钮状态
     ///
     /// - Parameter btn: 选中的按钮
@@ -98,15 +131,7 @@ class ProjectDetailsSegmentedView: UIView {
         oldBtn.isSelected = false
         btn.isSelected = true
         seleTag = btn.tag
-        
-        UIView.animate(withDuration: 0.3) {
-            self.slideView.snp.remakeConstraints({ (make) in
-                make.height.equalTo(3)
-                make.left.width.equalTo(btn)
-                make.bottom.equalToSuperview()
-            })
-            self.layoutIfNeeded()
-        }
+        btnAnimateHandle(btn: btn)
     }
     
     // MARK: - 按钮点击

@@ -36,6 +36,7 @@ enum APIManager {
     case customerSaveRequire(String, String, String, Int) // 申请新增客户（拜访页面） （name:客户名称  full_name:客户全称  address:公司地址  industry:行业id）
     case customerIndustryList() // 行业列表
     case customerDetail(Int) // 客户详情
+    case customerMembers(Int) // 客户跟进人员
     
     
     // MARK: - 项目
@@ -140,6 +141,7 @@ extension APIManager: TargetType {
         case .customerSaveRequire: return "/api/customer/save/require"
         case .customerIndustryList: return "/api/customer/industry/list"
         case .customerDetail(let id): return "/api/customer/detail/\(id)"
+        case .customerMembers(let id): return "/api/customer/members/\(id)"
             
         case .projectSave: return "/api/project/save"
         case .projectUpdate: return "/api/project/update"

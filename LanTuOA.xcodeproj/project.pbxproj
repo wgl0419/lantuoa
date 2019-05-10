@@ -116,6 +116,7 @@
 		180BFB3F2265CE26001879BD /* ContractDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB3E2265CE26001879BD /* ContractDetailsHeaderView.swift */; };
 		180BFB412265D675001879BD /* ContractDetailsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB402265D675001879BD /* ContractDetailsTableView.swift */; };
 		180BFB432265DE70001879BD /* ContractDetailsContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB422265DE70001879BD /* ContractDetailsContentCell.swift */; };
+		180E4D59228516AF0042FA87 /* CustomerMembersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180E4D58228516AF0042FA87 /* CustomerMembersModel.swift */; };
 		180EF5F822825F8600735383 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EF5F722825F8600735383 /* Int.swift */; };
 		180EF5FA2282D93F00735383 /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EF5F92282D93F00735383 /* AlignedCollectionViewFlowLayout.swift */; };
 		1810EC4C222F597C00CF6488 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1810EC4B222F597C00CF6488 /* AppDelegate.swift */; };
@@ -320,6 +321,7 @@
 		180BFB3E2265CE26001879BD /* ContractDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsHeaderView.swift; sourceTree = "<group>"; };
 		180BFB402265D675001879BD /* ContractDetailsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsTableView.swift; sourceTree = "<group>"; };
 		180BFB422265DE70001879BD /* ContractDetailsContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailsContentCell.swift; sourceTree = "<group>"; };
+		180E4D58228516AF0042FA87 /* CustomerMembersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerMembersModel.swift; sourceTree = "<group>"; };
 		180EF5F722825F8600735383 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		180EF5F92282D93F00735383 /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		1810EC48222F597C00CF6488 /* LanTuOA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LanTuOA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -473,6 +475,7 @@
 				1838BC43225C462300978E72 /* CustomerDetailModel.swift */,
 				180BFB322265B14C001879BD /* ContractListModel.swift */,
 				180736C422706A4F001F1FA6 /* CustomerSaveRequireModel.swift */,
+				180E4D58228516AF0042FA87 /* CustomerMembersModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1418,6 +1421,7 @@
 				1811AA92224089BA0073A794 /* SeleVisitTimeView.swift in Sources */,
 				1838BC48225C6AD300978E72 /* DepartmentsModel.swift in Sources */,
 				1827ED82226802E800EFF889 /* ContractDetailModel.swift in Sources */,
+				180E4D59228516AF0042FA87 /* CustomerMembersModel.swift in Sources */,
 				1803A32C225F32A600B86F20 /* ProcessHistoryModel.swift in Sources */,
 				181788522238E0B00015DC30 /* HomePageHeaderView.swift in Sources */,
 				1809E404225DCC7F00B615A8 /* SelePersonnelController.swift in Sources */,

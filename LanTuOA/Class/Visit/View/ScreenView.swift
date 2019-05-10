@@ -119,15 +119,25 @@ class ScreenView: UIView {
     /// 处理删除回调
     private func deleteHandle(position: Int, row: Int) {
         if isVisit && position == 1 {
-            strArray.remove(at: 1)
-            positionArray.remove(at: 1)
-            strArray.remove(at: 1)
-            positionArray.remove(at: 1)
+            strArray.remove(at: row)
+            positionArray.remove(at: row)
+            if positionArray.count > row {
+                let projectPosition = positionArray[row]
+                if projectPosition == 2 {
+                    strArray.remove(at: row)
+                    positionArray.remove(at: row)
+                }
+            }
         } else if !isVisit && position == 0 {
-            strArray.remove(at: 0)
-            positionArray.remove(at: 0)
-            strArray.remove(at: 0)
-            positionArray.remove(at: 0)
+            strArray.remove(at: row)
+            positionArray.remove(at: row)
+            if positionArray.count > row {
+                let projectPosition = positionArray[row]
+                if projectPosition == 1 {
+                    strArray.remove(at: row)
+                    positionArray.remove(at: row)
+                }
+            }
         } else {
             strArray.remove(at: row)
             positionArray.remove(at: row)

@@ -24,4 +24,5 @@ struct ProjectMemberListData: HandyJSON {
     var departmentName: String?
     var userId: Int = 0
     var joinTime: Int = 0
+    var visitTime: Int = 0
 }

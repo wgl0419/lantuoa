@@ -414,7 +414,7 @@ extension ProjectDetailsTableView: UITableViewDelegate, UITableViewDataSource {
                 self.projectMemberDelete(userId: self.memberData[row].userId)
             }
             cell.lockState = lockState == 1 && canManage == 1 ? 1 : 0
-            cell.data = memberData[row]
+            cell.data = (memberData[row].userName ?? "", memberData[row].visitTime)
             return cell
         } else if cellStyle == .history { // 拜访历史
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectDetailsVisitCell", for: indexPath) as! ProjectDetailsVisitCell

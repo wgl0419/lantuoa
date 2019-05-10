@@ -16,12 +16,14 @@ class CustomerDetailsTableView: UITableView {
     enum CellStyle: Int {
         /// 在线项目
         case project = 0
-        /// 拜访对象
-        case visitor = 1
+        /// 参与人员
+        case personnel = 1
         /// 拜访历史
         case history = 2
         /// 历史合同
         case contract = 3
+        /// 拜访对象
+        case visitor = 4
     }
     
     /// 滚动回调
@@ -54,6 +56,8 @@ class CustomerDetailsTableView: UITableView {
     private var visitData = [VisitListData]()
     /// 历史合同
     private var contractListData = [ContractListData]()
+    /// 参与人员
+    private var customerMembersData = [CustomerMembersData]()
     
     /// 第一次加载
     private var isFirst = true
@@ -77,8 +81,10 @@ class CustomerDetailsTableView: UITableView {
             projectListStatistics()
         } else if cellStyle == .visitor { // 联系人
             customerContactList()
-        } else { // 合同
+        } else if cellStyle == .contract { // 合同
             contractList(isMore: false)
+        } else { // 参与人员
+            customerMembers()
         }
     }
     
@@ -117,6 +123,7 @@ class CustomerDetailsTableView: UITableView {
         register(ProjectDetailsVisitCell.self, forCellReuseIdentifier: "ProjectDetailsVisitCell")
         register(CostomerDetailsVisitorCell.self, forCellReuseIdentifier: "CostomerDetailsVisitorCell")
         register(CostomerDetailsContractCell.self, forCellReuseIdentifier: "CostomerDetailsContractCell")
+        register(ProjectDetailsPersonnelCell.self, forCellReuseIdentifier: "ProjectDetailsPersonnelCell")
         
         
         mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
@@ -351,6 +358,19 @@ class CustomerDetailsTableView: UITableView {
         })
     }
     
+    /// 客户跟进人员
+    private func customerMembers() {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.customerMembers(customerId), t: CustomerMembersModel.self, successHandle: { (result) in
+            self.customerMembersData = result.data
+            self.mj_header.endRefreshing()
+            self.reloadData()
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "获取参与人员")
+        })
+    }
+    
     // MARK: - 按钮点击
     /// 点击添加按钮
     @objc private func addClick() {
@@ -402,8 +422,10 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             return contactListData.count
         } else if cellStyle == .history { // 拜访历史
             return section == 0 ? 0 : visitData.count
-        } else { // 历史合同
+        } else if cellStyle == .contract { // 历史合同
             return contractListData.count
+        } else {
+            return customerMembersData.count
         }
     }
     
@@ -431,9 +453,14 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectDetailsVisitCell", for: indexPath) as! ProjectDetailsVisitCell
             cell.data = visitData[row]
             return cell
-        } else { // 历史合同
+        } else if cellStyle == .contract { // 历史合同
             let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsContractCell", for: indexPath) as! CostomerDetailsContractCell
             cell.data = contractListData[row]
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectDetailsPersonnelCell", for: indexPath) as! ProjectDetailsPersonnelCell
+            cell.lockState = 0
+            cell.data = (customerMembersData[row].realname ?? "", customerMembersData[row].visitTime)
             return cell
         }
     }

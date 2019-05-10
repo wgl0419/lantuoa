@@ -73,8 +73,7 @@ class CustomerEditController: UIViewController {
         
         headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
         headerHeight = headerView.height // 并保存
-        
-        let titleArray = ["在线项目", "拜访对象", "历史拜访", "历史合同"]
+        let titleArray = ["在线项目", "参与人员", "历史拜访", "历史合同", "拜访对象"]
         segment = ProjectDetailsSegmentedView(title: titleArray) // 选择器
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
@@ -96,7 +95,7 @@ class CustomerEditController: UIViewController {
     private func addTableView() {
         var lastTableView: CustomerDetailsTableView!
         self.offsetY = -headerHeight - 40
-        for index in 0..<4 { // 添加3个tableview
+        for index in 0..<5 { // 添加5个tableview
             let tableView = CustomerDetailsTableView(style: CustomerDetailsTableView.CellStyle(rawValue: index)!, height: headerHeight, customerId: customerData.id) // tableview
                 .taxi.adhere(toSuperView: scrollView)
                 .taxi.layout { (make) in
@@ -106,7 +105,7 @@ class CustomerEditController: UIViewController {
                         make.left.equalTo(lastTableView.snp.right)
                     }
                     make.width.top.height.equalToSuperview()
-                    if index == 3 {
+                    if index == 4 {
                         make.right.equalToSuperview()
                     }
                 }

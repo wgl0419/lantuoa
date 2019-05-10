@@ -20,23 +20,22 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
             }
         }
     }
-    /// 数据
-    var data: ProjectMemberListData? {
+    /// 数据 (名字  拜访时间戳)
+    var data: (String, Int)? {
         didSet {
-            if let data = data {
-                nameLabel.text = data.userName
-                departmentLabel.text = data.roleName
-                phoneLabel.text = data.phone
+            if let nameStr = data?.0, let timeStamp = data?.1 {
+                nameLabel.text = nameStr
+                var visitTimeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).yearTimeStr()
+                visitTimeStr = "最后拜访：" + visitTimeStr
+                visitTimeLabel.text = visitTimeStr
             }
         }
     }
     
     /// 名字
     private var nameLabel: UILabel!
-    /// 部门名称
-    private var departmentLabel: UILabel!
-    /// 电话号码
-    private var phoneLabel: UILabel!
+    /// 拜访时间
+    private var visitTimeLabel: UILabel!
     /// 移除按钮
     private var deleteBtn: UIButton!
     
@@ -56,6 +55,7 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
     private func initSubViews() {
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名字
             .taxi.layout(snapKitMaker: { (make) in
+                make.bottom.equalToSuperview().offset(-10)
                 make.width.equalTo(ScreenWidth / 4 - 10)
                 make.left.equalToSuperview().offset(15)
                 make.top.equalToSuperview().offset(10)
@@ -65,27 +65,12 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
                 label.font = UIFont.medium(size: 14)
             })
         
-        departmentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 部门
+        visitTimeLabel = UILabel().taxi.adhere(toSuperView: contentView) // 拜访时间
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalTo(ScreenWidth / 3)
-                make.top.equalToSuperview().offset(10)
-                make.bottom.equalToSuperview().offset(-10)
-                make.left.equalToSuperview().offset(ScreenWidth / 4)
+                make.left.equalTo(nameLabel.snp.right)
+                make.centerY.equalTo(nameLabel)
             })
             .taxi.config({ (label) in
-                label.numberOfLines = 0
-                label.textColor = blackColor
-                label.font = UIFont.medium(size: 14)
-            })
-        
-        phoneLabel = UILabel().taxi.adhere(toSuperView: contentView) // 电话号码
-            .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalTo(ScreenWidth / 3)
-                make.top.equalToSuperview().offset(10)
-                make.left.equalTo(departmentLabel.snp.right).offset(5)
-            })
-            .taxi.config({ (label) in
-                label.text = "123456789011"
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 14)
             })
