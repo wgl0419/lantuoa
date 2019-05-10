@@ -162,10 +162,10 @@ class ContractListController: UIViewController {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
         let customerId = idArray[0] == -1 ? nil : idArray[0] // 客户id
-        let projectId = idArray[1] == -1 ? nil : idArray[1] // 项目id
+        let processId = idArray[1] == -1 ? nil : idArray[1] // 合同类型id
         let userId = idArray[2] == -1 ? nil : idArray[2] // 用户id
         let startTimeStamp = releaseTimeStamp == 0 ? nil : releaseTimeStamp
-        _ = APIService.shared.getData(.contractList(searchBar.text ?? "", customerId, projectId, userId, newPage, 10, startTimeStamp, nil), t: ContractListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.contractList(searchBar.text ?? "", customerId, nil, userId, newPage, 10, startTimeStamp, nil, processId), t: ContractListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

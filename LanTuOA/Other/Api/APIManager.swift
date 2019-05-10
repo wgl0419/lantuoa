@@ -97,7 +97,7 @@ enum APIManager {
     case processCommit(Int, [String:String], [[String:String]], [[String:String]], [[String:String]]) // 提交流程
     
     // MARK: - 合同
-    case contractList(String, Int?, Int?, Int?, Int, Int, Int?, Int?) // 合同列表/查询合同 (name:客户名称/项目名称/合同编码   customerId:客户id  projectId:项目id   userId:用户id，查询他人合同时使用  page:页码   limit:一页数据)
+    case contractList(String, Int?, Int?, Int?, Int, Int, Int?, Int?, Int?) // 合同列表/查询合同 (name:客户名称/项目名称/合同编码   customerId:客户id  projectId:项目id   userId:用户id，查询他人合同时使用  page:页码   limit:一页数据)
     case contractPaybackList(Int) // 回款列表  (合同id)
     case performList(Int, Int?, Int?, Int?)  // 业绩列表  (queryType: 1.按人-合同查询 2.按人查询总业绩      userId:用户id(与self排斥)    self:查看自己的业绩(与userId排斥)       contractId:合同id（queryType = 1时传）)
     case contractUpdate(Int, Float?, Float?, Int?, Int?, Int?) // 修改合同内容  (合同id  totalMoney：合同总额   rebate:组稿费总额   startTime:开始时间戳  endTime:结束时间戳)
@@ -106,6 +106,7 @@ enum APIManager {
     case contractPaybackAdd(Int, String, Float, Int) // 添加回款 (contractId:合同id  desc:备注  money:金额  payTime:回款时间)
     case performUnder(String) // 查询绩效 (name:查询名称)
     case performDetail(Int?, Int?, String) // 查询绩效-详情-月份绩效 （userId:用户id  self:是否是自己  month:月份,格式yyyy-MM）
+    case contractTypeList() // 合同类型列表
 
     
     case x // MARK: 补位 -> 暂时代替一些没有使用的类型
@@ -205,6 +206,7 @@ extension APIManager: TargetType {
         case .contractPaybackAdd: return "/api/contract/payback/add"
         case .performUnder: return "/api/perform/under"
         case .performDetail: return "/api/perform/detail"
+        case .contractTypeList: return "/api/contract/type/list"
             
         default: return ""
         }
@@ -372,13 +374,14 @@ extension APIManager: TargetType {
             return .requestParameters(parameters: params, encoding: JSONEncoding.default)
             
             
-        case let .contractList(name, customerId, projectId, userId, page, limit, startTime, endTime): // 合同列表/查询合同
+        case let .contractList(name, customerId, projectId, userId, page, limit, startTime, endTime, processId): // 合同列表/查询合同
             params = ["name": name, "page": page, "limit": limit]
             if customerId != nil { params["customerId"] = customerId! }
             if projectId != nil { params["projectId"] = projectId! }
             if userId != nil { params["userId"] = userId! }
             if startTime != nil { params["startTime"] = startTime! }
             if endTime != nil { params["endTime"] = endTime! }
+            if processId != nil { params["processId"] = processId! }
         case let .performList(queryType, userId, `self`, contractId): // 业绩列表
             params = ["queryType": queryType]
             if userId != nil { params["userId"] = userId! }

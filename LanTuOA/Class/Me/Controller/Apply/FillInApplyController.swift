@@ -333,6 +333,10 @@ class FillInApplyController: UIViewController {
     
     /// 处理添加人员
     private func addMoneyBackHandle() {
+        if moneyBackData.count == 9 {
+            MBProgressHUD.showSuccess("回款设置过多，不能继续添加")
+            return
+        }
         let ejectView = AddMoneyBackEjectView()
         ejectView.titleStr = "新增回款时间"
         ejectView.addBlock = { [weak self] (money, timeStamp) in

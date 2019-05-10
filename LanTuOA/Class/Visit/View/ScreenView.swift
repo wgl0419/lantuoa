@@ -128,16 +128,6 @@ class ScreenView: UIView {
                     positionArray.remove(at: row)
                 }
             }
-        } else if !isVisit && position == 0 {
-            strArray.remove(at: row)
-            positionArray.remove(at: row)
-            if positionArray.count > row {
-                let projectPosition = positionArray[row]
-                if projectPosition == 1 {
-                    strArray.remove(at: row)
-                    positionArray.remove(at: row)
-                }
-            }
         } else {
             strArray.remove(at: row)
             positionArray.remove(at: row)

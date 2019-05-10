@@ -322,7 +322,7 @@ class CustomerDetailsTableView: UITableView {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
         let startTimeStamp = timeStamp == 0 ? nil : timeStamp
-        _ = APIService.shared.getData(.contractList("", customerId, nil, nil, newPage, 10, startTimeStamp, nil), t: ContractListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.contractList("", customerId, nil, nil, newPage, 10, startTimeStamp, nil, nil), t: ContractListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

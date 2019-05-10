@@ -24,7 +24,7 @@ class ContractScreenView: UIView {
     private var endBtn = UIButton()
     
     /// 标题
-    private let titleArray = ["客户", "项目", "业务人员"]
+    private let titleArray = ["客户", "合同类型", "参与人员"]
     /// 内容
     private var contentArray = ["", "", ""]
     /// 选中的id
@@ -34,14 +34,14 @@ class ContractScreenView: UIView {
     
     /// 客户数据
     private var customerData = [CustomerListStatisticsData]()
-    /// 项目数据
-    private var projectData = [ProjectListStatisticsData]()
+    /// 合同类型
+    private var contractTypeData = [ContractTypeListData]()
     /// 业务人员数据
     private var usersData = [UsersData]()
     /// 加载过客户数据
     private var isCustomerData = false
-    /// 加载或项目数据
-    private var isProjectData = false
+    /// 加载过合同类型
+    private var isPcontractType = false
     /// 是否加载过客户数据
     private var isUsersData = false
     
@@ -188,11 +188,7 @@ class ContractScreenView: UIView {
                 } else {
                     self?.idArray[0] = id
                     self?.contentArray[0] = name
-                    // 清空项目数据
-                    self?.projectData = []
-                    self?.idArray[1] = -1
-                    self?.contentArray[1] = ""
-                    self?.tableView.reloadRows(at: [IndexPath(row: 1, section: 0), IndexPath(row: 3, section: 0)], with: .none)
+                    self?.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
                 }
             }
             ejectView.show()
@@ -200,21 +196,25 @@ class ContractScreenView: UIView {
     }
     
     /// 项目筛选
-    private func projectScreening() {
-        if !isProjectData {
-            projectList()
+    private func contractTypeScreening() {
+        if !isPcontractType {
+            contractTypeList()
         } else {
-            if projectData.count == 0 {
-                MBProgressHUD.showError("暂无项目")
+            if contractTypeData.count == 0 {
+                MBProgressHUD.showError("无可选合同类型")
                 return
             }
-            let ejectView = ScreenEjectView(data: projectData)
-            ejectView.seleBlock = { [weak self] (name, id) in
-                self?.idArray[1] = id
-                self?.contentArray[1] = name
+            var contentArray = [String]()
+            for model in contractTypeData {
+                contentArray.append(model.name ?? "")
+            }
+            let view = SeleVisitModelView(title: "合同类型筛选", content: contentArray)
+            view.didBlock = { [weak self] (seleIndex) in
+                self?.contentArray[1] = contentArray[seleIndex]
+                self?.idArray[1] = self?.contractTypeData[seleIndex].id ?? 0
                 self?.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .none)
             }
-            ejectView.show()
+            view.show()
         }
     }
     
@@ -267,21 +267,16 @@ class ContractScreenView: UIView {
         })
     }
     
-    /// 项目列表
-    private func projectList() {
-        let customerId = idArray[0]
-        if customerId == -1 {
-            MBProgressHUD.showError("请先选择客户")
-            return
-        }
+    /// 合同类型
+    private func contractTypeList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.projectList("", customerId, 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.contractTypeList(), t: ContractTypeListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
-            self.isProjectData = true
-            self.projectData = result.data
-            self.projectScreening()
+            self.isPcontractType = true
+            self.contractTypeData = result.data
+            self.contractTypeScreening()
         }, errorHandle: { (error) in
-            MBProgressHUD.showError(error ?? "获取项目失败，请重试")
+            MBProgressHUD.showError(error ?? "获取合同类型失败，请重试")
         })
     }
     
@@ -331,7 +326,7 @@ extension ContractScreenView: UITableViewDelegate, UITableViewDataSource {
         cell.screenBlock = { [weak self] in
             switch row {
             case 1: self?.customerScreening()
-            case 2: self?.projectScreening()
+            case 2: self?.contractTypeScreening()
             case 3: self?.usersScreening()
             default: break
             }
