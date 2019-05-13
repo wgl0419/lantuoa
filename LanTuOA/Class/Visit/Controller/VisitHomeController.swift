@@ -211,7 +211,7 @@ class VisitHomeController: UIViewController {
         if data.count == 0 {
             let searchStr = searchBar.text ?? ""
             if searchStr.count == 0 {
-                setNoneData(str: "暂无拜访", imageStr: "noneData2")
+                setNoneData(str: "暂无拜访！", imageStr: "noneData2")
             } else {
                 setNoneData(str: "搜索不到相关内容！", imageStr: "noneData4")
             }

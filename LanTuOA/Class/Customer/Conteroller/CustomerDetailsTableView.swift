@@ -141,13 +141,15 @@ class CustomerDetailsTableView: UITableView {
         }
         
         if cellStyle == .history { // 拜访历史
-            setNoneData(str: "暂无拜访历史", imageStr: "noneData")
+            setNoneData(str: "暂无拜访历史！", imageStr: "noneData")
         } else if cellStyle == .project { // 在线项目
-            setNoneData(str: "暂无在线项目", imageStr: "noneData")
+            setNoneData(str: "暂无在线项目！", imageStr: "noneData")
         } else if cellStyle == .visitor { // 联系人
-            setNoneData(str: "暂无拜访对象", imageStr: "noneData")
-        } else { // 合同
-            setNoneData(str: "暂无历史合同", imageStr: "noneData")
+            setNoneData(str: "暂无拜访！", imageStr: "noneData")
+        } else if cellStyle == .contract { // 合同
+            setNoneData(str: "暂无历史合同！", imageStr: "noneData")
+        } else {
+            setNoneData(str: "暂无参与人员！", imageStr: "noneData4")
         }
     }
     
@@ -365,6 +367,7 @@ class CustomerDetailsTableView: UITableView {
             self.customerMembersData = result.data
             self.mj_header.endRefreshing()
             self.reloadData()
+            self.isNoData = self.customerMembersData.count == 0
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取参与人员")

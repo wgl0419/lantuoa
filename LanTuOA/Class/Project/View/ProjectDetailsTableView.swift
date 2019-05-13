@@ -137,13 +137,13 @@ class ProjectDetailsTableView: UITableView {
         
         
         if cellStyle == .history {
-            setNoneData(str: "暂无拜访历史", imageStr: "noneData")
+            setNoneData(str: "暂无拜访！", imageStr: "noneData")
         } else if cellStyle == .personnel {
-            setNoneData(str: "暂无参与人员", imageStr: "noneData")
+            setNoneData(str: "暂无参与人员！", imageStr: "noneData")
         } else if cellStyle == .workingGroup {
-            setNoneData(str: "暂无工作组", imageStr: "noneData")
+            setNoneData(str: "暂无工作组！", imageStr: "noneData")
         } else {
-            setNoneData(str: "暂无历史合同", imageStr: "noneData")
+            setNoneData(str: "暂无历史合同！", imageStr: "noneData")
         }
         
     }

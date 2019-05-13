@@ -391,6 +391,7 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
         var name = ""
         var seleIndex = -1
         let row = indexPath.row
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildSeleCell", for: indexPath) as! NewlyBuildSeleCell
         switch type {
         case .customer: // 客户
             name = customerData[row].name ?? ""
@@ -399,19 +400,22 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
             }
         case .visitor: // 拜访对象 多选
             name = visitorData[row].name ?? ""
+            let position = visitorData[row].position ?? ""
             for index in seleIndexArray {
                 if row == index {
                     seleIndex = row
                     break
                 }
             }
+            cell.data = (name, position, seleIndex == indexPath.row)
+            return cell
         case .project: // 项目
             name = projectData[row].name ?? ""
             if seleArray.count > 0 { // 防止报错
                 seleIndex = seleIndexArray.first ?? -1
             }
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildSeleCell", for: indexPath) as! NewlyBuildSeleCell
+        
         cell.data = (name, "", seleIndex == indexPath.row)
         return cell
     }

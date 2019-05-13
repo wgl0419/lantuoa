@@ -21,15 +21,10 @@ class ContractListCell: UITableViewCell {
                 totalLabel.text = data.totalMoney.getSpotMoneyStr()
                 
                 let moneyBackStr = data.paybackMoney.getSpotMoneyStr()
-                if data.paybackMoney < data.totalMoney {
-                    moneyBackLabel.textColor = UIColor(hex: "#FF4444")
-                    let attriMuStr = NSMutableAttributedString(string: moneyBackStr)
-                    attriMuStr.changeColor(str: "元", color: blackColor)
-                    moneyBackLabel.attributedText = attriMuStr
-                } else {
-                    moneyBackLabel.textColor = blackColor
-                    moneyBackLabel.text = moneyBackStr
-                }
+                moneyBackLabel.textColor = data.paybackMoney < data.totalMoney ? UIColor(hex: "#FF4444") : UIColor(hex: "#5FB9A1")
+                let attriMuStr = NSMutableAttributedString(string: moneyBackStr)
+                attriMuStr.changeColor(str: "元", color: blackColor)
+                moneyBackLabel.attributedText = attriMuStr
                 
                 // 时间
                 let startTimeStr = Date(timeIntervalSince1970: TimeInterval(data.startTime)).customTimeStr(customStr: "yyyy-MM-dd")
