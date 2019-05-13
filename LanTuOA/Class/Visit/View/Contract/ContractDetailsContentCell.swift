@@ -53,7 +53,7 @@ class ContractDetailsContentCell: UITableViewCell {
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalToSuperview().offset(5)
                 make.left.equalTo(titleLabel.snp.right)
-                make.right.equalToSuperview().offset(-15)
+                make.right.lessThanOrEqualToSuperview().offset(-15)
                 make.bottom.equalToSuperview().offset(-5).priority(800)
             })
             .taxi.config({ (label) in

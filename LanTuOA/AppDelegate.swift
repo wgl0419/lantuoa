@@ -39,16 +39,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func applicationWillResignActive(_ application: UIApplication) { }
-    
-    func applicationDidEnterBackground(_ application: UIApplication) { }
-    
-    func applicationWillEnterForeground(_ application: UIApplication) { }
-    
-    func applicationDidBecomeActive(_ application: UIApplication) { }
-    
-    func applicationWillTerminate(_ application: UIApplication) { }
-    
+    func applicationDidEnterBackground(_ application: UIApplication) { // 后台进前台
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        JPUSHService.setBadge(0)
+        UIApplication.shared.cancelAllLocalNotifications()
+    }
 }
 
 extension AppDelegate {
@@ -71,14 +66,11 @@ extension AppDelegate {
     
     /// 极光推送处理
     private func configJPush(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
-        if (Double(UIDevice.current.systemVersion) ?? 0) >= 10.0 {
-            let entity = JPUSHRegisterEntity()
-            entity.types = 0|1|2
-            JPUSHService.register(forRemoteNotificationConfig: entity, delegate: self)
-        } else {
-            JPUSHService.register(forRemoteNotificationTypes:0|1|2, categories: nil)
-        }
-        JPUSHService.setup(withOption: launchOptions, appKey: "65903c371debbb3aac77d566", channel: "App Store", apsForProduction: true)
+        //推送代码
+        let entity = JPUSHRegisterEntity()
+        entity.types = 1 << 0 | 1 << 1 | 1 << 2
+        JPUSHService.register(forRemoteNotificationConfig: entity, delegate: self)
+        JPUSHService.setup(withOption: launchOptions, appKey: "65903c371debbb3aac77d566", channel: "App Store", apsForProduction: false, advertisingIdentifier: nil)
         JPUSHService.setLogOFF() // 关闭日志打印
         JPUSHService.registrationIDCompletionHandler { (resCode: Int32, registrationID: String?) in
             if resCode == 0  { // 获取到 registrationID
@@ -136,45 +128,80 @@ extension AppDelegate {
     }
 }
 
-extension AppDelegate { // 推送处理
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) { // 注册 DeviceToken
+//MARK:--推送代理
+extension AppDelegate : JPUSHRegisterDelegate {
+    @available(iOS 10.0, *)
+    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, willPresent notification: UNNotification!, withCompletionHandler completionHandler: ((Int) -> Void)!) { // 当程序在前台时, 收到推送弹出的通知
+        
+        let userInfo = notification.request.content.userInfo
+        if notification.request.trigger is UNPushNotificationTrigger {
+            JPUSHService.handleRemoteNotification(userInfo)
+            // TODO: 弹出alert
+        } else { // 判断为本地通知
+            // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
+            completionHandler(Int(UNAuthorizationOptions.alert.rawValue | UNAuthorizationOptions.sound.rawValue | UNAuthorizationOptions.badge.rawValue))// 需要执行这个方法，选择是否提醒用户，有badge、sound、alert三种类型可以选择设置
+        }
+    }
+    
+    @available(iOS 10.0, *)
+    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, didReceive response: UNNotificationResponse!, withCompletionHandler completionHandler: (() -> Void)!) { // 通过点击推送弹出的通知进入app
+        let userInfo = response.notification.request.content.userInfo
+        if response.notification.request.trigger is UNPushNotificationTrigger {
+            JPUSHService.handleRemoteNotification(userInfo)
+        }
+        // 系统要求执行这个方法
+        completionHandler()
+    }
+    
+    // 点推送进来执行这个方法
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        JPUSHService.handleRemoteNotification(userInfo)
+        completionHandler(UIBackgroundFetchResult.newData)
+    }
+    
+    //系统获取Token
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         JPUSHService.registerDeviceToken(deviceToken)
     }
-
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) { // 实现注册 APNs 失败接口（可选）
-
+    
+    //获取token 失败
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) { //可选
+        print("did Fail To Register For Remote Notifications With Error: \(error)")
     }
 }
-
-extension AppDelegate: JPUSHRegisterDelegate {
-    @available(iOS 10.0, *)
-    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, openSettingsFor notification: UNNotification?) {
-
-    }
-
-    @available(iOS 10.0, *) // 程序关闭后, 通过点击推送弹出的通知
-    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, didReceive response: UNNotificationResponse!, withCompletionHandler completionHandler: (() -> Void)!) {
-        if response.notification.request.trigger is UNPushNotificationTrigger {
-            let userInfo = response.notification.request.content.userInfo
-            JPUSHService.handleRemoteNotification(userInfo)
-        }
-        completionHandler() // 系统要求执行这个方法
-    }
-
-    @available(iOS 10.0, *) // 当程序在前台时, 收到推送弹出的通知
-    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, willPresent notification: UNNotification!, withCompletionHandler completionHandler: ((Int) -> Void)!) {
-        let userInfo = notification.request.content.userInfo
-        let task = userInfo["task"] as? String
-        if task == "1" {
-            return
-        }
-        if (notification.request.trigger?.isKind(of: UNPushNotificationTrigger.self))!{
-            print("iOS10 前台收到远程通知:\(userInfo)")
-            JPUSHService.handleRemoteNotification(userInfo)
-        }else {
-            // 判断为本地通知
-            print("iOS10 前台收到本地通知:\(userInfo)")
-        completionHandler(Int(UNAuthorizationOptions.alert.rawValue | UNAuthorizationOptions.sound.rawValue | UNAuthorizationOptions.badge.rawValue))// 需要执行这个方法，选择是否提醒用户，有badge、sound、alert三种类型可以选择设置
-        }
-    }
-}
+//extension AppDelegate: JPUSHRegisterDelegate {
+//    @available(iOS 12.0, *) // iOS 12 通知
+//    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, openSettingsFor notification: UNNotification?) {
+//        if notification != nil { // 从通知界面直接进入应用
+//
+//        } else { // 从系统设置界面进入应用
+//
+//        }
+//    }
+//
+//    @available(iOS 10.0, *) // 程序关闭后, 通过点击推送弹出的通知
+//    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, didReceive response: UNNotificationResponse!, withCompletionHandler completionHandler: (() -> Void)!) {
+//        if response.notification.request.trigger is UNPushNotificationTrigger {
+//            let userInfo = response.notification.request.content.userInfo
+//            JPUSHService.handleRemoteNotification(userInfo)
+//        }
+//        completionHandler() // 系统要求执行这个方法
+//    }
+//
+//    @available(iOS 10.0, *) // 当程序在前台时, 收到推送弹出的通知
+//    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, willPresent notification: UNNotification!, withCompletionHandler completionHandler: ((Int) -> Void)!) {
+//        let userInfo = notification.request.content.userInfo
+//        let task = userInfo["task"] as? String
+//        if task == "1" {
+//            return
+//        }
+//        if (notification.request.trigger?.isKind(of: UNPushNotificationTrigger.self))!{
+//            print("iOS10 前台收到远程通知:\(userInfo)")
+//            JPUSHService.handleRemoteNotification(userInfo)
+//        }else {
+//            // 判断为本地通知
+//            print("iOS10 前台收到本地通知:\(userInfo)")
+//            completionHandler(Int(UNAuthorizationOptions.alert.rawValue | UNAuthorizationOptions.sound.rawValue | UNAuthorizationOptions.badge.rawValue))// 需要执行这个方法，选择是否提醒用户，有badge、sound、alert三种类型可以选择设置
+//        }
+//    }
+//}

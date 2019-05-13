@@ -273,8 +273,13 @@ class FillInApplyController: UIViewController {
             }
             self?.tableView.reloadRows(at: [indexPath], with: .none)
             self?.confirmHandle()
+            self?.perform(#selector(self?.reloadRows(indexPath:)), with: indexPath, afterDelay: 0.1)
         }
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc private func reloadRows(indexPath: IndexPath) {
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
     
     /// 删除抄送人处理

@@ -52,7 +52,7 @@ class UserInfo: NSObject, NSCoding {
         userName = aDecoder.decodeObject(forKey: "userName") as? String ?? ""
         phone = aDecoder.decodeObject(forKey: "phone") as? String ?? ""
         position = aDecoder.decodeObject(forKey: "position") as? String ?? ""
-        registrationID = aDecoder.decodeObject(forKey: "position") as? String ?? ""
+        registrationID = aDecoder.decodeObject(forKey: "registrationID") as? String ?? ""
     }
     
     // MARK: - 数据修改

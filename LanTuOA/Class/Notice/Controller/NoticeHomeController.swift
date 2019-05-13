@@ -33,12 +33,16 @@ class NoticeHomeController: UIViewController {
     /// 查看系统信息
     private var isCheckSystem = false
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        notifyCheckList(isMore: false) // 获取待处理的初始数据
+        notifyList(isMore: false) // 获取系统的初始数据
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setNav()
         initSubViews()
-        notifyCheckList(isMore: false) // 获取待处理的初始数据
-        notifyList(isMore: false) // 获取系统的初始数据
     }
     
     // MARK: - 自定义私有方法
@@ -221,6 +225,7 @@ class NoticeHomeController: UIViewController {
                 self.pendingTableView.mj_header.endRefreshing()
                 self.pendingTableView.mj_footer.isHidden = false
             }
+            self.setTips()
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }
@@ -259,6 +264,7 @@ class NoticeHomeController: UIViewController {
                 self.systemTableView.mj_header.endRefreshing()
                 self.systemTableView.mj_footer.isHidden = false
             }
+            self.setTips()
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }

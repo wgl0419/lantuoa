@@ -7,9 +7,9 @@
 //  客户详情顶部视图
 
 import UIKit
+import SnapKit
 
 class CustomerDetailsHeaderView: UIView {
-    
     
     /// 数据
     var data: CustomerListStatisticsData? {
@@ -30,6 +30,16 @@ class CustomerDetailsHeaderView: UIView {
                 
                 let customerTypeName = data.type == 1 ? "customer_company" : data.type == 2 ? "customer_ordinary" : "customer_development"
                 typeBtn.setImage(UIImage(named: customerTypeName), for: .normal)
+                
+                if data.type == 3 {
+                    developerLabel.text = data.developerName ?? " "
+                    timeOutLabel.text = Date(timeIntervalSince1970: TimeInterval(data.developTime)).customTimeStr(customStr: "yyyy-MM-dd")
+                    developerConstraint.deactivate()
+                    developerView.isHidden = false
+                } else {
+                    developerConstraint.activate()
+                    developerView.isHidden = true
+                }
             }
         }
     }
@@ -45,6 +55,14 @@ class CustomerDetailsHeaderView: UIView {
     private var typeBtn = UIButton()
     /// 公司地址
     private var addressLabel = UILabel()
+    /// 开发view
+    private var developerView: UIView!
+    /// 开发人
+    private var developerLabel: UILabel!
+    /// 开发截止时间
+    private var timeOutLabel: UILabel!
+    /// 开发视图约束
+    private var developerConstraint: Constraint!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -103,12 +121,72 @@ class CustomerDetailsHeaderView: UIView {
         
         let type = setTitle(titleStr: "客户类型：", content: typeBtn, lastView: companyLabel)
         
-        _ = setTitle(titleStr: "公司地址：", content: addressLabel, lastView: type, position: 1)
+        let address = setTitle(titleStr: "公司地址：", content: addressLabel, lastView: type, position: 1)
+        
+        
+        developerView = UIView().taxi.adhere(toSuperView: self) // 开发view
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.right.equalToSuperview()
+                make.top.equalTo(address.snp.bottom).offset(5)
+                developerConstraint = make.height.equalTo(0).constraint
+            })
+        
+        let developer = UILabel().taxi.adhere(toSuperView: developerView) // "开发人"
+            .taxi.layout { (make) in
+                make.left.equalToSuperview().offset(15)
+                make.top.equalToSuperview()
+        }
+            .taxi.config { (label) in
+                label.text = "开发者："
+                label.font = UIFont.medium(size: 14)
+                label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        }
+        
+        developerLabel = UILabel().taxi.adhere(toSuperView: developerView) // 开发人
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalTo(developer)
+                make.left.equalTo(developer.snp.right)
+                make.right.lessThanOrEqualToSuperview().offset(-15)
+            })
+            .taxi.config({ (label) in
+                label.numberOfLines = 0
+                label.textColor = blackColor
+                label.font = UIFont.medium(size: 14)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            })
+        
+        let timeOut = UILabel().taxi.adhere(toSuperView: developerView) // "截止时间"
+            .taxi.layout { (make) in
+                make.left.equalToSuperview().offset(15)
+                make.top.equalTo(developer.snp.bottom).offset(5)
+            }
+            .taxi.config { (label) in
+                label.text = "开发截止时间："
+                label.font = UIFont.medium(size: 14)
+                label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        }
+        
+        timeOutLabel = UILabel().taxi.adhere(toSuperView: developerView) // 截止时间
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalTo(timeOut)
+                make.left.equalTo(timeOut.snp.right)
+                make.bottom.equalToSuperview().offset(-15)
+                make.right.lessThanOrEqualToSuperview().offset(-15)
+            })
+            .taxi.config({ (label) in
+                label.numberOfLines = 0
+                label.textColor = blackColor
+                label.font = UIFont.medium(size: 14)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            })
         
         _ = UIView().taxi.adhere(toSuperView: self) // 灰色块
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.right.bottom.equalToSuperview()
                 make.height.equalTo(10)
+                make.top.equalTo(developerView.snp.bottom)
             })
             .taxi.config({ (view) in
                 view.backgroundColor = UIColor(hex: "#F3F3F3")
@@ -157,9 +235,6 @@ class CustomerDetailsHeaderView: UIView {
                 make.top.equalTo(titleLabel)
                 make.left.equalTo(titleLabel.snp.right)
                 make.right.lessThanOrEqualToSuperview().offset(-15)
-                if position == 1 {
-                    make.bottom.equalToSuperview().offset(-25)
-                }
             }
                 .taxi.config { (label) in
                     label.text = " "
