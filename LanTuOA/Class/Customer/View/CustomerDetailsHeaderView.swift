@@ -33,7 +33,12 @@ class CustomerDetailsHeaderView: UIView {
                 
                 if data.type == 3 {
                     developerLabel.text = data.developerName ?? " "
-                    timeOutLabel.text = Date(timeIntervalSince1970: TimeInterval(data.developTime)).customTimeStr(customStr: "yyyy-MM-dd")
+                    if data.developTime != 0 {
+                        timeOutLabel.text = Date(timeIntervalSince1970: TimeInterval(data.developTime)).customTimeStr(customStr: "yyyy-MM-dd")
+                    } else {
+                        timeOutLabel.text = " "
+                    }
+                    
                     developerConstraint.deactivate()
                     developerView.isHidden = false
                 } else {
@@ -134,7 +139,7 @@ class CustomerDetailsHeaderView: UIView {
         let developer = UILabel().taxi.adhere(toSuperView: developerView) // "开发人"
             .taxi.layout { (make) in
                 make.left.equalToSuperview().offset(15)
-                make.top.equalToSuperview()
+                make.top.equalToSuperview().priority(800)
         }
             .taxi.config { (label) in
                 label.text = "开发者："

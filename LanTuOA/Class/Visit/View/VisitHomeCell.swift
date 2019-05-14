@@ -18,8 +18,12 @@ class VisitHomeCell: UITableViewCell {
                 visitNameLabel.text = data.contactInfo
                 
                 stateLabel.text = data.result
-                let timeStr = Date(timeIntervalSince1970: TimeInterval(data.visitTime)).yearTimeStr()
-                timeLabel.text = timeStr
+                if data.visitTime != 0 {
+                    let timeStr = Date(timeIntervalSince1970: TimeInterval(data.visitTime)).yearTimeStr()
+                    timeLabel.text = timeStr
+                } else {
+                    timeLabel.text = ""
+                }
                 
                 let str = "业务人员：" + (data.createUserName ?? "")
                 let attriMuStr = NSMutableAttributedString(string: str)

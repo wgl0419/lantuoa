@@ -21,8 +21,12 @@ class ProjectHomeCell: UITableViewCell {
                 stateLabel.text = data.lastVisitResult
                 
                 let timeStamp = data.lastVisitTime
-                let tiemStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).yearTimeStr()
-                timeLabel.text = tiemStr
+                if timeStamp != 0 {
+                    let tiemStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).yearTimeStr()
+                    timeLabel.text = tiemStr
+                } else {
+                    timeLabel.text = " "
+                }
             }
         }
     }

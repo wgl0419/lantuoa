@@ -4,7 +4,7 @@
 //
 //  Created by HYH on 2019/4/29.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  展开的多人会签  cell
+//  展开的多人审批  cell
 
 import UIKit
 

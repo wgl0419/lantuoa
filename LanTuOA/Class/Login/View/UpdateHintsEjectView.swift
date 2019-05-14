@@ -9,13 +9,53 @@
 import UIKit
 
 class UpdateHintsEjectView: UIView {
-
+    
+    /// 数据
+    var data: VersionData? {
+        didSet {
+            if let data = data {
+                let versionNo = data.versionNo ?? ""
+                if versionNo.count > 0 {
+                    versionLabel.text = data.versionNo
+                    let versionWidth = versionNo.getTextSize(font: UIFont.boldSystemFont(ofSize: 10), maxSize: CGSize(width: ScreenWidth, height: ScreenHeight)).width
+                    versionLabel.snp.updateConstraints { (make) in
+                        make.width.equalTo(versionWidth + 10).priority(800)
+                    }
+                }
+                
+                let contentStr = data.updateDesc ?? ""
+                if contentStr.count > 0 {
+                    let attriMuStr = NSMutableAttributedString(string: contentStr)
+                    attriMuStr.changeFont(str: contentStr, font: UIFont.medium(size: 14))
+                    attriMuStr.addLineSpacing(distance: 8)
+                    contentLabel.attributedText = attriMuStr
+                    let contentHeight = attriMuStr.getRect(maxSize: CGSize(width: 260, height: ScreenHeight)).height
+                    scrollView.snp.updateConstraints { (make) in
+                        make.height.equalTo(contentHeight).priority(800)
+                    }
+                }
+                
+                let isForceUpdate = data.forceUpdate // 1.强更，0.不强更
+                if isForceUpdate == 1 {
+                    updateBtn.snp.updateConstraints { (make) in
+                        make.left.equalToSuperview().offset(0)
+                    }
+                }
+            }
+        }
+    }
+    
+    
     /// 白色背景框
     private var whiteView: UIView!
     /// 版本号
     private var versionLabel: UILabel!
     /// 内容
     private var contentLabel: UILabel!
+    /// 滚动视图
+    private var scrollView: UIScrollView!
+    /// 更新按钮
+    private var updateBtn: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: ScreenBounds)
@@ -82,6 +122,7 @@ class UpdateHintsEjectView: UIView {
         versionLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 版本号
             .taxi.layout(snapKitMaker: { (make) in
                 make.centerY.equalTo(updateLabel)
+                make.width.equalTo(0).priority(800)
                 make.height.equalTo(updateLabel).offset(-4)
                 make.left.equalTo(updateLabel.snp.right).offset(5)
             })
@@ -95,13 +136,14 @@ class UpdateHintsEjectView: UIView {
                 label.font = UIFont.boldSystemFont(ofSize: 10)
             })
         
-        let scrollView = UIScrollView().taxi.adhere(toSuperView: whiteView) // 滚动视图
-            .taxi.layout { (make) in
+        scrollView = UIScrollView().taxi.adhere(toSuperView: whiteView) // 滚动视图
+            .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalTo(updateLabel.snp.bottom).offset(16)
                 make.right.equalToSuperview().offset(-20)
                 make.left.equalToSuperview().offset(20)
+                make.height.equalTo(0).priority(800)
                 make.height.lessThanOrEqualTo(95)
-        }
+            })
         
         contentLabel = UILabel().taxi.adhere(toSuperView: scrollView) // 内容
             .taxi.layout(snapKitMaker: { (make) in
@@ -109,10 +151,8 @@ class UpdateHintsEjectView: UIView {
             })
             .taxi.config({ (label) in
                 label.numberOfLines = 0
-                let aa = "前后端分离架构。前端 nodejs WEB服务器，后端  tomcat WEB服务器。 前端POST数据时，后端@RequestBody  自动对参数转换成类对象时报错。 在filter中打印了 content-type ，发现是 application/x-www-form-urlencoded. --------------------- 作者：Zonson9999 来源：CSDN 原文：https://blog.csdn.net/wuzhong8809/article/details/84579209 版权声明：本文为博主原创文章，转载请附上博文链接！"
-                let attriMuStr = NSMutableAttributedString(string: aa)
-                attriMuStr.addLineSpacing(distance: 8)
-                label.attributedText = attriMuStr
+                label.font = UIFont.medium(size: 14)
+                label.textColor = UIColor(hex: "#666666")
             })
         
         _ = UIButton().taxi.adhere(toSuperView: whiteView) // 取消按钮
@@ -129,22 +169,9 @@ class UpdateHintsEjectView: UIView {
                 btn.addTarget(self, action: #selector(cancelClick), for: .touchUpInside)
             })
         
-        _ = UIButton().taxi.adhere(toSuperView: whiteView) // 确定按钮
-            .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalToSuperview().dividedBy(2).priority(800)
-                make.top.equalTo(scrollView.snp.bottom).offset(10)
-                make.right.bottom.equalToSuperview()
-            })
-            .taxi.config({ (btn) in
-                btn.setTitle("更新", for: .normal)
-                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
-                btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-                btn.addTarget(self, action: #selector(updateClick), for: .touchUpInside)
-            })
-        
         _ = UIView().taxi.adhere(toSuperView: whiteView) // 分割线
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(scrollView.snp.bottom).offset(10)
+                make.top.equalTo(scrollView.snp.bottom).offset(9)
                 make.left.right.equalToSuperview()
                 make.height.equalTo(1)
             })
@@ -154,12 +181,26 @@ class UpdateHintsEjectView: UIView {
         
         _ = UIView().taxi.adhere(toSuperView: whiteView) // 分割线
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalTo(scrollView.snp.bottom).offset(10)
+                make.top.equalTo(scrollView.snp.bottom).offset(9)
                 make.bottom.centerX.equalToSuperview()
                 make.width.equalTo(1)
             })
             .taxi.config({ (view) in
                 view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+            })
+        
+        updateBtn = UIButton().taxi.adhere(toSuperView: whiteView) // 确定按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalTo(scrollView.snp.bottom).offset(10)
+                make.left.equalToSuperview().offset(150)
+                make.right.bottom.equalToSuperview()
+            })
+            .taxi.config({ (btn) in
+                btn.backgroundColor = .white
+                btn.setTitle("更新", for: .normal)
+                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+                btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+                btn.addTarget(self, action: #selector(updateClick), for: .touchUpInside)
             })
     }
     
@@ -171,7 +212,7 @@ class UpdateHintsEjectView: UIView {
     
     // 升级
     @objc private func updateClick() { // TODO:需更新后面的id
-        let url = URL(string: "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=1281436084")
+        let url = URL(string: "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=1463525035")
         UIApplication.shared.openURL(url!)
     }
 }

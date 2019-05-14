@@ -18,6 +18,14 @@ class SeleVisitModelView: UIView {
             tableView.reloadData()
         }
     }
+    /// 两行标题
+    var attriMuTitleStr: NSMutableAttributedString? {
+        didSet {
+            if let attriMuStr = attriMuTitleStr {
+                titleLabel.attributedText = attriMuStr
+            }
+        }
+    }
     
     /// 灰色背景view
     private var grayView: UIView!
@@ -25,6 +33,8 @@ class SeleVisitModelView: UIView {
     private var tableView: UITableView!
     /// 取消按钮
     private var cancelBtn: UIButton!
+    /// 标题
+    private var titleLabel: UILabel!
     
     /// 内容数组
     private var contentStrArray = [String]()
@@ -98,13 +108,14 @@ class SeleVisitModelView: UIView {
             make.height.equalTo(contentHeight > 385 ? 400 : contentHeight)
         }
         
-        _ = UILabel().taxi.adhere(toSuperView: grayView) // "选择拜访方式"
+        titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // "选择拜访方式"
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.left.right.equalToSuperview()
                 make.height.equalTo(50)
             })
             .taxi.config({ (label) in
                 label.text = titleStr
+                label.numberOfLines = 0
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.medium(size: 16)

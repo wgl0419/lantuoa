@@ -17,8 +17,12 @@ class ProjectDetailsVisitCell: UITableViewCell {
                 initiatedLabel.text = data.createUserName
                 modeLabel.text = data.type == 1 ? "面谈" : data.type == 2 ? "电话沟通" : "网络聊天"
                 resultLabel.text = data.result
-                let timeStr = Date(timeIntervalSince1970: TimeInterval(data.visitTime)).yearTimeStr()
-                timeLabel.text = timeStr
+                if data.visitTime != 0 {
+                    let timeStr = Date(timeIntervalSince1970: TimeInterval(data.visitTime)).yearTimeStr()
+                    timeLabel.text = timeStr
+                } else {
+                    timeLabel.text = " " 
+                }
             }
         }
     }

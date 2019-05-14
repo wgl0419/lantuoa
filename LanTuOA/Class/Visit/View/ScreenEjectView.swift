@@ -15,6 +15,8 @@ class ScreenEjectView: UIView {
     enum ScreenType {
         /// 客户
         case customer
+        /// 项目
+        case project
         /// 业务人员
         case originator
     }
@@ -35,6 +37,8 @@ class ScreenEjectView: UIView {
     private var screenType: ScreenType!
     /// 客户数据
     private var customerData = [[CustomerListStatisticsData]]()
+    /// 项目数据
+    private var projectData = [[ProjectListStatisticsData]]()
     /// 业务人员数据
     private var usersData = [[UsersData]]()
     /// 索引
@@ -71,6 +75,17 @@ class ScreenEjectView: UIView {
                 if isSuccess{
                     self.firstLetterArray = titleArr
                     self.customerData = objArr
+                    self.reloadData()
+                }
+            }
+        } else if data is [ProjectListStatisticsData] {
+            screenType = .project
+            titleLabel.text = "项目筛选"
+            let oldData = data as! [ProjectListStatisticsData]
+            BMChineseSort.sortAndGroup(objectArray: oldData, key: "name") { (isSuccess, _, titleArr, objArr) in
+                if isSuccess{
+                    self.firstLetterArray = titleArr
+                    self.projectData = objArr
                     self.reloadData()
                 }
             }
@@ -175,6 +190,8 @@ extension ScreenEjectView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if screenType == .customer {
             return customerData[section].count
+        } else if screenType == .project {
+            return projectData[section].count
         } else {
             return usersData[section].count
         }
@@ -192,6 +209,8 @@ extension ScreenEjectView: UITableViewDelegate, UITableViewDataSource {
         let section = indexPath.section
         if screenType == .customer {
             str = customerData[section][row].name ?? ""
+        } else if screenType == .project {
+            str = projectData[section][row].name ?? ""
         } else {
             str = usersData[section][row].realname ?? ""
         }
@@ -221,6 +240,9 @@ extension ScreenEjectView: UITableViewDelegate, UITableViewDataSource {
         if screenType == .customer {
             id = customerData[section][row].id
             str = customerData[section][row].name ?? ""
+        } else if screenType == .project {
+            id = projectData[section][row].id
+            str = projectData[section][row].name ?? ""
         } else {
             id = usersData[section][row].id
             str = usersData[section][row].realname ?? ""

@@ -16,8 +16,13 @@ class NoticeHomeSystemCell: UITableViewCell {
             if let data = data {
                 nameLabel.text = data.title
                 contentLabel.text = data.content
-                let date = Date(timeIntervalSince1970: TimeInterval(data.createdTime))
-                timeLabel.text = timeHandle(date: date)
+                if data.createdTime != 0 {
+                    let date = Date(timeIntervalSince1970: TimeInterval(data.createdTime))
+                    timeLabel.text = timeHandle(date: date)
+                } else {
+                    timeLabel.text = " "
+                }
+                
                 let type = data.type ?? "1"
                 var imageNameStr = ""
                 switch type {

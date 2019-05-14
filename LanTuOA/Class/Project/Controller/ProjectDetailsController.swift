@@ -50,7 +50,7 @@ class ProjectDetailsController: UIViewController {
     // MARK: - 自定义私有方法
     /// 设置导航栏
     private func setNav(_ titleStr: String) {
-        title = "项目详情"
+//        title = "项目详情"
         if Jurisdiction.share.isEditProject || projectData.canManage == 1 {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: titleStr,
                                                                 titleColor: .white,
@@ -63,7 +63,7 @@ class ProjectDetailsController: UIViewController {
     
     /// 初始化子控件
     private func initSubViews() {
-        
+        title = projectData.fullName ?? "项目详情"
         view.backgroundColor = .white
         automaticallyAdjustsScrollViewInsets = false
         
@@ -352,11 +352,17 @@ class ProjectDetailsController: UIViewController {
             self.projectData = result.data
             MBProgressHUD.dismiss()
             self.initSubViews()
-            self.scrollView.setContentOffset(CGPoint(x: ScreenWidth * 2, y: 0), animated: false)
-            self.segment.changeBtn(page: 2)
+            self.perform(#selector(self.showWorkingGroup), with: nil, afterDelay: 0.01)
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取项目详情失败")
         })
+    }
+    
+    /// 跳转工作组tab
+    @objc private func showWorkingGroup() {
+        self.tableViewArray[2].reload()
+        self.scrollView.setContentOffset(CGPoint(x: ScreenWidth * 2, y: 0), animated: false)
+        self.segment.changeBtn(page: 2)
     }
     
     // MARK: - 按钮点击

@@ -25,9 +25,13 @@ class ProjectDetailsPersonnelCell: UITableViewCell {
         didSet {
             if let nameStr = data?.0, let timeStamp = data?.1 {
                 nameLabel.text = nameStr
-                var visitTimeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).yearTimeStr()
-                visitTimeStr = "最后拜访：" + visitTimeStr
-                visitTimeLabel.text = visitTimeStr
+                if timeStamp != 0 {
+                    var visitTimeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).yearTimeStr()
+                    visitTimeStr = "最后拜访：" + visitTimeStr
+                    visitTimeLabel.text = visitTimeStr
+                } else {
+                    visitTimeLabel.text = " "
+                }
             }
         }
     }

@@ -22,7 +22,7 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
     var data: [ProcessUsersCheckUsers] = [] {
         didSet {
             if data.count > 1 {
-                nameBtn.setTitle("\(data.count)人会签", for: .normal)
+                nameBtn.setTitle("\(data.count)人审批", for: .normal)
                 nameBtn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
                 positionLabel.isHidden = true
             } else if data.count == 1 {
@@ -64,7 +64,7 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
         }
     }
     
-    /// 名称/会签
+    /// 名称/审批
     private var nameBtn: UIButton!
     /// 职位
     private var positionLabel: UILabel!
@@ -83,7 +83,7 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
     // MAKR: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        nameBtn = UIButton().taxi.adhere(toSuperView: contentView) // 名称/会签
+        nameBtn = UIButton().taxi.adhere(toSuperView: contentView) // 名称/审批
             .taxi.layout(snapKitMaker: { (make) in
                 make.width.lessThanOrEqualToSuperview().offset(-10).priority(800)
                 make.top.equalToSuperview().offset(5)
@@ -136,7 +136,11 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
         guard contentArray.count > 1 else {
             return
         }
-        let view = SeleVisitModelView(title: "\(data.count)人会签", content: contentArray)
+        let view = SeleVisitModelView(title: "", content: contentArray)
+        let attriMuStr = NSMutableAttributedString(string: "\(data.count)人审批\n其中一人通过即可")
+        attriMuStr.changeFont(str: "其中一人通过即可", font: UIFont.medium(size: 13))
+        attriMuStr.addLineSpacing(distance: 5, alignment: .center)
+        view.attriMuTitleStr = attriMuStr
         view.isClick = false
         view.show()
     }

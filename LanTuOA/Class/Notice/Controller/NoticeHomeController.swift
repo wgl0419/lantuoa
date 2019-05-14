@@ -35,14 +35,27 @@ class NoticeHomeController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        notifyCheckList(isMore: false) // 获取待处理的初始数据
-        notifyList(isMore: false) // 获取系统的初始数据
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        if appdelegate.isNotification {
+            appdelegate.isNotification = false
+            relaodData()
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNav()
         initSubViews()
+        relaodData(show: false)
+    }
+    
+    func relaodData(show: Bool = true) {
+        if show {
+            segmentView.changeBtn(page: 1)
+            scrollView.setContentOffset(CGPoint(x: ScreenWidth, y: 0), animated: true)
+        }
+        notifyCheckList(isMore: false) // 获取待处理的初始数据
+        notifyList(isMore: false) // 获取系统的初始数据
     }
     
     // MARK: - 自定义私有方法

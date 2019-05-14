@@ -27,6 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     var window: UIWindow?
+    /// 是否有新信息
+    var isNotification = false
+    /// 是否版本更新
     static var netWorkState : NetWorkState = .unknown
     
     
@@ -43,6 +46,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.applicationIconBadgeNumber = 0
         JPUSHService.setBadge(0)
         UIApplication.shared.cancelAllLocalNotifications()
+    }
+    
+    func current(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return current(base: nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController {
+            return current(base: tab.selectedViewController)
+        }
+        if let presented = base?.presentedViewController {
+            return current(base: presented)
+        }
+        return base
     }
 }
 
@@ -103,6 +119,9 @@ extension AppDelegate {
                 item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2E4695")], for: .selected)
                 bar.addChild(nav)
             }
+            if isNotification {
+                bar.selectedIndex = 3
+            }
             window?.rootViewController = bar
         }
         window?.backgroundColor = .white
@@ -125,6 +144,34 @@ extension AppDelegate {
             }
         }
         net?.startListening()
+        
+        /// 检查版本更新
+        _ = APIService.shared.getData(.version(), t: VersionModel.self, successHandle: { (result) in
+            if self.compareNumber(versionStr: result.data?.versionNo ?? "") {
+                let view = UpdateHintsEjectView()
+                view.data = result.data
+                view.show()
+            }
+        }, errorHandle: nil)
+    }
+    
+    /// 比较版本
+    ///
+    /// - Parameter versionStr: 接口版本号
+    /// - Returns: 是否本地版本比网络版本低
+    func compareNumber(versionStr: String) -> Bool {
+        let appArray = appVersion.components(separatedBy: ".")
+        let resultArray = versionStr.components(separatedBy: ".")
+        for i in 0..<appArray.count{
+            if Int(appArray[i])! != Int(resultArray[i])! {
+                if Int(appArray[i])! > Int(resultArray[i])! {
+                    return false
+                }else{
+                    return true
+                }
+            }
+        }
+        return false
     }
 }
 
@@ -137,6 +184,24 @@ extension AppDelegate : JPUSHRegisterDelegate {
         if notification.request.trigger is UNPushNotificationTrigger {
             JPUSHService.handleRemoteNotification(userInfo)
             // TODO: 弹出alert
+            let presentedViewController = current()
+            let alert = UIAlertController(title: "提示", message: "有新信息，是否查看？", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "取消", style: .cancel) { (_) in
+                self.isNotification = true // 标题需要更新通知列表,防止加载或后不再重新获取
+            }
+            let seeAction = UIAlertAction(title: "查看", style: .default) { (_) in
+                if presentedViewController is NoticeHomeController { // 如果是通知界面
+                    let noticeHome = presentedViewController as! NoticeHomeController
+                    noticeHome.relaodData()
+                } else {
+                    presentedViewController?.navigationController?.tabBarController?.selectedIndex = 3
+                    presentedViewController?.navigationController?.popToRootViewController(animated: false)
+                    self.isNotification = true // 标题需要更新通知列表,防止加载或后不再重新获取
+                }
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(seeAction)
+            presentedViewController?.present(alert, animated: true, completion: nil)
         } else { // 判断为本地通知
             // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
             completionHandler(Int(UNAuthorizationOptions.alert.rawValue | UNAuthorizationOptions.sound.rawValue | UNAuthorizationOptions.badge.rawValue))// 需要执行这个方法，选择是否提醒用户，有badge、sound、alert三种类型可以选择设置
@@ -148,6 +213,7 @@ extension AppDelegate : JPUSHRegisterDelegate {
         let userInfo = response.notification.request.content.userInfo
         if response.notification.request.trigger is UNPushNotificationTrigger {
             JPUSHService.handleRemoteNotification(userInfo)
+            isNotification = true
         }
         // 系统要求执行这个方法
         completionHandler()
@@ -169,39 +235,3 @@ extension AppDelegate : JPUSHRegisterDelegate {
         print("did Fail To Register For Remote Notifications With Error: \(error)")
     }
 }
-//extension AppDelegate: JPUSHRegisterDelegate {
-//    @available(iOS 12.0, *) // iOS 12 通知
-//    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, openSettingsFor notification: UNNotification?) {
-//        if notification != nil { // 从通知界面直接进入应用
-//
-//        } else { // 从系统设置界面进入应用
-//
-//        }
-//    }
-//
-//    @available(iOS 10.0, *) // 程序关闭后, 通过点击推送弹出的通知
-//    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, didReceive response: UNNotificationResponse!, withCompletionHandler completionHandler: (() -> Void)!) {
-//        if response.notification.request.trigger is UNPushNotificationTrigger {
-//            let userInfo = response.notification.request.content.userInfo
-//            JPUSHService.handleRemoteNotification(userInfo)
-//        }
-//        completionHandler() // 系统要求执行这个方法
-//    }
-//
-//    @available(iOS 10.0, *) // 当程序在前台时, 收到推送弹出的通知
-//    func jpushNotificationCenter(_ center: UNUserNotificationCenter!, willPresent notification: UNNotification!, withCompletionHandler completionHandler: ((Int) -> Void)!) {
-//        let userInfo = notification.request.content.userInfo
-//        let task = userInfo["task"] as? String
-//        if task == "1" {
-//            return
-//        }
-//        if (notification.request.trigger?.isKind(of: UNPushNotificationTrigger.self))!{
-//            print("iOS10 前台收到远程通知:\(userInfo)")
-//            JPUSHService.handleRemoteNotification(userInfo)
-//        }else {
-//            // 判断为本地通知
-//            print("iOS10 前台收到本地通知:\(userInfo)")
-//            completionHandler(Int(UNAuthorizationOptions.alert.rawValue | UNAuthorizationOptions.sound.rawValue | UNAuthorizationOptions.badge.rawValue))// 需要执行这个方法，选择是否提醒用户，有badge、sound、alert三种类型可以选择设置
-//        }
-//    }
-//}

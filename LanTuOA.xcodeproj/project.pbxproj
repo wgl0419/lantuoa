@@ -105,6 +105,8 @@
 		180B8F9F2272B09700E6FDE5 /* ApplyHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8F9E2272B09700E6FDE5 /* ApplyHeaderView.swift */; };
 		180B8FA3227300A200E6FDE5 /* NotifyNumberModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8FA2227300A200E6FDE5 /* NotifyNumberModel.swift */; };
 		180B8FA72273191B00E6FDE5 /* UIResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B8FA62273191B00E6FDE5 /* UIResponder.swift */; };
+		180BB0C3228A9FBB00CAA38A /* VersionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BB0C2228A9FBB00CAA38A /* VersionModel.swift */; };
+		180BB0C5228AC60700CAA38A /* AgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BB0C4228AC60700CAA38A /* AgreementView.swift */; };
 		180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB2C22656AF3001879BD /* NotifyCheckUserListModel.swift */; };
 		180BFB2F22656DD3001879BD /* ToExamineDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */; };
 		180BFB3122658A0D001879BD /* ToExamineDescController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180BFB3022658A0D001879BD /* ToExamineDescController.swift */; };
@@ -316,6 +318,8 @@
 		180B8F9E2272B09700E6FDE5 /* ApplyHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyHeaderView.swift; sourceTree = "<group>"; };
 		180B8FA2227300A200E6FDE5 /* NotifyNumberModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyNumberModel.swift; sourceTree = "<group>"; };
 		180B8FA62273191B00E6FDE5 /* UIResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponder.swift; sourceTree = "<group>"; };
+		180BB0C2228A9FBB00CAA38A /* VersionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionModel.swift; sourceTree = "<group>"; };
+		180BB0C4228AC60700CAA38A /* AgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementView.swift; sourceTree = "<group>"; };
 		180BFB2C22656AF3001879BD /* NotifyCheckUserListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCheckUserListModel.swift; sourceTree = "<group>"; };
 		180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsCell.swift; sourceTree = "<group>"; };
 		180BFB3022658A0D001879BD /* ToExamineDescController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDescController.swift; sourceTree = "<group>"; };
@@ -525,6 +529,7 @@
 			children = (
 				18001884225351E400832E60 /* NotifyListModel.swift */,
 				1802B0072254501E00E94341 /* NotifyCheckListModel.swift */,
+				180BB0C2228A9FBB00CAA38A /* VersionModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -629,6 +634,7 @@
 			isa = PBXGroup;
 			children = (
 				180736BA226EFF83001F1FA6 /* UpdateHintsEjectView.swift */,
+				180BB0C4228AC60700CAA38A /* AgreementView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1273,6 +1279,7 @@
 				1809E400225DC4D400B615A8 /* DepartmentsUsersModel.swift in Sources */,
 				180736C3227067FF001F1FA6 /* ProjectSaveRequireModel.swift in Sources */,
 				1810EC7B222F5D4100CF6488 /* String.swift in Sources */,
+				180BB0C5228AC60700CAA38A /* AgreementView.swift in Sources */,
 				18A7C96B223F7BA7000B4007 /* ProjectListModel.swift in Sources */,
 				18050D69224B4C4D00C9DB9A /* HandoverStaffController.swift in Sources */,
 				18026DE3223B894D00993B66 /* ProjectHomeCell.swift in Sources */,
@@ -1294,6 +1301,7 @@
 				180B8F9B2272A3EA00E6FDE5 /* ApplyControllers.swift in Sources */,
 				1802B01222549EA100E94341 /* WorkExtendListModel.swift in Sources */,
 				1803A326225F0F3D00B86F20 /* ApplyListCell.swift in Sources */,
+				180BB0C3228A9FBB00CAA38A /* VersionModel.swift in Sources */,
 				1838BC44225C462300978E72 /* CustomerDetailModel.swift in Sources */,
 				1803A324225F0A9100B86F20 /* ApplyCollectionCell.swift in Sources */,
 				1838BC54225C9BC700978E72 /* CostomerDetailsProjectCell.swift in Sources */,

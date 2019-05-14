@@ -22,7 +22,11 @@ class ContractRepaymentEjectView: UIView {
         didSet {
             contentArray[0] = data.desc ?? ""
             contentArray[1] = String(format: "%.2f", data.money)
-            contentArray[2] = Date(timeIntervalSince1970: TimeInterval(data.payTime)).customTimeStr(customStr: "yyyy-MM-dd")
+            if data.payTime != 0 {
+                contentArray[2] = Date(timeIntervalSince1970: TimeInterval(data.payTime)).customTimeStr(customStr: "yyyy-MM-dd")
+            } else {
+                contentArray[2] = ""
+            }
             tableView.reloadData()
         }
     }

@@ -42,7 +42,7 @@ class CustomerEditController: UIViewController {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        title = "客户详情"
+        title = customerData.name ?? "客户详情"
         view.backgroundColor = .white
         
         scrollView = UIScrollView().taxi.adhere(toSuperView: view) // 滚动视图
@@ -53,6 +53,7 @@ class CustomerEditController: UIViewController {
                 scrollView.bounces = false
                 scrollView.delegate = self
                 scrollView.isPagingEnabled = true
+                scrollView.showsHorizontalScrollIndicator = false
             })
         
          headerView = CustomerDetailsHeaderView().taxi.adhere(toSuperView: view) // 顶部视图

@@ -19,8 +19,12 @@ class ContractRepaymentCell: UITableViewCell {
             moneyLabel.text = data.money.getAllMoneyStr()
             moneyLabel.textColor = data.status == 1 ? UIColor(hex: "#999999") : UIColor(hex: "#5FB9A1")
             
-            let timeStr = Date(timeIntervalSince1970: TimeInterval(data.payTime)).customTimeStr(customStr: "yyyy-MM-dd")
-            timeLabel.text = timeStr
+            if data.payTime != 0 {
+                let timeStr = Date(timeIntervalSince1970: TimeInterval(data.payTime)).customTimeStr(customStr: "yyyy-MM-dd")
+                timeLabel.text = timeStr
+            } else {
+                timeLabel.text = " "
+            }
         }
     }
     

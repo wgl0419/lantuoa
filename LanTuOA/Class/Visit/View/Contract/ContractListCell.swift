@@ -29,7 +29,15 @@ class ContractListCell: UITableViewCell {
                 // 时间
                 let startTimeStr = Date(timeIntervalSince1970: TimeInterval(data.startTime)).customTimeStr(customStr: "yyyy-MM-dd")
                 let endTimeStr = Date(timeIntervalSince1970: TimeInterval(data.endTime)).customTimeStr(customStr: "yyyy-MM-dd")
-                timeLabel.text = startTimeStr + " 至 " + endTimeStr
+                if data.startTime != 0 && data.endTime != 0 {
+                    timeLabel.text = startTimeStr + " 至 " + endTimeStr
+                } else if data.startTime != 0 {
+                    timeLabel.text = startTimeStr + "开始"
+                } else if data.endTime != 0 {
+                    timeLabel.text = startTimeStr + "之前"
+                } else {
+                    timeLabel.text = "未设置"
+                }
                 
                 // 参与人
                 var participateStr = ""

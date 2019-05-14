@@ -22,7 +22,11 @@ class ToExamineDetailsCell: UITableViewCell {
                 statusLabel.text = "(发起申请)"
                 statusLabel.textColor = blackColor
                 nameLabel.text = data.createdUserName ?? ""
-                timeLabel.text = Date(timeIntervalSince1970: TimeInterval(data.createdTime)).getCommentTimeString()
+                if data.createdTime != 0 {
+                    timeLabel.text = Date(timeIntervalSince1970: TimeInterval(data.createdTime)).getCommentTimeString()
+                } else {
+                    timeLabel.text = " "
+                }
             }
         }
     }
@@ -31,13 +35,13 @@ class ToExamineDetailsCell: UITableViewCell {
         didSet {
             if let listModel = data?.0, let approval = data?.1, let isLast = data?.2, let isOpen = data?.3 {
                 var status: Int!
-                // 处理是显示名称  还是  多人会签
+                // 处理是显示名称  还是  多人审批
                 var model = listModel.filter { (model) -> Bool in
                     return model.status == 2 || model.status == 3
                 }
                 
-                if model.count == 0 && listModel.count > 1 { // 多人会签状态下 还没有人处理
-                    nameLabel.text = "\(listModel.count)人会签"
+                if model.count == 0 && listModel.count > 1 { // 多人审批状态下 还没有人处理
+                    nameLabel.text = "\(listModel.count)人审批（一人通过即可）"
                     openBtn.isHidden = false
                     status = listModel[0].status
                     
@@ -69,7 +73,7 @@ class ToExamineDetailsCell: UITableViewCell {
                 if listModel[0].checkedTime != 0 {
                     timeLabel.text = Date(timeIntervalSince1970: TimeInterval(listModel[0].checkedTime)).getCommentTimeString()
                 } else {
-                    timeLabel.text = ""
+                    timeLabel.text = " "
                 }
                 openBtn.isSelected = isOpen
                 if statusConstraint.isActive {

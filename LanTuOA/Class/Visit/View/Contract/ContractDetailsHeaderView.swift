@@ -28,7 +28,15 @@ class ContractDetailsHeaderView: UIView {
                 // 时间
                 let startTimeStr = Date(timeIntervalSince1970: TimeInterval(data.startTime)).customTimeStr(customStr: "yyyy-MM-dd")
                 let endTimeStr = Date(timeIntervalSince1970: TimeInterval(data.endTime)).customTimeStr(customStr: "yyyy-MM-dd")
-                timeLabel.text = startTimeStr + " 至 " + endTimeStr
+                if data.startTime != 0 && data.endTime != 0 {
+                    timeLabel.text = startTimeStr + " 至 " + endTimeStr
+                } else if data.startTime != 0 {
+                    timeLabel.text = startTimeStr + "开始"
+                } else if data.endTime != 0 {
+                    timeLabel.text = startTimeStr + "之前"
+                } else {
+                    timeLabel.text = "未设置"
+                }
                 
                 // 参与人
                 var participateStr = ""
@@ -203,7 +211,8 @@ class ContractDetailsHeaderView: UIView {
     // MARK: - 按钮点击
     /// 点击修改
     @objc private func modifyClick() {
-        let view = SeleVisitModelView(title: "选择修改内容", content: ["实际发布时间", "组稿费总额", "合同总额", "签约时间"])
+//        let view = SeleVisitModelView(title: "选择修改内容", content: ["实际发布时间", "组稿费总额", "合同总额", "签约时间"])
+        let view = SeleVisitModelView(title: "选择修改内容", content: ["实际发布时间", "组稿费总额", "签约时间"])
         view.didBlock = { [weak self] (seleIndex) in
             switch seleIndex {
             case 0:
@@ -219,14 +228,14 @@ class ContractDetailsHeaderView: UIView {
                     self?.contractUpdate(totalMoney: nil, rebate: money, startTime: nil, endTime: nil, signTime: nil)
                 }
                 showView.show()
+//            case 2:
+//                let showView = ContractMoneyEjectView()
+//                showView.data = ("修改合同总额", "合同总额（元）：")
+//                showView.seleBlock = { (money) in
+//                    self?.contractUpdate(totalMoney: money, rebate: nil, startTime: nil, endTime: nil, signTime: nil)
+//                }
+//                showView.show()
             case 2:
-                let showView = ContractMoneyEjectView()
-                showView.data = ("修改合同总额", "合同总额（元）：")
-                showView.seleBlock = { (money) in
-                    self?.contractUpdate(totalMoney: money, rebate: nil, startTime: nil, endTime: nil, signTime: nil)
-                }
-                showView.show()
-            case 3:
                 let ejectView = SeleTimeEjectView(timeStamp: nil, titleStr: "选择签约时间")
                 ejectView.determineBlock = { [weak self] (timeStamp) in
                     self?.contractUpdate(totalMoney: nil, rebate: nil, startTime: nil, endTime: nil, signTime: timeStamp)

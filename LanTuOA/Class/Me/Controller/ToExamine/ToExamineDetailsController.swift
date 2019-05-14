@@ -354,7 +354,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
             cell.carbonCopyData = carbonCopyData
             return cell
         } else {
-            if row == 0 { // 审核人信息 or 多人会签
+            if row == 0 { // 审核人信息 or 多人审批
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
                 let step = checkListData != nil ? checkListData.step : 0
                 cell.data = (checkUserData[section - 2], step >= checkUserData[section - 2][0].sort, section - 1 == checkUserData.count, openArray[section - 2])

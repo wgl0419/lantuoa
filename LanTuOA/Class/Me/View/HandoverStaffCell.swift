@@ -16,7 +16,11 @@ class HandoverStaffCell: UITableViewCell {
             if let data = data {
                 var nameStr = data.name ?? ""
                 let newUserStr = data.lastExtend?.newUserName ?? ""
-                let timeStr = Date(timeIntervalSince1970: TimeInterval(data.lastExtend?.createdTime ?? 0)).customTimeStr(customStr: "yyyy-MM-dd")
+                let time = data.lastExtend?.createdTime ?? 0
+                var timeStr = " "
+                if time != 0 {
+                    timeStr = Date(timeIntervalSince1970: TimeInterval(data.lastExtend?.createdTime ?? 0)).customTimeStr(customStr: "yyyy-MM-dd")
+                }
                 if newUserStr.count > 0 {
                     let changeStr = "（已交接\(newUserStr)\(timeStr)）"
                     nameStr = nameStr + changeStr

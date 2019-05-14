@@ -46,10 +46,20 @@ let isIphonePlus = ScreenWidth == 414 && ScreenHeight == 736
 /// 黑色
 let blackColor = UIColor(hex: "#222222")
 
+// MARK: - 设备信息
+/// 手机系统版本
+let versionStr = UIDevice.current.systemVersion
+/// app信息
+let appInfo = Bundle.main.infoDictionary
+/// app版本
+let appVersion = appInfo!["CFBundleShortVersionString"] as! String
+/// app build版本
+let appBuild = appInfo!["CFBundleVersion"] as! String
+
 // MARK: - 服务器地址
 
 /// 服务器地址(正式)
-//let serverAddressURL = ""
+//let serverAddressURL = "erp.lidu.danjuantec.com"
 
 /// 测试服务器(蒙冠洲电脑)
 //let serverAddressURL = "192.168.1.135:9102"

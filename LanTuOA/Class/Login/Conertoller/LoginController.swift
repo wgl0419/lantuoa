@@ -17,6 +17,8 @@ class LoginController: UIViewController {
     private var pwdTextField: UITextField!
     /// 登录按钮
     private var loginBtn: UIButton!
+    /// 同意协议视图
+    private var agreementView: AgreementView!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -170,13 +172,31 @@ class LoginController: UIViewController {
                 label.text = "©2019 广西蛋卷科技有限公司"
                 label.textColor = UIColor(hex: "#6B83D1")
             })
+        
+        agreementView = AgreementView().taxi.adhere(toSuperView: view) // 协议模块
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerX.equalTo(view)
+                make.bottom.equalToSuperview().offset((isIphoneX ? -SafeH : -20) - 25)
+            })
+            .taxi.config({ (view) in
+                view.agreementBlock = { [weak self] in // 点击用户协议
+//                    let webVc = AgreementWebController()
+//                    webVc.agreementNameStr = "deal"
+//                    self?.navigationController?.pushViewController(webVc, animated: true)
+                }
+                view.privacyBlock = { [weak self] in // 点击隐私协议
+//                    let webVc = AgreementWebController()
+//                    webVc.agreementNameStr = "privacy"
+//                    self?.navigationController?.pushViewController(webVc, animated: true)
+                }
+            })
     }
     
     /// textField 内容变化
     @objc private func textFieldChange() {
         let accountStr = accountTextField.text ?? ""
         let pwdStr = pwdTextField.text ?? ""
-        if accountStr.count > 0 && pwdStr.count >= 4 { // 未做限制
+        if accountStr.count == 11 && pwdStr.count >= 4 && pwdStr.count < 20 && agreementView.agree == .agree { // 账号：11位   密码：4~20位   同意协议
             loginBtn.backgroundColor = UIColor(hex: "#2E4695")
             loginBtn.isEnabled = true
         } else {

@@ -15,24 +15,29 @@ class NoticeHomePendingCell: UITableViewCell {
         didSet {
             let checkListData = data.0
             let isCheck = data.1
-                initSubViews()
+            initSubViews()
+            if checkListData.createdTime != 0 {
                 let date = Date(timeIntervalSince1970: TimeInterval(checkListData.createdTime))
                 timeLabel.text = timeHandle(date: date)
-                
-                titleLabel.text = checkListData.title
-                titleLabel.textColor = UIColor(hex: "#FF7744")
-                
-                let smallData = checkListData.data
-                if smallData.count == 1 {
-                    let model = smallData.first!
-                    _ = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: titleLabel, isLast: true)
-                }
-                var lastLabel = titleLabel
-                for index in 0..<smallData.count {
-                    let model = smallData[index]
-                    let label = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: lastLabel, isLast: index == smallData.count - 1)
-                    lastLabel = label
-                }
+            } else {
+                timeLabel.text = " "
+            }
+            
+            
+            titleLabel.text = checkListData.title
+            titleLabel.textColor = UIColor(hex: "#FF7744")
+            
+            let smallData = checkListData.data
+            if smallData.count == 1 {
+                let model = smallData.first!
+                _ = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: titleLabel, isLast: true)
+            }
+            var lastLabel = titleLabel
+            for index in 0..<smallData.count {
+                let model = smallData[index]
+                let label = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: lastLabel, isLast: index == smallData.count - 1)
+                lastLabel = label
+            }
             
             agreeBtn.isHidden = !isCheck
             refuseBtn.isHidden = !isCheck

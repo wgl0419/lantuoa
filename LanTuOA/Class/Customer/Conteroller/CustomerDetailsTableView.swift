@@ -157,7 +157,7 @@ class CustomerDetailsTableView: UITableView {
     @objc func setTableFooterView() {
         self.layoutIfNeeded()
         let old = self.tableFooterView?.height ?? 0
-        let footerHeight = ScreenHeight - NavigationH - self.contentSize.height - 40 - SafeH + old
+        let footerHeight = ScreenHeight - NavigationH - self.contentSize.height - SafeH + old
         if footerHeight > 0 {
             self.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: footerHeight))
         } else {
@@ -367,6 +367,7 @@ class CustomerDetailsTableView: UITableView {
             self.customerMembersData = result.data
             self.mj_header.endRefreshing()
             self.reloadData()
+            self.setTableFooterView()
             self.isNoData = self.customerMembersData.count == 0
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
