@@ -39,8 +39,8 @@ class Jurisdiction: NSObject, NSCoding {
     private(set) var isModifyPerson = false
     /// 离职员工
     private(set) var isLeavePerson = false
-    /// 新增部门员工
-    private(set) var isAddDepartmentMember = false
+    /// 新增部门员工 -> 更换员工部门
+//    private(set) var isAddDepartmentMember = false
     /// 查看他人绩效
     private(set) var isViewPerform = false
     /// 工作交接功能
@@ -69,7 +69,7 @@ class Jurisdiction: NSObject, NSCoding {
         aCoder.encode(isEditDepartment, forKey: "isEditDepartment")
         aCoder.encode(isModifyPerson, forKey: "isModifyPerson")
         aCoder.encode(isLeavePerson, forKey: "isLeavePerson")
-        aCoder.encode(isAddDepartmentMember, forKey: "isAddDepartmentMember")
+//        aCoder.encode(isAddDepartmentMember, forKey: "isAddDepartmentMember")
         aCoder.encode(isViewPerform, forKey: "isViewPerform")
         aCoder.encode(isViewWorkextend, forKey: "isViewWorkextend")
         aCoder.encode(isViewVisitUnder, forKey: "isViewVisitUnder")
@@ -90,7 +90,7 @@ class Jurisdiction: NSObject, NSCoding {
         isEditDepartment = aDecoder.decodeBool(forKey: "isEditDepartment")
         isModifyPerson = aDecoder.decodeBool(forKey: "isModifyPerson")
         isLeavePerson = aDecoder.decodeBool(forKey: "isLeavePerson")
-        isAddDepartmentMember = aDecoder.decodeBool(forKey: "isAddDepartmentMember")
+//        isAddDepartmentMember = aDecoder.decodeBool(forKey: "isAddDepartmentMember")
         isViewPerform = aDecoder.decodeBool(forKey: "isViewPerform")
         isViewWorkextend = aDecoder.decodeBool(forKey: "isViewWorkextend")
         isViewVisitUnder = aDecoder.decodeBool(forKey: "isViewVisitUnder")
@@ -131,7 +131,7 @@ class Jurisdiction: NSObject, NSCoding {
         isEditDepartment = false
         isModifyPerson = false
         isLeavePerson = false
-        isAddDepartmentMember = false
+//        isAddDepartmentMember = false
         isViewPerform = false
         isViewWorkextend = false
         isViewVisitUnder = false
@@ -155,7 +155,7 @@ class Jurisdiction: NSObject, NSCoding {
             case "department.manager:edit": isEditDepartment = true
             case "person.manager:modify": isModifyPerson = true
             case "person.manager:leave": isLeavePerson = true
-            case "department.manager.member:add": isAddDepartmentMember = true
+//            case "department.manager.member:add": isAddDepartmentMember = true
             case "perform.view": isViewPerform = true
             case "workextend.view": isViewWorkextend = true
             case "visit.under:view": isViewVisitUnder = true

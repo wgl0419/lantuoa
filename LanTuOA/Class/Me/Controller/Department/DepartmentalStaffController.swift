@@ -302,7 +302,7 @@ extension DepartmentalStaffController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 1 {
-            return Jurisdiction.share.isAddDepartmentMember ? 45 : 0
+            return Jurisdiction.share.isModifyPerson ? 45 : 0
         } else {
             return 0
         }
@@ -310,7 +310,7 @@ extension DepartmentalStaffController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 1 {
-            return Jurisdiction.share.isAddDepartmentMember ? addFooterViewHandle() : nil
+            return Jurisdiction.share.isModifyPerson ? addFooterViewHandle() : nil
         } else {
             return nil
         }
