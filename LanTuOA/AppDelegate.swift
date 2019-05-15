@@ -160,16 +160,19 @@ extension AppDelegate {
     /// - Parameter versionStr: 接口版本号
     /// - Returns: 是否本地版本比网络版本低
     func compareNumber(versionStr: String) -> Bool {
-        let appArray = appVersion.components(separatedBy: ".")
-        let resultArray = versionStr.components(separatedBy: ".")
-        for i in 0..<appArray.count{
-            if Int(appArray[i])! != Int(resultArray[i])! {
-                if Int(appArray[i])! > Int(resultArray[i])! {
-                    return false
-                }else{
-                    return true
+        if versionStr != "" {
+            let appArray = appVersion.components(separatedBy: ".")
+            let resultArray = versionStr.components(separatedBy: ".")
+            for i in 0..<appArray.count{
+                if Int(appArray[i])! != Int(resultArray[i])! {
+                    if Int(appArray[i])! > Int(resultArray[i])! {
+                        return false
+                    }else{
+                        return true
+                    }
                 }
             }
+            return false
         }
         return false
     }
