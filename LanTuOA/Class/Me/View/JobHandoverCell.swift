@@ -33,6 +33,8 @@ class JobHandoverCell: UITableViewCell {
     private var phoneLabel = UILabel()
     /// 交接工作
     private var jobLabel = UILabel()
+    /// 交接状态
+    private var statusLabel: UILabel!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -64,6 +66,16 @@ class JobHandoverCell: UITableViewCell {
             })
             .taxi.config({ (imageView) in
                 imageView.image = UIImage(named: "leavingCompany")
+            })
+        
+        statusLabel = UILabel().taxi.adhere(toSuperView: contentView) // 交接状态
+            .taxi.layout(snapKitMaker: { (make) in
+                make.right.centerY.equalToSuperview()
+            })
+            .taxi.config({ (label) in
+                label.text = "测测测测测测"
+                label.font = UIFont.regular(size: 12)
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
             })
         
         _ = setTitle(titleStr: "所属部门：", contentLabel: departmentLabel, lastView: nameLabel) // 部门
@@ -99,7 +111,7 @@ class JobHandoverCell: UITableViewCell {
         contentLabel.taxi.layout { (make) in
             make.top.equalTo(titleLabel)
             make.left.equalTo(titleLabel.snp.right)
-            make.right.lessThanOrEqualToSuperview()
+            make.right.lessThanOrEqualTo(statusLabel.snp.left).offset(-5)
             if isLast {
                 make.bottom.equalToSuperview().offset(-15)
             }

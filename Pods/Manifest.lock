@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (4.8.1)
+  - AliyunOSSiOS (2.10.7)
   - BMKLocationKit (1.4.0)
   - FSCalendar (2.8.0)
   - GPUImage (0.1.7)
@@ -27,6 +28,7 @@ PODS:
     - SDWebImage
 
 DEPENDENCIES:
+  - AliyunOSSiOS
   - BMKLocationKit
   - FSCalendar
   - HandyJSON (~> 4.2.0-beta1)
@@ -43,6 +45,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - AliyunOSSiOS
     - BMKLocationKit
     - FSCalendar
     - GPUImage
@@ -62,6 +65,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
+  AliyunOSSiOS: 602b6a4e70e62a5f0a6431c20496343141d7e66f
   BMKLocationKit: ca1343eea19b2f2e999d1ad51bd6a1f1220f3456
   FSCalendar: 3a5ed3636e2ba1b83ebebfcf0c2603105a6f5efe
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
@@ -79,6 +83,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZLPhotoBrowser: ef9d5cdc9fdc8ce029fd0e41223e8eb8a642918f
 
-PODFILE CHECKSUM: 594b7c490e9bbcbac7b154210e409de517f02f2b
+PODFILE CHECKSUM: 28ac6b8fbefae719945e45b36d4a32e0b044ba23
 
 COCOAPODS: 1.5.3

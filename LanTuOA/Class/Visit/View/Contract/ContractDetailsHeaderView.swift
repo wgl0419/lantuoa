@@ -57,7 +57,7 @@ class ContractDetailsHeaderView: UIView {
     }
     
     /// 标题数组
-    private let titleArray = ["实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "制作费：", "参与人员：", "签约时间："]
+    private let titleArray = ["实际发布时间：", "支持总额：", "合同总额：", "回款总额：", "制作费：", "参与人员：", "签约时间："]
     /// 内容控件数组
     private var contentLabelArray = [UILabel]()
     /// 合同名称
@@ -211,8 +211,8 @@ class ContractDetailsHeaderView: UIView {
     // MARK: - 按钮点击
     /// 点击修改
     @objc private func modifyClick() {
-//        let view = SeleVisitModelView(title: "选择修改内容", content: ["实际发布时间", "组稿费总额", "合同总额", "签约时间"])
-        let view = SeleVisitModelView(title: "选择修改内容", content: ["实际发布时间", "组稿费总额", "签约时间"])
+//        let view = SeleVisitModelView(title: "选择修改内容", content: ["实际发布时间", "支持总额", "合同总额", "签约时间"])
+        let view = SeleVisitModelView(title: "选择修改内容", content: ["实际发布时间", "支持总额", "签约时间"])
         view.didBlock = { [weak self] (seleIndex) in
             switch seleIndex {
             case 0:
@@ -223,7 +223,7 @@ class ContractDetailsHeaderView: UIView {
                 showView.show()
             case 1:
                 let showView = ContractMoneyEjectView()
-                showView.data = ("修改组稿费", "组稿费（元）：")
+                showView.data = ("修改支持", "支持（元）：")
                 showView.seleBlock = { (money) in
                     self?.contractUpdate(totalMoney: nil, rebate: money, startTime: nil, endTime: nil, signTime: nil)
                 }

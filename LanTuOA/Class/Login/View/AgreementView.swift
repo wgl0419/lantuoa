@@ -10,6 +10,8 @@ import UIKit
 
 class AgreementView: UIView {
     
+    /// 修改同意状态
+    var changeBlock: (() -> ())?
     /// 查看协议回调
     var agreementBlock: (() -> ())?
     /// 查看隐私
@@ -61,8 +63,8 @@ class AgreementView: UIView {
             }
             .taxi.config { (label) in
                 label.text = "阅读并同意"
-                label.textColor = blackColor
-                label.font = UIFont.medium(size: 14)
+                label.font = UIFont.medium(size: 12)
+                label.textColor = UIColor(hex: "#999999")
         }
         
         let agreementBtn  = UIButton().taxi.adhere(toSuperView: self) // 《蛋卷出行用户使用协议》
@@ -71,7 +73,7 @@ class AgreementView: UIView {
                 make.left.equalTo(agreeLabel.snp.right)
             }
             .taxi.config { (btn) in
-                btn.titleLabel?.font = UIFont.medium(size: 14)
+                btn.titleLabel?.font = UIFont.medium(size: 12)
                 btn.setTitle("《用户协议》", for: .normal)
                 btn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
                 btn.addTarget(self, action: #selector(agreementClick), for: .touchUpInside)
@@ -84,8 +86,8 @@ class AgreementView: UIView {
             }
             .taxi.config { (label) in
                 label.text = "和"
-                label.textColor = blackColor
-                label.font = UIFont.medium(size: 14)
+                label.font = UIFont.medium(size: 12)
+                label.textColor = UIColor(hex: "#999999")
         }
         
         _ = UIButton().taxi.adhere(toSuperView: self) // 隐私协议
@@ -95,8 +97,8 @@ class AgreementView: UIView {
                 make.left.equalTo(label.snp.right)
             })
             .taxi.config({ (btn) in
-                btn.titleLabel?.font = UIFont.medium(size: 14)
                 btn.setTitle("《隐私协议》", for: .normal)
+                btn.titleLabel?.font = UIFont.medium(size: 12)
                 btn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
                 btn.addTarget(self, action: #selector(privacyClick), for: .touchUpInside)
             })
@@ -107,6 +109,9 @@ class AgreementView: UIView {
     @objc private func agreeClick(btn: UIButton) {
         btn.isSelected = !btn.isSelected
         agree = btn.isSelected ? .agree : .unagree
+        if changeBlock != nil {
+            changeBlock!()
+        }
     }
     
     /// 点击用户协议

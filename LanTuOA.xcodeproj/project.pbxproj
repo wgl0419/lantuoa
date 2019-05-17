@@ -96,6 +96,12 @@
 		1809E402225DC55300B615A8 /* DepartmentalStaffCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E401225DC55300B615A8 /* DepartmentalStaffCell.swift */; };
 		1809E404225DCC7F00B615A8 /* SelePersonnelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E403225DCC7F00B615A8 /* SelePersonnelController.swift */; };
 		1809E406225DD5FC00B615A8 /* SelePersonnelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1809E405225DD5FC00B615A8 /* SelePersonnelCell.swift */; };
+		180B6F60228CF72B0086C0E8 /* WebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B6F5F228CF72B0086C0E8 /* WebController.swift */; };
+		180B6F63228D001C0086C0E8 /* deal.docx in Resources */ = {isa = PBXBuildFile; fileRef = 180B6F61228CFF750086C0E8 /* deal.docx */; };
+		180B6F64228D001F0086C0E8 /* privacy.docx in Resources */ = {isa = PBXBuildFile; fileRef = 180B6F62228CFF760086C0E8 /* privacy.docx */; };
+		180B6F66228D09460086C0E8 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 180B6F65228D09460086C0E8 /* libresolv.tbd */; };
+		180B6F6A228D38CC0086C0E8 /* AliOSSClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B6F69228D38CC0086C0E8 /* AliOSSClient.swift */; };
+		180B6F6C228D719A0086C0E8 /* WorkGroupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B6F6B228D719A0086C0E8 /* WorkGroupController.swift */; };
 		180B76FD2239DFCC0096403B /* VisitHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B76FC2239DFCC0096403B /* VisitHomeCell.swift */; };
 		180B77012239F8770096403B /* ProjectSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B77002239F8770096403B /* ProjectSegmentView.swift */; };
 		180B7707223A21D50096403B /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180B7706223A21D50096403B /* LoginController.swift */; };
@@ -309,6 +315,12 @@
 		1809E401225DC55300B615A8 /* DepartmentalStaffCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentalStaffCell.swift; sourceTree = "<group>"; };
 		1809E403225DCC7F00B615A8 /* SelePersonnelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelePersonnelController.swift; sourceTree = "<group>"; };
 		1809E405225DD5FC00B615A8 /* SelePersonnelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelePersonnelCell.swift; sourceTree = "<group>"; };
+		180B6F5F228CF72B0086C0E8 /* WebController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebController.swift; sourceTree = "<group>"; };
+		180B6F61228CFF750086C0E8 /* deal.docx */ = {isa = PBXFileReference; lastKnownFileType = file; path = deal.docx; sourceTree = "<group>"; };
+		180B6F62228CFF760086C0E8 /* privacy.docx */ = {isa = PBXFileReference; lastKnownFileType = file; path = privacy.docx; sourceTree = "<group>"; };
+		180B6F65228D09460086C0E8 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		180B6F69228D38CC0086C0E8 /* AliOSSClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliOSSClient.swift; sourceTree = "<group>"; };
+		180B6F6B228D719A0086C0E8 /* WorkGroupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkGroupController.swift; sourceTree = "<group>"; };
 		180B76FC2239DFCC0096403B /* VisitHomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitHomeCell.swift; sourceTree = "<group>"; };
 		180B77002239F8770096403B /* ProjectSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectSegmentView.swift; sourceTree = "<group>"; };
 		180B7706223A21D50096403B /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -441,6 +453,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				180B6F66228D09460086C0E8 /* libresolv.tbd in Frameworks */,
 				20086A34FD370732D57E936F /* Pods_LanTuOA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -626,6 +639,7 @@
 			children = (
 				180B7706223A21D50096403B /* LoginController.swift */,
 				1805FC3D2276F369001A2FF5 /* RetrievePasswordController.swift */,
+				180B6F5F228CF72B0086C0E8 /* WebController.swift */,
 			);
 			path = Conertoller;
 			sourceTree = "<group>";
@@ -750,6 +764,8 @@
 		1810EC5E222F5B9300CF6488 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				180B6F61228CFF750086C0E8 /* deal.docx */,
+				180B6F62228CFF760086C0E8 /* privacy.docx */,
 				1810EC52222F597D00CF6488 /* Assets.xcassets */,
 				1810EC57222F597D00CF6488 /* Info.plist */,
 			);
@@ -814,6 +830,7 @@
 			children = (
 				1810EC96222F5F9500CF6488 /* UserInfo.swift */,
 				180736B4226EB3E7001F1FA6 /* Jurisdiction.swift */,
+				180B6F69228D38CC0086C0E8 /* AliOSSClient.swift */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -920,6 +937,7 @@
 				18050D6E224B5B2D00C9DB9A /* HandoverStaffSeleController.swift */,
 				1802B00F22549D1200E94341 /* JobHandoverController.swift */,
 				1809E403225DCC7F00B615A8 /* SelePersonnelController.swift */,
+				180B6F6B228D719A0086C0E8 /* WorkGroupController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1111,6 +1129,7 @@
 		ADCDBC03F8C03A90CC14FFCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				180B6F65228D09460086C0E8 /* libresolv.tbd */,
 				731155E08D0F4362D82C88E7 /* Pods_LanTuOA.framework */,
 			);
 			name = Frameworks;
@@ -1191,6 +1210,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1810EC53222F597D00CF6488 /* Assets.xcassets in Resources */,
+				180B6F64228D001F0086C0E8 /* privacy.docx in Resources */,
+				180B6F63228D001C0086C0E8 /* deal.docx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1205,6 +1226,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-LanTuOA/Pods-LanTuOA-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AliyunOSSiOS/AliyunOSSiOS.framework",
 				"${BUILT_PRODUCTS_DIR}/FSCalendar/FSCalendar.framework",
 				"${BUILT_PRODUCTS_DIR}/GPUImage/GPUImage.framework",
 				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
@@ -1222,6 +1244,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AliyunOSSiOS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FSCalendar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GPUImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
@@ -1266,6 +1289,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				180B6F60228CF72B0086C0E8 /* WebController.swift in Sources */,
 				1804E1F5224A00EE006AB973 /* AddVisitorEjectView.swift in Sources */,
 				181788482238AB5C0015DC30 /* VisitHomeController.swift in Sources */,
 				1838BC52225C932E00978E72 /* CustomerDetailsTableView.swift in Sources */,
@@ -1296,6 +1320,7 @@
 				180736B9226EE176001F1FA6 /* ProjectDetailModel.swift in Sources */,
 				180736B7226EBA5C001F1FA6 /* UsersPermissionsModel.swift in Sources */,
 				180BFB372265BE16001879BD /* ContractListController.swift in Sources */,
+				180B6F6A228D38CC0086C0E8 /* AliOSSClient.swift in Sources */,
 				18070723226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift in Sources */,
 				1809E3F8225D865000B615A8 /* ToExamineDetailsController.swift in Sources */,
 				180B8F9B2272A3EA00E6FDE5 /* ApplyControllers.swift in Sources */,
@@ -1458,6 +1483,7 @@
 				181788522238E0B00015DC30 /* HomePageHeaderView.swift in Sources */,
 				1809E404225DCC7F00B615A8 /* SelePersonnelController.swift in Sources */,
 				180533D6226027CB00B785B7 /* FillInApplyFieldViewCell.swift in Sources */,
+				180B6F6C228D719A0086C0E8 /* WorkGroupController.swift in Sources */,
 				1817884E2238ADC00015DC30 /* MeHomeController.swift in Sources */,
 				1827ED842268076D00EFF889 /* ContractRepaymentEjectView.swift in Sources */,
 				1802CDA0224CC3D3005997F1 /* VisitSeleTimeView.swift in Sources */,

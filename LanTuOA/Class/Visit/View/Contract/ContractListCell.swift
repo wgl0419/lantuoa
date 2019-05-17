@@ -58,7 +58,7 @@ class ContractListCell: UITableViewCell {
     }
 
     /// 标题数组
-    private let titleArray = ["实际发布时间：", "组稿费总额：", "合同总额：", "回款总额：", "签约时间：", "参与人员："]
+    private let titleArray = ["实际发布时间：", "支持总额：", "合同总额：", "回款总额：", "签约时间：", "参与人员："]
     /// 内容控件数组
     private var contentLabelArray = [UILabel]()
     /// 白色背景框

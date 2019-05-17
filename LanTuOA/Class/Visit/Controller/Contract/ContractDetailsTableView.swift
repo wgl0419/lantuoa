@@ -186,7 +186,7 @@ class ContractDetailsTableView: UITableView {
         for model in performanceData {
             totalPerformance += model.money
         }
-        // 发布总额 -> 减去制作费和组稿费
+        // 发布总额 -> 减去制作费和支持
         let totalMoney = contractListData.totalMoney - contractListData.makeMoney - contractListData.rebate
         
         let model = contractUsersData[seleContractUsers]

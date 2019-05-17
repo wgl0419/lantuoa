@@ -14,4 +14,6 @@
 #import "JPUSHService.h"
 #import <UserNotifications/UserNotifications.h>
 
+#import <AliyunOSSiOS/OSSService.h>
+
 #endif /* Header_h */

@@ -28,5 +28,7 @@ pod 'BMKLocationKit'
 pod 'FSCalendar'
 ############     推送    ############
 pod 'JPush', '3.1.0'
+############  阿里云OSS  ############
+pod 'AliyunOSSiOS'
 end
 

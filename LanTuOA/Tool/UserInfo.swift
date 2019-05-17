@@ -30,6 +30,10 @@ class UserInfo: NSObject, NSCoding {
     private(set) var position = ""
     /// registrationID
     private(set) var registrationID = ""
+    /// securityToken（oss）
+    private(set) var securityToken = ""
+    /// securityToken 获取时间戳
+//    private(set) var 
     
     private override init() {
 //        super.init()
@@ -43,6 +47,7 @@ class UserInfo: NSObject, NSCoding {
         aCoder.encode(phone, forKey: "phone")
         aCoder.encode(position, forKey: "position")
         aCoder.encode(registrationID, forKey: "registrationID")
+        aCoder.encode(securityToken, forKey: "securityToken")
     }
     
     /// 解档
@@ -53,6 +58,7 @@ class UserInfo: NSObject, NSCoding {
         phone = aDecoder.decodeObject(forKey: "phone") as? String ?? ""
         position = aDecoder.decodeObject(forKey: "position") as? String ?? ""
         registrationID = aDecoder.decodeObject(forKey: "registrationID") as? String ?? ""
+        securityToken = aDecoder.decodeObject(forKey: "securityToken") as? String ?? ""
     }
     
     // MARK: - 数据修改
@@ -83,6 +89,7 @@ class UserInfo: NSObject, NSCoding {
         phone = ""
         position = ""
         registrationID = ""
+        securityToken = ""
         userSave()
     }
     
@@ -113,6 +120,12 @@ class UserInfo: NSObject, NSCoding {
     /// 记录registrationID
     func setRegistrationID(_ registrationID: String) {
         self.registrationID = registrationID
+        userSave()
+    }
+    
+    /// 修改securityToken
+    func setSecurityToken(_ securityToken: String) {
+        self.securityToken = securityToken
         userSave()
     }
 }

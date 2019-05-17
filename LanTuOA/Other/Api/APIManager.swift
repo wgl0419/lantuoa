@@ -59,7 +59,7 @@ enum APIManager {
     
     // MARK: - 工作组
     case workGroupCreate(String, [Int], Int) // 新建工作组 (name:工作组名称  members:成员id  projectId:项目id)
-    case workGroupList(Int, Int, Int) // 工作组列表 （page:页码  limit:一页数据  projectId:项目id）
+    case workGroupList(Int, Int, Int?) // 工作组列表 （page:页码  limit:一页数据  projectId:项目id）
     case workGroupQuit(Int) // 退出工作组
     case workGroupInvite(Int, [Int]) // 邀请他人加入工作组   (groupId:工作组id  members：成员id数组)
     
@@ -100,7 +100,7 @@ enum APIManager {
     case contractList(String, Int?, Int?, Int?, Int, Int, Int?, Int?, Int?) // 合同列表/查询合同 (name:客户名称/项目名称/合同编码   customerId:客户id  projectId:项目id   userId:用户id，查询他人合同时使用  page:页码   limit:一页数据)
     case contractPaybackList(Int) // 回款列表  (合同id)
     case performList(Int, Int?, Int?, Int?)  // 业绩列表  (queryType: 1.按人-合同查询 2.按人查询总业绩      userId:用户id(与self排斥)    self:查看自己的业绩(与userId排斥)       contractId:合同id（queryType = 1时传）)
-    case contractUpdate(Int, Float?, Float?, Int?, Int?, Int?) // 修改合同内容  (合同id  totalMoney：合同总额   rebate:组稿费总额   startTime:开始时间戳  endTime:结束时间戳)
+    case contractUpdate(Int, Float?, Float?, Int?, Int?, Int?) // 修改合同内容  (合同id  totalMoney：合同总额   rebate:支持总额   startTime:开始时间戳  endTime:结束时间戳)
     case contractDetail(Int) // 合同详情 (合同id)
     case contractPaybackUpdate(Int, String, Float, Int) // 修改回款 (回款id  desc:备注  money:金额  payTime:回款时间)
     case contractPaybackAdd(Int, String, Float, Int) // 添加回款 (contractId:合同id  desc:备注  money:金额  payTime:回款时间)
@@ -110,7 +110,7 @@ enum APIManager {
     case contractDescList(Int) // 合同备注信息列表
     case contractDescCreate(Int, String) // 新建合同备注 （contractIdL: 合同id   desc: 备注信息）
 
-    
+    case fileOssToken() // 获取安全令牌securityToken
     case x // MARK: 补位 -> 暂时代替一些没有使用的类型
 }
 
@@ -211,6 +211,8 @@ extension APIManager: TargetType {
         case .contractTypeList: return "/api/contract/type/list"
         case .contractDescList(let id): return "/api/contract/desc/list/\(id)"
         case .contractDescCreate: return "api/contract/desc/create"
+            
+        case .fileOssToken: return "/api/file/ossToken"
             
         default: return ""
         }
@@ -325,7 +327,8 @@ extension APIManager: TargetType {
         case let .workGroupCreate(name, members, projectId): // 新建工作组
             params = ["name": name, "members": members, "projectId": projectId]
         case let .workGroupList(page, limit, projectId): // 工作组列表
-            params = ["page": page, "limit": limit, "projectId": projectId]
+            params = ["page": page, "limit": limit]
+            if projectId != nil { params["projectId"] = projectId }
         case let .workGroupInvite(groupId, members): // 邀请他人加入工作组
             params = ["groupId": groupId, "members": members]
             

@@ -173,30 +173,33 @@ class LoginController: UIViewController {
                 label.textColor = UIColor(hex: "#6B83D1")
             })
         
-//        agreementView = AgreementView().taxi.adhere(toSuperView: view) // 协议模块
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.centerX.equalTo(view)
-//                make.bottom.equalToSuperview().offset((isIphoneX ? -SafeH : -20) - 25)
-//            })
-//            .taxi.config({ (view) in
-//                view.agreementBlock = { [weak self] in // 点击用户协议
-//                    let webVc = AgreementWebController()
-//                    webVc.agreementNameStr = "deal"
-//                    self?.navigationController?.pushViewController(webVc, animated: true)
-//                }
-//                view.privacyBlock = { [weak self] in // 点击隐私协议
-//                    let webVc = AgreementWebController()
-//                    webVc.agreementNameStr = "privacy"
-//                    self?.navigationController?.pushViewController(webVc, animated: true)
-//                }
-//            })
+        agreementView = AgreementView().taxi.adhere(toSuperView: view) // 协议模块
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerX.equalTo(view)
+                make.bottom.equalToSuperview().offset((isIphoneX ? -SafeH : -20) - 25)
+            })
+            .taxi.config({ (view) in
+                view.agreementBlock = { [weak self] in // 点击用户协议
+                    let webController = WebController()
+                    webController.fileNameStr = "deal"
+                    self?.navigationController?.pushViewController(webController, animated: true)
+                }
+                view.privacyBlock = { [weak self] in // 点击隐私协议
+                    let webController = WebController()
+                    webController.fileNameStr = "privacy"
+                    self?.navigationController?.pushViewController(webController, animated: true)
+                }
+                view.changeBlock = { [weak self] in // 修改同意状态
+                    self?.textFieldChange()
+                }
+            })
     }
     
     /// textField 内容变化
     @objc private func textFieldChange() {
         let accountStr = accountTextField.text ?? ""
         let pwdStr = pwdTextField.text ?? ""
-        if accountStr.count == 11 && pwdStr.count >= 4 && pwdStr.count < 20 {// && agreementView.agree == .agree { // 账号：11位   密码：4~20位   同意协议
+        if accountStr.count == 11 && pwdStr.count >= 4 && pwdStr.count < 20 && agreementView.agree == .agree { // 账号：11位   密码：4~20位   同意协议
             loginBtn.backgroundColor = UIColor(hex: "#2E4695")
             loginBtn.isEnabled = true
         } else {
@@ -261,5 +264,19 @@ class LoginController: UIViewController {
     @objc private func forgetClick() {
         let vc = RetrievePasswordController()
         navigationController?.pushViewController(vc, animated: true)
+//        UserInfo.share.setSecurityToken("Fsk0ZbftFnIjArzz2IHhJeHBsB+oYv/kwmGlS7P0clqVoRoReREvCKM1565kPNMIiik6E6aKP9rUhpMCPOwr6UmzWvqL7Z+H+U6muGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wMDL1VJH7aCwBLH9BLPABvhdYHPH/KT5aXPwXtn3DbATgD2GM+qxsmufjgmJTGskKE3AWikbBOnemrfMj4NfsLFYxkTtK40NZxcqf8yyNK43BIjvwu0fAdpWmd4IDAXAUIuU/dbfCz9tRpMBJia7IkFrReq/zxhWD1U35Df0icGoABekthCLKruF2v15a6RY/8kBM/aGsClepXAbg4rmCWT8F05qGpMiKq2G4zPQ2aSZhbPjzCGidXW4RjTz7Rx6ujJOwsXkckD4iUX/YDeEX4N6sxhRrpAZUilHyzIHzZmr1wDmBGzjn1jg1EGCP1WgqDSNEVYv+No8mfTElvPbocKYw=")
+//        AliOSSClient.shared.download(url: "dev/img/lADPBbCc1rzZcKHNAn7NAuo_746_638.jpg") { (data) in
+//            if data != nil {
+//                let image = UIImage(data: data!)
+//                _ = UIImageView().taxi.adhere(toSuperView: self.view)
+//                    .taxi.layout(snapKitMaker: { (make) in
+//                        make.center.equalToSuperview()
+//                    })
+//                    .taxi.config({ (imageView) in
+//                        imageView.image = image
+//                    })
+//            }
+//        }
+//        _ = APIService.shared.getData(.fileOssToken(), t: <#T##HandyJSON.Protocol#>, successHandle: <#T##((HandyJSON) -> Void)?##((HandyJSON) -> Void)?##(HandyJSON) -> Void#>, errorHandle: <#T##((String?) -> Void)?##((String?) -> Void)?##(String?) -> Void#>)
     }
 }

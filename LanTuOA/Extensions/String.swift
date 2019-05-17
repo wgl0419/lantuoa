@@ -151,4 +151,15 @@ extension String {
         }
         return moneyStr
     }
+    
+    /// 生成指定长度的字符串
+    func randomStringWithLength(len: Int) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        var randomString = ""
+        for _ in 0..<len {
+            let letterStr = letters.randomElement() ?? "a"
+            randomString.append(letterStr)
+        }
+        return randomString
+    }
 }

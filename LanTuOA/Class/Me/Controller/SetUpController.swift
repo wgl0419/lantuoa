@@ -56,33 +56,73 @@ class SetUpController: UIViewController {
 }
 
 extension SetUpController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "SetUpCell")
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: "SetUpCell")
-            cell?.textLabel?.textColor = UIColor(hex: "#444444")
-            cell?.textLabel?.font = UIFont.medium(size: 14)
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 2
+        } else {
+            return 1
         }
-        cell?.textLabel?.text = indexPath.row == 0 ? "修改密码" : "退出登录"
-        return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let section = indexPath.section
+        
+        if section == 0 {
+            var cell = tableView.dequeueReusableCell(withIdentifier: "SetUpCell")
+            if cell == nil {
+                cell = UITableViewCell(style: .default, reuseIdentifier: "SetUpCell")
+                cell?.textLabel?.textColor = UIColor(hex: "#444444")
+                cell?.textLabel?.font = UIFont.medium(size: 14)
+                cell?.accessoryType = .disclosureIndicator
+            }
+            cell?.textLabel?.text = indexPath.row == 0 ? "修改密码" : "退出登录"
+            return cell!
+        } else {
+            var cell = tableView.dequeueReusableCell(withIdentifier: "UpdateCell")
+            if cell == nil {
+                cell = UITableViewCell(style: .default, reuseIdentifier: "UpdateCell")
+                cell?.selectionStyle = .none
+                _ = UILabel().taxi.adhere(toSuperView: cell!)
+                    .taxi.layout { (make) in
+                        make.edges.equalToSuperview()
+                }
+                    .taxi.config { (label) in
+                        label.tag = 10086
+                        label.textAlignment = .center
+                        label.font = UIFont.medium(size: 14)
+                        label.textColor = UIColor(hex: "#999999")
+                }
+            }
+            let label = cell!.viewWithTag(10086) as! UILabel
+            label.text = "当前版本：" + appVersion
+            return cell!
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.row == 0 {
-            let vc = ChangePasswordController()
-            navigationController?.pushViewController(vc, animated: true)
-        } else {
-            logoutHandle()
+        let section = indexPath.section
+        if section == 0 {
+            if indexPath.row == 0 {
+                let vc = ChangePasswordController()
+                navigationController?.pushViewController(vc, animated: true)
+            } else {
+                logoutHandle()
+            }
         }
     }
 }

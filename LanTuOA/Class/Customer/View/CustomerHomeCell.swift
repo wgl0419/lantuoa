@@ -48,7 +48,7 @@ class CustomerHomeCell: UITableViewCell {
                 let weekDeal = setAttriMuStr(contentStr: String(format: "成交：%.2f元", data.monthMoney), highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
                 weekDealLabel.attributedText = weekDeal
                 
-                let weekRebate = setAttriMuStr(contentStr: String(format: "组稿费：%.2f元", data.monthRebate), highlightStr: "组稿费：", highlightColor:  UIColor(hex: "#999999"))
+                let weekRebate = setAttriMuStr(contentStr: String(format: "支持：%.2f元", data.monthRebate), highlightStr: "支持：", highlightColor:  UIColor(hex: "#999999"))
                 weekRebateLabel.attributedText = weekRebate
                 
                 let moonCount = setAttriMuStr(contentStr: "跟进人数：\(data.monthVisitNum)人", highlightStr: "跟进人数：", highlightColor:  UIColor(hex: "#999999"))
@@ -57,7 +57,7 @@ class CustomerHomeCell: UITableViewCell {
                 let moonDeal = setAttriMuStr(contentStr: String(format: "成交：%.2f元", data.seasonMoney), highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
                 moonDealLabel.attributedText = moonDeal
                 
-                let moonRebate = setAttriMuStr(contentStr: String(format: "组稿费：%.2f元", data.seasonRebate), highlightStr: "组稿费：", highlightColor:  UIColor(hex: "#999999"))
+                let moonRebate = setAttriMuStr(contentStr: String(format: "支持：%.2f元", data.seasonRebate), highlightStr: "支持：", highlightColor:  UIColor(hex: "#999999"))
                 moonRebateLabel.attributedText = moonRebate
             }
         }
@@ -89,13 +89,13 @@ class CustomerHomeCell: UITableViewCell {
     private var weekCountLabel = UILabel()
     /// 一周成交
     private var weekDealLabel = UILabel()
-    /// 一周组稿费
+    /// 一周支持
     private var weekRebateLabel = UILabel()
     /// 一月跟进人数
     private var moonCountLabel = UILabel()
     /// 一月成交
     private var moonDealLabel = UILabel()
-    /// 一月组稿费
+    /// 一月支持
     private var moonRebateLabel = UILabel()
     
     
@@ -317,7 +317,7 @@ class CustomerHomeCell: UITableViewCell {
     ///   - titleStr: 标题内容
     ///   - count: 数量label
     ///   - deal: 成交label
-    ///   - rebate: 组稿费label
+    ///   - rebate: 支持label
     ///   - lastView: 跟随的最后一个视图
     ///   - isLast: 是否是最后一个
     private func setCount(titleStr: String, count: UILabel, deal: UILabel, rebate: UILabel, lastView: UIView, isLast: Bool = false) {
@@ -377,7 +377,7 @@ class CustomerHomeCell: UITableViewCell {
                 label.adjustsFontSizeToFitWidth = true
         }
         
-        rebate.taxi.adhere(toSuperView: whiteView) // 组稿费
+        rebate.taxi.adhere(toSuperView: whiteView) // 支持
             .taxi.layout(snapKitMaker: { (make) in
                 make.width.equalToSuperview().dividedBy(3.1).priority(800)
                 make.top.equalTo(title.snp.bottom).offset(5)

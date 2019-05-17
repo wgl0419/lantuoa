@@ -100,18 +100,18 @@ class AddVisitorEjectView: UIView {
                 view.backgroundColor = .white
             })
         
-        let titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // “新增拜访对象
-            .taxi.layout { (make) in
+        titleLabel = UILabel().taxi.adhere(toSuperView: grayView) // 标题
+            .taxi.layout(snapKitMaker: { (make) in
                 make.height.equalTo(55)
                 make.top.left.right.equalToSuperview()
-            }
-            .taxi.config { (label) in
+            })
+            .taxi.config({ (label) in
                 label.text = "新增拜访对象"
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
                 label.backgroundColor = UIColor(hex: "#F1F1F1")
-        }
+            })
         
         tableView = UITableView().taxi.adhere(toSuperView: grayView) // tableview
             .taxi.layout(snapKitMaker: { (make) in

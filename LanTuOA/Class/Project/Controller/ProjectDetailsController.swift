@@ -242,10 +242,16 @@ class ProjectDetailsController: UIViewController {
     /// 刷新数据 -> 修改锁定状态时调用
     private func reloadData() {
         setNav(projectData.isLock == 0 ? "锁定项目" : "解锁项目")
-        for tableView in tableViewArray {
-            tableView.lockState = projectData.isLock
-            tableView.setTableFooterView()
-            tableView.reloadData()
+        for index in 0..<tableViewArray.count {
+            let tableView = tableViewArray[index]
+            if index == 0 {
+                tableView.lockState = projectData.isLock
+                tableView.reload()
+            } else {
+                tableView.lockState = projectData.isLock
+                tableView.setTableFooterView()
+                tableView.reloadData()
+            }
         }
         let lock = lockState == 1 ? projectData.isLock : 2
         headerView.data = (projectData, lock)
@@ -275,7 +281,14 @@ class ProjectDetailsController: UIViewController {
     private func projectUpdate(isLock: Int) {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.projectUpdate(nil, projectData.id, nil, isLock, nil), t: ProjectDetailModel.self, successHandle: { (result) in
+            let fullName = self.projectData.fullName
+            let customerName = self.projectData.customerName
+            let canManage = self.projectData.canManage
             self.projectData = result.data
+            self.projectData.isLock = isLock
+            self.projectData.fullName = fullName
+            self.projectData.canManage = canManage
+            self.projectData.customerName = customerName
             self.reloadData()
             self.block()
             MBProgressHUD.dismiss()

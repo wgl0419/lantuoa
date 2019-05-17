@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "68B6D1A3BF8A6CC05245D1F6C2188960"
+               BlueprintIdentifier = "65A2138535D99A74FE3F49A70BB3C869"
                BuildableName = "YCMenuView.framework"
                BlueprintName = "YCMenuView"
                ReferencedContainer = "container:Pods.xcodeproj">

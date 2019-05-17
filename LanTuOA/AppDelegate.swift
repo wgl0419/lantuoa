@@ -28,8 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     /// 是否有新信息
-    var isNotification = false
-    /// 是否版本更新
+    static var isNotification = false
+    /// 网络状态
     static var netWorkState : NetWorkState = .unknown
     
     
@@ -119,7 +119,7 @@ extension AppDelegate {
                 item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2E4695")], for: .selected)
                 bar.addChild(nav)
             }
-            if isNotification {
+            if AppDelegate.isNotification {
                 bar.selectedIndex = 3
             }
             window?.rootViewController = bar
@@ -190,7 +190,7 @@ extension AppDelegate : JPUSHRegisterDelegate {
             let presentedViewController = current()
             let alert = UIAlertController(title: "提示", message: "有新信息，是否查看？", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "取消", style: .cancel) { (_) in
-                self.isNotification = true // 标题需要更新通知列表,防止加载或后不再重新获取
+                AppDelegate.isNotification = true // 标题需要更新通知列表,防止加载或后不再重新获取
             }
             let seeAction = UIAlertAction(title: "查看", style: .default) { (_) in
                 if presentedViewController is NoticeHomeController { // 如果是通知界面
@@ -199,7 +199,7 @@ extension AppDelegate : JPUSHRegisterDelegate {
                 } else {
                     presentedViewController?.navigationController?.tabBarController?.selectedIndex = 3
                     presentedViewController?.navigationController?.popToRootViewController(animated: false)
-                    self.isNotification = true // 标题需要更新通知列表,防止加载或后不再重新获取
+                    AppDelegate.isNotification = true // 标题需要更新通知列表,防止加载或后不再重新获取
                 }
             }
             alert.addAction(cancelAction)
@@ -216,7 +216,7 @@ extension AppDelegate : JPUSHRegisterDelegate {
         let userInfo = response.notification.request.content.userInfo
         if response.notification.request.trigger is UNPushNotificationTrigger {
             JPUSHService.handleRemoteNotification(userInfo)
-            isNotification = true
+            AppDelegate.isNotification = true
         }
         // 系统要求执行这个方法
         completionHandler()

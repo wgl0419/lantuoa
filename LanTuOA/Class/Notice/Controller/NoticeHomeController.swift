@@ -35,9 +35,8 @@ class NoticeHomeController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let appdelegate = UIApplication.shared.delegate as! AppDelegate
-        if appdelegate.isNotification {
-            appdelegate.isNotification = false
+        if AppDelegate.isNotification {
+            AppDelegate.isNotification = false
             relaodData()
         }
     }

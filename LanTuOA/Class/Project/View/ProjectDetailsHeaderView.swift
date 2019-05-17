@@ -25,6 +25,8 @@ class ProjectDetailsHeaderView: UIView {
                     lockLabel.textColor = projectData.isLock == 1 ? UIColor(hex: "#2E4695") : UIColor(hex: "#999999")
                     lockLabel.text = projectData.isLock == 1 ? "已锁定" : "未锁定"
                 }
+                
+                modifyBtn.isHidden = !(Jurisdiction.share.isEditProject || projectData.canManage == 1)
             }
         }
     }
@@ -126,21 +128,19 @@ class ProjectDetailsHeaderView: UIView {
                 label.textColor = UIColor(hex: "#2E4695")
             })
         
-        if Jurisdiction.share.isEditProject || data?.0.canManage == 1 {
-            modifyBtn = UIButton().taxi.adhere(toSuperView: self) // 修改按钮
-                .taxi.layout(snapKitMaker: { (make) in
-                    make.right.equalToSuperview().offset(-5)
-                    make.top.equalTo(manage.snp.bottom)
-                    make.width.equalTo(58)
-                })
-                .taxi.config({ (btn) in
-                    btn.setTitle(" 修改", for: .normal)
-                    btn.titleLabel?.font = UIFont.medium(size: 14)
-                    btn.setImage(UIImage(named: "edit"), for: .normal)
-                    btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
-                    btn.addTarget(self, action: #selector(modifyClick), for: .touchUpInside)
-                })
-        }
+        modifyBtn = UIButton().taxi.adhere(toSuperView: self) // 修改按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.right.equalToSuperview().offset(-5)
+                make.top.equalTo(manage.snp.bottom)
+                make.width.equalTo(58)
+            })
+            .taxi.config({ (btn) in
+                btn.setTitle(" 修改", for: .normal)
+                btn.titleLabel?.font = UIFont.medium(size: 14)
+                btn.setImage(UIImage(named: "edit"), for: .normal)
+                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+                btn.addTarget(self, action: #selector(modifyClick), for: .touchUpInside)
+            })
     }
     
     /// 设置标题和内容
