@@ -211,7 +211,7 @@ class UpdateHintsEjectView: UIView {
     }
     
     // 升级
-    @objc private func updateClick() { // TODO:需更新后面的id
+    @objc private func updateClick() {
         let url = URL(string: "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=1463525035")
         UIApplication.shared.openURL(url!)
     }

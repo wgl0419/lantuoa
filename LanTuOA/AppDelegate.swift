@@ -186,7 +186,6 @@ extension AppDelegate : JPUSHRegisterDelegate {
         let userInfo = notification.request.content.userInfo
         if notification.request.trigger is UNPushNotificationTrigger {
             JPUSHService.handleRemoteNotification(userInfo)
-            // TODO: 弹出alert
             let presentedViewController = current()
             let alert = UIAlertController(title: "提示", message: "有新信息，是否查看？", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "取消", style: .cancel) { (_) in
