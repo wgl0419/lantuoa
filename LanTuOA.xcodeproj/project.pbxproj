@@ -76,7 +76,6 @@
 		1806FBD92243305A005A4A77 /* ProjectDetailsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBD82243305A005A4A77 /* ProjectDetailsTableView.swift */; };
 		1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */; };
 		1806FBDD2243637D005A4A77 /* ProjectDetailsSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */; };
-		1806FBDF22436E06005A4A77 /* ProjectDetailsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDE22436E06005A4A77 /* ProjectDetailsCollectionCell.swift */; };
 		18070721226D4D2700E6C36C /* FillInApplyPersonnelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070720226D4D2700E6C36C /* FillInApplyPersonnelCell.swift */; };
 		18070723226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070722226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift */; };
 		18070725226DAE3000E6C36C /* SingleSeleTimeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070724226DAE2F00E6C36C /* SingleSeleTimeEjectView.swift */; };
@@ -295,7 +294,6 @@
 		1806FBD82243305A005A4A77 /* ProjectDetailsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsTableView.swift; sourceTree = "<group>"; };
 		1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsPersonnelCell.swift; sourceTree = "<group>"; };
 		1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsSegmentedView.swift; sourceTree = "<group>"; };
-		1806FBDE22436E06005A4A77 /* ProjectDetailsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsCollectionCell.swift; sourceTree = "<group>"; };
 		18070720226D4D2700E6C36C /* FillInApplyPersonnelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyPersonnelCell.swift; sourceTree = "<group>"; };
 		18070722226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyAddPersonnelEjectView.swift; sourceTree = "<group>"; };
 		18070724226DAE2F00E6C36C /* SingleSeleTimeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSeleTimeEjectView.swift; sourceTree = "<group>"; };
@@ -1019,7 +1017,6 @@
 				1806FBD82243305A005A4A77 /* ProjectDetailsTableView.swift */,
 				1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */,
 				1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */,
-				1806FBDE22436E06005A4A77 /* ProjectDetailsCollectionCell.swift */,
 				1802335F2244900D0064A50E /* ProjectDetailsVisitCell.swift */,
 				180115362248CFD000EA551F /* AddProjectEjectView.swift */,
 				183383022251E10C0053F2BF /* EditProjectEjectView.swift */,
@@ -1377,7 +1374,6 @@
 				180115372248CFD000EA551F /* AddProjectEjectView.swift in Sources */,
 				1803A31E225EE81300B86F20 /* AchievementsListCell.swift in Sources */,
 				1810EC73222F5D4100CF6488 /* Date.swift in Sources */,
-				1806FBDF22436E06005A4A77 /* ProjectDetailsCollectionCell.swift in Sources */,
 				1802335C2244710B0064A50E /* ProjectMemberListModel.swift in Sources */,
 				183383072251EF190053F2BF /* ProjectManageSeleController.swift in Sources */,
 				1849C1C5227EC11100883C61 /* SeleTimeEjectView.swift in Sources */,

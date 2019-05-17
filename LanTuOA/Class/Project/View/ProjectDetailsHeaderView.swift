@@ -102,12 +102,12 @@ class ProjectDetailsHeaderView: UIView {
         
         _ = UIView().taxi.adhere(toSuperView: self) // 分割线
             .taxi.layout(snapKitMaker: { (make) in
-                make.height.equalTo(1)
-                make.bottom.right.equalToSuperview().offset(-20)
-                make.left.equalToSuperview().offset(15).priority(800)
+                make.height.equalTo(10)
+                make.left.right.equalToSuperview()
+                make.bottom.equalToSuperview().offset(-10)
             })
             .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+                view.backgroundColor = UIColor(hex: "#F3F3F3")
             })
         
         lockImageView = UIImageView().taxi.adhere(toSuperView: self) // 锁定图标

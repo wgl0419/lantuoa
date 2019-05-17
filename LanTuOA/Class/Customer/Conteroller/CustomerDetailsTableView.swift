@@ -7,10 +7,11 @@
 //  客户详情 各个类型的tableview
 
 import UIKit
+import SnapKit
 import MJRefresh
 import MBProgressHUD
 
-class CustomerDetailsTableView: UITableView {
+class CustomerDetailsTableView: UIView {
 
     /// cell类型
     enum CellStyle: Int {
@@ -39,6 +40,16 @@ class CustomerDetailsTableView: UITableView {
     
     /// 历史顶部选择时间按钮
     private var seleTimeBtn: UIButton!
+    /// tableview
+    var tableView: UITableView!
+    /// 底部视图
+    private var footerView: UIView!
+    /// 添加按钮
+    private var addBtn: UIButton!
+    /// 灰色块
+    private var grayView: UIView!
+    /// 提示内容
+    private var tipsLabel: UILabel!
     
     /// cell类型
     private var cellStyle: CellStyle = .project
@@ -63,6 +74,8 @@ class CustomerDetailsTableView: UITableView {
     private var isFirst = true
     /// 历史选择的时间戳
     private var timeStamp = 0
+    /// 尾部视图约束
+    private var footerConstraint: Constraint!
     
     /// 加载刷新
     func getData() {
@@ -74,8 +87,9 @@ class CustomerDetailsTableView: UITableView {
     
     /// 刷新数据
     func reload() {
+        setFooterView()
         if cellStyle == .history { // 拜访历史
-            mj_footer.isHidden = true
+            tableView.mj_footer.isHidden = true
             visitList(isMore: false)
         } else if cellStyle == .project { // 在线项目
             projectListStatistics()
@@ -93,18 +107,106 @@ class CustomerDetailsTableView: UITableView {
         cellStyle = style
         offsetY = height
         self.customerId = customerId
+        initFooterViews()
         setTableView()
     }
     
     // MARK: - 自定义私有方法
+    /// 底部按钮控件初始化
+    private func initFooterViews() {
+        footerView = UIView().taxi.adhere(toSuperView: self) // 底部视图
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.right.equalToSuperview().priority(800)
+                footerConstraint = make.height.equalTo(0).constraint
+                make.bottom.equalToSuperview().offset(isIphoneX ? -SafeH : 0).priority(800)
+            })
+            .taxi.config({ (view) in
+                footerConstraint.deactivate()
+                view.backgroundColor = .white
+            })
+        
+        addBtn = UIButton().taxi.adhere(toSuperView: footerView) // 添加按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.right.bottom.equalToSuperview()
+                make.height.equalTo(40)
+            })
+            .taxi.config({ (btn) in
+                btn.setTitle("测试", for: .normal)
+                btn.titleLabel?.font = UIFont.medium(size: 14)
+                btn.setImage(UIImage(named: "add"), for: .normal)
+                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+                btn.addTarget(self, action: #selector(addClick), for: .touchUpInside)
+            })
+        
+        grayView = UIView().taxi.adhere(toSuperView: footerView) // 灰色块
+            .taxi.layout(snapKitMaker: { (make) in
+                make.height.equalTo(10)
+                make.left.right.equalToSuperview()
+                make.bottom.equalTo(addBtn.snp.top)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#F3F3F3")
+            })
+        
+        tipsLabel = UILabel().taxi.adhere(toSuperView: footerView)
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalToSuperview().offset(15)
+                make.bottom.equalTo(addBtn.snp.top).offset(-15)
+                make.right.equalToSuperview().offset(-15)
+                make.top.equalToSuperview().offset(10)
+            })
+            .taxi.config({ (label) in
+                label.numberOfLines = 0
+                label.textAlignment = .center
+                label.font = UIFont.regular(size: 12)
+                label.textColor = UIColor(hex: "#FF4444")
+            })
+        setFooterView()
+    }
+    
     /// 设置tableView
     private func setTableView() {
-        delegate = self
-        dataSource = self
-        estimatedRowHeight = 50
-        if cellStyle != .project {
-            separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        }
+        
+        tableView = UITableView().taxi.adhere(toSuperView: self) // tableview
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.left.right.equalToSuperview()
+                make.bottom.equalTo(footerView.snp.top)
+            })
+            .taxi.config({ (tableView) in
+                tableView.delegate = self
+                tableView.dataSource = self
+                tableView.estimatedRowHeight = 50
+                if cellStyle != .project {
+                    tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+                }
+                
+                tableView.contentInset = UIEdgeInsets(top: offsetY + 40, left: 0, bottom: 0, right: 0)
+                tableView.setContentOffset(CGPoint(x: 0, y: -offsetY - 40), animated: false)
+                
+                
+                tableView.register(CostomerDetailsProjectCell.self, forCellReuseIdentifier: "CostomerDetailsProjectCell")
+                tableView.register(ProjectDetailsVisitCell.self, forCellReuseIdentifier: "ProjectDetailsVisitCell")
+                tableView.register(CostomerDetailsVisitorCell.self, forCellReuseIdentifier: "CostomerDetailsVisitorCell")
+                tableView.register(CostomerDetailsContractCell.self, forCellReuseIdentifier: "CostomerDetailsContractCell")
+                tableView.register(ProjectDetailsPersonnelCell.self, forCellReuseIdentifier: "ProjectDetailsPersonnelCell")
+                
+                
+                tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
+                    self?.reload()
+                })
+                if cellStyle == .history || cellStyle == .contract {
+                    tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
+                        self?.tableView.mj_header.isHidden = true
+                        if self?.cellStyle == .history {
+                            self?.visitList(isMore: true)
+                        } else {
+                            self?.contractList(isMore: true)
+                        }
+                    })
+                }
+            })
+        setTableFooterView()
+        
         
         _ = UIView().taxi.adhere(toSuperView: self) // 添加底部安全区的白色背景 -> 防止出现尾视图在内容之上的问题
             .taxi.layout(snapKitMaker: { (make) in
@@ -114,31 +216,6 @@ class CustomerDetailsTableView: UITableView {
             .taxi.config({ (view) in
                 view.backgroundColor = .white
             })
-        
-        contentInset = UIEdgeInsets(top: offsetY + 40, left: 0, bottom: 0, right: 0)
-        setContentOffset(CGPoint(x: 0, y: -offsetY - 40), animated: false)
-        setTableFooterView()
-        
-        register(CostomerDetailsProjectCell.self, forCellReuseIdentifier: "CostomerDetailsProjectCell")
-        register(ProjectDetailsVisitCell.self, forCellReuseIdentifier: "ProjectDetailsVisitCell")
-        register(CostomerDetailsVisitorCell.self, forCellReuseIdentifier: "CostomerDetailsVisitorCell")
-        register(CostomerDetailsContractCell.self, forCellReuseIdentifier: "CostomerDetailsContractCell")
-        register(ProjectDetailsPersonnelCell.self, forCellReuseIdentifier: "ProjectDetailsPersonnelCell")
-        
-        
-        mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
-            self?.reload()
-        })
-        if cellStyle == .history || cellStyle == .contract {
-            mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
-                self?.mj_header.isHidden = true
-                if self?.cellStyle == .history {
-                    self?.visitList(isMore: true)
-                } else {
-                    self?.contractList(isMore: true)
-                }
-            })
-        }
         
         if cellStyle == .history { // 拜访历史
             setNoneData(str: "暂无拜访历史！", imageStr: "noneData")
@@ -154,14 +231,56 @@ class CustomerDetailsTableView: UITableView {
     }
     
     /// 设置尾视图
+    private func setFooterView() {
+        if cellStyle == .history { // 拜访历史
+            addBtn.snp.updateConstraints { (make) in
+                make.height.equalTo(0)
+            }
+            grayView.snp.updateConstraints { (make) in
+                make.height.equalTo(0)
+            }
+            addBtn.isHidden = true
+            tipsLabel.text = "注：可看到您和您的下级的拜访，您接手的拜访，\n以及您工作组中其他成员的拜访"
+        } else if cellStyle == .project { // 在线项目
+            addBtn.setTitle(" 添加项目", for: .normal)
+        } else if cellStyle == .visitor { // 联系人
+            tipsLabel.text = "注：可看到您和您的下级的拜访对象"
+            addBtn.setTitle(" 添加拜访对象", for: .normal)
+        } else if cellStyle == .contract { // 合同
+            addBtn.snp.updateConstraints { (make) in
+                make.height.equalTo(0)
+            }
+            grayView.snp.updateConstraints { (make) in
+                make.height.equalTo(0)
+            }
+            addBtn.isHidden = true
+            tipsLabel.text = "注：可看到您和您的下级参与的合同以及您接手的合同"
+        } else { // 参与人员
+            footerConstraint.activate()
+            footerView.isHidden = true
+        }
+    }
+    
+    /// 设置尾视图
     @objc func setTableFooterView() {
         self.layoutIfNeeded()
-        let old = self.tableFooterView?.height ?? 0
-        let footerHeight = ScreenHeight - NavigationH - self.contentSize.height - SafeH + old
+        let old = self.tableView.tableFooterView?.height ?? 0
+        var footerHeight = ScreenHeight - NavigationH - self.tableView.contentSize.height - 40 - SafeH + old
+        footerHeight = footerHeight - footerView.height
         if footerHeight > 0 {
-            self.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: footerHeight))
+            let footer = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: footerHeight))
+            _ = UIView().taxi.adhere(toSuperView: footer)
+                .taxi.layout(snapKitMaker: { (make) in
+                    make.height.equalTo(1)
+                    make.top.right.equalToSuperview()
+                    make.left.equalToSuperview().offset(15).priority(800)
+                })
+                .taxi.config({ (view) in
+                    view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+                })
+            tableView.tableFooterView = footer
         } else {
-            self.tableFooterView = UIView()
+            self.tableView.tableFooterView = UIView()
         }
     }
     
@@ -232,14 +351,14 @@ class CustomerDetailsTableView: UITableView {
         let attriMuStr = NSMutableAttributedString(string: str)
         attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
         attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
-        noDataLabel?.attributedText = attriMuStr
-        noDataImageView?.image = UIImage(named: imageStr)
+        tableView.noDataLabel?.attributedText = attriMuStr
+        tableView.noDataImageView?.image = UIImage(named: imageStr)
         
-        noDataLabel?.snp.updateConstraints({ (make) in
-            make.bottom.equalTo(self.snp.centerY).offset(-offsetY / 2)
+        tableView.noDataLabel?.snp.updateConstraints({ (make) in
+            make.bottom.equalTo(self.tableView.snp.centerY).offset(-offsetY / 2)
         })
-        noDataImageView?.snp.updateConstraints({ (make) in
-            make.bottom.equalTo(self.snp.centerY).offset(-55 + spacing * 2 - offsetY / 2)
+        tableView.noDataImageView?.snp.updateConstraints({ (make) in
+            make.bottom.equalTo(self.tableView.snp.centerY).offset(-55 + spacing * 2 - offsetY / 2)
         })
     }
     
@@ -250,12 +369,12 @@ class CustomerDetailsTableView: UITableView {
         _ = APIService.shared.getData(.projectList("", customerId, 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.projectData = result.data
-            self.mj_header.endRefreshing()
-            self.reloadData()
+            self.tableView.mj_header.endRefreshing()
+            self.tableView.reloadData()
             self.isNoData = self.projectData.count == 0
             self.setTableFooterView()
         }, errorHandle: { (error) in
-            self.mj_header.endRefreshing()
+            self.tableView.mj_header.endRefreshing()
             self.isNoData = self.projectData.count == 0
             MBProgressHUD.showError(error ?? "获取在线项目失败")
         })
@@ -266,12 +385,12 @@ class CustomerDetailsTableView: UITableView {
         _ = APIService.shared.getData(.customerContactList(customerId, 1, 9999), t: CustomerContactListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.contactListData = result.data
-            self.mj_header.endRefreshing()
-            self.reloadData()
+            self.tableView.mj_header.endRefreshing()
+            self.tableView.reloadData()
             self.isNoData = self.contactListData.count == 0
             self.setTableFooterView()
         }, errorHandle: { (error) in
-            self.mj_header.endRefreshing()
+            self.tableView.mj_header.endRefreshing()
             self.isNoData = self.contactListData.count == 0
             MBProgressHUD.showError(error ?? "获取拜访对象失败")
         })
@@ -289,30 +408,30 @@ class CustomerDetailsTableView: UITableView {
                 for model in result.data {
                     self.visitData.append(model)
                 }
-                self.mj_footer.endRefreshing()
-                self.mj_header.isHidden = false
+                self.tableView.mj_footer.endRefreshing()
+                self.tableView.mj_header.isHidden = false
                 self.page += 1
             } else {
                 self.page = 1
                 self.visitData = result.data
-                self.mj_header.endRefreshing()
-                self.mj_footer.isHidden = false
+                self.tableView.mj_header.endRefreshing()
+                self.tableView.mj_footer.isHidden = false
             }
             if result.data.count == 0 {
-                self.mj_footer.endRefreshingWithNoMoreData()
+                self.tableView.mj_footer.endRefreshingWithNoMoreData()
             } else {
-                self.mj_footer.resetNoMoreData()
+                self.tableView.mj_footer.resetNoMoreData()
             }
             self.isNoData = self.visitData.count == 0
-            self.reloadData()
+            self.tableView.reloadData()
             self.setTableFooterView()
         }, errorHandle: { (error) in
             if isMore {
-                self.mj_footer.endRefreshing()
-                self.mj_header.isHidden = false
+                self.tableView.mj_footer.endRefreshing()
+                self.tableView.mj_header.isHidden = false
             } else {
-                self.mj_header.endRefreshing()
-                self.mj_footer.isHidden = false
+                self.tableView.mj_header.endRefreshing()
+                self.tableView.mj_footer.isHidden = false
             }
             self.isNoData = self.visitData.count == 0
             MBProgressHUD.showError(error ?? "获取历史拜访失败")
@@ -330,30 +449,30 @@ class CustomerDetailsTableView: UITableView {
                 for model in result.data {
                     self.contractListData.append(model)
                 }
-                self.mj_footer.endRefreshing()
-                self.mj_header.isHidden = false
+                self.tableView.mj_footer.endRefreshing()
+                self.tableView.mj_header.isHidden = false
                 self.page += 1
             } else {
                 self.page = 1
                 self.contractListData = result.data
-                self.mj_header.endRefreshing()
-                self.mj_footer.isHidden = false
+                self.tableView.mj_header.endRefreshing()
+                self.tableView.mj_footer.isHidden = false
             }
             if result.data.count == 0 {
-                self.mj_footer.endRefreshingWithNoMoreData()
+                self.tableView.mj_footer.endRefreshingWithNoMoreData()
             } else {
-                self.mj_footer.resetNoMoreData()
+                self.tableView.mj_footer.resetNoMoreData()
             }
             self.isNoData = self.contractListData.count == 0
-            self.reloadData()
+            self.tableView.reloadData()
             self.setTableFooterView()
         }, errorHandle: { (error) in
             if isMore {
-                self.mj_footer.endRefreshing()
-                self.mj_header.isHidden = false
+                self.tableView.mj_footer.endRefreshing()
+                self.tableView.mj_header.isHidden = false
             } else {
-                self.mj_header.endRefreshing()
-                self.mj_footer.isHidden = false
+                self.tableView.mj_header.endRefreshing()
+                self.tableView.mj_footer.isHidden = false
             }
             self.isNoData = self.contractListData.count == 0
             MBProgressHUD.showError(error ?? "获取历史合同失败")
@@ -365,8 +484,8 @@ class CustomerDetailsTableView: UITableView {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.customerMembers(customerId), t: CustomerMembersModel.self, successHandle: { (result) in
             self.customerMembersData = result.data
-            self.mj_header.endRefreshing()
-            self.reloadData()
+            self.tableView.mj_header.endRefreshing()
+            self.tableView.reloadData()
             self.setTableFooterView()
             self.isNoData = self.customerMembersData.count == 0
             MBProgressHUD.dismiss()
@@ -470,37 +589,33 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return 0
-        } else if cellStyle == .history {
+        if cellStyle == .history && section == 0 {
             return 30
-        } else if cellStyle == .project {
-            if Jurisdiction.share.isAddProject {
-                return 40
-            }
-            return 0
-        } else if cellStyle == .visitor {
-            return 40
         } else {
             return 0
         }
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 1 {
-            return nil
-        } else if cellStyle == .history {
+        if cellStyle == .history && section == 0 {
             return timeFooterViewHandle()
-        } else if cellStyle == .project {
-            if Jurisdiction.share.isAddProject {
-                return addFooterViewHandle()
-            }
-            return nil
-        } else if cellStyle == .visitor {
-            return addFooterViewHandle()
         } else {
             return nil
         }
+//        if section == 1 {
+//            return nil
+//        } else if cellStyle == .history {
+//            return timeFooterViewHandle()
+//        } else if cellStyle == .project {
+//            if Jurisdiction.share.isAddProject {
+//                return addFooterViewHandle()
+//            }
+//            return nil
+//        } else if cellStyle == .visitor {
+//            return addFooterViewHandle()
+//        } else {
+//            return nil
+//        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -147,13 +147,13 @@ class CustomerEditController: UIViewController {
     ///
     /// - Parameter tableView: 要设置的tableview
     private func setTableViewOffsetY(tableView: CustomerDetailsTableView) {
-        let contentY = tableView.contentOffset.y
+        let contentY = tableView.tableView.contentOffset.y
         if offsetY < -40 { // SegmentedView不在顶部
             if offsetY != contentY { // 没有设置过
-                tableView.setContentOffset(CGPoint(x: 0, y: offsetY), animated: false)
+                tableView.tableView.setContentOffset(CGPoint(x: 0, y: offsetY), animated: false)
             }
         } else if contentY < -40 { // SegmentedView在顶部 而自身没有吧内容放在顶部 并且没有设置过
-            tableView.setContentOffset(CGPoint(x: 0, y: -40), animated: false)
+            tableView.tableView.setContentOffset(CGPoint(x: 0, y: -40), animated: false)
         }
         tableView.getData()
     }
