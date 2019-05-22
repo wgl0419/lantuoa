@@ -234,7 +234,7 @@ class LoginController: UIViewController {
     /// 获取个人信息
     private func loginUser() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.loginUser(), t: LoginUserModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.loginUser, t: LoginUserModel.self, successHandle: { (result) in
             Jurisdiction.share.setJurisdiction(data: result.data?.privilegeList ?? [])
             UserInfo.share.setUserName(result.data?.realname ?? "")
             self.postMainController()
@@ -264,19 +264,5 @@ class LoginController: UIViewController {
     @objc private func forgetClick() {
         let vc = RetrievePasswordController()
         navigationController?.pushViewController(vc, animated: true)
-//        UserInfo.share.setSecurityToken("CAIS+gF1q6Ft5B2yfSjIr4iNKs/s3IlH8oS+Q1TYnWghWv5ihKvA2zz2IHhJeHBsB+oYv/kwmGlS7P0clqVoRoReREvCKM1565kPA+tirU6E6aKP9rUhpMCPOwr6UmzWvqL7Z+H+U6muGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wMDL1VJH7aCwBLH9BLPABvhdYHPH/KT5aXPwXtn3DbATgD2GM+qxsmufjgmJTGskKE3AWikbBOnemrfMj4NfsLFYxkTtK40NZxcqf8yyNK43BIjvwu0fAdpWmd4IDAXAUIuU/dbfCz9tRpMBJia7IkFrReq/zxhWD1U35Df0icGoABFHQjF+yrEnhRak3BNFEM0vVTxv4jKt6o9nwo1G0YoKsOjS2LfJUxWFD8/iUSGgHNkyDV1i78AqaN298NGA2Sesa2Y+vC/6VU6DzdWAcmQx94/gh39bCsgUF3okEkWDvczGMOjQEXlYcXVUXzZM2zbsVuUwgfuRwDdZ3j6AixCTk=")
-//        AliOSSClient.shared.download(url: "dev/img/lADPBbCc1rzZcKHNAn7NAuo_746_638.jpg") { (data) in
-//            if data != nil {
-//                let image = UIImage(data: data!)
-//                _ = UIImageView().taxi.adhere(toSuperView: self.view)
-//                    .taxi.layout(snapKitMaker: { (make) in
-//                        make.center.equalToSuperview()
-//                    })
-//                    .taxi.config({ (imageView) in
-//                        imageView.image = image
-//                    })
-//            }
-//        }
-//        _ = APIService.shared.getData(.fileOssToken(), t: <#T##HandyJSON.Protocol#>, successHandle: <#T##((HandyJSON) -> Void)?##((HandyJSON) -> Void)?##(HandyJSON) -> Void#>, errorHandle: <#T##((String?) -> Void)?##((String?) -> Void)?##(String?) -> Void#>)
     }
 }

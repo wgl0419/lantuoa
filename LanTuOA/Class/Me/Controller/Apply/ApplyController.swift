@@ -64,7 +64,7 @@ class ApplyController: UIViewController {
     /// 流程列表
     private func processList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.processList(), t: ProcessListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.processList, t: ProcessListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.data = result.data
             var moreArray = [Bool]()

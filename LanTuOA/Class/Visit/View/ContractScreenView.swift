@@ -270,7 +270,7 @@ class ContractScreenView: UIView {
     /// 合同类型
     private func contractTypeList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.contractTypeList(), t: ContractTypeListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.contractTypeList, t: ContractTypeListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.isPcontractType = true
             self.contractTypeData = result.data

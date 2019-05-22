@@ -27,7 +27,7 @@ extension NSMutableAttributedString {
         let attriStr = self.string
         let range = attriStr.range(of: str)
         if range != nil {
-            let nsRange = NSRange(range!, in: str)
+            let nsRange = NSRange(range!, in: attriStr)
             self.addAttributes([NSAttributedString.Key.font : font], range: nsRange)
         }
     }
@@ -37,7 +37,7 @@ extension NSMutableAttributedString {
         let attriStr = self.string
         let range = attriStr.range(of: str)
         if range != nil {
-            let nsRange = NSRange(range!, in: str)
+            let nsRange = NSRange(range!, in: attriStr)
             self.addAttributes([NSAttributedString.Key.foregroundColor: color], range: nsRange)
         }
     }

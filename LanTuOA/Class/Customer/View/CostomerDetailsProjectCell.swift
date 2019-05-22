@@ -74,6 +74,7 @@ class CostomerDetailsProjectCell: UITableViewCell {
 //        }
 //            .taxi.config { (label) in
 //                label.text = "工作组："
+//                label.font = UIFont.medium(size: 12)
 //                label.textColor = UIColor(hex: "#999999")
 //                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 //        }
@@ -98,6 +99,7 @@ class CostomerDetailsProjectCell: UITableViewCell {
 //        }
 //            .taxi.config { (label) in
 //                label.text = "参与人员："
+//                label.font = UIFont.medium(size: 12)
 //                label.textColor = UIColor(hex: "#999999")
 //                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 //        }
@@ -123,6 +125,7 @@ class CostomerDetailsProjectCell: UITableViewCell {
             }
             .taxi.config { (label) in
                 label.text = "参与人员："
+                label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
                 label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         }

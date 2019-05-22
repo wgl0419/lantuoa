@@ -25,6 +25,7 @@ struct ProcessListList: HandyJSON {
     var paramsLength: Int = 0
     var type: Int = 0
     var createdTime: Int = 0
+    var canUpload: Int = 0
 }
 
 struct ProcessListData: HandyJSON {

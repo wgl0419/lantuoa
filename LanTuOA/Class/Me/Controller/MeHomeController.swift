@@ -15,9 +15,11 @@ class MeHomeController: UIViewController {
     private var tableView: UITableView!
     
     /// 标题
-    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同", "工作组"], ["组织架构"], ["设置"]]
+//    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同", "工作组"], ["组织架构"], ["设置"]]
+    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同"], ["组织架构"], ["设置"]]
     /// 图标
-    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication", "me_workGroup"], ["me_departmentManagement"], ["me_setUp"]]
+//    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication", "me_workGroup"], ["me_departmentManagement"], ["me_setUp"]]
+    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication"], ["me_departmentManagement"], ["me_setUp"]]
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -81,7 +83,7 @@ class MeHomeController: UIViewController {
     /// 获取个人信息
     private func loginUser() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.loginUser(), t: LoginUserModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.loginUser, t: LoginUserModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             UserInfo.share.setUserName(result.data?.realname ?? "")
             let positio = (result.data?.roleList.count ?? 0) > 0 ? result.data?.roleList[0].name ?? "" : "员工"

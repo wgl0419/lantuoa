@@ -13,7 +13,7 @@ class AliOSSClient: NSObject {
     /// 上传回调
     public typealias uploadCallblock = ((Bool) -> Void)?
     
-//    private var client: OSSClient!
+    private var client: OSSClient!
     
     /// 单例
     class var shared: AliOSSClient {
@@ -21,60 +21,68 @@ class AliOSSClient: NSObject {
     }
     
     override init() {
-//        let endpoint = "oss-cn-shenzhen.aliyuncs.com"
-//        let aa = UserInfo.share.securityToken
-//        let credential = OSSStsTokenCredentialProvider(accessKeyId: "LTAIT8Igueogcd8m", secretKeyId: "wsNt4r373rW7AbBbCP7cdGcOz1EpO2", securityToken: "CAIS+gF1q6Ft5B2yfSjIr4iNKs/s3IlH8oS+Q1TYnWghWv5ihKvA2zz2IHhJeHBsB+oYv/kwmGlS7P0clqVoRoReREvCKM1565kPA+tirU6E6aKP9rUhpMCPOwr6UmzWvqL7Z+H+U6muGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wMDL1VJH7aCwBLH9BLPABvhdYHPH/KT5aXPwXtn3DbATgD2GM+qxsmufjgmJTGskKE3AWikbBOnemrfMj4NfsLFYxkTtK40NZxcqf8yyNK43BIjvwu0fAdpWmd4IDAXAUIuU/dbfCz9tRpMBJia7IkFrReq/zxhWD1U35Df0icGoABFHQjF+yrEnhRak3BNFEM0vVTxv4jKt6o9nwo1G0YoKsOjS2LfJUxWFD8/iUSGgHNkyDV1i78AqaN298NGA2Sesa2Y+vC/6VU6DzdWAcmQx94/gh39bCsgUF3okEkWDvczGMOjQEXlYcXVUXzZM2zbsVuUwgfuRwDdZ3j6AixCTk=")
-//        client = OSSClient(endpoint: endpoint, credentialProvider: credential)
+        super.init()
+        let endpoint = "http://oss-cn-shenzhen.aliyuncs.com/"
+        let credential = OSSAuthCredentialProvider(authServerUrl: "http://api.lantudev.danjuantaxi.com/api/stsRegistoer")
+        client = OSSClient(endpoint: endpoint, credentialProvider: credential)
     }
     
     /// 上传图片
-    func uploadImages(images: [UIImage], callback: uploadCallblock) {
-        let endpoint = "oss-cn-shenzhen.aliyuncs.com"
-        let credential = OSSStsTokenCredentialProvider(accessKeyId: "LTAIT8Igueogcd8m", secretKeyId: "wsNt4r373rW7AbBbCP7cdGcOz1EpO2", securityToken: "CAIS+gF1q6Ft5B2yfSjIr4iNKs/s3IlH8oS+Q1TYnWghWv5ihKvA2zz2IHhJeHBsB+oYv/kwmGlS7P0clqVoRoReREvCKM1565kPA+tirU6E6aKP9rUhpMCPOwr6UmzWvqL7Z+H+U6muGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wMDL1VJH7aCwBLH9BLPABvhdYHPH/KT5aXPwXtn3DbATgD2GM+qxsmufjgmJTGskKE3AWikbBOnemrfMj4NfsLFYxkTtK40NZxcqf8yyNK43BIjvwu0fAdpWmd4IDAXAUIuU/dbfCz9tRpMBJia7IkFrReq/zxhWD1U35Df0icGoABFHQjF+yrEnhRak3BNFEM0vVTxv4jKt6o9nwo1G0YoKsOjS2LfJUxWFD8/iUSGgHNkyDV1i78AqaN298NGA2Sesa2Y+vC/6VU6DzdWAcmQx94/gh39bCsgUF3okEkWDvczGMOjQEXlYcXVUXzZM2zbsVuUwgfuRwDdZ3j6AixCTk=")
-        let client = OSSClient(endpoint: endpoint, credentialProvider: credential)
+    func uploadImage(image: UIImage, name: String, body: Int, callback: uploadCallblock) {
         
-        let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = images.count
+        let put = OSSPutObjectRequest()
+        put.bucketName = "danjuan-lantuoa"
+        put.objectKey = name
         
-        for image in images {
-            let operation = BlockOperation {
-                let put = OSSPutObjectRequest()
-                put.bucketName = "danjuan-lantuoa"
-                var imageName = "".randomStringWithLength(len: 8)
-                let suffix = String(format: "-%zdx%zd.png", image.size.width, image.size.height)
-                imageName = imageName + suffix
-                put.objectKey = imageName
-                
-                let data = image.jpegData(compressionQuality: 0.5) ?? Data()
-                put.uploadingData = data
-                
-                let putTask = client.putObject(put)
-                putTask.waitUntilFinished()// 阻塞直到上传完成
-                
-                if putTask.error != nil { // 有一个没有上传成功 -> 停止线程 —> 返回false
-                    queue.cancelAllOperations()
-                    if callback != nil {
-                        callback!(false)
-                    }
+        let data = image.jpegData(compressionQuality: 0.5) ?? Data()
+        put.uploadingData = data
+        put.callbackParam = ["callbackUrl": "http://api.lantudev.danjuantaxi.com/api/callback/fileUpload", "callbackBody": "\(body)", "callbackBodyType": "application/json"]
+        put.contentType = "application/json"
+        let putTask = self.client.putObject(put)
+        
+        putTask.continue({ (task) -> Any? in
+            if task.error != nil {
+                if callback != nil {
+                    callback!(false)
                 }
-                if (image == images.last!) {
-                    if callback != nil {
-                        callback!(true)
-                    }
+            } else {
+                if callback != nil {
+                    callback!(true)
                 }
             }
-            if queue.operations.count != 0 {
-                operation.addDependency(queue.operations.last!)
+            return nil
+        })
+    }
+    
+    /// 上传文件
+    func uploadFile(name: String, path: String, body: Int, callback: uploadCallblock) {
+        let put = OSSPutObjectRequest()
+        put.bucketName = "danjuan-lantuoa"
+        put.objectKey = path
+        
+        let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+        let enclosurePath = cachePath! + ("/enclosure/") + name
+        put.uploadingFileURL = URL(string: enclosurePath)!
+        put.callbackParam = ["callbackUrl": "http://api.lantudev.danjuantaxi.com/api/callback/fileUpload", "callbackBody": "\(body)", "callbackBodyType": "application/json"]
+        let putTask = self.client.putObject(put)
+        
+        putTask.continue({ (task) -> Any? in
+            if task.error != nil {
+                print(task.error.debugDescription)
+                if callback != nil {
+                    callback!(false)
+                }
+            } else {
+                if callback != nil {
+                    callback!(true)
+                }
             }
-            queue.addOperation(operation)
-        }
+            return nil
+        })
     }
     
     /// 下载
     func download(url: String, result: @escaping ((Data?) -> ())) {
-        let endpoint = "oss-cn-shenzhen-internal.aliyuncs.com" // oss-cn-shenzhen.aliyuncs.com/
-        let credential = OSSStsTokenCredentialProvider(accessKeyId: "LTAIT8Igueogcd8m", secretKeyId: "wsNt4r373rW7AbBbCP7cdGcOz1EpO2", securityToken: "CAIS+gF1q6Ft5B2yfSjIr4iNKs/s3IlH8oS+Q1TYnWghWv5ihKvA2zz2IHhJeHBsB+oYv/kwmGlS7P0clqVoRoReREvCKM1565kPA+tirU6E6aKP9rUhpMCPOwr6UmzWvqL7Z+H+U6muGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wMDL1VJH7aCwBLH9BLPABvhdYHPH/KT5aXPwXtn3DbATgD2GM+qxsmufjgmJTGskKE3AWikbBOnemrfMj4NfsLFYxkTtK40NZxcqf8yyNK43BIjvwu0fAdpWmd4IDAXAUIuU/dbfCz9tRpMBJia7IkFrReq/zxhWD1U35Df0icGoABFHQjF+yrEnhRak3BNFEM0vVTxv4jKt6o9nwo1G0YoKsOjS2LfJUxWFD8/iUSGgHNkyDV1i78AqaN298NGA2Sesa2Y+vC/6VU6DzdWAcmQx94/gh39bCsgUF3okEkWDvczGMOjQEXlYcXVUXzZM2zbsVuUwgfuRwDdZ3j6AixCTk=")
-        let client = OSSClient(endpoint: endpoint, credentialProvider: credential)
         
         let request = OSSGetObjectRequest()
         request.bucketName = "danjuan-lantuoa"

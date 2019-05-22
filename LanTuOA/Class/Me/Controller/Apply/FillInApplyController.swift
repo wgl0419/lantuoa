@@ -8,6 +8,8 @@
 
 import UIKit
 import MBProgressHUD
+import AssetsLibrary
+import ZLPhotoBrowser
 
 class FillInApplyController: UIViewController {
     
@@ -17,6 +19,8 @@ class FillInApplyController: UIViewController {
     var processId = 0
     /// 流程类型
     var pricessType = 0
+    /// 是否允许上传图片、附件，1允许，0不允许
+    var canUpload = 0
 
     /// tableview
     private var tableView: UITableView!
@@ -41,6 +45,20 @@ class FillInApplyController: UIViewController {
     private var customerId = -1
     /// 项目id
     private var projectId = -1
+    /// 图片数据
+    private var imageArray: [UIImage] = []
+    /// 图片信息数据
+    private var PHAssetArray: Array<PHAsset> = []
+    /// 原图选项
+    private var isOriginal = false
+    /// 选中文件
+    private var fileArray = [String]()
+    /// 上报的图片
+    private var uploadImageIds = [Int]()
+    /// 上报附件
+    private var uploadFileIds = [Int]()
+
+    
     /// 没有审批人
     private var isProcess = true {
         didSet {
@@ -95,6 +113,7 @@ class FillInApplyController: UIViewController {
             .taxi.config({ (tableView) in
                 tableView.delegate = self
                 tableView.dataSource = self
+                tableView.separatorStyle = .none
                 tableView.estimatedRowHeight = 50
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
@@ -104,6 +123,9 @@ class FillInApplyController: UIViewController {
                 tableView.register(FillInApplyApprovalCell.self, forCellReuseIdentifier: "FillInApplyApprovalCell")
                 tableView.register(FillInApplyPersonnelCell.self, forCellReuseIdentifier: "FillInApplyPersonnelCell")
                 tableView.register(FillInApplyMoneyBackCell.self, forCellReuseIdentifier: "FillInApplyMoneyBackCell")
+                tableView.register(ToExamineImageCell.self, forCellReuseIdentifier: "ToExamineImageCell")
+                tableView.register(ToExamineEnclosureCell.self, forCellReuseIdentifier: "ToExamineEnclosureCell")
+                tableView.register(ToExamineEnclosureTitleCell.self, forCellReuseIdentifier: "ToExamineEnclosureTitleCell")
             })
     }
     
@@ -388,6 +410,48 @@ class FillInApplyController: UIViewController {
         return cell
     }
     
+    /// 图片cell
+    private func getImageCell(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImageCell", for: indexPath) as! ToExamineImageCell
+        cell.data = imageArray
+        cell.imageBlock = { [weak self] in
+            self?.imageClick()
+        }
+        cell.deleteBlock = { [weak self] (row) in
+            self?.imageArray.remove(at: row)
+            self?.PHAssetArray.remove(at: row)
+            self?.reloadImageCell()
+        }
+        return cell
+    }
+    
+    /// 附件标题cell
+    private func getEnclosureTitleCell(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureTitleCell", for: indexPath) as! ToExamineEnclosureTitleCell
+        cell.enclosureBlock = {
+            let vc = SeleEnclosureController()
+            vc.determineBlock = { [weak self] (fileArray) in
+                for file in fileArray {
+                    self?.fileArray.append(file)
+                }
+                self?.reloadImageCell()
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        return cell
+    }
+    
+    /// 附件cell
+    private func getEnclosureCell(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureCell", for: indexPath) as! ToExamineEnclosureCell
+        cell.path = fileArray[indexPath.row - 2]
+        cell.deleteBlock = { [weak self] in
+            self?.fileArray.remove(at: indexPath.row - 2)
+            self?.reloadImageCell()
+        }
+        return cell
+    }
+    
     /// 抄送人cell
     private func getCarbonCopyCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
@@ -403,6 +467,128 @@ class FillInApplyController: UIViewController {
         }
         return cell
     }
+    
+    /// 点击添加图片
+    @objc private func imageClick() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let action = UIAlertAction(title: "摄像", style: .default) { _ in
+            self.showImagePicker(.camera)
+        }
+        let albumAction = UIAlertAction(title: "从手机相册选择", style: .default) { _ in
+            self.changeImage()
+        }
+        
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        alert.addAction(action)
+        alert.addAction(albumAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    /// 打开照相机
+    private func showImagePicker(_ sourceType: UIImagePickerController.SourceType) {
+        // 弹出相片选择器
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.modalPresentationStyle = .currentContext
+        imagePickerController.sourceType = sourceType
+        imagePickerController.delegate = self
+        self.present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    /// 刷新图片cell
+    private func reloadImageCell() {
+        let section = pricessType == 5 ? data.count + 3 : data.count + 1
+        tableView.reloadSections(IndexSet(arrayLiteral: section), with: .fade)
+    }
+    
+    /// 相册修改图片
+    private func changeImage(indexPath: Int = -1) {
+        let photoSheet = ZLPhotoActionSheet()
+        photoSheet.sender = self
+        photoSheet.configuration.allowEditImage = false
+        photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
+            self?.imageArray = images!
+            self?.PHAssetArray = assets
+            self?.isOriginal = isOriginal
+            self?.reloadImageCell()
+        }
+        if indexPath < 0 { // 添加图片
+            let arrSelectedAssets = NSMutableArray()
+            for item in PHAssetArray {
+                arrSelectedAssets.add(item)
+            }
+            photoSheet.arrSelectedAssets = arrSelectedAssets
+            photoSheet.configuration.maxSelectCount = 4
+            photoSheet.configuration.allowSelectGif = false
+            photoSheet.configuration.allowSelectVideo = false
+            photoSheet.configuration.allowSlideSelect = false
+            photoSheet.configuration.allowSelectLivePhoto = false
+            photoSheet.configuration.allowTakePhotoInLibrary = false
+            photoSheet.showPhotoLibrary()
+        } else { // 浏览图片
+            photoSheet.previewSelectedPhotos(imageArray, assets: PHAssetArray, index: indexPath, isOriginal: isOriginal)
+        }
+    }
+    
+    /// 上传文件
+    private func uploadData() {
+        let aa = ["callbackUrl": "http://api.lantudev.danjuantaxi.com/api/callback/fileUploady", "callbackBody": ["fileId": "1"]] as [String : Any]
+        print(aa)
+        uploadImageIds = []
+        uploadFileIds = []
+        for index in 0..<imageArray.count {
+            let image = imageArray[index]
+            let imageName = "".randomStringWithLength(len: 8) + ".png"
+            fileUploadGetKey(type: 1, name: imageName) { (status, body, path) in
+                if status {
+                    AliOSSClient.shared.uploadImage(image: image, name: path!, body: body!, callback: { (status) in
+                        if status {
+                            self.uploadImageIds.append(body!)
+                            if index == self.imageArray.count - 1 {
+                                if self.uploadImageIds.count != self.imageArray.count {
+                                    DispatchQueue.main.async(execute: {
+                                        MBProgressHUD.showError("上传失败")
+                                    })
+                                } else {
+                                    self.getProcessCommit()
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        for index in 0..<fileArray.count {
+            let file = fileArray[index]
+            fileUploadGetKey(type: 2, name: file) { (status, body, path) in
+                if status {
+                    AliOSSClient.shared.uploadFile(name: file, path: path!, body: body!, callback: { (status) in
+                        if status {
+                            self.uploadFileIds.append(body!)
+                            if index == self.fileArray.count - 1 {
+                                if self.uploadFileIds.count != self.fileArray.count {
+                                    DispatchQueue.main.async(execute: {
+                                        MBProgressHUD.showError("上传失败")
+                                    })
+                                } else {
+                                    self.getProcessCommit()
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    }
+    
+    private func getProcessCommit() {
+        if uploadImageIds.count == imageArray.count && uploadFileIds.count  == fileArray.count {
+            DispatchQueue.main.async(execute: {
+                self.processCommit()
+            })
+        }
+    }
+    
     
     // MARK: - Api
     /// 获取流程内容
@@ -483,12 +669,47 @@ class FillInApplyController: UIViewController {
             moneyBackArray.append(dic)
         }
         
-        _ = APIService.shared.getData(.processCommit(processId, dataDic, memberArray, ccUsersArray, moneyBackArray), t: LoginModel.self, successHandle: { (result) in
+        /// 文件
+        var files = [[String:String]]()
+        for index in 0..<uploadFileIds.count {
+            let fileId = uploadFileIds[index]
+            var dic: [String:String] = [:]
+            dic["fileId"] = "\(fileId)"
+            files.append(dic)
+        }
+        
+        /// 图片
+        var imgs = [[String:String]]()
+        for index in 0..<uploadImageIds.count {
+            let fileId = uploadImageIds[index]
+            var dic: [String:String] = [:]
+            dic["fileId"] = "\(fileId)"
+            imgs.append(dic)
+        }
+        
+        _ = APIService.shared.getData(.processCommit(processId, dataDic, memberArray, ccUsersArray, moneyBackArray, files, imgs), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.showSuccess("申请成功")
             self.navigationController?.popViewController(animated: true)
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "申请失败")
         })
+    }
+    
+    /// 上传文件报备
+    ///
+    /// - Parameters:
+    ///   - type: 文件类型 1.图片，2.文件
+    ///   - name: 文件名称
+    private func fileUploadGetKey(type: Int, name: String, block: @escaping ((Bool, Int?, String?) -> ())) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.fileUploadGetKey(type, name), t: FileUploadGetKeyModel.self, successHandle: { (result) in
+            block(true, result.data?.id, result.data?.objectName)
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            block(false, nil, nil)
+            MBProgressHUD.showError(error ?? "上传失败")
+        })
+//        AliOSSClient.shared.download(url: "dev/img/lADPBbCc1rzZcKHNAn7NAuo_746_638.jpg") { (data) in
     }
     
     // MARK: - 按钮点击
@@ -502,7 +723,7 @@ class FillInApplyController: UIViewController {
                 achievemenhtsPercentage -= Int(model.1) ?? 0
                 royaltyPercentage -= Int(model.2) ?? 0
             }
-            
+
             if achievemenhtsPercentage != 0 {
                 MBProgressHUD.showError("业绩比例未分配完全")
                 return
@@ -511,20 +732,27 @@ class FillInApplyController: UIViewController {
                 return
             }
         }
-        processCommit()
+        uploadData()
     }
 }
 
 extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if processUsersData != nil {
-            return pricessType == 5 ? data.count + 4 : data.count + 2
+            let pricesCount = pricessType == 5 ? data.count + 4 : data.count + 2
+            return pricesCount + canUpload
         } else {
             return data.count
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if canUpload == 1 {
+            let upload = pricessType == 5 ? data.count + 3 : data.count + 1
+            if section == upload {
+                return 2 + fileArray.count
+            }
+        }
         return 1
     }
     
@@ -557,12 +785,34 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                     self?.deleteMoneyBackHandle(index: index)
                 }
                 return cell
-            } else { // 审批人
-                return getCarbonCopyCell(indexPath)
+            } else {
+                if canUpload == 1 { // 上传部分
+                    if indexPath.row == 0 {
+                        return getImageCell(indexPath)
+                    } else if indexPath.row == 1 {
+                        return getEnclosureTitleCell(indexPath)
+                    } else {
+                        return getEnclosureCell(indexPath)
+                    }
+                } else { // 抄送人cell
+                    return getCarbonCopyCell(indexPath)
+                }
             }
         } else if section > data.count {
             if pricessType == 5 && section == data.count + 2 { // 审批人
                 return getApprovalCell(indexPath)
+            } else if pricessType == 5 && section == data.count + 3 {
+                if canUpload == 1 { // 上传部分
+                    if indexPath.row == 0 {
+                        return getImageCell(indexPath)
+                    } else if indexPath.row == 1 {
+                        return getEnclosureTitleCell(indexPath)
+                    } else {
+                        return getEnclosureCell(indexPath)
+                    }
+                } else { // 抄送人cell
+                    return getCarbonCopyCell(indexPath)
+                }
             } else { // 抄送
                 return getCarbonCopyCell(indexPath)
             }
@@ -632,5 +882,24 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
             seleProjectHandle(section: section)
         default: break
         }
+    }
+}
+
+extension FillInApplyController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        let library = ALAssetsLibrary()
+        library.writeImage(toSavedPhotosAlbum: image?.cgImage, orientation: ALAssetOrientation(rawValue: image?.imageOrientation.rawValue ?? 0)!) { (assetURL, error) in
+            if error == nil {
+                let result = PHAsset.fetchAssets(withALAssetURLs: [assetURL!], options: nil)
+                self.imageArray.append(image!)
+                self.PHAssetArray.append(result.firstObject!)
+                self.reloadImageCell()
+            }
+        }
+        picker.dismiss(animated: true, completion: nil)
+        
     }
 }

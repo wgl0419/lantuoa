@@ -367,7 +367,7 @@ class NoticeHomeController: UIViewController {
     
     /// 全部已读
     private func notifyReadAll() {
-        _ = APIService.shared.getData(.notifyReadAll(), t: LoginModel.self, successHandle: { (_) in
+        _ = APIService.shared.getData(.notifyReadAll, t: LoginModel.self, successHandle: { (_) in
             self.setTips()
         }, errorHandle: nil)
     }

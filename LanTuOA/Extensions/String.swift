@@ -60,7 +60,7 @@ extension String {
     /// - Parameter str: 正则式
     /// - Returns: 是否成立
     func isRegex(str: String) -> Bool {
-        let predicate =  NSPredicate(format: "SELF MATCHES %@" ,str)
+        let predicate = NSPredicate(format: "SELF MATCHES %@" ,str)
         return predicate.evaluate(with: self)
     }
     

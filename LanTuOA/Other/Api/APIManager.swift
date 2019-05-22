@@ -12,14 +12,14 @@ import Foundation
 enum APIManager {
     /// MARK: - 用户及权限
     case login(String, String) // 登录 （phone:账号   pwd:密码）
-    case logout() // 退出登录
-    case loginUser() // 获取个人信息
+    case logout // 退出登录
+    case loginUser // 获取个人信息
     case users(Int, Int, String, Int) // 用户列表 (page:页码 limit:一页几条数据 realname:真实名称  used:是否启用)
     case usersPwd(String, String) // 修改密码 （oldPwd:原密码  新密码:新密码）
     case usersLeave(Int) // 离职员工
-    case usersPermissions() // 获取权限
-    case version() // 获取版本信息 (1.安卓2.iOS3.web)
-    case startupSum() // 首页统计
+    case usersPermissions // 获取权限
+    case version // 获取版本信息 (1.安卓2.iOS3.web)
+    case startupSum // 首页统计
     case code(String) // 获取验证码
     case passwordReset(String, String, String) // 找回密码
     
@@ -34,7 +34,7 @@ enum APIManager {
     case customerContactUpdate(String, String, Int) // 修改客户联系人信息 （phone:手机号  position:职位  contactId:联系人Id）
     case customerListStatistics(String, Int?, Int?, Int, Int) // 客户统计信息列表 （name:客户名称  type:客户类型，1.公司客户，2.待开发客户，3.开发中客户  industry：行业id（保留）  page:页码  limit:一页几条数据）
     case customerSaveRequire(String, String, String, Int) // 申请新增客户（拜访页面） （name:客户名称  full_name:客户全称  address:公司地址  industry:行业id）
-    case customerIndustryList() // 行业列表
+    case customerIndustryList // 行业列表
     case customerDetail(Int) // 客户详情
     case customerMembers(Int) // 客户跟进人员
     
@@ -73,8 +73,8 @@ enum APIManager {
     case notifyCheckList(Int?, Int, Int) // 审核列表 (page:页码  limit:一页数据)
     case notifyCheckDetail(Int) // 审批详情
     case notifyCheckUserList(Int) // 审批人列表
-    case notifyNumber() // 未读消息数
-    case notifyReadAll() // 全部已读
+    case notifyNumber // 未读消息数
+    case notifyReadAll // 全部已读
     
     // MARK: - 工作交接
     case workExtendList(String, Int?) // 下级员工列表
@@ -91,10 +91,10 @@ enum APIManager {
     
     // mARK: - 工作申请
     case processHistory(Int?, Int, Int) // 历史申请列表 (status:1.申请中，2.通过，3.被拒绝   page:页码  limit:一页数据)
-    case processList() // 流程列表
+    case processList // 流程列表
     case processParams(Int) // 获取流程内容
     case processUsers(Int) // 获取流程默认审批/抄送人
-    case processCommit(Int, [String:String], [[String:String]], [[String:String]], [[String:String]]) // 提交流程
+    case processCommit(Int, [String:String], [[String:String]], [[String:String]], [[String:String]], [[String:String]], [[String:String]]) // 提交流程
     
     // MARK: - 合同
     case contractList(String, Int?, Int?, Int?, Int, Int, Int?, Int?, Int?) // 合同列表/查询合同 (name:客户名称/项目名称/合同编码   customerId:客户id  projectId:项目id   userId:用户id，查询他人合同时使用  page:页码   limit:一页数据)
@@ -106,11 +106,13 @@ enum APIManager {
     case contractPaybackAdd(Int, String, Float, Int) // 添加回款 (contractId:合同id  desc:备注  money:金额  payTime:回款时间)
     case performUnder(String) // 绩效查询 (name:查询名称)
     case performDetail(Int?, Int?, String) // 绩效查询-详情-月份绩效 （userId:用户id  self:是否是自己  month:月份,格式yyyy-MM）
-    case contractTypeList() // 合同类型列表
+    case contractTypeList // 合同类型列表
     case contractDescList(Int) // 合同备注信息列表
     case contractDescCreate(Int, String) // 新建合同备注 （contractIdL: 合同id   desc: 备注信息）
 
-    case fileOssToken() // 获取安全令牌securityToken
+    case fileOssToken // 获取安全令牌securityToken
+    case fileUploadGetKey(Int, String) // 上传文件报备
+    
     case x // MARK: 补位 -> 暂时代替一些没有使用的类型
 }
 
@@ -213,6 +215,7 @@ extension APIManager: TargetType {
         case .contractDescCreate: return "api/contract/desc/create"
             
         case .fileOssToken: return "/api/file/ossToken"
+        case .fileUploadGetKey: return "/api/file/upload/getKey"
             
         default: return ""
         }
@@ -259,7 +262,7 @@ extension APIManager: TargetType {
             params = ["page": page, "limit": limit, "realname": realname, "used": used, "status": 1]
         case let .usersPwd(oldPwd, newPwd): // 修改密码
             params = ["oldPwd": oldPwd, "newPwd": newPwd]
-        case .version():
+        case .version:
             params = ["os": 2]
         case .code(let phone): // 获取验证码
             params = ["phone": phone]
@@ -373,11 +376,13 @@ extension APIManager: TargetType {
         case let .processHistory(status, page, limit): // 历史申请列表
             params = ["page": page, "limit": limit]
             if status != nil { params["status"] = status! }
-        case let .processCommit(processId, data, member, ccUsers, payback):
+        case let .processCommit(processId, data, member, ccUsers, payback, files, imgs):
             params = ["processId": processId, "data": data]
             if member.count > 0 { params["member"] = member }
             if ccUsers.count > 0 { params["ccUsers"] = ccUsers }
             if payback.count > 0 { params["payback"] = payback }
+            if files.count > 0 { params["files"] = files }
+            if imgs.count > 0 { params["imgs"] = imgs }
             return .requestParameters(parameters: params, encoding: JSONEncoding.default)
             
             
@@ -413,6 +418,9 @@ extension APIManager: TargetType {
             if `self` != nil { params["self"] = `self`! }
         case let .contractDescCreate(contractId, desc): // 新建合同备注
             params = ["contractId": contractId, "desc": desc]
+            
+        case let .fileUploadGetKey(fileType, fileName): // 上传文件报备
+            params = ["fileType": fileType, "fileName": fileName]
             
             
         default: params = [:] 

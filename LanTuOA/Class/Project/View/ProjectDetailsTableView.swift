@@ -268,7 +268,7 @@ class ProjectDetailsTableView: UIView {
             tipsLabel.text = "注：若您不是项目管理员，本页面您只能看到您和您的下级"
         } else if cellStyle == .workingGroup {
             addBtn.setTitle(" 新增工作组", for: .normal)
-            tipsLabel.text = "注：同一工作组成员能看到彼此在该项目的所有拜访"
+            tipsLabel.text = "注：仅项目管理员可看到所有参与人"
         } else {
             footerConstraint.activate()
             footerView.isHidden = true

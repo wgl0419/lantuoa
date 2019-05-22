@@ -78,7 +78,7 @@ class ApplyControllers: UIViewController {
     /// 流程列表
     private func processList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.processList(), t: ProcessListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.processList, t: ProcessListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             
             self.data = result.data.filter({ (model) -> Bool in
@@ -155,6 +155,7 @@ extension ApplyControllers: UICollectionViewDelegate, UICollectionViewDataSource
             vc.processName = data[indexPath.section].list[row].name ?? ""
             vc.processId = data[indexPath.section].list[row].id
             vc.pricessType = data[indexPath.section].list[row].type
+            vc.canUpload = data[indexPath.section].list[row].canUpload
             navigationController?.pushViewController(vc, animated: true)
         }
     }

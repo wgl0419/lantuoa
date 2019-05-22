@@ -66,6 +66,15 @@
 		180533D6226027CB00B785B7 /* FillInApplyFieldViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180533D5226027CB00B785B7 /* FillInApplyFieldViewCell.swift */; };
 		180533DC226071E100B785B7 /* DepartmentEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180533DB226071E100B785B7 /* DepartmentEjectView.swift */; };
 		180533DE2260898100B785B7 /* DepartmentalGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180533DD2260898100B785B7 /* DepartmentalGroupCell.swift */; };
+		18057D8B229390040087D05D /* LPPZSendContentTextParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 18057D8A229390040087D05D /* LPPZSendContentTextParser.m */; };
+		18057D8E229390BF0087D05D /* LPPZHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 18057D8D229390BF0087D05D /* LPPZHelper.m */; };
+		18057D91229391090087D05D /* LPPZLabelImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18057D90229391090087D05D /* LPPZLabelImage.m */; };
+		18057D9622939EAC0087D05D /* SeleEnclosureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18057D9522939EAC0087D05D /* SeleEnclosureController.swift */; };
+		18057D982293AC050087D05D /* ToExamineImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18057D972293AC050087D05D /* ToExamineImageCell.swift */; };
+		18057D9A2293E62C0087D05D /* ToExamineImageCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18057D992293E62C0087D05D /* ToExamineImageCollectionCell.swift */; };
+		18057D9C2293EFBC0087D05D /* ToExamineEnclosureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18057D9B2293EFBC0087D05D /* ToExamineEnclosureCell.swift */; };
+		18057D9E2293F1EC0087D05D /* ToExamineEnclosureTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18057D9D2293F1EC0087D05D /* ToExamineEnclosureTitleCell.swift */; };
+		18057DA0229406830087D05D /* FileUploadGetKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18057D9F229406830087D05D /* FileUploadGetKeyModel.swift */; };
 		1805F3B52275500B00AF0AF7 /* ScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805F3B42275500B00AF0AF7 /* ScreenView.swift */; };
 		1805F3B722758C9500AF0AF7 /* ReplacementDepartmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805F3B622758C9500AF0AF7 /* ReplacementDepartmentController.swift */; };
 		1805FC3A2276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805FC392276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift */; };
@@ -206,6 +215,8 @@
 		1849C1C3227E8A1600883C61 /* ScreenEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C2227E8A1600883C61 /* ScreenEjectView.swift */; };
 		1849C1C5227EC11100883C61 /* SeleTimeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C4227EC11100883C61 /* SeleTimeEjectView.swift */; };
 		1849C1C7227ED85400883C61 /* ScreenViewCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1849C1C6227ED85400883C61 /* ScreenViewCollectionCell.swift */; };
+		18532E92229252D500C58E47 /* ToExamineCommentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18532E91229252D500C58E47 /* ToExamineCommentController.swift */; };
+		18532E9422927BBD00C58E47 /* ToExamineCommentCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18532E9322927BBD00C58E47 /* ToExamineCommentCollectionCell.swift */; };
 		1876A8DC2266B376002EBDB2 /* ContractPaybackListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */; };
 		1876A8DE2266BA52002EBDB2 /* PerformListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */; };
 		1876A8E02266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1876A8DF2266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift */; };
@@ -284,6 +295,18 @@
 		180533D5226027CB00B785B7 /* FillInApplyFieldViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyFieldViewCell.swift; sourceTree = "<group>"; };
 		180533DB226071E100B785B7 /* DepartmentEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentEjectView.swift; sourceTree = "<group>"; };
 		180533DD2260898100B785B7 /* DepartmentalGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentalGroupCell.swift; sourceTree = "<group>"; };
+		18057D89229390040087D05D /* LPPZSendContentTextParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LPPZSendContentTextParser.h; sourceTree = "<group>"; };
+		18057D8A229390040087D05D /* LPPZSendContentTextParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LPPZSendContentTextParser.m; sourceTree = "<group>"; };
+		18057D8C229390BF0087D05D /* LPPZHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LPPZHelper.h; sourceTree = "<group>"; };
+		18057D8D229390BF0087D05D /* LPPZHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LPPZHelper.m; sourceTree = "<group>"; };
+		18057D8F229391090087D05D /* LPPZLabelImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LPPZLabelImage.h; sourceTree = "<group>"; };
+		18057D90229391090087D05D /* LPPZLabelImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LPPZLabelImage.m; sourceTree = "<group>"; };
+		18057D9522939EAC0087D05D /* SeleEnclosureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeleEnclosureController.swift; sourceTree = "<group>"; };
+		18057D972293AC050087D05D /* ToExamineImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineImageCell.swift; sourceTree = "<group>"; };
+		18057D992293E62C0087D05D /* ToExamineImageCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineImageCollectionCell.swift; sourceTree = "<group>"; };
+		18057D9B2293EFBC0087D05D /* ToExamineEnclosureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineEnclosureCell.swift; sourceTree = "<group>"; };
+		18057D9D2293F1EC0087D05D /* ToExamineEnclosureTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineEnclosureTitleCell.swift; sourceTree = "<group>"; };
+		18057D9F229406830087D05D /* FileUploadGetKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadGetKeyModel.swift; sourceTree = "<group>"; };
 		1805F3B42275500B00AF0AF7 /* ScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenView.swift; sourceTree = "<group>"; };
 		1805F3B622758C9500AF0AF7 /* ReplacementDepartmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplacementDepartmentController.swift; sourceTree = "<group>"; };
 		1805FC392276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsSmallCell.swift; sourceTree = "<group>"; };
@@ -428,6 +451,8 @@
 		1849C1C2227E8A1600883C61 /* ScreenEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEjectView.swift; sourceTree = "<group>"; };
 		1849C1C4227EC11100883C61 /* SeleTimeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeleTimeEjectView.swift; sourceTree = "<group>"; };
 		1849C1C6227ED85400883C61 /* ScreenViewCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenViewCollectionCell.swift; sourceTree = "<group>"; };
+		18532E91229252D500C58E47 /* ToExamineCommentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineCommentController.swift; sourceTree = "<group>"; };
+		18532E9322927BBD00C58E47 /* ToExamineCommentCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineCommentCollectionCell.swift; sourceTree = "<group>"; };
 		1876A8DB2266B376002EBDB2 /* ContractPaybackListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPaybackListModel.swift; sourceTree = "<group>"; };
 		1876A8DD2266BA52002EBDB2 /* PerformListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformListModel.swift; sourceTree = "<group>"; };
 		1876A8DF2266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPerformanceHeaderView.swift; sourceTree = "<group>"; };
@@ -622,6 +647,19 @@
 			path = Department;
 			sourceTree = "<group>";
 		};
+		18057D7C22938DE40087D05D /* LPPZSendContentTextParser */ = {
+			isa = PBXGroup;
+			children = (
+				18057D89229390040087D05D /* LPPZSendContentTextParser.h */,
+				18057D8A229390040087D05D /* LPPZSendContentTextParser.m */,
+				18057D8C229390BF0087D05D /* LPPZHelper.h */,
+				18057D8D229390BF0087D05D /* LPPZHelper.m */,
+				18057D8F229391090087D05D /* LPPZLabelImage.h */,
+				18057D90229391090087D05D /* LPPZLabelImage.m */,
+			);
+			path = LPPZSendContentTextParser;
+			sourceTree = "<group>";
+		};
 		180B7702223A21950096403B /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -666,6 +704,8 @@
 				18050D5C224B16C200C9DB9A /* ToExamineController.swift */,
 				1809E3F7225D865000B615A8 /* ToExamineDetailsController.swift */,
 				180BFB3022658A0D001879BD /* ToExamineDescController.swift */,
+				18532E91229252D500C58E47 /* ToExamineCommentController.swift */,
+				18057D9522939EAC0087D05D /* SeleEnclosureController.swift */,
 			);
 			path = ToExamine;
 			sourceTree = "<group>";
@@ -677,6 +717,11 @@
 				180BFB2E22656DD3001879BD /* ToExamineDetailsCell.swift */,
 				1805FC392276A76F001A2FF5 /* ToExamineDetailsSmallCell.swift */,
 				1805FC3B2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift */,
+				18532E9322927BBD00C58E47 /* ToExamineCommentCollectionCell.swift */,
+				18057D972293AC050087D05D /* ToExamineImageCell.swift */,
+				18057D992293E62C0087D05D /* ToExamineImageCollectionCell.swift */,
+				18057D9B2293EFBC0087D05D /* ToExamineEnclosureCell.swift */,
+				18057D9D2293F1EC0087D05D /* ToExamineEnclosureTitleCell.swift */,
 			);
 			path = ToExamine;
 			sourceTree = "<group>";
@@ -773,6 +818,7 @@
 		1810EC5F222F5BC600CF6488 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				18057D7C22938DE40087D05D /* LPPZSendContentTextParser */,
 				1849C1C8227EEB3200883C61 /* AlignedCollectionViewFlowLayout */,
 				1849C1BB227E6E7700883C61 /* BMChineseSort */,
 				1810EC60222F5BCC00CF6488 /* Api */,
@@ -956,6 +1002,7 @@
 				1827ED9122686DE000EFF889 /* PerformDetailModel.swift */,
 				1827ED9322695F8700EFF889 /* ProcessUsersModel.swift */,
 				180736BC22700FAA001F1FA6 /* LoginUserModel.swift */,
+				18057D9F229406830087D05D /* FileUploadGetKeyModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1293,6 +1340,7 @@
 				1830BE6522373C4200ADC03A /* APIManager.swift in Sources */,
 				1802B00C2254555A00E94341 /* NoticeHomePendingCell.swift in Sources */,
 				180BFB332265B14C001879BD /* ContractListModel.swift in Sources */,
+				18057D9C2293EFBC0087D05D /* ToExamineEnclosureCell.swift in Sources */,
 				1801AE92223F2FE60027A5DB /* CustomerListStatisticsModel.swift in Sources */,
 				1810EC74222F5D4100CF6488 /* UiView.swift in Sources */,
 				1849C1C1227E782000883C61 /* ScreenTimeCell.swift in Sources */,
@@ -1317,6 +1365,7 @@
 				180736B9226EE176001F1FA6 /* ProjectDetailModel.swift in Sources */,
 				180736B7226EBA5C001F1FA6 /* UsersPermissionsModel.swift in Sources */,
 				180BFB372265BE16001879BD /* ContractListController.swift in Sources */,
+				18057D9622939EAC0087D05D /* SeleEnclosureController.swift in Sources */,
 				180B6F6A228D38CC0086C0E8 /* AliOSSClient.swift in Sources */,
 				18070723226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift in Sources */,
 				1809E3F8225D865000B615A8 /* ToExamineDetailsController.swift in Sources */,
@@ -1333,6 +1382,7 @@
 				18067C2922801E42005D26AC /* ContractScreenView.swift in Sources */,
 				181FF96622714E9600ED5A2A /* ModifyNoticeEjectView.swift in Sources */,
 				1805F3B722758C9500AF0AF7 /* ReplacementDepartmentController.swift in Sources */,
+				18532E9422927BBD00C58E47 /* ToExamineCommentCollectionCell.swift in Sources */,
 				18050D5D224B16C200C9DB9A /* ToExamineController.swift in Sources */,
 				180B76FD2239DFCC0096403B /* VisitHomeCell.swift in Sources */,
 				18026DEF223B9F7E00993B66 /* NewlyBuildVisitController.swift in Sources */,
@@ -1349,12 +1399,14 @@
 				18050D6F224B5B2D00C9DB9A /* HandoverStaffSeleController.swift in Sources */,
 				180E4D6522856CDE0042FA87 /* AddRemarksEjectView.swift in Sources */,
 				18067C2B22801EFF005D26AC /* ContractScreenTimeCell.swift in Sources */,
+				18057D9A2293E62C0087D05D /* ToExamineImageCollectionCell.swift in Sources */,
 				1805FC3C2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift in Sources */,
 				180E4D5F22855B1E0042FA87 /* ContractTypeListModel.swift in Sources */,
 				180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */,
 				180BFB352265B49F001879BD /* CostomerDetailsContractCell.swift in Sources */,
 				180B7707223A21D50096403B /* LoginController.swift in Sources */,
 				180BFB3122658A0D001879BD /* ToExamineDescController.swift in Sources */,
+				18057D8E229390BF0087D05D /* LPPZHelper.m in Sources */,
 				18050D71224B5CA300C9DB9A /* HandoverStaffSeleCell.swift in Sources */,
 				180E4D61228561400042FA87 /* ContractRemarksCell.swift in Sources */,
 				184407162264889300F10D83 /* NotifyCheckDetailModel.swift in Sources */,
@@ -1379,6 +1431,7 @@
 				1849C1C5227EC11100883C61 /* SeleTimeEjectView.swift in Sources */,
 				1817884C2238ABE40015DC30 /* WrokHomeController.swift in Sources */,
 				180273E5223B5A410033E083 /* ProjectListCell.swift in Sources */,
+				18057D982293AC050087D05D /* ToExamineImageCell.swift in Sources */,
 				1803A321225EF07300B86F20 /* ProcessListModel.swift in Sources */,
 				1849C1C3227E8A1600883C61 /* ScreenEjectView.swift in Sources */,
 				1827ED882268223700EFF889 /* AchievementsDetailsController.swift in Sources */,
@@ -1410,6 +1463,7 @@
 				18001885225351E400832E60 /* NotifyListModel.swift in Sources */,
 				18050D67224B46EA00C9DB9A /* JobHandoverCell.swift in Sources */,
 				1810EC7E222F5D4100CF6488 /* UIFont.swift in Sources */,
+				18057D91229391090087D05D /* LPPZLabelImage.m in Sources */,
 				1810EC79222F5D4100CF6488 /* NSMutableAttributedString.swift in Sources */,
 				1827ED8C22684A3E00EFF889 /* AchievementsDetailsCell.swift in Sources */,
 				180533D422601F7100B785B7 /* ProcessParamsModel.swift in Sources */,
@@ -1420,6 +1474,7 @@
 				1810EC90222F5F2F00CF6488 /* DispatchQueueExtension.swift in Sources */,
 				180233662244C6640064A50E /* MeHomeCell.swift in Sources */,
 				1876A8EA22672850002EBDB2 /* MoreTimeSeleEjectView.swift in Sources */,
+				18057DA0229406830087D05D /* FileUploadGetKeyModel.swift in Sources */,
 				1803A31B225EE73900B86F20 /* AchievementsListController.swift in Sources */,
 				1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */,
 				1827ED902268620B00EFF889 /* AchievementsDetailsEjectCell.swift in Sources */,
@@ -1464,6 +1519,7 @@
 				180BFB3F2265CE26001879BD /* ContractDetailsHeaderView.swift in Sources */,
 				1833DD3C2241E8C800730FB9 /* ProjectDetailsController.swift in Sources */,
 				1833DD3A2241D9F600730FB9 /* VisitListModel.swift in Sources */,
+				18057D9E2293F1EC0087D05D /* ToExamineEnclosureTitleCell.swift in Sources */,
 				180B8F9F2272B09700E6FDE5 /* ApplyHeaderView.swift in Sources */,
 				180736B5226EB3E7001F1FA6 /* Jurisdiction.swift in Sources */,
 				180E4D63228564A20042FA87 /* ContractDescListModel.swift in Sources */,
@@ -1484,10 +1540,12 @@
 				1827ED842268076D00EFF889 /* ContractRepaymentEjectView.swift in Sources */,
 				1802CDA0224CC3D3005997F1 /* VisitSeleTimeView.swift in Sources */,
 				1849C1BD227E6E8200883C61 /* BMChineseSort.swift in Sources */,
+				18057D8B229390040087D05D /* LPPZSendContentTextParser.m in Sources */,
 				1827ED8E22685E9600EFF889 /* AchievementsDetailsEjectView.swift in Sources */,
 				180B8FA72273191B00E6FDE5 /* UIResponder.swift in Sources */,
 				18A7C96F223F9828000B4007 /* SeleVisitModelView.swift in Sources */,
 				18070729226DBA1300E6C36C /* MultipleSeleController.swift in Sources */,
+				18532E92229252D500C58E47 /* ToExamineCommentController.swift in Sources */,
 				1802B00A225454D000E94341 /* NoticeHomeSystemCell.swift in Sources */,
 				1804E1FD224A2124006AB973 /* SetUpController.swift in Sources */,
 				180233602244900D0064A50E /* ProjectDetailsVisitCell.swift in Sources */,

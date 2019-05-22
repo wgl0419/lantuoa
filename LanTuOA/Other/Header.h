@@ -16,4 +16,6 @@
 
 #import <AliyunOSSiOS/OSSService.h>
 
+#import "LPPZSendContentTextParser.h"
+
 #endif /* Header_h */

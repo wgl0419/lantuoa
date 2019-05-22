@@ -143,7 +143,7 @@ class HomePageController: UIViewController {
     
     /// 获取个人信息 -> 更新权限
     private func loginUser() {
-        _ = APIService.shared.getData(.loginUser(), t: LoginUserModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.loginUser, t: LoginUserModel.self, successHandle: { (result) in
             Jurisdiction.share.setJurisdiction(data: result.data?.privilegeList ?? [])
             UserInfo.share.setUserName(result.data?.realname ?? "")
         }, errorHandle: nil)
@@ -152,7 +152,7 @@ class HomePageController: UIViewController {
     /// 首页统计
     private func startupSum() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.startupSum(), t: StartupSumModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.startupSum, t: StartupSumModel.self, successHandle: { (result) in
             self.startupSumData = result.data
             self.tableView.reloadData()
             self.tableView.mj_header.endRefreshing()
@@ -165,7 +165,7 @@ class HomePageController: UIViewController {
     
     /// 未读信息数
     private func notifyNumber() {
-        _ = APIService.shared.getData(.notifyNumber(), t: NotifyNumberModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyNumber, t: NotifyNumberModel.self, successHandle: { (result) in
             let checkNum = result.data?.checkNum ?? 0
             let notReadNum = result.data?.notReadNum ?? 0
             if checkNum > 0 {

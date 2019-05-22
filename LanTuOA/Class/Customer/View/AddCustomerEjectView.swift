@@ -287,7 +287,7 @@ class AddCustomerEjectView: UIView {
     private func customerIndustryList() {
         if customerIndustryData.count == 0 {
             MBProgressHUD.showWait("")
-            _ = APIService.shared.getData(.customerIndustryList(), t: CustomerIndustryListModel.self, successHandle: { (result) in
+            _ = APIService.shared.getData(.customerIndustryList, t: CustomerIndustryListModel.self, successHandle: { (result) in
                 MBProgressHUD.dismiss()
                 self.customerIndustryData = result.data
                 self.customerIndustryList()

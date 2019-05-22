@@ -146,7 +146,7 @@ extension AppDelegate {
         net?.startListening()
         
         /// 检查版本更新
-        _ = APIService.shared.getData(.version(), t: VersionModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.version, t: VersionModel.self, successHandle: { (result) in
             if self.compareNumber(versionStr: result.data?.versionNo ?? "") {
                 let view = UpdateHintsEjectView()
                 view.data = result.data

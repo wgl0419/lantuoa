@@ -24,6 +24,12 @@ class ToExamineDetailsController: UIViewController {
     private var statusImageView: UIImageView!
     /// 按钮框
     private var btnView: UIView!
+    /// 同意按钮
+    private var agreeBtn: UIButton!
+    /// 拒绝按钮
+    private var refuseBtn: UIButton!
+    /// 评论
+    private var commentBtn: UIButton!
     
     /// 审批数据
     private var checkListData: NotifyCheckListData!
@@ -56,12 +62,29 @@ class ToExamineDetailsController: UIViewController {
                 view.backgroundColor = .white
             })
         
-        _ = UIButton().taxi.adhere(toSuperView: btnView) // 拒绝按钮
+        agreeBtn = UIButton().taxi.adhere(toSuperView: btnView) // 同意按钮
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalTo((ScreenWidth - 45) / 2).priority(800)
-                make.left.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-15)
                 make.top.equalToSuperview().offset(18)
                 make.height.equalTo(44)
+                make.width.equalTo(80)
+            })
+            .taxi.config({ (btn) in
+                btn.setTitle("同意", for: .normal)
+                btn.setTitleColor(.white, for: .normal)
+                
+                btn.layer.cornerRadius = 4
+                btn.layer.masksToBounds = true
+                btn.backgroundColor = UIColor(hex: "#2E4695")
+                btn.addTarget(self, action: #selector(agreeClick), for: .touchUpInside)
+            })
+        
+        refuseBtn = UIButton().taxi.adhere(toSuperView: btnView) // 拒绝按钮
+            .taxi.layout(snapKitMaker: { (make) in
+                make.right.equalTo(agreeBtn.snp.left).offset(-15)
+                make.top.equalToSuperview().offset(18)
+                make.height.equalTo(44)
+                make.width.equalTo(80)
             })
             .taxi.config({ (btn) in
                 btn.setTitle("拒绝", for: .normal)
@@ -74,22 +97,22 @@ class ToExamineDetailsController: UIViewController {
                 btn.addTarget(self, action: #selector(refuseClick), for: .touchUpInside)
             })
         
-        _ = UIButton().taxi.adhere(toSuperView: btnView) // 同意按钮
+        
+        commentBtn = UIButton().taxi.adhere(toSuperView: btnView) // 评论按钮
             .taxi.layout(snapKitMaker: { (make) in
-                make.width.equalTo((ScreenWidth - 45) / 2).priority(800)
-                make.right.equalToSuperview().offset(-15)
+                make.left.equalToSuperview().offset(15)
                 make.top.equalToSuperview().offset(18)
                 make.height.equalTo(44)
             })
             .taxi.config({ (btn) in
-                btn.setTitle("同意", for: .normal)
-                btn.setTitleColor(.white, for: .normal)
-                
-                btn.layer.cornerRadius = 4
-                btn.layer.masksToBounds = true
-                btn.backgroundColor = UIColor(hex: "#2E4695")
-                btn.addTarget(self, action: #selector(agreeClick), for: .touchUpInside)
+                btn.setTitle("留言评论", for: .normal)
+                btn.titleLabel?.font = UIFont.medium(size: 10)
+                btn.setImage(UIImage(named: "comment"), for: .normal)
+                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+                btn.setImage(UIImage(named: "comment"), for: .highlighted)
+                btn.addTarget(self, action: #selector(commentClick), for: .touchUpInside)
             })
+        commentBtn.setSpacing()
         
         tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
@@ -120,9 +143,8 @@ class ToExamineDetailsController: UIViewController {
     
     /// 修改处理
     private func changeHandle() {
-        btnView.snp.updateConstraints { (make) in
-            make.height.equalTo(0)
-        }
+        agreeBtn.isHidden = true
+        refuseBtn.isHidden = true
         notifyCheckDetail()
         notifyCheckUserList()
         if changeBlock != nil {
@@ -185,13 +207,10 @@ class ToExamineDetailsController: UIViewController {
                     return model.`self` == 1
                 }
                 if currentModel.count != 0 && checkListData.status != 2 && checkListData.status != 3 { // 到自己处理的阶段   展开同意拒绝按钮
-                    btnView.snp.updateConstraints { (make) in
-                        make.height.equalTo(62 + (isIphoneX ? SafeH : 18))
-                    }
+                    
                 } else {
-                    btnView.snp.updateConstraints { (make) in
-                        make.height.equalTo(0)
-                    }
+                    agreeBtn.isHidden = true
+                    refuseBtn.isHidden = true
                 }
             }
         }
@@ -318,6 +337,11 @@ class ToExamineDetailsController: UIViewController {
             }
             navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    @objc private func commentClick() {
+        let vc = ToExamineCommentController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
