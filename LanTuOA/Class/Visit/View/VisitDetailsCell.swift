@@ -41,6 +41,15 @@ class VisitDetailsCell: UITableViewCell {
                     _ = setTitleAndContent("拜访内容：", contentStr: data.content ?? " ", lastLabel: nil, position: 2)
                 case .result:
                     _ = setTitleAndContent("拜访结果：", contentStr: data.result ?? " ", lastLabel: nil, position: 2)
+                    _ = UIView().taxi.adhere(toSuperView: contentView) // 分割线
+                        .taxi.layout(snapKitMaker: { (make) in
+                            make.left.equalToSuperview().offset(15)
+                            make.top.right.equalToSuperview()
+                            make.height.equalTo(1)
+                        })
+                        .taxi.config({ (view) in
+                            view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+                        })
                 }
             }
         }

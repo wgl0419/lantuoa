@@ -19,15 +19,33 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
                 titleLabel.text = data.createdUserName
                 
                 let smallData = data.data
-                if smallData.count == 1 {
-                    let model = smallData.first!
-                    _ = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: titleLabel, isLast: true)
-                }
-                var lastLabel = titleLabel
+//                if smallData.count == 1 {
+//                    let model = smallData.first!
+//                    _ = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: titleLabel, isLast: true)
+//                }
+                var lastView: UIView = titleLabel
                 for index in 0..<smallData.count {
                     let model = smallData[index]
-                    let label = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: lastLabel, isLast: index == smallData.count - 1)
-                    lastLabel = label
+                    if model.type == 1 { // 标题 + 文本
+                        let label = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastView: lastView, isLast: index == smallData.count - 1)
+                        lastView = label
+                    } else if model.type == 2 { // 表单名称
+                        lastView = setFormHeader(model.title ?? "", lastView: lastView, isLast: index == smallData.count - 1)
+                    } else { // 分割线
+                        lastView = UIView().taxi.adhere(toSuperView: contentView) // 分割线
+                            .taxi.layout(snapKitMaker: { (make) in
+                                make.top.equalTo(lastView.snp.bottom).offset(5)
+                                make.left.equalToSuperview().offset(15)
+                                make.right.equalToSuperview()
+                                make.height.equalTo(1)
+                                if index == smallData.count - 1 {
+                                    make.bottom.equalToSuperview()
+                                }
+                            })
+                            .taxi.config({ (view) in
+                                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+                            })
+                    }
                 }
             }
         }
@@ -87,16 +105,16 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
     ///   - lastLabel: 跟随的控件
     ///   - isLast: 是否是后一个控件
     /// - Returns: 内容控件
-    private func setTitleAndContent(_ titleStr: String, contentStr: String, lastLabel: UILabel?, isLast: Bool) -> UILabel {
+    private func setTitleAndContent(_ titleStr: String, contentStr: String, lastView: UIView, isLast: Bool) -> UILabel {
         
         let titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
             .taxi.layout { (make) in
-                make.top.equalTo(lastLabel!.snp.bottom).offset(5)
+                make.top.equalTo(lastView.snp.bottom).offset(5)
                 make.left.equalToSuperview().offset(15)
             }
             .taxi.config { (label) in
                 label.text = titleStr + "："
-                label.font = UIFont.medium(size: 12)
+                label.font = UIFont.regular(size: 14)
                 label.textColor = UIColor(hex: "#999999")
                 label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
@@ -113,12 +131,41 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
             .taxi.config { (label) in
                 label.numberOfLines = 0
                 label.textColor = blackColor
-                label.font = UIFont.medium(size: 12)
+                label.font = UIFont.regular(size: 14)
                 label.text = contentStr.count == 0 ? " " : contentStr
                 label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         
         return contentLabel
+    }
+    
+    /// 设置表单头
+    private func setFormHeader(_ titleStr: String, lastView: UIView, isLast: Bool) -> UILabel {
+        let titleLabel = UILabel().taxi.adhere(toSuperView: contentView)
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalTo(lastView.snp.bottom).offset(lastView is UILabel ? 11 : 5)
+                make.left.equalToSuperview().offset(15)
+            })
+            .taxi.config { (label) in
+                label.text = titleStr
+                label.font = UIFont.regular(size: 14)
+                label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        }
+        if lastView is UILabel {
+            _ = UIView().taxi.adhere(toSuperView: contentView) // 分割线
+                .taxi.layout(snapKitMaker: { (make) in
+                    make.top.equalTo(lastView.snp.bottom).offset(5)
+                    make.left.equalToSuperview().offset(15)
+                    make.right.equalToSuperview()
+                    make.height.equalTo(1)
+                })
+                .taxi.config({ (view) in
+                    view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+                })
+        }
+        
+        return titleLabel
     }
     
     /// 时间处理

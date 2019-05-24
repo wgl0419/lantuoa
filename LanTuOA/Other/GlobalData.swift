@@ -62,8 +62,7 @@ let appBuild = appInfo!["CFBundleVersion"] as! String
 //let serverAddressURL = "api.lantuoa.com"
 
 /// 测试服务器(蒙冠洲电脑)
-//let serverAddressURL = "192.168.1.135:9102"
-//let serverAddressURL = "192.168.1.247:9101"
+//let serverAddressURL = "192.168.1.135:9101"
 /// 测试服务器(李健电脑)
 //let serverAddressURL = "192.168.1.111:9101"
 /// 测试服务器

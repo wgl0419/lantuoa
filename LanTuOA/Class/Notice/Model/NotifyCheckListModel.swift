@@ -20,8 +20,10 @@ struct NotifyCheckListSmallData: HandyJSON {
     var name: String?
     var value: String?
     var title: String?
+    /// 1.key-value，2.表单标题，3.表单结束分隔符，4.图片，5.文件
     var type: Int = 0
     var sort: Int = 0
+    var fileArr = [NotifyCheckListValue]()
 }
 
 struct NotifyCheckListData: HandyJSON {
@@ -47,5 +49,20 @@ struct NotifyCheckListData: HandyJSON {
     var projectName: String?
     var customerName: String?
     var personStatus: Int = 0
+}
+
+struct NotifyCheckListValue: HandyJSON {
+    var uploadUser: Int = 0
+    var status: Int = 0
+    var id: Int = 0
+    var fileName: String?
+    var uploadTime: Int = 0
+    var commentId: Int = 0
+    var fileId: Int = 0
+    var fileType: Int = 0
+    var fileSize: Int = 0
+    var relateId: String?
+    var objectName: String?
+    var type: Int = 0
 }
 

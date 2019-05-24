@@ -8,19 +8,38 @@
 
 import UIKit
 import YYText
+import MBProgressHUD
 import AssetsLibrary
 import ZLPhotoBrowser
 
 class ToExamineCommentController: UIViewController {
     
+    /// 备注
+    enum DescType {
+        /// 同意
+        case agree
+        /// 拒绝
+        case refuse
+        /// 审批评论
+        case approval
+        /// 拜访评论
+        case visit
+    }
+    
+    /// 审批id
+    var checkListId = 0
+    /// 评论回调
+    var commentBlock: (() -> ())?
+    /// 备注类型
+    var descType: DescType = .agree
 
     /// 输入框
     private var textView: YYTextView!
     /// 图片
     private var collectionView: UICollectionView!
     
-    /// 图片数据
-    private var imageArray: [UIImage] = []
+    /// 数据
+    private var data = [Any]()
     /// 图片信息数据
     private var PHAssetArray: Array<PHAsset> = []
     /// 原图选项
@@ -36,8 +55,8 @@ class ToExamineCommentController: UIViewController {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        title = "留言评论"
         view.backgroundColor = .white
+        title = descType == .agree ? "确认同意" : descType == .refuse ? "确认拒绝" : "留言评论"
         
         let btnView = UIView().taxi.adhere(toSuperView: view) // 按钮视图
             .taxi.layout { (make) in
@@ -55,10 +74,10 @@ class ToExamineCommentController: UIViewController {
                 make.height.equalTo(44)
             })
             .taxi.config({ (btn) in
-                btn.setTitle("提交", for: .normal)
                 btn.backgroundColor = UIColor(hex: "#2E4695")
                 btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
                 btn.addTarget(self, action: #selector(submissionClick), for: .touchUpInside)
+                btn.setTitle(descType == .agree ? "确认同意" : descType == .refuse ? "确认拒绝" : "提交", for: .normal)
             })
         
         _ = UIView().taxi.adhere(toSuperView: btnView) // 分割线
@@ -150,8 +169,6 @@ class ToExamineCommentController: UIViewController {
                 textView.font = UIFont.systemFont(ofSize: 16)
                 textView.placeholderText = "请输入评论"
             })
-//        textView.text = "[@张三-123123]"
-//        textView.replace(textView.selectedTextRange!, withText: "[@张三-123123]")
     }
     
     /// 打开照相机
@@ -170,8 +187,15 @@ class ToExamineCommentController: UIViewController {
         photoSheet.sender = self
         photoSheet.configuration.allowEditImage = false
         photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
-            self?.imageArray = images!
-            self?.PHAssetArray = assets
+            if indexPath < 0 { // 添加图片
+                for index in 0..<images!.count {
+                    self?.data.append((images![index], assets[index]))
+                }
+            } else { // 浏览
+                if images!.count == 0 {
+                     self?.data.remove(at: indexPath)
+                }
+            }
             self?.isOriginal = isOriginal
             self?.collectionView.reloadData()
         }
@@ -181,7 +205,7 @@ class ToExamineCommentController: UIViewController {
                 arrSelectedAssets.add(item)
             }
             photoSheet.arrSelectedAssets = arrSelectedAssets
-            photoSheet.configuration.maxSelectCount = 4
+            photoSheet.configuration.maxSelectCount = 9
             photoSheet.configuration.allowSelectGif = false
             photoSheet.configuration.allowSelectVideo = false
             photoSheet.configuration.allowSlideSelect = false
@@ -189,46 +213,203 @@ class ToExamineCommentController: UIViewController {
             photoSheet.configuration.allowTakePhotoInLibrary = false
             photoSheet.showPhotoLibrary()
         } else { // 浏览图片
-            photoSheet.previewSelectedPhotos(imageArray, assets: PHAssetArray, index: indexPath, isOriginal: isOriginal)
+            let model = data[indexPath] as! (UIImage, PHAsset)
+            photoSheet.previewSelectedPhotos([model.0], assets: [model.1], index: 0, isOriginal: isOriginal)
         }
     }
     
     /// 添加人员处理
     private func addPersion(users: [UsersData]) {
         for model in users {
-            let str = "[@\(model.realname ?? "")-\(model.id)]"
+            let str = "@\(model.realname ?? ""){{\(model.id)}}"
             textView.replace(textView.selectedTextRange!, withText: str)
         }
+    }
+    
+    /// 确认数据
+    private func confirmData(image: [Int], file: [Int], str: String) {
+        if descType == .agree {
+            notifyCheckAgree(image: image, file: file, str: str)
+        } else if descType == .refuse {
+            notifyCheckReject(image: image, file: file, str: str)
+        } else if descType == .approval {
+            notifyCheckCommentCreate(image: image, file: file, str: str)
+        } else {
+            visitCommentCreate(image: image, file: file, str: str)
+        }
+    }
+    
+    // MARK: - Api
+    /// 审批评论
+    private func notifyCheckCommentCreate(image: [Int], file: [Int], str: String) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.notifyCheckCommentCreate(checkListId, image, file, str), t: LoginModel.self, successHandle: { (result) in
+            if self.commentBlock != nil {
+                self.commentBlock!()
+            }
+            MBProgressHUD.dismiss()
+            self.navigationController?.popViewController(animated: true)
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "评论失败")
+        })
+    }
+    
+    /// 上传文件报备
+    ///
+    /// - Parameters:
+    ///   - type: 文件类型 1.图片，2.文件
+    ///   - name: 文件名称
+    private func fileUploadGetKey(type: Int, name: String, block: @escaping ((Bool, Int?, String?) -> ())) {
+        MBProgressHUD.showWait("")
+        
+        var fileSizes = 0
+        if type == 2 { // 文件大小
+            let enclosurePath = AliOSSClient.shared.getCachesPath() + name
+            let floder = try! FileManager.default.attributesOfItem(atPath: enclosurePath)
+            // 用元组取出文件大小属性
+            for (key, fileSize) in floder {
+                // 累加文件大小
+                if key == FileAttributeKey.size {
+                    let size = (fileSize as AnyObject).integerValue ?? 0
+                    fileSizes = size
+                }
+            }
+        }
+        
+        _ = APIService.shared.getData(.fileUploadGetKey(type, name, fileSizes), t: FileUploadGetKeyModel.self, successHandle: { (result) in
+            block(true, result.data?.id, result.data?.objectName)
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            block(false, nil, nil)
+            MBProgressHUD.showError(error ?? "上传失败")
+        })
+    }
+    
+    /// 拒绝审批-非创建客户/项目
+    private func notifyCheckReject(image: [Int], file: [Int], str: String) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.notifyCheckReject(checkListId, image, file, str), t: LoginModel.self, successHandle: { (result) in
+            if self.commentBlock != nil {
+                self.commentBlock!()
+            }
+            MBProgressHUD.dismiss()
+            self.navigationController?.popViewController(animated: true)
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "拒绝失败")
+        })
+    }
+    
+    /// 同意审批
+    private func notifyCheckAgree(image: [Int], file: [Int], str: String) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.notifyCheckAgree(checkListId, image, file, str), t: LoginModel.self, successHandle: { (result) in
+            if self.commentBlock != nil {
+                self.commentBlock!()
+            }
+            MBProgressHUD.dismiss()
+            self.navigationController?.popViewController(animated: true)
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "同意失败")
+        })
+    }
+    
+    /// 评论拜访
+    private func visitCommentCreate(image: [Int], file: [Int], str: String) {
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.visitCommentCreate(checkListId, image, file, str), t: LoginModel.self, successHandle: { (result) in
+            if self.commentBlock != nil {
+                self.commentBlock!()
+            }
+            MBProgressHUD.dismiss()
+            self.navigationController?.popViewController(animated: true)
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "同意失败")
+        })
     }
     
     // MARK: - 按钮点击
     /// 点击提交
     @objc private func submissionClick() {
-        var ids = [Int]()
+        var contentStr = ""
         if let attributedText = textView.attributedText {
             attributedText.enumerateAttribute(NSAttributedString.Key(rawValue: YYTextAttachmentAttributeName), in: NSMakeRange(0, textView.attributedText?.string.count ?? 0), options: NSAttributedString.EnumerationOptions.init(rawValue: 0), using: { (value, range, stop) in
                 if value is YYTextAttachment {
                     let attachMent: YYTextAttachment  = value as! YYTextAttachment
                     if attachMent.userInfo != nil {
                         let idStr: String = attachMent.userInfo!["userID"] as! String
-                        let id = Int(idStr) ?? 0
-                        ids.append(id)
+                        var nameStr: String = attachMent.userInfo!["userName"] as! String
+                        nameStr.removeLast()
+                        contentStr.append("\(nameStr){{\(idStr)}}")
                     }
+                } else {
+                    let nsStr = attributedText.string as NSString
+                    let str = nsStr.substring(with: range)
+                    contentStr.append(str)
                 }
             })
-            print(ids)
+            print(contentStr)
         }
         
+        var uploadFileIds = [Int]()
+        var uploadImageIds = [Int]()
+        MBProgressHUD.showWait("上传中")
+        for index in 0..<data.count {
+            let model = data[index]
+            if model is String {
+                let file = model as! String
+                fileUploadGetKey(type: 2, name: file) { (status, body, path) in
+                    if status {
+                        AliOSSClient.shared.uploadFile(name: file, path: path!, body: body!, callback: { (status) in
+                            if status {
+                                uploadFileIds.append(body!)
+                                if index == self.data.count - 1 {
+                                    if self.data.count != uploadFileIds.count + uploadImageIds.count {
+                                        DispatchQueue.main.async(execute: {
+                                            MBProgressHUD.showError("上传失败")
+                                        })
+                                    } else {
+                                        DispatchQueue.main.async(execute: {
+                                            self.confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
+                                        })
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
+            } else {
+                let imageModel = model as! (UIImage, PHAsset)
+                let image = imageModel.0
+                let imageName = "".randomStringWithLength(len: 8) + ".png"
+                fileUploadGetKey(type: 1, name: imageName) { (status, body, path) in
+                    if status {
+                        AliOSSClient.shared.uploadImage(image: image, name: path!, body: body!, callback: { (status) in
+                            if status {
+                                uploadImageIds.append(body!)
+                                if index == self.data.count - 1 {
+                                    if self.data.count != uploadFileIds.count + uploadImageIds.count {
+                                        DispatchQueue.main.async(execute: {
+                                            MBProgressHUD.showError("上传失败")
+                                        })
+                                    } else {
+                                        DispatchQueue.main.async(execute: {
+                                            self.confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
+                                        })
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        }
     }
     
     /// 点击关联他人 @
     @objc private func relationClick() {
         let vc = SelePersonnelController()
-        var prohibitIds = [Int]()
-        for model in seleIds {
-            prohibitIds.append(model.id)
-        }
-        vc.prohibitIds = prohibitIds
         vc.isMultiple = true
         vc.displayData = ("请选择", "确定", .back)
         vc.backBlock = { [weak self] (users) in
@@ -257,30 +438,47 @@ class ToExamineCommentController: UIViewController {
     /// 点击添加附件
     @objc private func enclosureClick() {
         let vc = SeleEnclosureController()
-//        vc.determineBlock = { [weak self] (fileArray) in
-//            
-//        }
+        vc.determineBlock = { [weak self] (fileArray) in
+            for name in fileArray {
+                self?.data.append(name)
+                self?.collectionView.reloadData()
+            }
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
 }
 
 extension ToExamineCommentController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageArray.count
+        return data.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ToExamineCommentCollectionCell", for: indexPath) as! ToExamineCommentCollectionCell
-        cell.data = imageArray[indexPath.row]
+        let model = data[indexPath.row]
+        if model is String {
+            cell.fileName = model as? String
+        } else {
+            let imageModel = model as? (UIImage, PHAsset)
+            cell.imageData = imageModel?.0
+        }
         cell.deleteBlock = { [weak self] in
-            self?.imageArray.remove(at: indexPath.row)
+            self?.data.remove(at: indexPath.row)
             collectionView.reloadData()
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        changeImage(indexPath: indexPath.row)
+        let model = data[indexPath.row]
+        if model is String {
+            let name = model as! String
+            let webController = WebController()
+            webController.enclosure = name
+            navigationController?.pushViewController(webController, animated: true)
+        } else {
+            changeImage(indexPath: indexPath.row)
+        }
     }
 }
 
@@ -300,8 +498,7 @@ extension ToExamineCommentController: UIImagePickerControllerDelegate, UINavigat
         library.writeImage(toSavedPhotosAlbum: image?.cgImage, orientation: ALAssetOrientation(rawValue: image?.imageOrientation.rawValue ?? 0)!) { (assetURL, error) in
             if error == nil {
                 let result = PHAsset.fetchAssets(withALAssetURLs: [assetURL!], options: nil)
-                self.imageArray.append(image!)
-                self.PHAssetArray.append(result.firstObject!)
+                self.data.append((image!, result.firstObject!))
                 self.collectionView.reloadData()
             }
         }

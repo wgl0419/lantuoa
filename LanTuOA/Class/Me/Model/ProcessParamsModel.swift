@@ -29,6 +29,7 @@ struct ProcessParamsData: HandyJSON {
     var processId: Int = 0
     var sort: Int = 0
     var choices = [ProcessParamsChoices]()
+    var children = [ProcessParamsData]()
     var title: String?
     var hint: String?
     /// 字段类型：1.文本（高度可变），2.数字，3.日期，4.单选，5.多选，6.客户，7.项目

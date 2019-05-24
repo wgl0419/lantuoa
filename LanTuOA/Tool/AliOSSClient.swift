@@ -52,6 +52,7 @@ class AliOSSClient: NSObject {
             }
             return nil
         })
+        putTask.waitUntilFinished()
     }
     
     /// 上传文件
@@ -60,8 +61,7 @@ class AliOSSClient: NSObject {
         put.bucketName = "danjuan-lantuoa"
         put.objectKey = path
         
-        let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
-        let enclosurePath = cachePath! + ("/enclosure/") + name
+        let enclosurePath = getCachesPath() + name
         put.uploadingFileURL = URL(string: enclosurePath)!
         put.callbackParam = ["callbackUrl": "http://api.lantudev.danjuantaxi.com/api/callback/fileUpload", "callbackBody": "\(body)", "callbackBodyType": "application/json"]
         let putTask = self.client.putObject(put)
@@ -79,10 +79,18 @@ class AliOSSClient: NSObject {
             }
             return nil
         })
+        putTask.waitUntilFinished()
     }
     
     /// 下载
-    func download(url: String, result: @escaping ((Data?) -> ())) {
+    func download(url: String, isCache: Bool, result: @escaping ((Data?) -> ())) {
+        let name = url.components(separatedBy: "/").last ?? ""
+        let enclosurePath = getCachesPath() + name
+        let data = try? Data(contentsOf: URL(fileURLWithPath: enclosurePath), options: Data.ReadingOptions.mappedIfSafe)
+        if data != nil {
+            result(data)
+            return
+        }
         
         let request = OSSGetObjectRequest()
         request.bucketName = "danjuan-lantuoa"
@@ -97,15 +105,28 @@ class AliOSSClient: NSObject {
         task.continue({(t) -> OSSTask<AnyObject>? in
             if t.error == nil {
                 let getResult = t.result as! OSSGetObjectResult
-                print(getResult.downloadedData.count)
+                if isCache { // 缓存
+                    FileManager.default.createFile(atPath: enclosurePath, contents: getResult.downloadedData, attributes: nil)
+                }
                 result(getResult.downloadedData)
             } else {
-                print(t.error.debugDescription)
                 result(nil)
             }
             return nil
         })
-        task.waitUntilFinished()
     }
     
+    /// 缓存
+    func getCachesPath() -> String {
+        let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+        let enclosurePath = cachePath! + ("/enclosure/")
+        if !FileManager.default.fileExists(atPath: enclosurePath) {
+            do {
+                try FileManager.default.createDirectory(atPath: enclosurePath, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                
+            }
+        }
+        return enclosurePath
+    }
 }

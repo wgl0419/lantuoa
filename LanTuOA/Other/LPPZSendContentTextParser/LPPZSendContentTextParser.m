@@ -29,8 +29,8 @@
 - (instancetype)init {
     self = [super init];
     _font = [UIFont systemFontOfSize:16];
-    _textColor = HEXRGBCOLOR(0x353535);
-    _highlightTextColor = HEXRGBCOLOR(0xf08c1d);
+    _textColor = HEXRGBCOLOR(0x222222);
+    _highlightTextColor = HEXRGBCOLOR(0x6B83D1);
     _atUserFont = LPFontSize(16);
     return self;
 }
@@ -51,17 +51,17 @@
             
             NSMutableString *tmp1 = [NSMutableString stringWithString: [text.string substringWithRange:range]];
             
-            NSMutableString *tmp2 = [NSMutableString stringWithString: [tmp1 stringByReplacingOccurrencesOfString:@"[" withString:@""]];
-            NSMutableString *tmp3 = [NSMutableString stringWithString: [tmp2 stringByReplacingOccurrencesOfString:@"]" withString:@""]];
+            NSMutableString *tmp2 = [NSMutableString stringWithString: [tmp1 stringByReplacingOccurrencesOfString:@"{{" withString:@"{"]];
+            NSMutableString *tmp3 = [NSMutableString stringWithString: [tmp2 stringByReplacingOccurrencesOfString:@"}}" withString:@""]];
             
-            NSString *emoString = [tmp3 componentsSeparatedByString:@"-"].firstObject;
+            NSString *emoString = [tmp3 componentsSeparatedByString:@"{"].firstObject;
             emoString = [NSString stringWithFormat:@"%@ ", emoString];
-            NSString *userId = [tmp3 componentsSeparatedByString:@"-"].lastObject;
+            NSString *userId = [tmp3 componentsSeparatedByString:@"{"].lastObject;
             
-            if (![tmp1 hasPrefix:@"[@"]) {
+            if (![tmp1 hasPrefix:@"@"]) {
                 continue;
             }
-            if ([tmp3 componentsSeparatedByString:@"-"].count !=2) {
+            if ([tmp3 componentsSeparatedByString:@"{"].count !=2) {
                 continue;
             }
             if (NULLString(userId)) {
@@ -70,7 +70,7 @@
             //将正则匹配到的文字转化为图片
             LPPZLabelImage * image = [LPPZLabelImage imageWithText:emoString
                                                               font:_atUserFont
-                                                         textColor:HEXRGBCOLOR(0x0068b7)
+                                                         textColor:HEXRGBCOLOR(0x6B83D1)
                                                    backgroundColor:[UIColor whiteColor]];
             if (!image.image) continue;
             __block BOOL containsBindingRange = NO;

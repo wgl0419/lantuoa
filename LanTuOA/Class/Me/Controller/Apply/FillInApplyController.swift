@@ -38,7 +38,7 @@ class FillInApplyController: UIViewController {
     /// 添加回款设置数据
     private var moneyBackData = [(Float, Int)]()
     /// 选中内容
-    private var seleStrArray = [String]()
+    private var seleStrArray = [[String]]()
     /// 项目所在section
     private var projectPosition = -1
     /// 客户id
@@ -105,7 +105,7 @@ class FillInApplyController: UIViewController {
             })
         
         
-        tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
+        tableView = UITableView(frame: .zero, style: .grouped).taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.left.right.equalToSuperview()
                 make.bottom.equalTo(btnView.snp.top)
@@ -113,10 +113,11 @@ class FillInApplyController: UIViewController {
             .taxi.config({ (tableView) in
                 tableView.delegate = self
                 tableView.dataSource = self
-                tableView.separatorStyle = .none
                 tableView.estimatedRowHeight = 50
+                tableView.sectionHeaderHeight = 0.01
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 0.01))
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
                 tableView.register(FillInApplyTextViewCell.self, forCellReuseIdentifier: "FillInApplyTextViewCell")
                 tableView.register(FillInApplyFieldViewCell.self, forCellReuseIdentifier: "FillInApplyFieldViewCell")
@@ -155,17 +156,20 @@ class FillInApplyController: UIViewController {
     }
     
     /// 选择时间
-    private func seleTimeHandle(section: Int) {
+    private func seleTimeHandle(indexPath: IndexPath) {
         UIApplication.shared.keyWindow?.endEditing(true)
-        let timeStr = seleStrArray[section]
+        let row = indexPath.row
+        let section = indexPath.section
+        let timeStr = seleStrArray[section][row]
         var timeStamp: Int!
         if timeStr.count > 0 {
             timeStamp = timeStr.getTimeStamp(customStr: "yyyy-MM-dd")
         }
-        let ejectView = SeleTimeEjectView(timeStamp: timeStamp, titleStr: data[section].title ?? "")
+        let titleStr = data[section].type != 8 ? data[section].title : data[section].children[row].name
+        let ejectView = SeleTimeEjectView(timeStamp: timeStamp, titleStr: titleStr ?? "")
         ejectView.determineBlock = { [weak self] (timeStamp) in
             let timeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).customTimeStr(customStr: "yyyy-MM-dd")
-            self?.seleStrArray[section] = timeStr
+            self?.seleStrArray[section][row] = timeStr
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
             self?.confirmHandle()
         }
@@ -173,14 +177,17 @@ class FillInApplyController: UIViewController {
     }
     
     /// 单选
-    private func singleSeleHandle(section: Int) {
+    private func singleSeleHandle(indexPath: IndexPath) {
+        let row = indexPath.row
+        let section = indexPath.section
         var contentArray = [String]()
-        for model in data[section].choices {
+        let choicesData = data[section].type != 8 ? data[section].choices : data[section].children[row].choices
+        for model in choicesData {
             contentArray.append(model.name ?? "")
         }
         let view = SeleVisitModelView(title: "选择拜访方式", content: contentArray)
         view.didBlock = { [weak self] (seleIndex) in
-            self?.seleStrArray[section] = contentArray[seleIndex]
+            self?.seleStrArray[section][row] = contentArray[seleIndex]
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
             self?.confirmHandle()
         }
@@ -188,9 +195,12 @@ class FillInApplyController: UIViewController {
     }
     
     /// 多选处理
-    private func multipleSeleHandle(section: Int) {
+    private func multipleSeleHandle(indexPath: IndexPath) {
+        let row = indexPath.row
+        let section = indexPath.section
         var contentArray = [String]()
-        for model in data[section].choices {
+        let choicesData = data[section].type != 8 ? data[section].choices : data[section].children[row].choices
+        for model in choicesData {
             contentArray.append(model.name ?? "")
         }
         let vc = MultipleSeleController()
@@ -201,26 +211,28 @@ class FillInApplyController: UIViewController {
                 seleStr.append("、" + str)
             }
             if seleStr.count > 0 { seleStr.remove(at: seleStr.startIndex) }
-            self?.seleStrArray[section] = seleStr
+            self?.seleStrArray[section][row] = seleStr
             self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
     }
     
     /// 选择客户
-    private func seleCustomerHandle(section: Int) {
+    private func seleCustomerHandle(indexPath: IndexPath) {
         let vc = NewlyBuildVisitSeleController()
         vc.isAdd = false
         vc.type = .customer
+        let row = indexPath.row
+        let section = indexPath.section
         vc.seleBlock = { [weak self] (customerArray) in
             if self?.customerId != customerArray.first?.0 ?? -1 {
                 let position = self?.projectPosition ?? 0
                 self?.customerId = customerArray.first?.0 ?? -1
-                self?.seleStrArray[section] = customerArray.first?.1 ?? ""
+                self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
                 // 重置数据 -> 防止出现选择项目后 修改客户
                 self?.projectId = -1
                 if position != -1 {
-                    self?.seleStrArray[position] = ""
+                    self?.seleStrArray[position][0] = ""
                     self?.tableView.reloadRows(at: [IndexPath(row: 0, section: position)], with: .none)
                 }
                 
@@ -232,19 +244,21 @@ class FillInApplyController: UIViewController {
     }
     
     /// 选择项目
-    private func seleProjectHandle(section: Int) {
+    private func seleProjectHandle(indexPath: IndexPath) {
         guard customerId != -1 else {
             MBProgressHUD.showError("请先选择客户")
             return
         }
-        let customerName = seleStrArray.first ?? ""
+        let row = indexPath.row
+        let section = indexPath.section
+        let customerName = seleStrArray[projectPosition][0]
         let vc = NewlyBuildVisitSeleController()
         vc.type = .project(customerId, customerName)
         vc.isAdd = false
         
         vc.seleBlock = { [weak self] (customerArray) in
             self?.projectId = customerArray.first?.0 ?? -1
-            self?.seleStrArray[section] = customerArray.first?.1 ?? ""
+            self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
             self?.confirmHandle()
         }
@@ -261,7 +275,17 @@ class FillInApplyController: UIViewController {
             if model.type == 7 { // 客户
                 projectPosition = index
             }
-            seleStrArray.append("")
+            if model.type == 8 { // 表单
+                let smallArray = model.children
+                var array = [String]()
+                for _ in smallArray {
+                    array.append("")
+                }
+                seleStrArray.append(array)
+            } else {
+                seleStrArray.append([""])
+            }
+            
         }
     }
     
@@ -518,7 +542,7 @@ class FillInApplyController: UIViewController {
                 arrSelectedAssets.add(item)
             }
             photoSheet.arrSelectedAssets = arrSelectedAssets
-            photoSheet.configuration.maxSelectCount = 4
+            photoSheet.configuration.maxSelectCount = 9
             photoSheet.configuration.allowSelectGif = false
             photoSheet.configuration.allowSelectVideo = false
             photoSheet.configuration.allowSlideSelect = false
@@ -527,13 +551,12 @@ class FillInApplyController: UIViewController {
             photoSheet.showPhotoLibrary()
         } else { // 浏览图片
             photoSheet.previewSelectedPhotos(imageArray, assets: PHAssetArray, index: indexPath, isOriginal: isOriginal)
+//            photoSheet.previewPhotos(<#T##photos: [[AnyHashable : Any]]##[[AnyHashable : Any]]#>, index: <#T##Int#>, hideToolBar: <#T##Bool#>, complete: <#T##([Any]) -> Void#>)
         }
     }
     
     /// 上传文件
     private func uploadData() {
-        let aa = ["callbackUrl": "http://api.lantudev.danjuantaxi.com/api/callback/fileUploady", "callbackBody": ["fileId": "1"]] as [String : Any]
-        print(aa)
         uploadImageIds = []
         uploadFileIds = []
         for index in 0..<imageArray.count {
@@ -565,7 +588,7 @@ class FillInApplyController: UIViewController {
                     AliOSSClient.shared.uploadFile(name: file, path: path!, body: body!, callback: { (status) in
                         if status {
                             self.uploadFileIds.append(body!)
-                            if index == self.fileArray.count - 1 {
+                            if index == self.uploadFileIds.count - 1 {
                                 if self.uploadFileIds.count != self.fileArray.count {
                                     DispatchQueue.main.async(execute: {
                                         MBProgressHUD.showError("上传失败")
@@ -581,6 +604,7 @@ class FillInApplyController: UIViewController {
         }
     }
     
+    /// 提交流程o判断
     private func getProcessCommit() {
         if uploadImageIds.count == imageArray.count && uploadFileIds.count  == fileArray.count {
             DispatchQueue.main.async(execute: {
@@ -589,6 +613,19 @@ class FillInApplyController: UIViewController {
         }
     }
     
+    
+    /// 获取提交时的data部分的数据处理
+    private func processDataHnadle(_ model: ProcessParamsData, str: String) -> String {
+        var contentStr = str
+        if model.type == 3 { // 时间
+            contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd"))"
+        } else if model.type == 6 { // 客户
+            contentStr = "\(customerId)"
+        } else if model.type == 7 { // 项目
+            contentStr = "\(projectId)"
+        }
+        return contentStr
+    }
     
     // MARK: - Api
     /// 获取流程内容
@@ -625,15 +662,19 @@ class FillInApplyController: UIViewController {
         var dataDic: [String:String] = [:]
         for index in 0..<data.count {
             let model = data[index]
-            var contentStr = seleStrArray[index]
-            if model.type == 3 { // 时间
-                contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd"))"
-            } else if model.type == 6 { // 客户
-                contentStr = "\(customerId)"
-            } else if model.type == 7 { // 项目
-                contentStr = "\(projectId)"
+            if model.type < 8 {
+                var contentStr = seleStrArray[index][0]
+                contentStr = processDataHnadle(model, str: contentStr)
+                dataDic.updateValue(contentStr, forKey: model.name ?? "")
+            } else { // 表单
+                let children = model.children
+                for childrenIndex in 0..<children.count {
+                    let smallModel = children[childrenIndex]
+                    var contentStr = seleStrArray[index][childrenIndex]
+                    contentStr = processDataHnadle(model, str: contentStr)
+                    dataDic.updateValue(contentStr, forKey: smallModel.name ?? "")
+                }
             }
-            dataDic.updateValue(contentStr, forKey: model.name ?? "")
         }
         
         /// 成员
@@ -702,14 +743,28 @@ class FillInApplyController: UIViewController {
     ///   - name: 文件名称
     private func fileUploadGetKey(type: Int, name: String, block: @escaping ((Bool, Int?, String?) -> ())) {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.fileUploadGetKey(type, name), t: FileUploadGetKeyModel.self, successHandle: { (result) in
+        
+        var fileSizes = 0
+        if type == 2 { // 文件大小
+            let enclosurePath = AliOSSClient.shared.getCachesPath() + name
+            let floder = try! FileManager.default.attributesOfItem(atPath: enclosurePath)
+            // 用元组取出文件大小属性
+            for (key, fileSize) in floder {
+                // 累加文件大小
+                if key == FileAttributeKey.size {
+                    let size = (fileSize as AnyObject).integerValue ?? 0
+                    fileSizes = size
+                }
+            }
+        }
+        
+        _ = APIService.shared.getData(.fileUploadGetKey(type, name, fileSizes), t: FileUploadGetKeyModel.self, successHandle: { (result) in
             block(true, result.data?.id, result.data?.objectName)
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             block(false, nil, nil)
             MBProgressHUD.showError(error ?? "上传失败")
         })
-//        AliOSSClient.shared.download(url: "dev/img/lADPBbCc1rzZcKHNAn7NAuo_746_638.jpg") { (data) in
     }
     
     // MARK: - 按钮点击
@@ -753,10 +808,15 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                 return 2 + fileArray.count
             }
         }
-        return 1
+        if section < seleStrArray.count && seleStrArray.count > 0 {
+            return seleStrArray[section].count
+        } else {
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let row = indexPath.row
         let section = indexPath.section
         if section == data.count {
             if pricessType == 5 { // 合同人员
@@ -817,33 +877,36 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                 return getCarbonCopyCell(indexPath)
             }
         } else {
-            let model = data[section]
+            var model = data[section]
+            if model.type == 8 {
+                model = model.children[row]
+            }
             switch model.type {
             case 1: // 1.文本
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyTextViewCell", for: indexPath) as! FillInApplyTextViewCell
                 cell.data = (model.title ?? "", model.hint ?? "")
-                cell.contentStr = seleStrArray[section]
+                cell.contentStr = seleStrArray[section][row]
                 cell.isMust = model.isNecessary == 1
                 cell.inputBlock = { [weak self] (contentStr) in
-                    self?.seleStrArray[section] = contentStr
+                    self?.seleStrArray[section][0] = contentStr
                     self?.confirmHandle()
                 }
                 return cell
             case 2: // 2.数字
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyFieldViewCell", for: indexPath) as! FillInApplyFieldViewCell
                 cell.data = (model.title ?? "", model.hint ?? "")
-                cell.specialStr = seleStrArray[section]
+                cell.specialStr = seleStrArray[section][row]
                 cell.isMust = model.isNecessary == 1
                 cell.isSpecial = true
                 cell.inputBlock = { [weak self] (contentStr) in
-                    self?.seleStrArray[section] = contentStr
+                    self?.seleStrArray[section][0] = contentStr
                     self?.confirmHandle()
                 }
                 return cell
             case 3, 4, 5, 6, 7: // 3.日期，4.单选，5.多选，6.客户，7.项目
                 let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitSeleCell", for: indexPath) as! NewlyBuildVisitSeleCell
                 cell.data = (model.title ?? "", model.hint ?? "")
-                cell.contentStr = seleStrArray[section]
+                cell.contentStr = seleStrArray[section][row]
                 cell.isMust = model.isNecessary == 1
                 return cell
             default: return UITableViewCell()
@@ -852,37 +915,86 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
-        footerView.backgroundColor = .clear
-        return footerView
+        var isUpdata = false
+        if canUpload == 1 {
+            let count = pricessType == 5 ? 2 : 0
+            if section == data.count + count {
+                isUpdata = true
+            }
+        }
+        if ((section + 1) < data.count && data[section + 1].type == 8) || isUpdata {
+            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 40))
+            footerView.backgroundColor = .clear
+            _ = UILabel().taxi.adhere(toSuperView: footerView) //
+                .taxi.layout(snapKitMaker: { (make) in
+                    make.left.equalToSuperview().offset(15)
+                    make.centerY.equalToSuperview()
+                })
+                .taxi.config({ (label) in
+                    label.font = UIFont.regular(size: 12)
+                    label.textColor = UIColor(hex: "#666666")
+                    label.text = isUpdata ? "上传" : data[section + 1].title ?? ""
+                })
+            return footerView
+        } else {
+            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
+            footerView.backgroundColor = .clear
+            return footerView
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 10
+        var isUpdata = false
+        if canUpload == 1 {
+            let count = pricessType == 5 ? 2 : 0
+            if section == data.count + count {
+                isUpdata = true
+            }
+        }
+        if ((section + 1) < data.count && data[section + 1].type == 8) || isUpdata {
+            return 40
+        } else {
+            return 10
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        let row = indexPath.row
         let section = indexPath.section
         guard section < data.count else {
             return
         }
-        let model = data[section]
+        var model = data[section]
+        if model.type == 8 {
+            model = model.children[row]
+        }
         switch model.type {
         case 3: // 3.日期
-            seleTimeHandle(section: section)
+            seleTimeHandle(indexPath: indexPath)
         case 4: // 4.单选
-            singleSeleHandle(section: section)
+            singleSeleHandle(indexPath: indexPath)
         case 5: // 5.多选
-            multipleSeleHandle(section: section)
+            multipleSeleHandle(indexPath: indexPath)
         case 6: // 6.客户
-            seleCustomerHandle(section: section)
+            seleCustomerHandle(indexPath: indexPath)
         case 7: // 7.项目
-            seleProjectHandle(section: section)
+            seleProjectHandle(indexPath: indexPath)
         default: break
         }
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let sectionFooterH: CGFloat = 40
+//        if scrollView.contentOffset.y <= sectionFooterH && scrollView.contentOffset.y >= 0 {
+//            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -sectionFooterH, right: 0)
+//        }  else if scrollView.contentOffset.y >= sectionFooterH {
+//            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -sectionFooterH, right: 0)
+//        } else {
+//            scrollView.contentInset = .zero
+//        }
+//    }
 }
 
 extension FillInApplyController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

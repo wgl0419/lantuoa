@@ -195,7 +195,7 @@ class ToExamineController: UIViewController {
     private func notifyCheckReject(index: IndexPath) {
         MBProgressHUD.showWait("")
         let checkId = awaitingAuditData[index.row].id
-        _ = APIService.shared.getData(.notifyCheckReject(checkId, ""), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckReject(checkId, [], [], ""), t: LoginModel.self, successHandle: { (result) in
 //            self.awaitingAuditData.remove(at: index.row)
 //            self.tableViewArray[0].deleteRows(at: [index], with: .fade)
             self.notifyCheckList(status: 0, isMore: false)
@@ -262,7 +262,7 @@ class ToExamineController: UIViewController {
     private func notifyCheckAgree(index: IndexPath) {
         MBProgressHUD.showWait("")
         let checkId = awaitingAuditData[index.row].id
-        _ = APIService.shared.getData(.notifyCheckAgree(checkId, ""), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckAgree(checkId, [], [], ""), t: LoginModel.self, successHandle: { (result) in
 //            self.awaitingAuditData.remove(at: index.row)
 //            self.tableViewArray[0].deleteRows(at: [index], with: .fade)
             self.notifyCheckList(status: 0, isMore: false)

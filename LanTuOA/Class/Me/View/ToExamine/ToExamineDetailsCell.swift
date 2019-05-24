@@ -98,7 +98,7 @@ class ToExamineDetailsCell: UITableViewCell {
     /// 展开按钮
     private var openBtn: UIButton!
     /// 审批内容
-    private var contentLabel: UILabel!
+    private var contentLabel: YYLabel!
     /// 状态底部约束
     private var statusConstraint: Constraint!
     /// 内容底部约束
@@ -185,7 +185,7 @@ class ToExamineDetailsCell: UITableViewCell {
                 label.font = UIFont.boldSystemFont(ofSize: 10)
             })
         
-        contentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 审批内容
+        contentLabel = YYLabel().taxi.adhere(toSuperView: contentView) // 审批内容
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-15)
@@ -196,7 +196,11 @@ class ToExamineDetailsCell: UITableViewCell {
                 contentConstraint.deactivate()
                 label.numberOfLines = 0
                 label.textColor = blackColor
-                label.font = UIFont.boldSystemFont(ofSize: 10)
+                
+                let parser = LPPZSendContentTextParser()
+                parser.font = UIFont.boldSystemFont(ofSize: 10)
+                parser.atUserFont = UIFont.boldSystemFont(ofSize: 10)
+                label.textParser = parser
             })
     }
 }

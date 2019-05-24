@@ -33,10 +33,28 @@ class NoticeHomePendingCell: UITableViewCell {
                 _ = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: titleLabel, isLast: true)
             }
             var lastLabel = titleLabel
-            for index in 0..<smallData.count {
+            let showCount = smallData.count > 5 ? 5 : smallData.count
+            for index in 0..<showCount { //  最多显示5行
                 let model = smallData[index]
                 let label = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: lastLabel, isLast: index == smallData.count - 1)
                 lastLabel = label
+            }
+            if smallData.count > 5 {
+                _ = UILabel().taxi.adhere(toSuperView: whiteView)
+                    .taxi.layout(snapKitMaker: { (make) in
+                        make.top.equalTo(lastLabel!.snp.bottom).offset(10)
+                        make.bottom.equalTo(agreeBtn.snp.top).offset(-15)
+                        make.left.equalToSuperview().offset(15)
+                    })
+                    .taxi.config({ (label) in
+                        label.font = UIFont.regular(size: 14)
+                        label.textColor = UIColor(hex: "#6B83D1")
+                        
+                        let str = "点击卡片查看更多详情"
+                        let attriMuStr = NSMutableAttributedString(string: str)
+                        attriMuStr.addUnderline(color: UIColor(hex: "#6B83D1"), range: NSRange(location: 0, length: str.count))
+                        label.attributedText = attriMuStr
+                    })
             }
             
             agreeBtn.isHidden = !isCheck
@@ -187,7 +205,7 @@ class NoticeHomePendingCell: UITableViewCell {
                 label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
-        let contentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 内容
+        let contentLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 内容
             .taxi.layout { (make) in
                 make.top.equalTo(titleLabel)
                 make.left.equalTo(titleLabel.snp.right)

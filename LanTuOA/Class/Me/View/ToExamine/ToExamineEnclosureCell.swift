@@ -19,8 +19,7 @@ class ToExamineEnclosureCell: UITableViewCell {
                 sizeLabel.text = "0.00KB"
                 nameLabel.text = path
                 
-                let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
-                let enclosurePath = cachePath! + ("/enclosure/") + path
+                let enclosurePath = AliOSSClient.shared.getCachesPath() + path
                 let floder = try! FileManager.default.attributesOfItem(atPath: enclosurePath)
                 // 用元组取出文件大小属性
                 for (key, fileSize) in floder {
@@ -40,6 +39,40 @@ class ToExamineEnclosureCell: UITableViewCell {
             }
         }
     }
+    var data: NotifyCheckListValue! {
+        didSet {
+            if let data = data {
+                let size = data.fileSize
+                var totalCache = Double(size) / 1024.00
+                if totalCache < 1024 {
+                    sizeLabel.text = String(format: "%.2fKB", totalCache)
+                } else {
+                    totalCache = Double(size) / 1024.00 / 1024.00
+                    sizeLabel.text = String(format: "%.2fMB", totalCache)
+                }
+                nameLabel.text = data.fileName ?? ""
+            }
+        }
+    }
+    /// 是显示删除按钮
+    var isDelete: Bool! = true {
+        didSet {
+            logoImage.snp.updateConstraints { (make) in
+                make.width.height.equalTo(60)
+            }
+            deleteBtn.isHidden = !isDelete
+        }
+    }
+    /// 是否是评论
+    var isComment: Bool? {
+        didSet {
+            if let isComment = isComment {
+                logoImage.snp.updateConstraints { (make) in
+                    make.left.equalToSuperview().offset(isComment ? 33 : 15)
+                }
+            }
+        }
+    }
     
     /// 图标
     private var logoImage: UIImageView!
@@ -47,9 +80,12 @@ class ToExamineEnclosureCell: UITableViewCell {
     private var nameLabel: UILabel!
     /// 大小
     private var sizeLabel: UILabel!
+    /// 删除按钮
+    private var deleteBtn: UIButton!
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         initSubViews()
     }
     
@@ -73,9 +109,9 @@ class ToExamineEnclosureCell: UITableViewCell {
         
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名称
             .taxi.layout(snapKitMaker: { (make) in
+                make.bottom.equalTo(logoImage.snp.centerY).offset(-2)
                 make.left.equalTo(logoImage.snp.right).offset(10)
                 make.right.equalToSuperview().offset(-25)
-                make.top.equalTo(logoImage).offset(2)
             })
             .taxi.config({ (label) in
                 label.textColor = blackColor
@@ -85,14 +121,14 @@ class ToExamineEnclosureCell: UITableViewCell {
         sizeLabel = UILabel().taxi.adhere(toSuperView: contentView) // 大小
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalTo(logoImage.snp.right).offset(10)
-                make.bottom.equalTo(logoImage).offset(-2)
+                make.top.equalTo(logoImage.snp.centerY).offset(2)
             })
             .taxi.config({ (label) in
                 label.font = UIFont.regular(size: 12)
                 label.textColor = UIColor(hex: "#999999")
             })
         
-        _ = UIButton().taxi.adhere(toSuperView: contentView) // 删除按钮
+        deleteBtn = UIButton().taxi.adhere(toSuperView: contentView) // 删除按钮
             .taxi.layout(snapKitMaker: { (make) in
                 make.right.equalToSuperview().offset(-15)
                 make.width.height.equalTo(13)

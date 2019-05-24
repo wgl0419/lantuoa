@@ -56,6 +56,8 @@ enum APIManager {
     case visitSave(Int, Int, Int, String, String, Int, Array<Int>) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级   contact:拜访对象id数组)
     case visitList(String, Int?, Int?, Int, Int, Int, Int?, Int?, Int?) // 拜访查询 (name:关键词，客户名称/项目名称  startTime:开始时间，秒级  endTime:结束时间，秒级  queryType:1.全部，2.只看自己，3.工作组，4.接手  page:页码  limit:一页几条数据  customerId:客户id   projectId:项目id     createdUser: 用户id)
     case visitDetail(Int) // 拜访详情
+    case visitCommentCreate(Int, [Int], [Int], String) // 评论拜访
+    case visitCommentList(Int) // 获取拜访评论
     
     // MARK: - 工作组
     case workGroupCreate(String, [Int], Int) // 新建工作组 (name:工作组名称  members:成员id  projectId:项目id)
@@ -66,15 +68,18 @@ enum APIManager {
     
     // MARK: - 通知
     case notifyList(Int, Int)// 通知列表 (page:页码  limit:一页数据)
-    case notifyCheckReject(Int, String) // 拒绝审批-非创建客户/项目 (checkId:审批id    desc:备注）
+    case notifyCheckReject(Int, [Int], [Int], String) // 拒绝审批-非创建客户/项目 (checkId:审批id    desc:备注）
     case notifyCheckCusRejectExist(Int, Int, Int) // 拒绝创建客户/项目-客户已存在 (checkId:审批id   customerId:客户id   projectId:项目id）
     case notifyCheckCusRejectMistake(Int, String, String) // 拒绝创建客户/项目-名称有误 (checkId:审批id   customerName:客户名称   projectName: 项目名称）
-    case notifyCheckAgree(Int, String) // 同意审批 （desc:备注）
+    case notifyCheckAgree(Int, [Int], [Int], String) // 同意审批 （desc:备注）
     case notifyCheckList(Int?, Int, Int) // 审核列表 (page:页码  limit:一页数据)
     case notifyCheckDetail(Int) // 审批详情
     case notifyCheckUserList(Int) // 审批人列表
     case notifyNumber // 未读消息数
     case notifyReadAll // 全部已读
+    case notifyCheckCommentCreate(Int, [Int], [Int], String) // 审批评论
+    case notifyCheckCommentDelete(Int) // 删除评论
+    case notifyCheckCommentList(Int) // 审批评论列表
     
     // MARK: - 工作交接
     case workExtendList(String, Int?) // 下级员工列表
@@ -111,7 +116,7 @@ enum APIManager {
     case contractDescCreate(Int, String) // 新建合同备注 （contractIdL: 合同id   desc: 备注信息）
 
     case fileOssToken // 获取安全令牌securityToken
-    case fileUploadGetKey(Int, String) // 上传文件报备
+    case fileUploadGetKey(Int, String, Int) // 上传文件报备
     
     case x // MARK: 补位 -> 暂时代替一些没有使用的类型
 }
@@ -163,6 +168,8 @@ extension APIManager: TargetType {
         case .visitSave: return "/api/visit/save"
         case .visitList: return "/api/visit/list"
         case .visitDetail(let id): return "/api/visit/detail/\(id)"
+        case .visitCommentCreate(let id, _, _, _): return "/api/visit/comment/create/\(id)"
+        case .visitCommentList(let id): return "/api/visit/comment/list/\(id)"
             
             
         case .workGroupCreate: return "/api/workGroup/create"
@@ -175,12 +182,15 @@ extension APIManager: TargetType {
         case .notifyCheckReject: return "/api/notify/check/reject"
         case .notifyCheckCusRejectExist: return "/api/notify/check/cus/reject/exist"
         case .notifyCheckCusRejectMistake: return "/api/notify/check/cus/reject/mistake"
-        case .notifyCheckAgree(let id, _): return "/api/notify/check/agree/\(id)"
+        case .notifyCheckAgree(let id, _, _, _): return "/api/notify/check/agree/\(id)"
         case .notifyCheckList: return "/api/notify/check/list"
         case .notifyCheckDetail(let id): return "/api/notify/check/detail/\(id)"
         case .notifyCheckUserList(let id): return "/api/notify/check/user/list/\(id)"
         case .notifyNumber: return "/api/notify/number"
         case .notifyReadAll: return "/api/notify/readAll"
+        case .notifyCheckCommentCreate(let id, _, _, _): return "/api/notify/check/comment/create/\(id)"
+        case .notifyCheckCommentDelete(let id): return "/api/notify/check/comment/delete/\(id)"
+        case .notifyCheckCommentList(let id): return "/api/notify/check/comment/list/\(id)"
             
             
         case .workExtendList: return "/api/workExtend/list"
@@ -231,17 +241,17 @@ extension APIManager: TargetType {
             return .post
         case .visitSave:
             return .post
-        case .workGroupCreate, .workGroupInvite:
+        case .workGroupCreate, .workGroupInvite, .visitCommentCreate:
             return .post
         case .workGroupQuit:
             return .delete
-        case .notifyCheckReject, .notifyCheckCusRejectExist, .notifyCheckCusRejectMistake, .notifyCheckAgree, .notifyReadAll:
+        case .notifyCheckReject, .notifyCheckCusRejectExist, .notifyCheckCusRejectMistake, .notifyCheckAgree, .notifyReadAll, .notifyCheckCommentCreate:
             return .post
         case .workExtendExtend, .departmentsCreate, .departmentsAddUsers, .contractPaybackAdd, .processCommit:
             return .post
         case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate, .passwordReset:
             return .put
-        case .projectMemberDelete:
+        case .projectMemberDelete, .notifyCheckCommentDelete:
             return .delete
         case .usersLeave:
             return .delete
@@ -325,6 +335,10 @@ extension APIManager: TargetType {
             if customerId != nil { params["customerId"] = customerId! }
             if projectId != nil { params["projectId"] = projectId! }
             if createdUser != nil { params["createdUser"] = createdUser! }
+        case let .visitCommentCreate(_, imgs, files, text): // 评论拜访
+            params = ["text": text]
+            if imgs.count > 0 { params["imgs"] = imgs }
+            if files.count > 0 { params["files"] = files }
             
             
         case let .workGroupCreate(name, members, projectId): // 新建工作组
@@ -338,8 +352,10 @@ extension APIManager: TargetType {
             
         case let .notifyList(page, limit): // 通知列表
             params = ["page": page, "limit": limit]
-        case let .notifyCheckReject(checkId, desc): // 拒绝审批-非创建客户/项目
+        case let .notifyCheckReject(checkId, imgs, files, desc): // 拒绝审批-非创建客户/项目
             params = ["checkId": checkId, "desc": desc]
+            if imgs.count > 0 { params["imgs"] = imgs }
+            if files.count > 0 { params["files"] = files }
         case let .notifyCheckCusRejectExist(checkId, customerId, projectId): // 拒绝创建客户/项目-客户已存在
             params = ["checkId": checkId, "customerId": customerId, "projectId": projectId]
         case let .notifyCheckCusRejectMistake(checkId, customerName, projectName): // 拒绝创建客户/项目-名称有误
@@ -347,8 +363,14 @@ extension APIManager: TargetType {
         case let .notifyCheckList(status ,page, limit): // 审核列表
             params = ["page": page, "limit": limit]
             if status != nil { params["status"] = status! }
-        case .notifyCheckAgree(_, let desc): // 同意审批
+        case let .notifyCheckAgree(_, imgs, files,desc): // 同意审批
             params = ["desc": desc]
+            if imgs.count > 0 { params["imgs"] = imgs }
+            if files.count > 0 { params["files"] = files }
+        case let .notifyCheckCommentCreate(_, imgs, files, text): // 审批评论
+            params = ["text": text]
+            if imgs.count > 0 { params["imgs"] = imgs }
+            if files.count > 0 { params["files"] = files }
     
             
         case .departments(let parent): // 部门列表
@@ -419,8 +441,8 @@ extension APIManager: TargetType {
         case let .contractDescCreate(contractId, desc): // 新建合同备注
             params = ["contractId": contractId, "desc": desc]
             
-        case let .fileUploadGetKey(fileType, fileName): // 上传文件报备
-            params = ["fileType": fileType, "fileName": fileName]
+        case let .fileUploadGetKey(fileType, fileName, fileSize): // 上传文件报备
+            params = ["fileType": fileType, "fileName": fileName, "fileSize": fileSize]
             
             
         default: params = [:] 

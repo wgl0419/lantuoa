@@ -15,6 +15,8 @@ class WebController: UIViewController {
     var fileNameStr = ""
     /// 网页地址
     var urlStr = "https://www.baidu.com/"
+    /// 本地文件(附件)
+    var enclosure = ""
     
     /// 网页控件
     private var webView: WKWebView!
@@ -75,6 +77,10 @@ class WebController: UIViewController {
                     }
                     let path = Bundle.main.path(forResource: fileNameStr, ofType: "docx")
                     let url = URL(fileURLWithPath: path ?? "")
+                    webView.load(URLRequest(url: url))
+                } else if enclosure.count != 0 {
+                    let enclosurePath = AliOSSClient.shared.getCachesPath() + enclosure
+                    let url = URL(fileURLWithPath: enclosurePath)
                     webView.load(URLRequest(url: url))
                 } else {
                     webView.load(URLRequest(url: URL(string: urlStr)!))

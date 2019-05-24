@@ -47,15 +47,6 @@ class ToExamineEnclosureTitleCell: UITableViewCell {
                 btn.setImage(UIImage(named: "enclosure"), for: .normal)
                 btn.addTarget(self, action: #selector(enclosureClick), for: .touchUpInside)
             })
-        
-        _ = UIView().taxi.adhere(toSuperView: contentView) // 分割线
-            .taxi.layout(snapKitMaker: { (make) in
-                make.top.left.right.equalToSuperview()
-                make.height.equalTo(1)
-            })
-            .taxi.config({ (view) in
-                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
-            })
     }
     
     // MARK: - 按钮点击

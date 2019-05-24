@@ -67,6 +67,7 @@ class ToExamineImageCell: UITableViewCell {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
+        layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 53, height: 53)
         
         

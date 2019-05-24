@@ -94,7 +94,7 @@ class ToExamineDescController: UIViewController {
     /// 拒绝审批-非创建客户/项目
     private func notifyCheckReject() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.notifyCheckReject(checkId, textView.text), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckReject(checkId, [], [], textView.text), t: LoginModel.self, successHandle: { (result) in
             if self.changeBlock != nil {
                 self.changeBlock!()
             }
@@ -108,7 +108,7 @@ class ToExamineDescController: UIViewController {
     /// 同意审批
     private func notifyCheckAgree() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.notifyCheckAgree(checkId, textView.text), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.notifyCheckAgree(checkId, [], [], textView.text), t: LoginModel.self, successHandle: { (result) in
             if self.changeBlock != nil {
                 self.changeBlock!()
             }
