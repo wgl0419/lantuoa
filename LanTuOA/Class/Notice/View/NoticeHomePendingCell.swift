@@ -242,7 +242,7 @@ class NoticeHomePendingCell: UITableViewCell {
     /// 点击拒绝
     @objc private func refuseClick() {
         if data.0.processType == 1 || data.0.processType == 2 {
-            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户", "名字不合理"])
+            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户", "名字不合理", "其它原因"])
             view.didBlock = { [weak self] (seleIndex) in
                 if self?.refuseBlock != nil {
                     self?.refuseBlock!(seleIndex)

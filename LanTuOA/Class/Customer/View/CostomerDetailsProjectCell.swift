@@ -14,7 +14,6 @@ class CostomerDetailsProjectCell: UITableViewCell {
     var data: ProjectListStatisticsData? {
         didSet {
             if let data = data {
-                nameLabel.text = data.fullName ?? " "
                 let attriMuStr = NSMutableAttributedString(string: (data.fullName ?? "") + "  ")
                 if data.isLock == 1 { // 添加锁图标
                     let attachment = NSTextAttachment()
@@ -25,20 +24,19 @@ class CostomerDetailsProjectCell: UITableViewCell {
                 }
                 nameLabel.attributedText = attriMuStr
                 
-//                // TODO: 后端未返回
-//                wordGroupLabel.text = "后端未返回"
-//                personLabel.text = "后端未返回"
-                stateLabel.text = data.lastVisitResult ?? " "
+                wordGroupLabel.text = preventEmpty(data.groupNames)
+                personLabel.text = preventEmpty(data.members)
+                stateLabel.text = preventEmpty(data.lastVisitResult)
             }
         }
     }
     
     /// 项目名称
     private var nameLabel: UILabel!
-//    /// 工作组
-//    private var wordGroupLabel: UILabel!
-//    /// 参与人员
-//    private var personLabel: UILabel!
+    /// 工作组
+    private var wordGroupLabel: UILabel!
+    /// 参与人员
+    private var personLabel: UILabel!
     /// 状态
     private var stateLabel: UILabel!
     
@@ -67,74 +65,21 @@ class CostomerDetailsProjectCell: UITableViewCell {
                 label.font = UIFont.boldSystemFont(ofSize: 16)
             })
         
-//        let wordGroup = UILabel().taxi.adhere(toSuperView: contentView) // "工作组"
-//            .taxi.layout { (make) in
-//                make.left.equalToSuperview().offset(15)
-//                make.top.equalTo(nameLabel.snp.bottom).offset(5)
-//        }
-//            .taxi.config { (label) in
-//                label.text = "工作组："
-//                label.font = UIFont.medium(size: 12)
-//                label.textColor = UIColor(hex: "#999999")
-//                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-//        }
-//
-//        wordGroupLabel = UILabel().taxi.adhere(toSuperView: contentView) // 工作组
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.left.equalTo(wordGroup.snp.right)
-//                make.top.equalTo(nameLabel.snp.bottom).offset(5)
-//                make.right.lessThanOrEqualToSuperview().offset(-15)
-//            })
-//            .taxi.config({ (label) in
-//                label.numberOfLines = 0
-//                label.textColor = blackColor
-//                label.font = UIFont.medium(size: 12)
-//                label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-//            })
-//
-//        let person = UILabel().taxi.adhere(toSuperView: contentView) // "参与人员"
-//            .taxi.layout { (make) in
-//                make.left.equalToSuperview().offset(15)
-//                make.top.equalTo(wordGroupLabel.snp.bottom).offset(5)
-//        }
-//            .taxi.config { (label) in
-//                label.text = "参与人员："
-//                label.font = UIFont.medium(size: 12)
-//                label.textColor = UIColor(hex: "#999999")
-//                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-//        }
-//
-//        personLabel = UILabel().taxi.adhere(toSuperView: contentView) // 参与人员
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.left.equalTo(person.snp.right)
-//                make.right.lessThanOrEqualToSuperview().offset(-15)
-//                make.top.equalTo(wordGroupLabel.snp.bottom).offset(5)
-//            })
-//            .taxi.config({ (label) in
-//                label.numberOfLines = 0
-//                label.textColor = blackColor
-//                label.font = UIFont.medium(size: 12)
-//                label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-//            })
-        
-        let state = UILabel().taxi.adhere(toSuperView: contentView) // ”状态“
+        let wordGroup = UILabel().taxi.adhere(toSuperView: contentView) // "工作组"
             .taxi.layout { (make) in
                 make.left.equalToSuperview().offset(15)
-//                make.top.equalTo(personLabel.snp.bottom).offset(5)
                 make.top.equalTo(nameLabel.snp.bottom).offset(5)
-            }
+        }
             .taxi.config { (label) in
-                label.text = "参与人员："
+                label.text = "工作组："
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
                 label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         }
-        
-        stateLabel = UILabel().taxi.adhere(toSuperView: contentView) // 状态
+
+        wordGroupLabel = UILabel().taxi.adhere(toSuperView: contentView) // 工作组
             .taxi.layout(snapKitMaker: { (make) in
-                make.left.equalTo(state.snp.right)
-                make.bottom.equalToSuperview().offset(-13)
-//                make.top.equalTo(personLabel.snp.bottom).offset(5)
+                make.left.equalTo(wordGroup.snp.right)
                 make.top.equalTo(nameLabel.snp.bottom).offset(5)
                 make.right.lessThanOrEqualToSuperview().offset(-15)
             })
@@ -144,5 +89,69 @@ class CostomerDetailsProjectCell: UITableViewCell {
                 label.font = UIFont.medium(size: 12)
                 label.setContentHuggingPriority(.defaultLow, for: .horizontal)
             })
+
+        let person = UILabel().taxi.adhere(toSuperView: contentView) // "参与人员"
+            .taxi.layout { (make) in
+                make.left.equalToSuperview().offset(15)
+                make.top.equalTo(wordGroupLabel.snp.bottom).offset(5)
+        }
+            .taxi.config { (label) in
+                label.text = "参与人员："
+                label.font = UIFont.medium(size: 12)
+                label.textColor = UIColor(hex: "#999999")
+                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        }
+
+        personLabel = UILabel().taxi.adhere(toSuperView: contentView) // 参与人员
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalTo(person.snp.right)
+                make.right.lessThanOrEqualToSuperview().offset(-15)
+                make.top.equalTo(wordGroupLabel.snp.bottom).offset(5)
+            })
+            .taxi.config({ (label) in
+                label.numberOfLines = 0
+                label.textColor = blackColor
+                label.font = UIFont.medium(size: 12)
+                label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            })
+        
+        let state = UILabel().taxi.adhere(toSuperView: contentView) // ”状态“
+            .taxi.layout { (make) in
+                make.left.equalToSuperview().offset(15)
+                make.top.equalTo(personLabel.snp.bottom).offset(5)
+            }
+            .taxi.config { (label) in
+                label.text = "最新状态："
+                label.font = UIFont.medium(size: 12)
+                label.textColor = UIColor(hex: "#999999")
+                label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        }
+        
+        stateLabel = UILabel().taxi.adhere(toSuperView: contentView) // 状态
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalTo(state.snp.right)
+                make.bottom.equalToSuperview().offset(-13)
+                make.top.equalTo(personLabel.snp.bottom).offset(5)
+                make.right.lessThanOrEqualToSuperview().offset(-15)
+            })
+            .taxi.config({ (label) in
+                label.numberOfLines = 0
+                label.textColor = blackColor
+                label.font = UIFont.medium(size: 12)
+                label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            })
+    }
+    
+    /// 防止传空
+    ///
+    /// - Parameter str: 要判断的内容
+    /// - Returns: 非空字符串
+    private func preventEmpty(_ contentStr: String?) -> String {
+        if let str = contentStr {
+            if str.count > 0 {
+                return str
+            }
+        }
+        return "暂无"
     }
 }

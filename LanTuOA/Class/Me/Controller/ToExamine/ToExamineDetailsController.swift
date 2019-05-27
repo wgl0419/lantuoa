@@ -364,22 +364,31 @@ class ToExamineDetailsController: UIViewController {
     
     /// 拒绝审核 填写弹出框
     ///
-    /// - Parameter type: 0：已存在  1：有误
+    /// - Parameter type: 0：已存在  1：有误  2：其他
     private func modifyEjectView(type: Int) {
-        let ejectView = ModifyNoticeEjectView()
-        ejectView.data = checkListData
-        if type == 0 {
-            ejectView.modifyType = .alreadyExist
-        } else {
-            ejectView.modifyType = .unreasonable
+        if type != 2 { // 0：已存在  1：有误
+            let ejectView = ModifyNoticeEjectView()
+            ejectView.data = checkListData
+            if type == 0 {
+                ejectView.modifyType = .alreadyExist
+            } else {
+                ejectView.modifyType = .unreasonable
+            }
+            ejectView.alreadyExistBlock = { [weak self] (idArray) in
+                self?.notifyCheckCusRejectExist(id: idArray)
+            }
+            ejectView.unreasonableBlock = { [weak self] (contentArray) in
+                self?.notifyCheckCusRejectMistake(conten: contentArray)
+            }
+            ejectView.show()
+        } else { // 其他
+            let ejectView = ReasonsRefusalEjectView()
+            ejectView.checkId = checkListData.id
+            ejectView.changeBlock = { [weak self] in // 刷新审核列表
+                self?.notifyCheckUserList()
+            }
+            ejectView.show()
         }
-        ejectView.alreadyExistBlock = { [weak self] (idArray) in
-            self?.notifyCheckCusRejectExist(id: idArray)
-        }
-        ejectView.unreasonableBlock = { [weak self] (contentArray) in
-            self?.notifyCheckCusRejectMistake(conten: contentArray)
-        }
-        ejectView.show()
     }
     
     /// 拒绝创建客户/项目-客户已存在
@@ -425,13 +434,14 @@ class ToExamineDetailsController: UIViewController {
     /// 点击拒绝
     @objc private func refuseClick() {
         if checkListData.processType == 1 || checkListData.processType == 2 {
-            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户/拜访对象", "名字不合理"])
+            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户", "名字不合理", "其它原因"])
             view.didBlock = { [weak self] (seleIndex) in
                 self?.modifyEjectView(type: seleIndex)
             }
             view.show()
         } else {
             let vc = ToExamineCommentController()
+            vc.title = (checkListData.createdUserName ?? "") + "提交的《" + (checkListData.processName ?? "") + "》"
             vc.checkListId = checkListId
             vc.descType = .refuse
             vc.commentBlock = { [weak self] in
@@ -447,6 +457,7 @@ class ToExamineDetailsController: UIViewController {
             agreeHandle()
         } else {
             let vc = ToExamineCommentController()
+            vc.title = (checkListData.createdUserName ?? "") + "提交的《" + (checkListData.processName ?? "") + "》"
             vc.checkListId = checkListId
             vc.descType = .agree
             vc.commentBlock = { [weak self] in
@@ -458,6 +469,7 @@ class ToExamineDetailsController: UIViewController {
     
     @objc private func commentClick() {
         let vc = ToExamineCommentController()
+        vc.title = (checkListData.createdUserName ?? "") + "提交的《" + (checkListData.processName ?? "") + "》"
         vc.checkListId = checkListId
         vc.descType = .approval
         vc.commentBlock = { [weak self] in

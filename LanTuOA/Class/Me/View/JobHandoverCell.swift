@@ -19,6 +19,7 @@ class JobHandoverCell: UITableViewCell {
                 phoneLabel.text = preventEmpty(data.phone)
                 jobLabel.text = preventEmpty(data.projects)
                 leavingCompanyImageView.isHidden = data.status == 1
+                statusLabel.text = data.status == 1 ? "" : data.allExtend == 0 ? "" : "全部交接"
             }
         }
     }
@@ -33,8 +34,8 @@ class JobHandoverCell: UITableViewCell {
     private var phoneLabel = UILabel()
     /// 交接工作
     private var jobLabel = UILabel()
-//    /// 交接状态 // 后端缺少数据
-//    private var statusLabel: UILabel!
+    /// 交接状态
+    private var statusLabel: UILabel!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -62,21 +63,21 @@ class JobHandoverCell: UITableViewCell {
         leavingCompanyImageView = UIImageView().taxi.adhere(toSuperView: contentView) // 离职图标
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalToSuperview().offset(5)
-                make.right.equalToSuperview().offset(-5)
+                make.right.equalToSuperview().offset(-55)
             })
             .taxi.config({ (imageView) in
                 imageView.image = UIImage(named: "leavingCompany")
             })
         
-//        statusLabel = UILabel().taxi.adhere(toSuperView: contentView) // 交接状态
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.right.centerY.equalToSuperview()
-//            })
-//            .taxi.config({ (label) in
-//                label.text = "测测测测测测"
-//                label.font = UIFont.regular(size: 12)
-//                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-//            })
+        statusLabel = UILabel().taxi.adhere(toSuperView: contentView) // 交接状态
+            .taxi.layout(snapKitMaker: { (make) in
+                make.right.centerY.equalToSuperview()
+            })
+            .taxi.config({ (label) in
+                label.font = UIFont.regular(size: 12)
+                label.textColor = UIColor(hex: "#5FB9A1")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+            })
         
         _ = setTitle(titleStr: "所属部门：", contentLabel: departmentLabel, lastView: nameLabel) // 部门
         _ = setTitle(titleStr: "手机号码：", contentLabel: phoneLabel, lastView: departmentLabel) // 手机号码
@@ -111,8 +112,7 @@ class JobHandoverCell: UITableViewCell {
         contentLabel.taxi.layout { (make) in
             make.top.equalTo(titleLabel)
             make.left.equalTo(titleLabel.snp.right)
-//            make.right.lessThanOrEqualTo(statusLabel.snp.left).offset(-5)
-            make.right.lessThanOrEqualToSuperview().offset(-5)
+            make.right.lessThanOrEqualTo(statusLabel.snp.left).offset(-5)
             if isLast {
                 make.bottom.equalToSuperview().offset(-15)
             }

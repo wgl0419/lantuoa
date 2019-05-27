@@ -24,11 +24,22 @@ class FillInApplyApprovalCell: UITableViewCell {
             dataHandle()
         }
     }
+    var isProcess: Bool! {
+        didSet {
+            let str = isProcess ? "" : "本流程有节点缺失审批人，请联系管理员覃甲修改设置"
+            let attriMuStr = NSMutableAttributedString(string: str)
+            attriMuStr.changeFont(str: "覃甲", font: UIFont.medium(size: 12))
+            attriMuStr.changeColor(str: "覃甲", color: UIColor(hex: "#2E4695"))
+            tipsLabel.attributedText = attriMuStr
+        }
+    }
     
     /// CollectionView
     private var collectionView: UICollectionView!
     /// 标题
     private var titleLabel: UILabel!
+    /// 无审批人提示
+    private var tipsLabel: UILabel!
     
     /// 处理过的数据
     private var processedData = [[ProcessUsersCheckUsers]]()
@@ -76,7 +87,6 @@ class FillInApplyApprovalCell: UITableViewCell {
                 make.height.equalTo(200).priority(800)
                 make.top.equalTo(titleLabel.snp.bottom)
                 make.left.right.equalToSuperview()
-                make.bottom.equalToSuperview()
             })
             .taxi.config({ (collectionView) in
                 collectionView.delegate = self
@@ -88,6 +98,16 @@ class FillInApplyApprovalCell: UITableViewCell {
                 collectionView.register(FillInApplyCarbonCopyAddCell.self, forCellWithReuseIdentifier: "FillInApplyCarbonCopyAddCell")
             })
         
+        tipsLabel = UILabel().taxi.adhere(toSuperView: contentView) // 提示
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalTo(collectionView.snp.bottom)
+                make.bottom.equalToSuperview().offset(-10)
+                make.left.right.equalToSuperview()
+            })
+            .taxi.config({ (label) in
+                label.font = UIFont.regular(size: 12)
+                label.textColor = UIColor(hex: "#999999")
+            })
     }
     
     /// 数据处理

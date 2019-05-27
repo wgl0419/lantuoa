@@ -56,7 +56,6 @@ class ToExamineCommentController: UIViewController {
     /// 初始化子控件
     private func initSubViews() {
         view.backgroundColor = .white
-        title = descType == .agree ? "确认同意" : descType == .refuse ? "确认拒绝" : "留言评论"
         
         let btnView = UIView().taxi.adhere(toSuperView: view) // 按钮视图
             .taxi.layout { (make) in
@@ -354,53 +353,57 @@ class ToExamineCommentController: UIViewController {
         
         var uploadFileIds = [Int]()
         var uploadImageIds = [Int]()
-        MBProgressHUD.showWait("上传中")
-        for index in 0..<data.count {
-            let model = data[index]
-            if model is String {
-                let file = model as! String
-                fileUploadGetKey(type: 2, name: file) { (status, body, path) in
-                    if status {
-                        AliOSSClient.shared.uploadFile(name: file, path: path!, body: body!, callback: { (status) in
-                            if status {
-                                uploadFileIds.append(body!)
-                                if index == self.data.count - 1 {
-                                    if self.data.count != uploadFileIds.count + uploadImageIds.count {
-                                        DispatchQueue.main.async(execute: {
-                                            MBProgressHUD.showError("上传失败")
-                                        })
-                                    } else {
-                                        DispatchQueue.main.async(execute: {
-                                            self.confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
-                                        })
+        if data.count == 0 {
+            confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
+        } else {
+            MBProgressHUD.showWait("上传中")
+            for index in 0..<data.count {
+                let model = data[index]
+                if model is String {
+                    let file = model as! String
+                    fileUploadGetKey(type: 2, name: file) { (status, body, path) in
+                        if status {
+                            AliOSSClient.shared.uploadFile(name: file, path: path!, body: body!, callback: { (status) in
+                                if status {
+                                    uploadFileIds.append(body!)
+                                    if index == self.data.count - 1 {
+                                        if self.data.count != uploadFileIds.count + uploadImageIds.count {
+                                            DispatchQueue.main.async(execute: {
+                                                MBProgressHUD.showError("上传失败")
+                                            })
+                                        } else {
+                                            DispatchQueue.main.async(execute: {
+                                                self.confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
+                                            })
+                                        }
                                     }
                                 }
-                            }
-                        })
+                            })
+                        }
                     }
-                }
-            } else {
-                let imageModel = model as! (UIImage, PHAsset)
-                let image = imageModel.0
-                let imageName = "".randomStringWithLength(len: 8) + ".png"
-                fileUploadGetKey(type: 1, name: imageName) { (status, body, path) in
-                    if status {
-                        AliOSSClient.shared.uploadImage(image: image, name: path!, body: body!, callback: { (status) in
-                            if status {
-                                uploadImageIds.append(body!)
-                                if index == self.data.count - 1 {
-                                    if self.data.count != uploadFileIds.count + uploadImageIds.count {
-                                        DispatchQueue.main.async(execute: {
-                                            MBProgressHUD.showError("上传失败")
-                                        })
-                                    } else {
-                                        DispatchQueue.main.async(execute: {
-                                            self.confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
-                                        })
+                } else {
+                    let imageModel = model as! (UIImage, PHAsset)
+                    let image = imageModel.0
+                    let imageName = "".randomStringWithLength(len: 8) + ".png"
+                    fileUploadGetKey(type: 1, name: imageName) { (status, body, path) in
+                        if status {
+                            AliOSSClient.shared.uploadImage(image: image, name: path!, body: body!, callback: { (status) in
+                                if status {
+                                    uploadImageIds.append(body!)
+                                    if index == self.data.count - 1 {
+                                        if self.data.count != uploadFileIds.count + uploadImageIds.count {
+                                            DispatchQueue.main.async(execute: {
+                                                MBProgressHUD.showError("上传失败")
+                                            })
+                                        } else {
+                                            DispatchQueue.main.async(execute: {
+                                                self.confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
+                                            })
+                                        }
                                     }
                                 }
-                            }
-                        })
+                            })
+                        }
                     }
                 }
             }

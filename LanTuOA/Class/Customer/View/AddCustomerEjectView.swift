@@ -25,11 +25,14 @@ class AddCustomerEjectView: UIView {
                 titleLabel.text = modifyData.0
                 let data = modifyData.1
                 let type = data.type
+                titleArray.remove(at: 1)
+                seleStrArray.remove(at: 1)
+                placeholderArray.remove(at: 1)
+                
                 seleStrArray[0] = data.name ?? ""
-                seleStrArray[1] = type == 1 ? "公司客户" : "普通客户"
-                seleStrArray[2] = data.industryName ?? ""
-                seleStrArray[3] = data.address ?? ""
-                seleStrArray[4] = data.fullName ?? ""
+                seleStrArray[1] = data.industryName ?? ""
+                seleStrArray[2] = data.address ?? ""
+                seleStrArray[3] = data.fullName ?? ""
                 
                 customerType = type
                 customerIndustryId = data.industry
@@ -272,7 +275,7 @@ class AddCustomerEjectView: UIView {
     /// 编辑客户
     private func customerUpdate() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.customerUpdate(seleStrArray[0], seleStrArray[4], seleStrArray[3], customerType, customerIndustryId, customerId), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerUpdate(seleStrArray[0], seleStrArray[3], seleStrArray[2], customerType, customerIndustryId, customerId), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.showSuccess("修改客户成功")
             if self.addBlock != nil {
                 self.addBlock!()
@@ -301,9 +304,11 @@ class AddCustomerEjectView: UIView {
             }
             let view = SeleVisitModelView(title: "选择行业类型", content: contentStrArray)
             view.didBlock = { [weak self] (seleIndex) in
-                self?.seleStrArray[2] = contentStrArray[seleIndex]
+                var row = 2
+                if self?.seleStrArray.count == 4 { row = 1 }
+                self?.seleStrArray[row] = contentStrArray[seleIndex]
                 self?.customerIndustryId = self?.customerIndustryData[seleIndex].id ?? 0
-                self?.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+                self?.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .fade)
             }
             view.show()
         }
@@ -377,17 +382,23 @@ extension AddCustomerEjectView: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let row = indexPath.row
-        if row == 1 { // 客户类型
-            let contentArray = ["公司客户", "普通客户"]
-            let view = SeleVisitModelView(title: "选择客户类型", content: contentArray)
-            view.didBlock = { [weak self] (seleIndex) in
-                self?.customerType = seleIndex + 1
-                self?.seleStrArray[1] = contentArray[seleIndex]
-                tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
+        if seleStrArray.count == 4 { // 修改状态
+            if row == 1 { // 所属行业
+                customerIndustryList()
             }
-            view.show()
-        } else if row == 2 { // 所属行业
-            customerIndustryList()
+        } else { // 添加
+            if row == 1 { // 客户类型
+                let contentArray = ["公司客户", "普通客户"]
+                let view = SeleVisitModelView(title: "选择客户类型", content: contentArray)
+                view.didBlock = { [weak self] (seleIndex) in
+                    self?.customerType = seleIndex + 1
+                    self?.seleStrArray[1] = contentArray[seleIndex]
+                    tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
+                }
+                view.show()
+            } else if row == 2 { // 所属行业
+                customerIndustryList()
+            }
         }
     }
 }

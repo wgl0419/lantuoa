@@ -63,12 +63,16 @@ class CustomerEditController: UIViewController {
             .taxi.config({ (headerView) in
                 headerView.data = customerData
                 headerView.modifyBolck = {
-                    let ejectView = AddCustomerEjectView()
-                    ejectView.modifyData = ("修改客户信息", self.customerData)
-                    ejectView.addBlock = { [weak self] in // 修改成功 -> 刷新
-                        self?.customerDetail()
+                    let contentArray = ["修改客户信息", "修改客户类型"]
+                    let view = SeleVisitModelView(title: "选择修改内容", content: contentArray)
+                    view.didBlock = { [weak self] (seleIndex) in
+                        switch seleIndex {
+                        case 0: self?.modifyInformation()
+                        case 1: self?.modifyType()
+                        default: break
+                        }
                     }
-                    ejectView.show()
+                    view.show()
                 }
             })
         
@@ -158,6 +162,33 @@ class CustomerEditController: UIViewController {
         tableView.getData()
     }
     
+    /// 修改客户类型
+    private func modifyType() {
+        let ejectView = ModifyCustomerTypeEjectView(data: customerData)
+        ejectView.changeBlock = { [weak self] in // 修改成功 -> 刷新
+            self?.customerDetail()
+            self?.reloadTable()
+        }
+        ejectView.show()
+    }
+    
+    /// 刷新tab的数据
+    private func reloadTable() {
+        for tableView in tableViewArray {
+            tableView.reload()
+        }
+    }
+    
+    /// 修改客户信息
+    private func modifyInformation() {
+        let ejectView = AddCustomerEjectView()
+        ejectView.modifyData = ("修改客户信息", self.customerData)
+        ejectView.addBlock = { [weak self] in // 修改成功 -> 刷新
+            self?.customerDetail()
+        }
+        ejectView.show()
+    }
+    
     // MARK: - Api
     /// 客户详情
     private func customerDetail() {
@@ -172,12 +203,6 @@ class CustomerEditController: UIViewController {
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取最新数据失败")
         })
-    }
-    
-    // MARK: - 按钮点击
-    /// 点击添加拜访对象
-    @objc private func addVisitorClick() {
-        
     }
 
 }

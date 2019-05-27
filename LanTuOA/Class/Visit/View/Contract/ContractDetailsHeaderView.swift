@@ -52,12 +52,13 @@ class ContractDetailsHeaderView: UIView {
                     let signingTimeStr = Date(timeIntervalSince1970: TimeInterval(data.signTime)).customTimeStr(customStr: "yyyy-MM-dd")
                     signingTimeLabel.text = signingTimeStr
                 }
+                invoiceLabel.text = data.invoiceInfo ?? " "
             }
         }
     }
     
     /// 标题数组
-    private let titleArray = ["实际发布时间：", "支持总额：", "合同总额：", "回款总额：", "制作费：", "参与人员：", "签约时间："]
+    private let titleArray = ["实际发布时间：", "支持总额：", "合同总额：", "回款总额：", "制作费：", "参与人员：", "签约时间：", "开票状况："]
     /// 内容控件数组
     private var contentLabelArray = [UILabel]()
     /// 合同名称
@@ -78,6 +79,8 @@ class ContractDetailsHeaderView: UIView {
     private var participateLabel = UILabel()
     /// 签约时间
     private var signingTimeLabel = UILabel()
+    /// 开票状况
+    private var invoiceLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -141,7 +144,7 @@ class ContractDetailsHeaderView: UIView {
             })
         
         
-        contentLabelArray = [timeLabel, contributionLabel, totalLabel, moneyBackLabel, productionLabel, participateLabel, signingTimeLabel]
+        contentLabelArray = [timeLabel, contributionLabel, totalLabel, moneyBackLabel, productionLabel, participateLabel, signingTimeLabel, invoiceLabel]
         for index in 0..<titleArray.count {
             let lastLabel: UILabel! = index == 0 ? numberLabel : contentLabelArray[index - 1]
             setTitle(titleStr: titleArray[index], contentLabel: contentLabelArray[index], lastLabel: lastLabel, isLast: index == titleArray.count - 1)

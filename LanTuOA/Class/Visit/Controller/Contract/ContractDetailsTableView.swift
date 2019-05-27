@@ -255,6 +255,7 @@ class ContractDetailsTableView: UITableView {
     private func performList() {
         MBProgressHUD.showWait("")
         guard contractUsersData.count != 0 else {
+            MBProgressHUD.showError("获取业绩列表失败")
             return
         }
         let model = contractUsersData[seleContractUsers]

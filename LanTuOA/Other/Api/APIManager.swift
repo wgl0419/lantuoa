@@ -37,6 +37,7 @@ enum APIManager {
     case customerIndustryList // 行业列表
     case customerDetail(Int) // 客户详情
     case customerMembers(Int) // 客户跟进人员
+    case customerUpdateDevelop(Int, Int, Int) // 设置开发客户
     
     
     // MARK: - 项目
@@ -99,7 +100,7 @@ enum APIManager {
     case processList // 流程列表
     case processParams(Int) // 获取流程内容
     case processUsers(Int) // 获取流程默认审批/抄送人
-    case processCommit(Int, [String:String], [[String:String]], [[String:String]], [[String:String]], [[String:String]], [[String:String]]) // 提交流程
+    case processCommit(Int, [String:Any], [[String:String]], [[String:String]], [[String:String]], [[String:String]], [[String:String]]) // 提交流程
     
     // MARK: - 合同
     case contractList(String, Int?, Int?, Int?, Int, Int, Int?, Int?, Int?) // 合同列表/查询合同 (name:客户名称/项目名称/合同编码   customerId:客户id  projectId:项目id   userId:用户id，查询他人合同时使用  page:页码   limit:一页数据)
@@ -152,6 +153,7 @@ extension APIManager: TargetType {
         case .customerIndustryList: return "/api/customer/industry/list"
         case .customerDetail(let id): return "/api/customer/detail/\(id)"
         case .customerMembers(let id): return "/api/customer/members/\(id)"
+        case .customerUpdateDevelop(let id, _, _): return "/api/customer/update/develop/\(id)"
             
         case .projectSave: return "/api/project/save"
         case .projectUpdate: return "/api/project/update"
@@ -249,7 +251,7 @@ extension APIManager: TargetType {
             return .post
         case .workExtendExtend, .departmentsCreate, .departmentsAddUsers, .contractPaybackAdd, .processCommit:
             return .post
-        case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate, .passwordReset:
+        case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate, .passwordReset, .customerUpdateDevelop:
             return .put
         case .projectMemberDelete, .notifyCheckCommentDelete:
             return .delete
@@ -324,6 +326,8 @@ extension APIManager: TargetType {
             params = ["name": name, "full_name": full_name, "address": address, "industry": industry]
         case let .projectSaveRequire(name, customerId, address): // 申请新增项目（拜访页面）
             params = ["name": name, "customerId": customerId, "address": address]
+        case let .customerUpdateDevelop(_, userId, endTime): // 设置开发客户
+            params = ["userId": userId, "endTime": endTime]
             
             
         case let .visitSave(customerId, projectId, type, content, result, visitTime, contact): // 新增拜访

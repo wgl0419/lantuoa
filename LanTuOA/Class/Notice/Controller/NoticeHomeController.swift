@@ -300,23 +300,32 @@ class NoticeHomeController: UIViewController {
     /// 拒绝审核 填写弹出框
     ///
     /// - Parameters:
-    ///   - type: 类型  0：已存在  1：有误
+    ///   - type: 类型  0：已存在  1：有误  2：其他
     ///   - index: 在tableView中的位置
     private func modifyEjectView(type: Int ,index: IndexPath) {
-        let ejectView = ModifyNoticeEjectView()
-        ejectView.data = pendingData[index.row]
-        if type == 0 {
-            ejectView.modifyType = .alreadyExist
-        } else {
-            ejectView.modifyType = .unreasonable
+        if type != 2 { // 0：已存在  1：有误
+            let ejectView = ModifyNoticeEjectView()
+            ejectView.data = pendingData[index.row]
+            if type == 0 {
+                ejectView.modifyType = .alreadyExist
+            } else {
+                ejectView.modifyType = .unreasonable
+            }
+            ejectView.alreadyExistBlock = { [weak self] (idArray) in
+                self?.notifyCheckCusRejectExist(index: index, id: idArray)
+            }
+            ejectView.unreasonableBlock = { [weak self] (contentArray) in
+                self?.notifyCheckCusRejectMistake(index: index, conten: contentArray)
+            }
+            ejectView.show()
+        } else { // 其他
+            let ejectView = ReasonsRefusalEjectView()
+            ejectView.checkId = pendingData[index.row].id
+            ejectView.changeBlock = { [weak self] in // 刷新审核列表
+                self?.notifyCheckList(isMore: false)
+            }
+            ejectView.show()
         }
-        ejectView.alreadyExistBlock = { [weak self] (idArray) in
-            self?.notifyCheckCusRejectExist(index: index, id: idArray)
-        }
-        ejectView.unreasonableBlock = { [weak self] (contentArray) in
-            self?.notifyCheckCusRejectMistake(index: index, conten: contentArray)
-        }
-        ejectView.show()
     }
     
     /// 拒绝创建客户/项目-客户已存在
@@ -433,6 +442,10 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
             case "5": // 拜访 -> 拜访详情
                 let vc = VisitDetailsController()
                 vc.visitListId = systemData[indexPath.row].checkId
+                navigationController?.pushViewController(vc, animated: true)
+            case "6":
+                let vc = ContractDetailsController()
+                vc.contractId = systemData[indexPath.row].checkId
                 navigationController?.pushViewController(vc, animated: true)
             default: break
             }

@@ -62,4 +62,5 @@ struct ContractListData: HandyJSON {
     var endTime: Int = 0
     var makeMoney: Float = 0
     var startTime: Int = 0
+    var invoiceInfo: String?
 }

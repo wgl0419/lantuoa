@@ -276,7 +276,10 @@ class FillInApplyController: UIViewController {
                 projectPosition = index
             }
             if model.type == 8 { // 表单
-                let smallArray = model.children
+                data[index].children.sort { (model1, model2) -> Bool in
+                    return model1.sort < model2.sort
+                }
+                let smallArray = data[index].children
                 var array = [String]()
                 for _ in smallArray {
                     array.append("")
@@ -430,6 +433,7 @@ class FillInApplyController: UIViewController {
     private func getApprovalCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
         cell.isApproval = true
+        cell.isProcess = isProcess
         cell.data = processUsersData.checkUsers
         return cell
     }
@@ -480,6 +484,7 @@ class FillInApplyController: UIViewController {
     private func getCarbonCopyCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
         cell.isApproval = false
+        cell.isProcess = true
         let oldCount = processUsersData.ccUsers.count - carbonCopyData.count // 原本的抄送人数量
         cell.oldCount = oldCount
         cell.data = processUsersData.ccUsers
@@ -559,46 +564,50 @@ class FillInApplyController: UIViewController {
     private func uploadData() {
         uploadImageIds = []
         uploadFileIds = []
-        for index in 0..<imageArray.count {
-            let image = imageArray[index]
-            let imageName = "".randomStringWithLength(len: 8) + ".png"
-            fileUploadGetKey(type: 1, name: imageName) { (status, body, path) in
-                if status {
-                    AliOSSClient.shared.uploadImage(image: image, name: path!, body: body!, callback: { (status) in
-                        if status {
-                            self.uploadImageIds.append(body!)
-                            if index == self.imageArray.count - 1 {
-                                if self.uploadImageIds.count != self.imageArray.count {
-                                    DispatchQueue.main.async(execute: {
-                                        MBProgressHUD.showError("上传失败")
-                                    })
-                                } else {
-                                    self.getProcessCommit()
+        if imageArray.count == 0 && fileArray.count == 0 {
+            getProcessCommit()
+        } else {
+            for index in 0..<imageArray.count {
+                let image = imageArray[index]
+                let imageName = "".randomStringWithLength(len: 8) + ".png"
+                fileUploadGetKey(type: 1, name: imageName) { (status, body, path) in
+                    if status {
+                        AliOSSClient.shared.uploadImage(image: image, name: path!, body: body!, callback: { (status) in
+                            if status {
+                                self.uploadImageIds.append(body!)
+                                if index == self.imageArray.count - 1 {
+                                    if self.uploadImageIds.count != self.imageArray.count {
+                                        DispatchQueue.main.async(execute: {
+                                            MBProgressHUD.showError("上传失败")
+                                        })
+                                    } else {
+                                        self.getProcessCommit()
+                                    }
                                 }
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }
-        }
-        for index in 0..<fileArray.count {
-            let file = fileArray[index]
-            fileUploadGetKey(type: 2, name: file) { (status, body, path) in
-                if status {
-                    AliOSSClient.shared.uploadFile(name: file, path: path!, body: body!, callback: { (status) in
-                        if status {
-                            self.uploadFileIds.append(body!)
-                            if index == self.uploadFileIds.count - 1 {
-                                if self.uploadFileIds.count != self.fileArray.count {
-                                    DispatchQueue.main.async(execute: {
-                                        MBProgressHUD.showError("上传失败")
-                                    })
-                                } else {
-                                    self.getProcessCommit()
+            for index in 0..<fileArray.count {
+                let file = fileArray[index]
+                fileUploadGetKey(type: 2, name: file) { (status, body, path) in
+                    if status {
+                        AliOSSClient.shared.uploadFile(name: file, path: path!, body: body!, callback: { (status) in
+                            if status {
+                                self.uploadFileIds.append(body!)
+                                if index == self.uploadFileIds.count - 1 {
+                                    if self.uploadFileIds.count != self.fileArray.count {
+                                        DispatchQueue.main.async(execute: {
+                                            MBProgressHUD.showError("上传失败")
+                                        })
+                                    } else {
+                                        self.getProcessCommit()
+                                    }
                                 }
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }
         }
@@ -659,7 +668,7 @@ class FillInApplyController: UIViewController {
         MBProgressHUD.showWait("")
         
         /// 数据
-        var dataDic: [String:String] = [:]
+        var dataDic: [String:Any] = [:]
         for index in 0..<data.count {
             let model = data[index]
             if model.type < 8 {
@@ -667,13 +676,15 @@ class FillInApplyController: UIViewController {
                 contentStr = processDataHnadle(model, str: contentStr)
                 dataDic.updateValue(contentStr, forKey: model.name ?? "")
             } else { // 表单
+                var dic: [String:String] = [:]
                 let children = model.children
                 for childrenIndex in 0..<children.count {
                     let smallModel = children[childrenIndex]
                     var contentStr = seleStrArray[index][childrenIndex]
                     contentStr = processDataHnadle(model, str: contentStr)
-                    dataDic.updateValue(contentStr, forKey: smallModel.name ?? "")
+                    dic.updateValue(contentStr, forKey: smallModel.name ?? "")
                 }
+                dataDic.updateValue(dic, forKey: model.name ?? "")
             }
         }
         
@@ -888,7 +899,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                 cell.contentStr = seleStrArray[section][row]
                 cell.isMust = model.isNecessary == 1
                 cell.inputBlock = { [weak self] (contentStr) in
-                    self?.seleStrArray[section][0] = contentStr
+                    self?.seleStrArray[section][row] = contentStr
                     self?.confirmHandle()
                 }
                 return cell
@@ -899,7 +910,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                 cell.isMust = model.isNecessary == 1
                 cell.isSpecial = true
                 cell.inputBlock = { [weak self] (contentStr) in
-                    self?.seleStrArray[section][0] = contentStr
+                    self?.seleStrArray[section][row] = contentStr
                     self?.confirmHandle()
                 }
                 return cell
@@ -984,17 +995,6 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
         default: break
         }
     }
-    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let sectionFooterH: CGFloat = 40
-//        if scrollView.contentOffset.y <= sectionFooterH && scrollView.contentOffset.y >= 0 {
-//            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -sectionFooterH, right: 0)
-//        }  else if scrollView.contentOffset.y >= sectionFooterH {
-//            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -sectionFooterH, right: 0)
-//        } else {
-//            scrollView.contentInset = .zero
-//        }
-//    }
 }
 
 extension FillInApplyController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

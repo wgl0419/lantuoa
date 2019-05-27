@@ -47,4 +47,6 @@ struct ProjectListStatisticsData: HandyJSON {
     var manageUserName: String?
     var canManage: Int = 0
     var fullName: String?
+    var groupNames: String?
+    var members: String?
 }

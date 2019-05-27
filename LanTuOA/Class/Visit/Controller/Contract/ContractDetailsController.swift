@@ -16,6 +16,8 @@ class ContractDetailsController: UIViewController {
     
     /// 合同数据
     var contractListData: ContractListData!
+    /// 合同id
+    var contractId: Int!
 
     /// 顶部视图
     private var headerView: ContractDetailsHeaderView!
@@ -36,7 +38,12 @@ class ContractDetailsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initSubViews()
+        if contractListData != nil {
+            initSubViews()
+            contractId = contractListData.id
+        } else {
+            contractDetail()
+        }
     }
     
     // MARK: - 自定义私有方法
@@ -145,18 +152,22 @@ class ContractDetailsController: UIViewController {
     
     /// 刷新内容
     private func reloadData() {
-        headerView.data = contractListData
-        headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
-        headerHeight = headerView.height // 并保存
-        
-        if self.changeBlock != nil {
-            self.changeBlock!()
-        }
-        
-        for index in 0..<3 {
-            let tableView = tableViewArray[index]
-            tableView.offsetY = headerHeight
-            tableView.reload()
+        if headerView != nil {
+            headerView.data = contractListData
+            headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
+            headerHeight = headerView.height // 并保存
+            
+            if self.changeBlock != nil {
+                self.changeBlock!()
+            }
+            
+            for index in 0..<3 {
+                let tableView = tableViewArray[index]
+                tableView.offsetY = headerHeight
+                tableView.reload()
+            }
+        } else {
+            initSubViews()
         }
     }
     
@@ -164,12 +175,8 @@ class ContractDetailsController: UIViewController {
     /// 合同详情
     private func contractDetail() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.contractDetail(contractListData.id), t: ContractDetailModel.self, successHandle: { (result) in
-            let name = self.contractListData.name
-            let contractUsersData = self.contractListData.contractUsers
+        _ = APIService.shared.getData(.contractDetail(contractId), t: ContractDetailModel.self, successHandle: { (result) in
             self.contractListData = result.data
-            self.contractListData.name = name
-            self.contractListData.contractUsers = contractUsersData
             self.reloadData()
             MBProgressHUD.dismiss()
         }) { (error) in

@@ -48,6 +48,9 @@
 		1803A32A225F293500B86F20 /* ApplyHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A329225F293500B86F20 /* ApplyHistoryCell.swift */; };
 		1803A32C225F32A600B86F20 /* ProcessHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A32B225F32A600B86F20 /* ProcessHistoryModel.swift */; };
 		1803A32E225F426400B86F20 /* FillInApplyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A32D225F426400B86F20 /* FillInApplyController.swift */; };
+		18045B0B229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18045B0A229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift */; };
+		18045B0D229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18045B0C229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift */; };
+		18045B0F229BE69700B3E493 /* ReasonsRefusalEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18045B0E229BE69700B3E493 /* ReasonsRefusalEjectView.swift */; };
 		1804E1F5224A00EE006AB973 /* AddVisitorEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1804E1F4224A00EE006AB973 /* AddVisitorEjectView.swift */; };
 		1804E1F9224A1231006AB973 /* CustomerEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1804E1F8224A1231006AB973 /* CustomerEditController.swift */; };
 		1804E1FD224A2124006AB973 /* SetUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1804E1FC224A2124006AB973 /* SetUpController.swift */; };
@@ -285,6 +288,9 @@
 		1803A329225F293500B86F20 /* ApplyHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyHistoryCell.swift; sourceTree = "<group>"; };
 		1803A32B225F32A600B86F20 /* ProcessHistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHistoryModel.swift; sourceTree = "<group>"; };
 		1803A32D225F426400B86F20 /* FillInApplyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyController.swift; sourceTree = "<group>"; wrapsLines = 1; };
+		18045B0A229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyCustomerTypeEjectView.swift; sourceTree = "<group>"; };
+		18045B0C229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerUpdateDevelopModel.swift; sourceTree = "<group>"; };
+		18045B0E229BE69700B3E493 /* ReasonsRefusalEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReasonsRefusalEjectView.swift; sourceTree = "<group>"; };
 		1804E1F4224A00EE006AB973 /* AddVisitorEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVisitorEjectView.swift; sourceTree = "<group>"; };
 		1804E1F8224A1231006AB973 /* CustomerEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerEditController.swift; sourceTree = "<group>"; };
 		1804E1FC224A2124006AB973 /* SetUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpController.swift; sourceTree = "<group>"; };
@@ -531,6 +537,8 @@
 				1838BC53225C9BC700978E72 /* CostomerDetailsProjectCell.swift */,
 				1838BC55225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift */,
 				180BFB342265B49F001879BD /* CostomerDetailsContractCell.swift */,
+				18045B0A229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift */,
+				18045B0E229BE69700B3E493 /* ReasonsRefusalEjectView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -544,6 +552,7 @@
 				180BFB322265B14C001879BD /* ContractListModel.swift */,
 				180736C422706A4F001F1FA6 /* CustomerSaveRequireModel.swift */,
 				180E4D58228516AF0042FA87 /* CustomerMembersModel.swift */,
+				18045B0C229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1417,6 +1426,7 @@
 				18067C2922801E42005D26AC /* ContractScreenView.swift in Sources */,
 				181FF96622714E9600ED5A2A /* ModifyNoticeEjectView.swift in Sources */,
 				1805F3B722758C9500AF0AF7 /* ReplacementDepartmentController.swift in Sources */,
+				18045B0B229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift in Sources */,
 				18532E9422927BBD00C58E47 /* ToExamineCommentCollectionCell.swift in Sources */,
 				18050D5D224B16C200C9DB9A /* ToExamineController.swift in Sources */,
 				180B76FD2239DFCC0096403B /* VisitHomeCell.swift in Sources */,
@@ -1475,6 +1485,7 @@
 				1827ED882268223700EFF889 /* AchievementsDetailsController.swift in Sources */,
 				1827ED982269660700EFF889 /* FillInApplyApprovalCollectionCell.swift in Sources */,
 				1838BC56225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift in Sources */,
+				18045B0F229BE69700B3E493 /* ReasonsRefusalEjectView.swift in Sources */,
 				1876A8E02266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift in Sources */,
 				1804E1FF224A2ACC006AB973 /* ChangePasswordController.swift in Sources */,
 				1810EC80222F5D4100CF6488 /* UITextView.swift in Sources */,
@@ -1580,6 +1591,7 @@
 				1827ED842268076D00EFF889 /* ContractRepaymentEjectView.swift in Sources */,
 				1802CDA0224CC3D3005997F1 /* VisitSeleTimeView.swift in Sources */,
 				1849C1BD227E6E8200883C61 /* BMChineseSort.swift in Sources */,
+				18045B0D229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift in Sources */,
 				18057D8B229390040087D05D /* LPPZSendContentTextParser.m in Sources */,
 				1827ED8E22685E9600EFF889 /* AchievementsDetailsEjectView.swift in Sources */,
 				180B8FA72273191B00E6FDE5 /* UIResponder.swift in Sources */,

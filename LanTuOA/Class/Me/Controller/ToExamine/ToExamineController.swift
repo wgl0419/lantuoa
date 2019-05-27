@@ -209,23 +209,33 @@ class ToExamineController: UIViewController {
     /// 拒绝审核 填写弹出框
     ///
     /// - Parameters:
-    ///   - type: 类型  0：已存在  1：有误
+    ///   - type: 类型  0：已存在  1：有误  2：其他
     ///   - index: 在tableView中的位置
     private func modifyEjectView(type: Int ,index: IndexPath) {
-        let ejectView = ModifyNoticeEjectView()
-        ejectView.data = awaitingAuditData[index.row]
-        if type == 0 {
-            ejectView.modifyType = .alreadyExist
-        } else {
-            ejectView.modifyType = .unreasonable
+        if type != 2 { // 0：已存在  1：有误
+            let ejectView = ModifyNoticeEjectView()
+            ejectView.data = awaitingAuditData[index.row]
+            if type == 0 {
+                ejectView.modifyType = .alreadyExist
+            } else {
+                ejectView.modifyType = .unreasonable
+            }
+            ejectView.alreadyExistBlock = { [weak self] (idArray) in
+                self?.notifyCheckCusRejectExist(index: index, id: idArray)
+            }
+            ejectView.unreasonableBlock = { [weak self] (contentArray) in
+                self?.notifyCheckCusRejectMistake(index: index, conten: contentArray)
+            }
+            ejectView.show()
+        } else { // 其他
+            let ejectView = ReasonsRefusalEjectView()
+            ejectView.checkId = awaitingAuditData[index.row].id
+            ejectView.changeBlock = { [weak self] in // 刷新审核列表
+                self?.notifyCheckList(status: 1, isMore: false)
+                self?.notifyCheckList(status: 2, isMore: false)
+            }
+            ejectView.show()
         }
-        ejectView.alreadyExistBlock = { [weak self] (idArray) in
-            self?.notifyCheckCusRejectExist(index: index, id: idArray)
-        }
-        ejectView.unreasonableBlock = { [weak self] (contentArray) in
-            self?.notifyCheckCusRejectMistake(index: index, conten: contentArray)
-        }
-        ejectView.show()
     }
     
     /// 拒绝创建客户/项目-客户已存在
