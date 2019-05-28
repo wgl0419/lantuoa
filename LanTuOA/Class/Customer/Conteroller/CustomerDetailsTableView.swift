@@ -371,11 +371,11 @@ class CustomerDetailsTableView: UIView {
             self.projectData = result.data
             self.tableView.mj_header.endRefreshing()
             self.tableView.reloadData()
-            self.isNoData = self.projectData.count == 0
+            self.tableView.isNoData = self.projectData.count == 0
             self.setTableFooterView()
         }, errorHandle: { (error) in
             self.tableView.mj_header.endRefreshing()
-            self.isNoData = self.projectData.count == 0
+            self.tableView.isNoData = self.projectData.count == 0
             MBProgressHUD.showError(error ?? "获取在线项目失败")
         })
     }
@@ -387,11 +387,11 @@ class CustomerDetailsTableView: UIView {
             self.contactListData = result.data
             self.tableView.mj_header.endRefreshing()
             self.tableView.reloadData()
-            self.isNoData = self.contactListData.count == 0
+            self.tableView.isNoData = self.contactListData.count == 0
             self.setTableFooterView()
         }, errorHandle: { (error) in
             self.tableView.mj_header.endRefreshing()
-            self.isNoData = self.contactListData.count == 0
+            self.tableView.isNoData = self.contactListData.count == 0
             MBProgressHUD.showError(error ?? "获取拜访对象失败")
         })
     }
@@ -422,7 +422,7 @@ class CustomerDetailsTableView: UIView {
             } else {
                 self.tableView.mj_footer.resetNoMoreData()
             }
-            self.isNoData = self.visitData.count == 0
+            self.tableView.isNoData = self.visitData.count == 0
             self.tableView.reloadData()
             self.setTableFooterView()
         }, errorHandle: { (error) in
@@ -433,7 +433,7 @@ class CustomerDetailsTableView: UIView {
                 self.tableView.mj_header.endRefreshing()
                 self.tableView.mj_footer.isHidden = false
             }
-            self.isNoData = self.visitData.count == 0
+            self.tableView.isNoData = self.visitData.count == 0
             MBProgressHUD.showError(error ?? "获取历史拜访失败")
         })
     }
@@ -463,7 +463,7 @@ class CustomerDetailsTableView: UIView {
             } else {
                 self.tableView.mj_footer.resetNoMoreData()
             }
-            self.isNoData = self.contractListData.count == 0
+            self.tableView.isNoData = self.contractListData.count == 0
             self.tableView.reloadData()
             self.setTableFooterView()
         }, errorHandle: { (error) in
@@ -474,7 +474,7 @@ class CustomerDetailsTableView: UIView {
                 self.tableView.mj_header.endRefreshing()
                 self.tableView.mj_footer.isHidden = false
             }
-            self.isNoData = self.contractListData.count == 0
+            self.tableView.isNoData = self.contractListData.count == 0
             MBProgressHUD.showError(error ?? "获取历史合同失败")
         })
     }
@@ -487,10 +487,10 @@ class CustomerDetailsTableView: UIView {
             self.tableView.mj_header.endRefreshing()
             self.tableView.reloadData()
             self.setTableFooterView()
-            self.isNoData = self.customerMembersData.count == 0
+            self.tableView.isNoData = self.customerMembersData.count == 0
             MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
-            MBProgressHUD.showError(error ?? "获取参与人员")
+            MBProgressHUD.showError(error ?? "获取参与人员失败")
         })
     }
     

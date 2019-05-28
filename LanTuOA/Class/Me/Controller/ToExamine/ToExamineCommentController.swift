@@ -340,7 +340,7 @@ class ToExamineCommentController: UIViewController {
                         let idStr: String = attachMent.userInfo!["userID"] as! String
                         var nameStr: String = attachMent.userInfo!["userName"] as! String
                         nameStr.removeLast()
-                        contentStr.append("\(nameStr){{\(idStr)}}")
+                        contentStr.append("\(nameStr){{\(idStr)}} ")
                     }
                 } else {
                     let nsStr = attributedText.string as NSString
@@ -348,7 +348,6 @@ class ToExamineCommentController: UIViewController {
                     contentStr.append(str)
                 }
             })
-            print(contentStr)
         }
         
         var uploadFileIds = [Int]()

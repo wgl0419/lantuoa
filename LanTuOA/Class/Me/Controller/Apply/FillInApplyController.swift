@@ -443,6 +443,7 @@ class FillInApplyController: UIViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImageCell", for: indexPath) as! ToExamineImageCell
         cell.data = imageArray
         cell.imageBlock = { [weak self] in
+            UIApplication.shared.keyWindow?.endEditing(true)
             self?.imageClick()
         }
         cell.deleteBlock = { [weak self] (row) in
@@ -456,7 +457,9 @@ class FillInApplyController: UIViewController {
     /// 附件标题cell
     private func getEnclosureTitleCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureTitleCell", for: indexPath) as! ToExamineEnclosureTitleCell
+        cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
         cell.enclosureBlock = {
+            UIApplication.shared.keyWindow?.endEditing(true)
             let vc = SeleEnclosureController()
             vc.determineBlock = { [weak self] (fileArray) in
                 for file in fileArray {
@@ -472,6 +475,7 @@ class FillInApplyController: UIViewController {
     /// 附件cell
     private func getEnclosureCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureCell", for: indexPath) as! ToExamineEnclosureCell
+        cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
         cell.path = fileArray[indexPath.row - 2]
         cell.deleteBlock = { [weak self] in
             self?.fileArray.remove(at: indexPath.row - 2)
@@ -834,6 +838,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyPersonnelCell", for: indexPath) as! FillInApplyPersonnelCell
                 cell.data = contractData
                 cell.addBlock = { [weak self] in
+                    UIApplication.shared.keyWindow?.endEditing(true)
                     self?.addPersonnelHandle()
                     self?.confirmHandle()
                 }
@@ -849,6 +854,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyMoneyBackCell", for: indexPath) as! FillInApplyMoneyBackCell
                 cell.data = moneyBackData
                 cell.addBlock = { [weak self] in
+                    UIApplication.shared.keyWindow?.endEditing(true)
                     self?.addMoneyBackHandle()
                     self?.confirmHandle()
                 }

@@ -105,6 +105,7 @@ class FillInApplyApprovalCell: UITableViewCell {
                 make.left.right.equalToSuperview()
             })
             .taxi.config({ (label) in
+                label.textAlignment = .center
                 label.font = UIFont.regular(size: 12)
                 label.textColor = UIColor(hex: "#999999")
             })
