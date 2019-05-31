@@ -15,11 +15,11 @@ class MeHomeController: UIViewController {
     private var tableView: UITableView!
     
     /// 标题
-//    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同", "工作组"], ["组织架构"], ["设置"]]
-    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同"], ["组织架构"], ["设置"]]
+    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同", "工作组"], ["组织架构"], ["设置"]]
+//    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同"], ["组织架构"], ["设置"]]
     /// 图标
-//    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication", "me_workGroup"], ["me_departmentManagement"], ["me_setUp"]]
-    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication"], ["me_departmentManagement"], ["me_setUp"]]
+    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication", "me_workGroup"], ["me_departmentManagement"], ["me_setUp"]]
+//    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication"], ["me_departmentManagement"], ["me_setUp"]]
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

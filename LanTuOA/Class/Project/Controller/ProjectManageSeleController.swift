@@ -135,7 +135,7 @@ class ProjectManageSeleController: UIViewController {
     private func users(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.users(newPage, 10, searchBar.text ?? "", 1), t: UsersModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.users(newPage, 15, searchBar.text ?? "", 1), t: UsersModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

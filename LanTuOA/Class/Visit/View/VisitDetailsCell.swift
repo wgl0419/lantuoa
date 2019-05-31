@@ -87,7 +87,7 @@ class VisitDetailsCell: UITableViewCell {
         }
             .taxi.config { (label) in
                 label.text = titleStr
-                label.font = UIFont.medium(size: 12)
+                label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
         }
         
@@ -104,7 +104,7 @@ class VisitDetailsCell: UITableViewCell {
                 label.text = contentStr
                 label.numberOfLines = 0
                 label.textColor = blackColor
-                label.font = UIFont.medium(size: 12)
+                label.font = UIFont.medium(size: 14)
         }
         
         return contentLabel

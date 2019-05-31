@@ -17,14 +17,14 @@ class CustomerDetailsTableView: UIView {
     enum CellStyle: Int {
         /// 在线项目
         case project = 0
-        /// 参与人员
-        case personnel = 1
+//        /// 参与人员
+//        case personnel = 1
         /// 拜访历史
-        case history = 2
+        case history = 1
         /// 历史合同
-        case contract = 3
+        case contract = 2
         /// 拜访对象
-        case visitor = 4
+        case visitor = 3
     }
     
     /// 滚动回调
@@ -86,7 +86,12 @@ class CustomerDetailsTableView: UIView {
     }
     
     /// 刷新数据
-    func reload() {
+    func reload(height: CGFloat = 0) {
+        if height != 0 {
+            offsetY = height
+            tableView.contentInset = UIEdgeInsets(top: offsetY + 40, left: 0, bottom: 0, right: 0)
+            tableView.setContentOffset(CGPoint(x: 0, y: -offsetY - 40), animated: false)
+        }
         setFooterView()
         if cellStyle == .history { // 拜访历史
             tableView.mj_footer.isHidden = true

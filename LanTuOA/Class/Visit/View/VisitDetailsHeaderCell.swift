@@ -72,7 +72,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
         }
             .taxi.config { (label) in
                 label.text = "客户："
-                label.font = UIFont.medium(size: 12)
+                label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
         }
         
@@ -85,7 +85,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.numberOfLines = 0
                 label.textColor = blackColor
-                label.font = UIFont.boldSystemFont(ofSize: 12)
+                label.font = UIFont.boldSystemFont(ofSize: 14)
             })
         
         let projectAddress = UILabel().taxi.adhere(toSuperView: contentView) // “项目地址”
@@ -95,7 +95,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
         }
             .taxi.config { (label) in
                 label.text = "项目地址："
-                label.font = UIFont.medium(size: 12)
+                label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
         }
         
@@ -109,7 +109,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.numberOfLines = 0
                 label.textColor = blackColor
-                label.font = UIFont.boldSystemFont(ofSize: 12)
+                label.font = UIFont.boldSystemFont(ofSize: 14)
             })
     }
 }

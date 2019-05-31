@@ -139,6 +139,7 @@ class VisitDetailsController: UIViewController {
     /// 点击评论
     @objc private func commentClick() {
         let vc = ToExamineCommentController()
+        vc.title = visitListData.projectName ?? "留言评论"
         vc.checkListId = visitListId
         vc.descType = .visit
         vc.commentBlock = { [weak self] in

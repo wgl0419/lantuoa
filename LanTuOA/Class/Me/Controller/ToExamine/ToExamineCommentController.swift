@@ -164,10 +164,70 @@ class ToExamineCommentController: UIViewController {
             })
             .taxi.config({ (textView) in
                 textView.delegate = self
+                textView.inputAccessoryView = initInputView()
                 textView.textParser = LPPZSendContentTextParser()
                 textView.font = UIFont.systemFont(ofSize: 16)
                 textView.placeholderText = "请输入评论"
             })
+    }
+    
+    /// 生成inputView
+    private func initInputView() -> UIView {
+        let inputView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 44))
+        inputView.backgroundColor = .white
+        
+        _ = UIView().taxi.adhere(toSuperView: inputView) // 分割线
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.left.right.equalToSuperview()
+                make.height.equalTo(1)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+            })
+        
+        let relationBtn = UIButton().taxi.adhere(toSuperView: inputView) // 关联 -> @
+            .taxi.layout { (make) in
+                make.left.equalToSuperview().offset(10)
+                make.width.height.equalTo(44)
+                make.bottom.equalToSuperview()
+            }
+            .taxi.config { (btn) in
+                btn.setImage(UIImage(named: "relation"), for: .normal)
+                btn.addTarget(self, action: #selector(relationClick), for: .touchUpInside)
+        }
+        
+        let imageBtn = UIButton().taxi.adhere(toSuperView: inputView) // 图片
+            .taxi.layout { (make) in
+                make.left.equalTo(relationBtn.snp.right).offset(5)
+                make.bottom.width.height.equalTo(relationBtn)
+            }
+            .taxi.config { (btn) in
+                btn.setImage(UIImage(named: "image"), for: .normal)
+                btn.addTarget(self, action: #selector(imageClick), for: .touchUpInside)
+        }
+        
+        _ = UIButton().taxi.adhere(toSuperView: inputView) // 附件
+            .taxi.layout(snapKitMaker: { (make) in
+                make.left.equalTo(imageBtn.snp.right).offset(5)
+                make.bottom.width.height.equalTo(relationBtn)
+            })
+            .taxi.config({ (btn) in
+                btn.setImage(UIImage(named: "enclosure"), for: .normal)
+                btn.addTarget(self, action: #selector(enclosureClick), for: .touchUpInside)
+            })
+        
+        _ = UIButton().taxi.adhere(toSuperView: inputView)
+            .taxi.layout(snapKitMaker: { (make) in
+                make.right.equalToSuperview().offset(-15)
+                make.centerY.equalToSuperview()
+            })
+            .taxi.config({ (btn) in
+                btn.setTitle("完成", for: .normal)
+                btn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
+                btn.addTarget(self, action: #selector(doneClick), for: .touchUpInside)
+            })
+        
+        return inputView
     }
     
     /// 打开照相机
@@ -447,6 +507,11 @@ class ToExamineCommentController: UIViewController {
             }
         }
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /// 点击隐藏键盘
+    @objc private func doneClick() {
+        UIApplication.shared.keyWindow?.endEditing(true)
     }
 }
 

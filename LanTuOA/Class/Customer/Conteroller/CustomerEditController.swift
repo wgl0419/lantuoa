@@ -78,7 +78,8 @@ class CustomerEditController: UIViewController {
         
         headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
         headerHeight = headerView.height // 并保存
-        let titleArray = ["在线项目", "参与人员", "历史拜访", "历史合同", "拜访对象"]
+//        let titleArray = ["在线项目", "参与人员", "历史拜访", "历史合同", "拜访对象"]
+        let titleArray = ["在线项目", "历史拜访", "历史合同", "拜访对象"]
         segment = ProjectDetailsSegmentedView(title: titleArray) // 选择器
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
@@ -100,7 +101,7 @@ class CustomerEditController: UIViewController {
     private func addTableView() {
         var lastTableView: CustomerDetailsTableView!
         self.offsetY = -headerHeight - 40
-        for index in 0..<5 { // 添加5个tableview
+        for index in 0..<4 { // 添加4个tableview
             let tableView = CustomerDetailsTableView(style: CustomerDetailsTableView.CellStyle(rawValue: index)!, height: headerHeight, customerId: customerData.id) // tableview
                 .taxi.adhere(toSuperView: scrollView)
                 .taxi.layout { (make) in
@@ -110,7 +111,7 @@ class CustomerEditController: UIViewController {
                         make.left.equalTo(lastTableView.snp.right)
                     }
                     make.width.top.height.equalToSuperview()
-                    if index == 4 {
+                    if index == 3 {
                         make.right.equalToSuperview()
                     }
                 }
@@ -166,16 +167,17 @@ class CustomerEditController: UIViewController {
     private func modifyType() {
         let ejectView = ModifyCustomerTypeEjectView(data: customerData)
         ejectView.changeBlock = { [weak self] in // 修改成功 -> 刷新
-            self?.customerDetail()
-            self?.reloadTable()
+            self?.customerDetail(isChange: true)
         }
         ejectView.show()
     }
     
     /// 刷新tab的数据
     private func reloadTable() {
+        headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
+        headerHeight = headerView.height // 并保存
         for tableView in tableViewArray {
-            tableView.reload()
+            tableView.reload(height: headerHeight)
         }
     }
     
@@ -191,7 +193,7 @@ class CustomerEditController: UIViewController {
     
     // MARK: - Api
     /// 客户详情
-    private func customerDetail() {
+    private func customerDetail(isChange: Bool = false) {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.customerDetail(customerData.id), t: CustomerDetailModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
@@ -199,6 +201,9 @@ class CustomerEditController: UIViewController {
             self.headerView.data = self.customerData
             if self.editBlock != nil {
                 self.editBlock!()
+            }
+            if isChange {
+                self.reloadTable()
             }
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取最新数据失败")

@@ -36,9 +36,27 @@ class ToExamineEnclosureCell: UITableViewCell {
                         
                     }
                 }
+                let type = path.components(separatedBy: ".").last ?? ""
+                if type == "docx" {
+                    logoImage.backgroundColor = UIColor(hex: "#2E4695")
+                    attributeImageView.image = UIImage(named: "word")
+                    otherImageView.image = UIImage()
+                    attributeLabel.text = "word文档"
+                } else if type == "png" || type == "jpg" || type == "jpeg" {
+                    otherImageView.image = UIImage(named: "enclosure_image")
+                    logoImage.backgroundColor = UIColor(hex: "#F1F1F1")
+                    attributeImageView.image = UIImage()
+                    attributeLabel.text = ""
+                } else {
+                    otherImageView.image = UIImage(named: "enclosure_file")
+                    logoImage.backgroundColor = UIColor(hex: "#F1F1F1")
+                    attributeImageView.image = UIImage()
+                    attributeLabel.text = ""
+                }
             }
         }
     }
+    
     var data: NotifyCheckListValue! {
         didSet {
             if let data = data {
@@ -51,6 +69,24 @@ class ToExamineEnclosureCell: UITableViewCell {
                     sizeLabel.text = String(format: "%.2fMB", totalCache)
                 }
                 nameLabel.text = data.fileName ?? ""
+                
+                let type = (data.fileName ?? "other").components(separatedBy: ".").last ?? ""
+                if type == "docx" {
+                    logoImage.backgroundColor = UIColor(hex: "#2E4695")
+                    attributeImageView.image = UIImage(named: "word")
+                    otherImageView.image = UIImage()
+                    attributeLabel.text = "word文档"
+                } else if type == "png" || type == "jpg" || type == "jpeg" {
+                    otherImageView.image = UIImage(named: "enclosure_image")
+                    logoImage.backgroundColor = UIColor(hex: "#F1F1F1")
+                    attributeImageView.image = UIImage()
+                    attributeLabel.text = ""
+                } else {
+                    otherImageView.image = UIImage(named: "enclosure_file")
+                    logoImage.backgroundColor = UIColor(hex: "#F1F1F1")
+                    attributeImageView.image = UIImage()
+                    attributeLabel.text = ""
+                }
             }
         }
     }
@@ -76,6 +112,12 @@ class ToExamineEnclosureCell: UITableViewCell {
     
     /// 图标
     private var logoImage: UIImageView!
+    /// 文件属性
+    private var attributeImageView: UIImageView!
+    /// 文件名称
+    private var attributeLabel: UILabel!
+    /// 其他logo
+    private var otherImageView: UIImageView!
     /// 名称
     private var nameLabel: UILabel!
     /// 大小
@@ -104,7 +146,28 @@ class ToExamineEnclosureCell: UITableViewCell {
                 make.top.equalToSuperview()
             })
             .taxi.config({ (imageView) in
-                imageView.backgroundColor = .blue
+                imageView.backgroundColor = UIColor(hex: "#2E4695")
+            })
+        
+        attributeImageView = UIImageView().taxi.adhere(toSuperView: contentView) // 属性图标
+            .taxi.layout(snapKitMaker: { (make) in
+                make.bottom.equalTo(logoImage.snp.centerY).offset(-3)
+                make.centerX.equalTo(logoImage)
+            })
+        
+        attributeLabel = UILabel().taxi.adhere(toSuperView: contentView) // 属性文本
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalTo(attributeImageView.snp.bottom).offset(3)
+                make.centerX.equalTo(logoImage)
+            })
+            .taxi.config({ (label) in
+                label.textColor = .white
+                label.font = UIFont.medium(size: 10)
+            })
+        
+        otherImageView = UIImageView().taxi.adhere(toSuperView: contentView) // 其他logo
+            .taxi.layout(snapKitMaker: { (make) in
+                make.center.equalTo(logoImage)
             })
         
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名称
