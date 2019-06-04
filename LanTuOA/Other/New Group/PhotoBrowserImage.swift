@@ -17,9 +17,11 @@ class PhotoBrowserImage: UIScrollView {
     fileprivate var images : NSMutableArray! = []
     fileprivate var totalTime : CGFloat!
     
-    var imageUrl : String! {
+    var imageData: (String, String)! {
         didSet {
-            AliOSSClient.shared.download(url: imageUrl, isCache: true) { (data) in
+            let imageUrl = imageData.0
+            let path = imageData.1
+            AliOSSClient.shared.download(url: imageUrl, path: path, isCache: true) { (data) in
                 var defaultImage = UIImage(named: "image_default")
                 if data != nil {
                     defaultImage = UIImage(data: data!) ?? defaultImage

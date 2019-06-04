@@ -92,6 +92,7 @@
 		18070723226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070722226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift */; };
 		18070725226DAE3000E6C36C /* SingleSeleTimeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070724226DAE2F00E6C36C /* SingleSeleTimeEjectView.swift */; };
 		18070729226DBA1300E6C36C /* MultipleSeleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18070728226DBA1300E6C36C /* MultipleSeleController.swift */; };
+		180718AC22A13B23008BA9A7 /* CloudDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180718AB22A13B23008BA9A7 /* CloudDocument.swift */; };
 		180736B5226EB3E7001F1FA6 /* Jurisdiction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736B4226EB3E7001F1FA6 /* Jurisdiction.swift */; };
 		180736B7226EBA5C001F1FA6 /* UsersPermissionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736B6226EBA5C001F1FA6 /* UsersPermissionsModel.swift */; };
 		180736B9226EE176001F1FA6 /* ProjectDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180736B8226EE176001F1FA6 /* ProjectDetailModel.swift */; };
@@ -335,6 +336,7 @@
 		18070722226D648900E6C36C /* FillInApplyAddPersonnelEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyAddPersonnelEjectView.swift; sourceTree = "<group>"; };
 		18070724226DAE2F00E6C36C /* SingleSeleTimeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSeleTimeEjectView.swift; sourceTree = "<group>"; };
 		18070728226DBA1300E6C36C /* MultipleSeleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSeleController.swift; sourceTree = "<group>"; };
+		180718AB22A13B23008BA9A7 /* CloudDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudDocument.swift; sourceTree = "<group>"; };
 		180736B4226EB3E7001F1FA6 /* Jurisdiction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jurisdiction.swift; sourceTree = "<group>"; };
 		180736B6226EBA5C001F1FA6 /* UsersPermissionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersPermissionsModel.swift; sourceTree = "<group>"; };
 		180736B8226EE176001F1FA6 /* ProjectDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailModel.swift; sourceTree = "<group>"; };
@@ -914,6 +916,7 @@
 				1810EC96222F5F9500CF6488 /* UserInfo.swift */,
 				180736B4226EB3E7001F1FA6 /* Jurisdiction.swift */,
 				180B6F69228D38CC0086C0E8 /* AliOSSClient.swift */,
+				180718AB22A13B23008BA9A7 /* CloudDocument.swift */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -1267,6 +1270,9 @@
 							com.apple.Push = {
 								enabled = 1;
 							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
 						};
 					};
 				};
@@ -1490,6 +1496,7 @@
 				1804E1FF224A2ACC006AB973 /* ChangePasswordController.swift in Sources */,
 				1810EC80222F5D4100CF6488 /* UITextView.swift in Sources */,
 				183383092251F1270053F2BF /* UsersModel.swift in Sources */,
+				180718AC22A13B23008BA9A7 /* CloudDocument.swift in Sources */,
 				1806FBD92243305A005A4A77 /* ProjectDetailsTableView.swift in Sources */,
 				180B7709223A34EC0096403B /* LoginModel.swift in Sources */,
 				181788462238A7D60015DC30 /* HomePageController.swift in Sources */,

@@ -28,13 +28,12 @@ class AliOSSClient: NSObject {
     }
     
     /// 上传图片
-    func uploadImage(image: UIImage, name: String, body: Int, callback: uploadCallblock) {
+    func uploadData(_ data: Data, name: String, body: Int, callback: uploadCallblock) {
         
         let put = OSSPutObjectRequest()
         put.bucketName = "danjuan-lantuoa"
         put.objectKey = name
         
-        let data = image.jpegData(compressionQuality: 0.5) ?? Data()
         put.uploadingData = data
         put.callbackParam = ["callbackUrl": "http://api.lantudev.danjuantaxi.com/api/callback/fileUpload", "callbackBody": "\(body)", "callbackBodyType": "application/json"]
         put.contentType = "application/json"
@@ -55,38 +54,10 @@ class AliOSSClient: NSObject {
         putTask.waitUntilFinished()
     }
     
-    /// 上传文件
-    func uploadFile(name: String, path: String, body: Int, callback: uploadCallblock) {
-        let put = OSSPutObjectRequest()
-        put.bucketName = "danjuan-lantuoa"
-        put.objectKey = path
-        
-        let enclosurePath = getCachesPath() + name
-        put.uploadingFileURL = URL(string: enclosurePath)!
-        put.callbackParam = ["callbackUrl": "http://api.lantudev.danjuantaxi.com/api/callback/fileUpload", "callbackBody": "\(body)", "callbackBodyType": "application/json"]
-        let putTask = self.client.putObject(put)
-        
-        putTask.continue({ (task) -> Any? in
-            if task.error != nil {
-                print(task.error.debugDescription)
-                if callback != nil {
-                    callback!(false)
-                }
-            } else {
-                if callback != nil {
-                    callback!(true)
-                }
-            }
-            return nil
-        })
-        putTask.waitUntilFinished()
-    }
-    
     /// 下载
-    func download(url: String, isCache: Bool, result: @escaping ((Data?) -> ())) {
-        let name = url.components(separatedBy: "/").last ?? ""
-        let enclosurePath = getCachesPath() + name
-        let data = try? Data(contentsOf: URL(fileURLWithPath: enclosurePath), options: Data.ReadingOptions.mappedIfSafe)
+    func download(url: String, path: String, isCache: Bool, result: @escaping ((Data?) -> ())) {
+        let enclosurePath = getCachesPath(path)
+        let data = try? Data(contentsOf: URL(fileURLWithPath: enclosurePath))
         if data != nil {
             result(data)
             return
@@ -106,20 +77,27 @@ class AliOSSClient: NSObject {
             if t.error == nil {
                 let getResult = t.result as! OSSGetObjectResult
                 if isCache { // 缓存
-                    FileManager.default.createFile(atPath: enclosurePath, contents: getResult.downloadedData, attributes: nil)
+                    FileManager.default.createFile(atPath: self.getCachesPath(path), contents: getResult.downloadedData, attributes: nil)
                 }
                 result(getResult.downloadedData)
             } else {
+                // 下载失败
                 result(nil)
             }
             return nil
         })
     }
     
-    /// 缓存
-    func getCachesPath() -> String {
+    /// 缓存路径
+    func getCachesPath(_ path: String = "/caches/") -> String {
         let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
-        let enclosurePath = cachePath! + ("/enclosure/")
+        let fileName = path.components(separatedBy: "/").last ?? ""
+        var enclosurePath = cachePath! + path
+        if fileName.count > 0 {
+            let range = enclosurePath.range(of: fileName)!
+            enclosurePath.removeSubrange(range)
+        }
+        
         if !FileManager.default.fileExists(atPath: enclosurePath) {
             do {
                 try FileManager.default.createDirectory(atPath: enclosurePath, withIntermediateDirectories: true, attributes: nil)
@@ -127,6 +105,7 @@ class AliOSSClient: NSObject {
                 
             }
         }
-        return enclosurePath
+        return cachePath! + path
     }
+    
 }

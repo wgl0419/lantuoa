@@ -109,7 +109,7 @@ class ProjectDetailsVisitCell: UITableViewCell {
         let result = UILabel()
         setTitle(title: result, content: resultLabel, lastLabel: time, isLast: true)
         resultLabel.text = "123"
-        result.text = "拜访结果："
+        result.text = "主要事宜："
         resultLabel.text = "拜访方式："
     }
     

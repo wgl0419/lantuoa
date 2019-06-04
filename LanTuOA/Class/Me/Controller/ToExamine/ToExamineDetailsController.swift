@@ -286,10 +286,10 @@ class ToExamineDetailsController: UIViewController {
     /// 过滤文档、图片数据
     private func filterData(_ data: [NotifyCheckListValue]) -> ([NotifyCheckListValue], [NotifyCheckListValue]) {
         let images = data.filter { (model) -> Bool in
-            return model.type == 1
+            return model.fileType == 1
         }
         let files = data.filter { (model) -> Bool in
-            return model.type == 2
+            return model.fileType == 2
         }
         return (images, files)
     }
@@ -301,17 +301,23 @@ class ToExamineDetailsController: UIViewController {
         let type = fileName.components(separatedBy: ".").last ?? ""
         if type == "docx" || type == "png" || type == "jpg" || type == "jpeg" {
             MBProgressHUD.showWait("")
-            AliOSSClient.shared.download(url: objectName, isCache: true) { (data) in
+            let path = "/Approval/\(model.fileId)/" + fileName
+            AliOSSClient.shared.download(url: objectName, path: path, isCache: true) { (data) in
                 DispatchQueue.main.async(execute: {
                     if data != nil {
-                        MBProgressHUD.dismiss()
-                        let vc = WebController()
-                        vc.enclosure = fileName
-                        self.navigationController?.pushViewController(vc, animated: true)
+                        if #available(iOS 9.0, *) {
+                            MBProgressHUD.dismiss()
+                            let vc = WebController()
+                            vc.enclosure = path
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        } else {
+                            MBProgressHUD.showError("系统版本过低，无法预览")
+                        }
                     } else {
                         MBProgressHUD.showError("打开失败，请重试")
                     }
                 })
+
             }
         } else {
             MBProgressHUD.showError("不支持浏览该类型文件")
@@ -536,6 +542,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                         return cell
                     } else {
                         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImagesCell", for: indexPath) as! ToExamineImagesCell
+                        cell.isApproval = true
                         cell.datas = imagesData
                         cell.isComment = false
                         return cell
@@ -591,6 +598,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                 let fileArray = model.1
                 if imageArray.count > 0 && row == 1 { // 显示图片
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImagesCell", for: indexPath) as! ToExamineImagesCell
+                    cell.isApproval = true
                     cell.datas = imageArray
                     cell.isComment = false
                     return cell
@@ -613,6 +621,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                 return cell
             } else if row == 1 && imageArray.count > 0 { // 图片
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImagesCell", for: indexPath) as! ToExamineImagesCell
+                cell.isApproval = true
                 cell.datas = imageArray
                 cell.isComment = true
                 return cell

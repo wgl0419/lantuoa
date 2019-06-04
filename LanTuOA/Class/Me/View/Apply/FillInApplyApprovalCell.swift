@@ -115,7 +115,7 @@ class FillInApplyApprovalCell: UITableViewCell {
     private func dataHandle() {
         processedData = []
         if !isApproval { // 抄送人不需要处理
-            titleLabel.text = "抄送人"
+            titleLabel.text = "抄送人（审批发起和通过时，通知抄送人）"
             for model in data {
                 processedData.append([model])
             }

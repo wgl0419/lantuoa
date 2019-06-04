@@ -13,7 +13,7 @@ class PhotoBrowser: UIView {
     fileprivate var collectionView : UICollectionView!
     var pageControl : UIPageControl!//开放用于修改颜色
     
-    var images : Array<String> = [] {
+    var images: Array<(String, String)> = [] {
         didSet {
             collectionView.reloadData()
             pageControl.numberOfPages = images.count
@@ -88,7 +88,7 @@ extension PhotoBrowser : UICollectionViewDelegate, UICollectionViewDataSource {
             cell.photoImage.imageDelegate = self
         }
         if images.count != 0 {
-            cell.photoImage.imageUrl = images[indexPath.item]
+            cell.photoImage.imageData = images[indexPath.item]
         }
         else {
             cell.photoImage.currentImage = imageViews[indexPath.item]

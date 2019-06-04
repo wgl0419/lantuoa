@@ -138,7 +138,7 @@ class VisitHomeCell: UITableViewCell {
         let state = UILabel().taxi.adhere(toSuperView: whiteView) // “状态“
         stateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 状态
         setTitle(title: state, content: stateLabel, lastLabel: visitNameLabel)
-        state.text = "拜访结果："
+        state.text = "主要事宜："
         
         timeLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 时间
             .taxi.layout(snapKitMaker: { (make) in

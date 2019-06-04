@@ -41,6 +41,8 @@ class NoticeHomeSystemCell: UITableViewCell {
                 default: break
                 }
                 portraitImageView.image = UIImage(named: imageNameStr)
+                statusLabel.textColor = data.checkStatus == 0 ? .clear : data.checkStatus == 1 ? UIColor(hex: "#FF7744") : data.checkStatus == 2 ? UIColor(hex: "#5FB9A1") : UIColor(hex: "#FF4444")
+                statusLabel.text = data.checkStatus == 0 ? "" : data.checkStatus == 1 ? "待审批" : data.checkStatus == 2 ? "已同意" : "已拒绝"
             }
         }
     }
@@ -73,6 +75,8 @@ class NoticeHomeSystemCell: UITableViewCell {
     private var agreeBtn: UIButton!
     /// 拒绝按钮
     private var refuseBtn: UIButton!
+    /// 状态
+    private var statusLabel: UILabel!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -181,6 +185,14 @@ class NoticeHomeSystemCell: UITableViewCell {
             .taxi.config({ (label) in
                 label.font = UIFont.medium(size: 10)
                 label.textColor = UIColor(hex: "#999999")
+            })
+        
+        statusLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 状态
+            .taxi.layout(snapKitMaker: { (make) in
+                make.right.bottom.equalTo(agreeBtn)
+            })
+            .taxi.config({ (label) in
+                label.font = UIFont.medium(size: 16)
             })
     }
     

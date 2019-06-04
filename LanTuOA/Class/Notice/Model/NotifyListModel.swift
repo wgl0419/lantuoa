@@ -27,4 +27,5 @@ struct NotifyListData: HandyJSON {
     var type: String?
     var readTime: Int = 0
     var createdTime: Int = 0
+    var checkStatus: Int = 0
 }

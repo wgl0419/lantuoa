@@ -21,10 +21,10 @@ class NewlyBuildVisitController: UIViewController {
     
     /// 标题
 //    private let titleArray = ["客户", "拜访对象", "项目", "拜访方式", "拜访时间", "内容", "结果", "所在位置"]
-    private let titleArray = ["客户", "拜访对象", "项目", "拜访方式", "拜访时间", "内容", "结果"]
+    private let titleArray = ["客户", "拜访对象", "项目", "拜访方式", "拜访时间", "主要事宜"]
     /// 提示
 //    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请输入拜访结果", "请选择"]
-    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请输入拜访结果"]
+    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入主要事宜"]
     /// 选中id
 //    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1, -1]
     private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1]
@@ -224,8 +224,8 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitTextViewCell", for: indexPath) as! NewlyBuildVisitTextViewCell
             cell.data = (titleArray[section], placeholderArray[section])
             cell.contentStr = seleStrArray[section]
-            if indexPath.row == 6 { // 拜访结果
-                cell.limit = 50
+            if indexPath.section == 5 { // 拜访结果
+                cell.limit = 125
             }
             cell.textBlock = { [weak self] (str) in
                 self?.seleStrArray[section] = str

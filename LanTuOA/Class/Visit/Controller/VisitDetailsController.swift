@@ -66,7 +66,7 @@ class VisitDetailsController: UIViewController {
             })
         
         
-        tableView = UITableView().taxi.adhere(toSuperView: view)
+        tableView = UITableView(frame: .zero, style: .grouped).taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.left.right.equalToSuperview()
                 make.bottom.equalTo(btnView.snp.top)
@@ -77,7 +77,9 @@ class VisitDetailsController: UIViewController {
                 tableView.estimatedRowHeight = 50
                 tableView.separatorStyle = .none
                 tableView.tableFooterView = UIView()
+                tableView.sectionHeaderHeight = 0.01
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 0.01))
                 tableView.register(VisitDetailsCell.self, forCellReuseIdentifier: "VisitDetailsCell")
                 tableView.register(VisitDetailsHeaderCell.self, forCellReuseIdentifier: "VisitDetailsHeaderCell")
                 tableView.register(ToExamineCommentNameCell.self, forCellReuseIdentifier: "ToExamineCommentNameCell")
@@ -93,13 +95,18 @@ class VisitDetailsController: UIViewController {
         let type = fileName.components(separatedBy: ".").last ?? ""
         if type == "docx" || type == "png" || type == "jpg" || type == "jpeg" {
             MBProgressHUD.showWait("")
-            AliOSSClient.shared.download(url: objectName, isCache: true) { (data) in
+            let path = "/Visit/\(model.fileId)/" + fileName
+            AliOSSClient.shared.download(url: objectName, path: path, isCache: true) { (data) in
                 DispatchQueue.main.async(execute: {
                     if data != nil {
-                        MBProgressHUD.dismiss()
-                        let vc = WebController()
-                        vc.enclosure = fileName
-                        self.navigationController?.pushViewController(vc, animated: true)
+                        if #available(iOS 9.0, *) {
+                            MBProgressHUD.dismiss()
+                            let vc = WebController()
+                            vc.enclosure = path
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        } else {
+                            MBProgressHUD.showError("系统版本过低，无法预览")
+                        }
                     } else {
                         MBProgressHUD.showError("打开失败，请重试")
                     }
@@ -151,19 +158,19 @@ class VisitDetailsController: UIViewController {
 
 extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4 + visitCommentData.count
+        return 3 + visitCommentData.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section < 4 {
+        if section < 3 {
             return 1
         } else {
-            let commentsModel = visitCommentData[section - 4].commentsFiles
+            let commentsModel = visitCommentData[section - 3].commentsFiles
             let imageArray = commentsModel.filter { (model) -> Bool in
-                return model.type == 1
+                return model.fileType == 1
             }
             let fileArray = commentsModel.filter { (model) -> Bool in
-                return model.type == 2
+                return model.fileType == 2
             }
             return 1 + fileArray.count + (imageArray.count > 0 ? 1 : 0)
         }
@@ -176,29 +183,30 @@ extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "VisitDetailsHeaderCell", for: indexPath) as! VisitDetailsHeaderCell
             cell.data = visitListData
             return cell
-        } else if  section < 4 {
+        } else if  section < 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "VisitDetailsCell", for: indexPath) as! VisitDetailsCell
-            let type: VisitDetailsCell.visitType = section == 1 ? .details : section == 2 ? .content : .result
+            let type: VisitDetailsCell.visitType = section == 1 ? .details : .result
             cell.visitListData = (visitListData, type)
             return cell
         } else {
-            let commentsModel = visitCommentData[section - 4].commentsFiles
+            let commentsModel = visitCommentData[section - 3].commentsFiles
             let imageArray = commentsModel.filter { (model) -> Bool in
-                return model.type == 1
+                return model.fileType == 1
             }
             if row == 0 { // 名称
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineCommentNameCell", for: indexPath) as! ToExamineCommentNameCell
-                cell.data = visitCommentData[section - 4]
+                cell.data = visitCommentData[section - 3]
                 return cell
             } else if imageArray.count > 0 && row == 1 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImagesCell", for: indexPath) as! ToExamineImagesCell
+                cell.isApproval = false
                 cell.datas = imageArray
                 cell.isComment = true
                 return cell
             } else {
                 let index = imageArray.count > 0 ? 2 : 1
                 let fileArray = commentsModel.filter { (model) -> Bool in
-                    return model.type == 2
+                    return model.fileType == 2
                 }
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureCell", for: indexPath) as! ToExamineEnclosureCell
                 cell.data = fileArray[row - index]
@@ -210,11 +218,11 @@ extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section < 2 || section == 3 + visitCommentData.count {
+        if section < 2 || section == 2 + visitCommentData.count {
             let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
             footerView.backgroundColor = .clear
             return footerView
-        } else if section == 3 {
+        } else if section == 2 {
             let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
             footerView.backgroundColor = .clear
             _ = UILabel().taxi.adhere(toSuperView: footerView) // 评论
@@ -234,27 +242,27 @@ extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section < 2 || section == 3 + visitCommentData.count {
+        if section < 2 || section == 2 + visitCommentData.count {
             return 10
-        } else if section == 3 {
-            return visitCommentData.count > 0 ? 40 : 0
+        } else if section == 2 {
+            return visitCommentData.count > 0 ? 40 : 0.01
         } else {
-            return 0
+            return 0.01
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = indexPath.section
-        if section >= 4 {
+        if section >= 3 {
             let row = indexPath.row
-            let commentsModel = visitCommentData[section - 4].commentsFiles
+            let commentsModel = visitCommentData[section - 3].commentsFiles
             let imageArray = commentsModel.filter { (model) -> Bool in
-                return model.type == 1
+                return model.fileType == 1
             }
             let index = imageArray.count > 0 ? 2 : 1
             if row >= index {
                 let fileArray = commentsModel.filter { (model) -> Bool in
-                    return model.type == 2
+                    return model.fileType == 2
                 }
                 openFile(fileArray[row - index])
             }

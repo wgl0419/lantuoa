@@ -47,7 +47,7 @@ class ToExamineDetailsCarbonCopyCell: UITableViewCell {
                 make.top.left.equalToSuperview().offset(15)
         }
             .taxi.config { (label) in
-                label.text = "抄送人"
+                label.text = "抄送人（审批发起和通过时，通知抄送人）"
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 16)
         }

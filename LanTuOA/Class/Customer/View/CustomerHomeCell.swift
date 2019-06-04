@@ -20,7 +20,7 @@ class CustomerHomeCell: UITableViewCell {
                 titleAttriMuStr.changeFont(str: industryStr, font: UIFont.medium(size: 12))
                 titleLabel.attributedText = titleAttriMuStr
                 
-                let customerTypeName = data.type == 1 ? "customer_company" : data.type == 2 ? "customer_ordinary" : "customer_development"
+                let customerTypeName = data.type == 1 ? "customer_company" : data.type == 2 ? "customer_ordinary" : data.type == 3 ? "customer_development" : "customer_refuse"
                 customerTypeImageView.image = UIImage(named: customerTypeName)
                 
                 let allAttriMuStr = setAttriMuStr(contentStr: "在线  \(data.onlineProjectNum)", highlightStr: "在线", highlightColor:  UIColor(hex: "#999999"))

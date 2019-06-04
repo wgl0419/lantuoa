@@ -52,7 +52,7 @@ class FillInApplyController: UIViewController {
     /// 原图选项
     private var isOriginal = false
     /// 选中文件
-    private var fileArray = [String]()
+    private var fileArray = [(Data, String)]()
     /// 上报的图片
     private var uploadImageIds = [Int]()
     /// 上报附件
@@ -459,15 +459,22 @@ class FillInApplyController: UIViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureTitleCell", for: indexPath) as! ToExamineEnclosureTitleCell
         cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
         cell.enclosureBlock = {
-            UIApplication.shared.keyWindow?.endEditing(true)
-            let vc = SeleEnclosureController()
-            vc.determineBlock = { [weak self] (fileArray) in
-                for file in fileArray {
-                    self?.fileArray.append(file)
-                }
-                self?.reloadImageCell()
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            let action = UIAlertAction(title: "相册", style: .default) { _ in
+                self.addImageEnclosure()
             }
-            self.navigationController?.pushViewController(vc, animated: true)
+            let albumAction = UIAlertAction(title: "文档", style: .default) { _ in
+                let vc = UIDocumentPickerViewController(documentTypes: ["public.content","public.text"], in: .open)
+                vc.delegate = self
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
+            }
+            
+            let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+            alert.addAction(action)
+            alert.addAction(albumAction)
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
         }
         return cell
     }
@@ -476,7 +483,7 @@ class FillInApplyController: UIViewController {
     private func getEnclosureCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureCell", for: indexPath) as! ToExamineEnclosureCell
         cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
-        cell.path = fileArray[indexPath.row - 2]
+        cell.enclosureData = fileArray[indexPath.row - 2]
         cell.deleteBlock = { [weak self] in
             self?.fileArray.remove(at: indexPath.row - 2)
             self?.reloadImageCell()
@@ -565,64 +572,63 @@ class FillInApplyController: UIViewController {
     }
     
     /// 上传文件
-    private func uploadData() {
+    private func uploadGetKey() {
         uploadImageIds = []
         uploadFileIds = []
         if imageArray.count == 0 && fileArray.count == 0 {
-            getProcessCommit()
+            self.processCommit()
         } else {
-            for index in 0..<imageArray.count {
-                let image = imageArray[index]
-                let imageName = "".randomStringWithLength(len: 8) + ".png"
-                fileUploadGetKey(type: 1, name: imageName) { (status, body, path) in
-                    if status {
-                        AliOSSClient.shared.uploadImage(image: image, name: path!, body: body!, callback: { (status) in
-                            if status {
-                                self.uploadImageIds.append(body!)
-                                if index == self.imageArray.count - 1 {
-                                    if self.uploadImageIds.count != self.imageArray.count {
-                                        DispatchQueue.main.async(execute: {
-                                            MBProgressHUD.showError("上传失败")
-                                        })
-                                    } else {
-                                        self.getProcessCommit()
-                                    }
-                                }
-                            }
-                        })
-                    }
-                }
+            var uploadDataArray = [Any]()
+            for image in imageArray {
+                uploadDataArray.append(image)
             }
-            for index in 0..<fileArray.count {
-                let file = fileArray[index]
-                fileUploadGetKey(type: 2, name: file) { (status, body, path) in
+            for file in fileArray {
+                uploadDataArray.append(file)
+            }
+            for index in 0..<uploadDataArray.count {
+                var size = 0
+                var type: Int!
+                var name: String!
+                var uploadData: Data!
+                if index < imageArray.count {
+                    type = 1
+                    name = "".randomStringWithLength(len: 8) + ".png"
+                    uploadData = imageArray[index].jpegData(compressionQuality: 0.5) ?? Data()
+                } else {
+                    type = 2
+                    name = fileArray[index - imageArray.count].1
+                    uploadData = fileArray[index - imageArray.count].0
+                    size = fileArray[index - imageArray.count].0.count
+                }
+                fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
                     if status {
-                        AliOSSClient.shared.uploadFile(name: file, path: path!, body: body!, callback: { (status) in
-                            if status {
-                                self.uploadFileIds.append(body!)
-                                if index == self.uploadFileIds.count - 1 {
-                                    if self.uploadFileIds.count != self.fileArray.count {
-                                        DispatchQueue.main.async(execute: {
-                                            MBProgressHUD.showError("上传失败")
-                                        })
-                                    } else {
-                                        self.getProcessCommit()
-                                    }
-                                }
-                            }
-                        })
+                        self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == uploadDataArray.count - 1)
                     }
                 }
             }
         }
     }
     
-    /// 提交流程o判断
-    private func getProcessCommit() {
-        if uploadImageIds.count == imageArray.count && uploadFileIds.count  == fileArray.count {
-            DispatchQueue.main.async(execute: {
-                self.processCommit()
-            })
+    /// 上传数据
+    private func uploadData(_ data: Data, name: String, body: Int, type: Int, isLast: Bool) {
+        AliOSSClient.shared.uploadData(data, name: name, body: body) { (status) in
+            if status {
+                if type == 1 {
+                    self.uploadImageIds.append(body)
+                } else {
+                    self.uploadFileIds.append(body)
+                }
+                if isLast {
+                    DispatchQueue.main.async(execute: {
+                        if self.uploadFileIds.count == self.fileArray.count && self.uploadImageIds.count == self.imageArray.count {
+                            self.processCommit()
+                        } else {
+                            MBProgressHUD.showError("上传失败")
+                        }
+                    })
+                    
+                }
+            }
         }
     }
     
@@ -638,6 +644,49 @@ class FillInApplyController: UIViewController {
             contentStr = "\(projectId)"
         }
         return contentStr
+    }
+    
+    /// 生成文件名称
+    private func initFileName(_ name: String) -> String {
+        let fileName = name.components(separatedBy: ".").first ?? ""
+        let type = name.components(separatedBy: ".").last ?? ""
+        let similarName = fileArray.filter { (model) -> Bool in
+            return model.1.contains(fileName)
+        }
+        if similarName.count > 0 {
+            let lastSimilar = similarName.last ?? (Data(), "")
+            if lastSimilar.1.contains("(") {
+                var index = lastSimilar.1.components(separatedBy: "(").last ?? ""
+                index = index.components(separatedBy: ")").first ?? ""
+                let number = 1 + (Int(index) ?? 0)
+                return fileName + "(\(number))." + type
+            } else {
+                return fileName + "(1)." + type
+            }
+        } else {
+            return name
+        }
+    }
+    
+    /// 添加图片附件
+    private func addImageEnclosure() {
+        let photoSheet = ZLPhotoActionSheet()
+        photoSheet.sender = self
+        photoSheet.configuration.allowEditImage = false
+        photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
+            let image = images![0]
+            let fileName = "".randomStringWithLength(len: 8) + ".png"
+            let fileData = image.pngData() ?? Data()
+            self?.fileArray.append((fileData, fileName))
+            self?.reloadImageCell()
+        }
+        photoSheet.configuration.maxSelectCount = 1
+        photoSheet.configuration.allowSelectGif = false
+        photoSheet.configuration.allowSelectVideo = false
+        photoSheet.configuration.allowSlideSelect = false
+        photoSheet.configuration.allowSelectLivePhoto = false
+        photoSheet.configuration.allowTakePhotoInLibrary = false
+        photoSheet.showPhotoLibrary()
     }
     
     // MARK: - Api
@@ -755,27 +804,12 @@ class FillInApplyController: UIViewController {
     ///
     /// - Parameters:
     ///   - type: 文件类型 1.图片，2.文件
-    ///   - name: 文件名称
-    private func fileUploadGetKey(type: Int, name: String, block: @escaping ((Bool, Int?, String?) -> ())) {
+    ///   - type: 文件名称
+    ///   - size: 文件大小
+    private func fileUploadGetKey(type: Int, name: String, size: Int, block: @escaping ((Bool, Int?, String?) -> ())) {
         MBProgressHUD.showWait("")
-        
-        var fileSizes = 0
-        if type == 2 { // 文件大小
-            let enclosurePath = AliOSSClient.shared.getCachesPath() + name
-            let floder = try! FileManager.default.attributesOfItem(atPath: enclosurePath)
-            // 用元组取出文件大小属性
-            for (key, fileSize) in floder {
-                // 累加文件大小
-                if key == FileAttributeKey.size {
-                    let size = (fileSize as AnyObject).integerValue ?? 0
-                    fileSizes = size
-                }
-            }
-        }
-        
-        _ = APIService.shared.getData(.fileUploadGetKey(type, name, fileSizes), t: FileUploadGetKeyModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.fileUploadGetKey(type, name, size), t: FileUploadGetKeyModel.self, successHandle: { (result) in
             block(true, result.data?.id, result.data?.objectName)
-            MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             block(false, nil, nil)
             MBProgressHUD.showError(error ?? "上传失败")
@@ -802,7 +836,7 @@ class FillInApplyController: UIViewController {
                 return
             }
         }
-        uploadData()
+        uploadGetKey()
     }
 }
 
@@ -1019,5 +1053,27 @@ extension FillInApplyController: UIImagePickerControllerDelegate, UINavigationCo
         }
         picker.dismiss(animated: true, completion: nil)
         
+    }
+}
+
+extension FillInApplyController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        let canAccessingResource = url.startAccessingSecurityScopedResource()
+        if canAccessingResource {
+            var error: NSError!
+            let fileCoordinator = NSFileCoordinator()
+            fileCoordinator.coordinate(readingItemAt: url, options: .withoutChanges, error: &error) { (newURL) in
+                do { // 不缓存，只获取data和名称
+                    var fileName = url.lastPathComponent
+                    let fileData = try Data(contentsOf: newURL)
+                    fileName = initFileName(fileName)
+                    self.fileArray.append((fileData, fileName))
+                    self.reloadImageCell()
+                } catch {
+                    MBProgressHUD.showError("添加失败")
+                }
+            }
+        }
+        url.stopAccessingSecurityScopedResource()
     }
 }

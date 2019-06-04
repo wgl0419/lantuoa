@@ -13,29 +13,21 @@ class ToExamineEnclosureCell: UITableViewCell {
     /// 删除回调
     var deleteBlock: (() -> ())?
     /// 数据
-    var path: String? {
+    var enclosureData: (Data, String)? {
         didSet {
-            if let path = path {
+            if let path = enclosureData?.1, let data = enclosureData?.0 {
                 sizeLabel.text = "0.00KB"
                 nameLabel.text = path
                 
-                let enclosurePath = AliOSSClient.shared.getCachesPath() + path
-                let floder = try! FileManager.default.attributesOfItem(atPath: enclosurePath)
-                // 用元组取出文件大小属性
-                for (key, fileSize) in floder {
-                    // 累加文件大小
-                    if key == FileAttributeKey.size {
-                        let size = (fileSize as AnyObject).integerValue ?? 0
-                        var totalCache = Double(size) / 1024.00
-                        if totalCache < 1024 {
-                            sizeLabel.text = String(format: "%.2fKB", totalCache)
-                        } else {
-                            totalCache = Double(size) / 1024.00 / 1024.00
-                            sizeLabel.text = String(format: "%.2fMB", totalCache)
-                        }
-                        
-                    }
+                var totalCache = Double(data.count) / 1024.00
+                if totalCache < 1024 {
+                    sizeLabel.text = String(format: "%.2fKB", totalCache)
+                } else {
+                    totalCache = Double(data.count) / 1024.00 / 1024.00
+                    sizeLabel.text = String(format: "%.2fMB", totalCache)
                 }
+                
+                /// 显示logo
                 let type = path.components(separatedBy: ".").last ?? ""
                 if type == "docx" {
                     logoImage.backgroundColor = UIColor(hex: "#2E4695")
@@ -151,7 +143,7 @@ class ToExamineEnclosureCell: UITableViewCell {
         
         attributeImageView = UIImageView().taxi.adhere(toSuperView: contentView) // 属性图标
             .taxi.layout(snapKitMaker: { (make) in
-                make.bottom.equalTo(logoImage.snp.centerY).offset(-3)
+                make.bottom.equalTo(logoImage.snp.centerY).offset(3)
                 make.centerX.equalTo(logoImage)
             })
         

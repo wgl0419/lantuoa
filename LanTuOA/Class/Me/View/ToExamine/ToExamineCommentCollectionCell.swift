@@ -24,36 +24,27 @@ class ToExamineCommentCollectionCell: UICollectionViewCell {
         }
     }
     /// 文件数据
-    var fileName: String? {
+    var fileData: (Data, String)? {
         didSet {
-            if let fileName = fileName {
-                nameLabel.text = fileName
+            if let fileData = fileData {
+                nameLabel.text = fileData.1
                 
-                let enclosurePath = AliOSSClient.shared.getCachesPath() + fileName
-                let floder = try! FileManager.default.attributesOfItem(atPath: enclosurePath)
-                // 用元组取出文件大小属性
-                for (key, fileSize) in floder {
-                    // 累加文件大小
-                    if key == FileAttributeKey.size {
-                        let size = (fileSize as AnyObject).integerValue ?? 0
-                        var totalCache = Double(size) / 1024.00
-                        if totalCache < 1024 {
-                            sizeLabel.text = String(format: "%.2fKB", totalCache)
-                        } else {
-                            totalCache = Double(size) / 1024.00 / 1024.00
-                            sizeLabel.text = String(format: "%.2fMB", totalCache)
-                        }
-                        
-                    }
+                let size = fileData.0.count
+                var totalCache = Double(size) / 1024.00
+                if totalCache < 1024 {
+                    sizeLabel.text = String(format: "%.2fKB", totalCache)
+                } else {
+                    totalCache = Double(size) / 1024.00 / 1024.00
+                    sizeLabel.text = String(format: "%.2fMB", totalCache)
                 }
                 
-                let type = fileName.components(separatedBy: ".").last ?? ""
+                let type = fileData.1.components(separatedBy: ".").last ?? ""
                 if type == "docx" { // word
                     logoImageView.image = UIImage(named: "enclosure_word")
                 } else if type == "png" || type == "jpg" || type == "jpeg" { // 图片
                     logoImageView.image = UIImage(named: "enclosure_image")
                 } else { // 其他
-                    
+                    logoImageView.image = UIImage(named: "enclosure_file")
                 }
             }
         }

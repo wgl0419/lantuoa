@@ -79,9 +79,11 @@ class WebController: UIViewController {
                     let url = URL(fileURLWithPath: path ?? "")
                     webView.load(URLRequest(url: url))
                 } else if enclosure.count != 0 {
-                    let enclosurePath = AliOSSClient.shared.getCachesPath() + enclosure
-                    let url = URL(fileURLWithPath: enclosurePath)
-                    webView.load(URLRequest(url: url))
+                    let path = AliOSSClient.shared.getCachesPath(enclosure)
+                    let url = URL(fileURLWithPath: path)
+                    if #available(iOS 9.0, *) {
+                        webView.loadFileURL(url, allowingReadAccessTo: url)
+                    }
                 } else {
                     webView.load(URLRequest(url: URL(string: urlStr)!))
                 }

@@ -42,6 +42,10 @@ class ToExamineCommentController: UIViewController {
     private var data = [Any]()
     /// 图片信息数据
     private var PHAssetArray: Array<PHAsset> = []
+    /// 上传文件id
+    private var uploadFileIds = [Int]()
+    /// 上传图片id
+    private var uploadImageIds = [Int]()
     /// 原图选项
     private var isOriginal = false
     /// 已选@数据
@@ -298,6 +302,54 @@ class ToExamineCommentController: UIViewController {
         }
     }
     
+    /// 生成文件名称
+    private func initFileName(_ name: String) -> String {
+        let fileName = name.components(separatedBy: ".").first ?? ""
+        let type = name.components(separatedBy: ".").last ?? ""
+        let similarName = data.filter { (model) -> Bool in
+            if model is (Data, String) {
+                let fileModel = model as! (Data, String)
+                return fileModel.1.contains(fileName)
+            } else {
+                return false
+            }
+        }
+        if similarName.count > 0 {
+            let lastSimilar = similarName.last as! (Data, String)
+            if lastSimilar.1.contains("(") {
+                var index = lastSimilar.1.components(separatedBy: "(").last ?? ""
+                index = index.components(separatedBy: ")").first ?? ""
+                let number = 1 + (Int(index) ?? 0)
+                return fileName + "(\(number))." + type
+            } else {
+                return fileName + "(1)." + type
+            }
+        } else {
+            return name
+        }
+    }
+    
+    /// 添加图片附件
+    private func addImageEnclosure() {
+        let photoSheet = ZLPhotoActionSheet()
+        photoSheet.sender = self
+        photoSheet.configuration.allowEditImage = false
+        photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
+            let image = images![0]
+            let fileName = "".randomStringWithLength(len: 8) + ".png"
+            let fileData = image.pngData() ?? Data()
+            self?.data.append((fileData, fileName))
+            self?.collectionView.reloadData()
+        }
+        photoSheet.configuration.maxSelectCount = 1
+        photoSheet.configuration.allowSelectGif = false
+        photoSheet.configuration.allowSelectVideo = false
+        photoSheet.configuration.allowSlideSelect = false
+        photoSheet.configuration.allowSelectLivePhoto = false
+        photoSheet.configuration.allowTakePhotoInLibrary = false
+        photoSheet.showPhotoLibrary()
+    }
+    
     // MARK: - Api
     /// 审批评论
     private func notifyCheckCommentCreate(image: [Int], file: [Int], str: String) {
@@ -317,27 +369,12 @@ class ToExamineCommentController: UIViewController {
     ///
     /// - Parameters:
     ///   - type: 文件类型 1.图片，2.文件
-    ///   - name: 文件名称
-    private func fileUploadGetKey(type: Int, name: String, block: @escaping ((Bool, Int?, String?) -> ())) {
+    ///   - type: 文件名称
+    ///   - size: 文件大小
+    private func fileUploadGetKey(type: Int, name: String, size: Int, block: @escaping ((Bool, Int?, String?) -> ())) {
         MBProgressHUD.showWait("")
-        
-        var fileSizes = 0
-        if type == 2 { // 文件大小
-            let enclosurePath = AliOSSClient.shared.getCachesPath() + name
-            let floder = try! FileManager.default.attributesOfItem(atPath: enclosurePath)
-            // 用元组取出文件大小属性
-            for (key, fileSize) in floder {
-                // 累加文件大小
-                if key == FileAttributeKey.size {
-                    let size = (fileSize as AnyObject).integerValue ?? 0
-                    fileSizes = size
-                }
-            }
-        }
-        
-        _ = APIService.shared.getData(.fileUploadGetKey(type, name, fileSizes), t: FileUploadGetKeyModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.fileUploadGetKey(type, name, size), t: FileUploadGetKeyModel.self, successHandle: { (result) in
             block(true, result.data?.id, result.data?.objectName)
-            MBProgressHUD.dismiss()
         }, errorHandle: { (error) in
             block(false, nil, nil)
             MBProgressHUD.showError(error ?? "上传失败")
@@ -409,61 +446,59 @@ class ToExamineCommentController: UIViewController {
                 }
             })
         }
-        
-        var uploadFileIds = [Int]()
-        var uploadImageIds = [Int]()
+        uploadFileIds = [Int]()
+        uploadImageIds = [Int]()
         if data.count == 0 {
             confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
         } else {
-            MBProgressHUD.showWait("上传中")
-            for index in 0..<data.count {
-                let model = data[index]
-                if model is String {
-                    let file = model as! String
-                    fileUploadGetKey(type: 2, name: file) { (status, body, path) in
-                        if status {
-                            AliOSSClient.shared.uploadFile(name: file, path: path!, body: body!, callback: { (status) in
-                                if status {
-                                    uploadFileIds.append(body!)
-                                    if index == self.data.count - 1 {
-                                        if self.data.count != uploadFileIds.count + uploadImageIds.count {
-                                            DispatchQueue.main.async(execute: {
-                                                MBProgressHUD.showError("上传失败")
-                                            })
-                                        } else {
-                                            DispatchQueue.main.async(execute: {
-                                                self.confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
-                                            })
-                                        }
-                                    }
-                                }
-                            })
-                        }
-                    }
+            uploadGetKey(contentStr: contentStr)
+        }
+    }
+    /// 上传文件
+    private func uploadGetKey(contentStr: String) {
+        for index in 0..<data.count {
+            var size = 0
+            var type: Int!
+            var name: String!
+            var uploadData: Data!
+            let model = data[index]
+            if model is (UIImage, PHAsset) {
+                type = 1
+                name = "".randomStringWithLength(len: 8) + ".png"
+                let imageData = model as! (UIImage, PHAsset)
+                uploadData = imageData.0.jpegData(compressionQuality: 0.5) ?? Data()
+            } else {
+                type = 2
+                let fileData = model as! (Data, String)
+                name = fileData.1
+                uploadData = fileData.0
+                size = fileData.0.count
+            }
+            fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                if status {
+                    self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == self.data.count - 1, contentStr: contentStr)
+                }
+            }
+        }
+    }
+    
+    /// 上传数据
+    private func uploadData(_ data: Data, name: String, body: Int, type: Int, isLast: Bool, contentStr: String) {
+        AliOSSClient.shared.uploadData(data, name: name, body: body) { (status) in
+            if status {
+                if type == 1 {
+                    self.uploadImageIds.append(body)
                 } else {
-                    let imageModel = model as! (UIImage, PHAsset)
-                    let image = imageModel.0
-                    let imageName = "".randomStringWithLength(len: 8) + ".png"
-                    fileUploadGetKey(type: 1, name: imageName) { (status, body, path) in
-                        if status {
-                            AliOSSClient.shared.uploadImage(image: image, name: path!, body: body!, callback: { (status) in
-                                if status {
-                                    uploadImageIds.append(body!)
-                                    if index == self.data.count - 1 {
-                                        if self.data.count != uploadFileIds.count + uploadImageIds.count {
-                                            DispatchQueue.main.async(execute: {
-                                                MBProgressHUD.showError("上传失败")
-                                            })
-                                        } else {
-                                            DispatchQueue.main.async(execute: {
-                                                self.confirmData(image: uploadImageIds, file: uploadFileIds, str: contentStr)
-                                            })
-                                        }
-                                    }
-                                }
-                            })
+                    self.uploadFileIds.append(body)
+                }
+                if isLast {
+                    DispatchQueue.main.async(execute: {
+                        if self.uploadFileIds.count + self.uploadImageIds.count == self.data.count {
+                            self.confirmData(image: self.uploadImageIds, file: self.uploadFileIds, str: contentStr)
+                        } else {
+                            MBProgressHUD.showError("上传失败")
                         }
-                    }
+                    })
                 }
             }
         }
@@ -499,14 +534,23 @@ class ToExamineCommentController: UIViewController {
     
     /// 点击添加附件
     @objc private func enclosureClick() {
-        let vc = SeleEnclosureController()
-        vc.determineBlock = { [weak self] (fileArray) in
-            for name in fileArray {
-                self?.data.append(name)
-                self?.collectionView.reloadData()
-            }
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let action = UIAlertAction(title: "相册", style: .default) { _ in
+            self.addImageEnclosure()
         }
-        navigationController?.pushViewController(vc, animated: true)
+        let albumAction = UIAlertAction(title: "文档", style: .default) { _ in
+            let vc = UIDocumentPickerViewController(documentTypes: ["public.content","public.text"], in: .open)
+            vc.delegate = self
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+        }
+        
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        alert.addAction(action)
+        alert.addAction(albumAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
     /// 点击隐藏键盘
@@ -523,8 +567,8 @@ extension ToExamineCommentController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ToExamineCommentCollectionCell", for: indexPath) as! ToExamineCommentCollectionCell
         let model = data[indexPath.row]
-        if model is String {
-            cell.fileName = model as? String
+        if model is (Data, String) {
+            cell.fileData = model as? (Data, String)
         } else {
             let imageModel = model as? (UIImage, PHAsset)
             cell.imageData = imageModel?.0
@@ -538,22 +582,13 @@ extension ToExamineCommentController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let model = data[indexPath.row]
-        if model is String {
-            let name = model as! String
-            let webController = WebController()
-            webController.enclosure = name
-            navigationController?.pushViewController(webController, animated: true)
+        if model is (Data, String) {
+            MBProgressHUD.showError("不支持预览")
         } else {
             changeImage(indexPath: indexPath.row)
         }
     }
 }
-
-//extension ToExamineCommentController: UITextViewDelegate {
-//    func textViewDidChange(_ textView: UITextView) {
-//        textView.placeHolderLabel?.isHidden = textView.text.count > 0
-//    }
-//}
 
 
 extension ToExamineCommentController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -576,4 +611,26 @@ extension ToExamineCommentController: UIImagePickerControllerDelegate, UINavigat
 
 extension ToExamineCommentController: YYTextViewDelegate {
     
+}
+
+extension ToExamineCommentController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        let canAccessingResource = url.startAccessingSecurityScopedResource()
+        if canAccessingResource {
+            var error: NSError!
+            let fileCoordinator = NSFileCoordinator()
+            fileCoordinator.coordinate(readingItemAt: url, options: .withoutChanges, error: &error) { (newURL) in
+                do { // 不缓存，只获取data和名称
+                    var fileName = url.lastPathComponent
+                    let fileData = try Data(contentsOf: newURL)
+                    fileName = initFileName(fileName)
+                    self.data.append((fileData, fileName))
+                    self.collectionView.reloadData()
+                } catch {
+                    MBProgressHUD.showError("添加失败")
+                }
+            }
+        }
+        url.stopAccessingSecurityScopedResource()
+    }
 }

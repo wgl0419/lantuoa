@@ -198,8 +198,8 @@ class ToExamineDetailsCell: UITableViewCell {
                 label.textColor = blackColor
                 
                 let parser = LPPZSendContentTextParser()
-                parser.font = UIFont.boldSystemFont(ofSize: 10)
-                parser.atUserFont = UIFont.boldSystemFont(ofSize: 10)
+                parser.font = UIFont.boldSystemFont(ofSize: 14)
+                parser.atUserFont = UIFont.boldSystemFont(ofSize: 14)
                 label.textParser = parser
             })
     }

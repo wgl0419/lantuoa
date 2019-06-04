@@ -10,6 +10,8 @@ import UIKit
 
 class ToExamineImagesCell: UITableViewCell {
     
+    /// 是否是审批
+    var isApproval = false
     /// 图片连接s
     var datas = [NotifyCheckListValue]() {
         didSet {
@@ -73,6 +75,7 @@ extension ToExamineImagesCell: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ToExamineImagesCollectionCell", for: indexPath) as! ToExamineImagesCollectionCell
+        cell.isApproval = isApproval
         cell.data = datas[indexPath.row]
         return cell
     }
@@ -80,9 +83,12 @@ extension ToExamineImagesCell: UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photoBrowser = PhotoBrowser()
         
-        var array: Array<String> = []
+        var array = [(String, String)]()
         for itme in datas {
-            array.append(itme.objectName ?? "")
+            let objectName = itme.objectName ?? ""
+            let fileName = itme.fileName ?? ""
+            let path = isApproval ? "/Approval/\(itme.fileId)/" + fileName : "/Visit/\(itme.fileId)/" + fileName
+            array.append((objectName, path))
         }
         photoBrowser.images = array
         photoBrowser.currentIndex = indexPath.row
@@ -93,11 +99,16 @@ extension ToExamineImagesCell: UICollectionViewDelegate, UICollectionViewDataSou
 
 class ToExamineImagesCollectionCell: UICollectionViewCell {
     
+    /// 是否是审批
+    var isApproval = false
     /// 图片链接
     var data: NotifyCheckListValue? {
         didSet {
             if let data = data {
-                AliOSSClient.shared.download(url: data.objectName ?? "", isCache: true) { (data) in
+                let objectName = data.objectName ?? ""
+                let fileName = data.fileName ?? ""
+                let path = isApproval ? "/Approval/\(data.fileId)/" + fileName : "/Visit/\(data.fileId)/" + fileName
+                AliOSSClient.shared.download(url: objectName, path: path, isCache: true) { (data) in
                     var defaultImage = UIImage(named: "image_default")
                     if data != nil {
                         defaultImage = UIImage(data: data!) ?? defaultImage
@@ -105,7 +116,6 @@ class ToExamineImagesCollectionCell: UICollectionViewCell {
                     DispatchQueue.main.async(execute: {
                         self.imageView.image = defaultImage
                     })
-
                 }
             }
         }

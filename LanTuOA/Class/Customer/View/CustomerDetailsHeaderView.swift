@@ -28,7 +28,7 @@ class CustomerDetailsHeaderView: UIView {
                 companyLabel.text = data.fullName ?? " "
                 addressLabel.text = data.address ?? " "
                 
-                let customerTypeName = data.type == 1 ? "customer_company" : data.type == 2 ? "customer_ordinary" : "customer_development"
+                let customerTypeName = data.type == 1 ? "customer_company" : data.type == 2 ? "customer_ordinary" : data.type == 3 ? "customer_development" : "customer_refuse"
                 typeBtn.setImage(UIImage(named: customerTypeName), for: .normal)
                 
                 if data.type == 3 {
