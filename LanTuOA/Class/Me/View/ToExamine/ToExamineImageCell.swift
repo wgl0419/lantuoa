@@ -45,7 +45,7 @@ class ToExamineImageCell: UITableViewCell {
         let imageLabel = UILabel().taxi.adhere(toSuperView: contentView) // “图片”
             .taxi.layout { (make) in
                 make.left.equalToSuperview().offset(15)
-                make.top.equalToSuperview().offset(11)
+                make.top.equalToSuperview().offset(15)
         }
             .taxi.config { (label) in
                 label.text = "图片"
@@ -55,8 +55,9 @@ class ToExamineImageCell: UITableViewCell {
         
         _ = UIButton().taxi.adhere(toSuperView: contentView) // 点击按钮
             .taxi.layout(snapKitMaker: { (make) in
-                make.right.equalToSuperview().offset(-15)
+                make.top.right.equalToSuperview()
                 make.centerY.equalTo(imageLabel)
+                make.width.equalTo(53)
             })
             .taxi.config({ (btn) in
                 btn.setImage(UIImage(named: "image"), for: .normal)

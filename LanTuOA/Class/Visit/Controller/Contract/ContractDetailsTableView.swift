@@ -190,7 +190,7 @@ class ContractDetailsTableView: UITableView {
         let totalMoney = contractListData.totalMoney - contractListData.makeMoney - contractListData.rebate
         
         let model = contractUsersData[seleContractUsers]
-        headerView.data = (totalMoney, model.realname ?? "", model.propPerform, totalPerformance)
+        headerView.data = (totalMoney, model.realname ?? "", model.propPerform, totalPerformance, performanceData.count == 0)
         headerView.seleBlock = { [weak self] (seleIndex) in
             self?.seleContractUsers = seleIndex
             self?.performList()

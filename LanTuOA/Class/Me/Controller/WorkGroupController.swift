@@ -168,7 +168,7 @@ extension WorkGroupController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let view = SeleVisitModelView(title: "选择操作", content: ["添加成员", "退出工作组"])
+        let view = SeleVisitModelView(title: "选择操作", content: ["邀请成员", "退出工作组"])
         view.didBlock = { [weak self] (seleIndex) in
             let id = self?.groupData[indexPath.row].id ?? 0
             switch seleIndex {

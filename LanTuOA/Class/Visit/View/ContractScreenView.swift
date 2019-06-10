@@ -188,7 +188,7 @@ class ContractScreenView: UIView {
                 } else {
                     self?.idArray[0] = id
                     self?.contentArray[0] = name
-                    self?.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
                 }
             }
             ejectView.show()
@@ -212,7 +212,7 @@ class ContractScreenView: UIView {
             view.didBlock = { [weak self] (seleIndex) in
                 self?.contentArray[1] = contentArray[seleIndex]
                 self?.idArray[1] = self?.contractTypeData[seleIndex].id ?? 0
-                self?.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .none)
+                self?.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
             }
             view.show()
         }
@@ -230,7 +230,7 @@ class ContractScreenView: UIView {
             ejectView.seleBlock = { [weak self] (name, id) in
                 self?.idArray[2] = id
                 self?.contentArray[2] = name
-                self?.tableView.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .none)
+                self?.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .none)
             }
             ejectView.show()
         }
@@ -257,7 +257,7 @@ class ContractScreenView: UIView {
     /// 客户列表
     private func customerList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.customerListStatistics("", nil, nil, 1, 99999), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerList("", nil, nil, 1, 99999), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.isCustomerData = true
             self.customerData = result.data
@@ -308,26 +308,26 @@ extension ContractScreenView: UIGestureRecognizerDelegate {
 
 extension ContractScreenView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
-        if row == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ContractScreenTimeCell", for: indexPath) as! ContractScreenTimeCell
-            cell.data = ("发布时间", "请选择", releaseTimeStamp)
-            cell.screenBlock = { [weak self] in
-                self?.seleTimeHandle()
-            }
-            return cell
-        }
+//        if row == 0 {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "ContractScreenTimeCell", for: indexPath) as! ContractScreenTimeCell
+//            cell.data = ("发布时间", "请选择", releaseTimeStamp)
+//            cell.screenBlock = { [weak self] in
+//                self?.seleTimeHandle()
+//            }
+//            return cell
+//        }
         let cell = tableView.dequeueReusableCell(withIdentifier: "ScreenOtherCell", for: indexPath) as! ScreenOtherCell
-        cell.data = (titleArray[row - 1], "请选择", contentArray[row - 1])
+        cell.data = (titleArray[row], "请选择", contentArray[row])
         cell.screenBlock = { [weak self] in
             switch row {
-            case 1: self?.customerScreening()
-            case 2: self?.contractTypeScreening()
-            case 3: self?.usersScreening()
+            case 0: self?.customerScreening()
+            case 1: self?.contractTypeScreening()
+            case 2: self?.usersScreening()
             default: break
             }
         }

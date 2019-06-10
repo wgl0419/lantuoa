@@ -128,21 +128,22 @@ class ContractDetailsHeaderView: UIView {
                 label.font = UIFont.boldSystemFont(ofSize: 16)
             })
         
-        _ = UIButton().taxi.adhere(toSuperView: self) // 修改按钮
-            .taxi.layout(snapKitMaker: { (make) in
-                make.right.equalToSuperview().offset(-10)
-                make.centerY.equalTo(nameLabel)
-                make.height.equalTo(20)
-                make.width.equalTo(60)
-            })
-            .taxi.config({ (btn) in
-                btn.setTitle(" 修改", for: .normal)
-                btn.titleLabel?.font = UIFont.medium(size: 14)
-                btn.setImage(UIImage(named: "edit"), for: .normal)
-                btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
-                btn.addTarget(self, action: #selector(modifyClick), for: .touchUpInside)
-            })
-        
+        if Jurisdiction.share.isUpdateContract { // 修改合同权限
+            _ = UIButton().taxi.adhere(toSuperView: self) // 修改按钮
+                .taxi.layout(snapKitMaker: { (make) in
+                    make.right.equalToSuperview().offset(-10)
+                    make.centerY.equalTo(nameLabel)
+                    make.height.equalTo(20)
+                    make.width.equalTo(60)
+                })
+                .taxi.config({ (btn) in
+                    btn.setTitle(" 修改", for: .normal)
+                    btn.titleLabel?.font = UIFont.medium(size: 14)
+                    btn.setImage(UIImage(named: "edit"), for: .normal)
+                    btn.setTitleColor(UIColor(hex: "#6B83D1"), for: .normal)
+                    btn.addTarget(self, action: #selector(modifyClick), for: .touchUpInside)
+                })
+        }
         
         contentLabelArray = [timeLabel, contributionLabel, totalLabel, moneyBackLabel, productionLabel, participateLabel, signingTimeLabel, invoiceLabel]
         for index in 0..<titleArray.count {

@@ -8,9 +8,24 @@
 
 import UIKit
 
+var itemStatusKey = 105
+
 extension UITabBar {
     
-    
+    /// 通知是否有小红点
+    var itemStatus: Bool {
+        set {
+            objc_setAssociatedObject(self, &itemStatusKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+        }
+        
+        get {
+            if let rs = objc_getAssociatedObject(self, &itemStatusKey) as? Bool {
+                return rs
+            }
+            return false
+        }
+    }
+        
     /// 显示红点
     ///
     /// - Parameter index: 第几个tabbar
@@ -32,6 +47,7 @@ extension UITabBar {
         badgeView.frame = CGRect(x: X, y: Y, width: 10, height: 10) // 红点宽高为10
         badgeView.backgroundColor = .red
         addSubview(badgeView)
+        itemStatus = true
     }
     
     /// 隐藏红点
@@ -39,5 +55,6 @@ extension UITabBar {
     /// - Parameter index: 第几个tabbar
     func hideBadgeOnItemIndex(index: Int) {
         removeByTag(tag: 888 + index)
+        itemStatus = false
     }
 }

@@ -56,7 +56,7 @@ class AchievementsListController: UIViewController {
                 searchBar.delegate = self
                 searchBar.backgroundColor = .clear
                 searchBar.searchBarStyle = .minimal
-                searchBar.placeholder = "项目名称/客户名称"
+                searchBar.placeholder = "员工名称"
                 searchBar.returnKeyType = .done
             })
         

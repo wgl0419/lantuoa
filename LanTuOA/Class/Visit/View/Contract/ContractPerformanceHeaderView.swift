@@ -14,15 +14,22 @@ class ContractPerformanceHeaderView: UIView {
     var seleBlock: ((Int) -> ())?
     /// 参与合同人员  （用于业绩详情）
     var contractUsersData = [ContractListContractUsers]()
-    /// 数据 (发布总额  选择人名称  百分百  总业绩)
-    var data: (Float, String, Int, Float)? {
+    /// 数据 (发布总额  选择人名称  百分百  总业绩  是否未设置发布时间)
+    var data: (Float, String, Int, Float, Bool)? {
         didSet {
             if let data = data {
                 totalLabel.text = data.0.getAllMoneyStr()
                 let seleStr = "选择参与人：\(data.1)（\(data.2)%）"
                 seleBtn.setTitle(seleStr, for: .normal)
                 seleLabel.text = "\(data.1)业绩详情："
-                totalPerformanceLabel.text = data.3.getAllMoneyStr()
+                if data.4 {
+                    let str = data.3.getAllMoneyStr() + " (尚未设置实际发布时间)"
+                    let attriMuStr = NSMutableAttributedString(string: str)
+                    attriMuStr.changeColor(str: "(尚未设置实际发布时间)", color: blackColor)
+                    totalPerformanceLabel.attributedText = attriMuStr
+                } else {
+                    totalPerformanceLabel.text = data.3.getAllMoneyStr()
+                }
             }
         }
     }

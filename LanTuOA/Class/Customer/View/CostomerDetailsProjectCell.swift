@@ -100,6 +100,7 @@ class CostomerDetailsProjectCell: UITableViewCell {
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
                 label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
 
         personLabel = UILabel().taxi.adhere(toSuperView: contentView) // 参与人员
@@ -113,6 +114,7 @@ class CostomerDetailsProjectCell: UITableViewCell {
                 label.textColor = blackColor
                 label.font = UIFont.medium(size: 12)
                 label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+                label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             })
         
         let state = UILabel().taxi.adhere(toSuperView: contentView) // ”状态“

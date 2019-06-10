@@ -158,7 +158,11 @@ class VisitDetailsController: UIViewController {
 
 extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3 + visitCommentData.count
+        if visitListData != nil {
+            return 3 + visitCommentData.count
+        } else {
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

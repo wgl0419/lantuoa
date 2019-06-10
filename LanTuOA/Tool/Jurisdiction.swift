@@ -51,6 +51,8 @@ class Jurisdiction: NSObject, NSCoding {
     private(set) var isManageContractDesc = false
     /// 查看合同备注信息
     private(set) var isViewContractDesc = false
+    /// 修改合同权限
+    private(set) var isUpdateContract = false
     
     private override init() {
         //        super.init()
@@ -75,6 +77,7 @@ class Jurisdiction: NSObject, NSCoding {
         aCoder.encode(isViewVisitUnder, forKey: "isViewVisitUnder")
         aCoder.encode(isManageContractDesc, forKey: "isManageContractDesc")
         aCoder.encode(isViewContractDesc, forKey: "isViewContractDesc")
+        aCoder.encode(isUpdateContract, forKey: "isUpdateContract")
     }
     
     /// 解档
@@ -96,6 +99,7 @@ class Jurisdiction: NSObject, NSCoding {
         isViewVisitUnder = aDecoder.decodeBool(forKey: "isViewVisitUnder")
         isManageContractDesc = aDecoder.decodeBool(forKey: "isManageContractDesc")
         isViewContractDesc = aDecoder.decodeBool(forKey: "isViewContractDesc")
+        isUpdateContract = aDecoder.decodeBool(forKey: "isUpdateContract")
     }
     
     // MARK: - 数据修改
@@ -137,6 +141,7 @@ class Jurisdiction: NSObject, NSCoding {
         isViewVisitUnder = false
         isManageContractDesc = false
         isViewContractDesc = false
+        isUpdateContract = false
         userSave()
     }
     
@@ -161,6 +166,7 @@ class Jurisdiction: NSObject, NSCoding {
             case "visit.under:view": isViewVisitUnder = true
             case "contract.desc:manage": isManageContractDesc = true
             case "contract.desc:view": isViewContractDesc = true
+            case "contract.manager:update": isUpdateContract = true
             default: break
             }
         }

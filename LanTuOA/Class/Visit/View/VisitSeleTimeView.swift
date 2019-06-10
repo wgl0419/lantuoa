@@ -291,7 +291,7 @@ class VisitSeleTimeView: UIView {
     /// 客户列表
     private func customerList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.customerListStatistics("", nil, nil, 1, 99999), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerList("", nil, nil, 1, 99999), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.isCustomerData = true
             self.customerData = result.data

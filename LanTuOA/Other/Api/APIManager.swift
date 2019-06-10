@@ -29,7 +29,7 @@ enum APIManager {
     case customerUpdate(String, String, String, Int, Int, Int) // 编辑客户 (name:客户简称 full_name:客户全称  address:客户地址  type:客户类型：1.公司客户，2.待开发客户，3.开发中客户  industry:行业类型id，从行业列表中获取     id:客户id)
     case customerContactList(Int, Int, Int) // 客户联系人列表 (customerId:客户id  page:页码  limit:一页有几条数据)
     case customerContactDetail(Int) // 客户联系人修改历史 （客户id:拼接到连接上）
-    case customerList(String, Int, String, Int, Int) // 客户基本信息列表 (name:客户名称  type:1.公司客户2.待开发客户3.开发中客户 industry:行业id  page:页码  limit:一页几条数据)
+    case customerList(String, Int?, Int?, Int, Int) // 客户基本信息列表 (name:客户名称  type:1.公司客户2.待开发客户3.开发中客户 industry:行业id  page:页码  limit:一页几条数据)
     case customerContactSave(Int, String, String, String) // 新增客户联系人 （customerId:客户id   name:客户姓名  phone:手机号  position:职位）
     case customerContactUpdate(String, String, Int) // 修改客户联系人信息 （phone:手机号  position:职位  contactId:联系人Id）
     case customerListStatistics(String, Int?, Int?, Int, Int) // 客户统计信息列表 （name:客户名称  type:客户类型，1.公司客户，2.待开发客户，3.开发中客户  industry：行业id（保留）  page:页码  limit:一页几条数据）
@@ -289,7 +289,9 @@ extension APIManager: TargetType {
         case let .customerContactList(customerId, page, limit): // 客户联系人修改历史
             params = ["customerId": customerId, "page": page, "limit": limit]
         case let .customerList(name, type, industry, page, limit): // 客户基本信息列表
-            params = ["name": name, "type": type, "industry": industry, "page": page, "limit": limit]
+            params = ["name": name, "page": page, "limit": limit]
+            if type != nil { params["type"] = type }
+            if industry != nil { params["industry"] = industry }
         case let .customerContactSave(customerId, name, phone, position): // 新增客户联系人
             params = ["customerId": customerId, "name": name, "phone": phone, "position": position]
         case let .customerContactUpdate(phone, position, contactId): // 修改客户联系人信息

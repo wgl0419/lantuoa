@@ -156,28 +156,69 @@ class NoticeHomeController: UIViewController {
             })
     }
     
+//    @objc private func refuseClick() {
+//        if checkListData.processType == 1 || checkListData.processType == 2 {
+//            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户", "名字不合理", "其它原因"])
+//            view.didBlock = { [weak self] (seleIndex) in
+//                self?.modifyEjectView(type: seleIndex)
+//            }
+//            view.show()
+//        } else {
+    
+//        }
+//    }
+//
+//    /// 点击同意
+//    @objc private func agreeClick() {
+//        if checkListData.processType == 1 || checkListData.processType == 2 {
+//            agreeHandle()
+//        } else {
+//        }
+//    }
+    
     /// 点击同意处理
     private func agreeHandle(indexPath: IndexPath) {
-        let alertController = UIAlertController(title: "提示", message: "是否同意该信息?", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
-        alertController.addAction(cancelAction)
-        let agreeAction = UIAlertAction(title: "同意", style: .default, handler: { (_) in
-            self.notifyCheckAgree(index: indexPath)
-        })
-        alertController.addAction(agreeAction)
-        present(alertController, animated: true, completion: nil)
+//        let alertController = UIAlertController(title: "提示", message: "是否同意该信息?", preferredStyle: .alert)
+//        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
+//        alertController.addAction(cancelAction)
+//        let agreeAction = UIAlertAction(title: "同意", style: .default, handler: { (_) in
+//
+//        })
+//        alertController.addAction(agreeAction)
+//        present(alertController, animated: true, completion: nil)
+        let model = self.pendingData[indexPath.row]
+        let vc = ToExamineCommentController()
+        vc.title = (model.createdUserName ?? "") + "提交的《" + (model.processName ?? "") + "》"
+        vc.checkListId = model.id
+        vc.descType = .agree
+        vc.commentBlock = { [weak self] in
+            self?.notifyCheckList(isMore: false)
+            self?.notifyList(isMore: false)
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     /// 点击拒绝处理
     private func refuseHandle(indexPath: IndexPath) {
-        let alertController = UIAlertController(title: "提示", message: "是否拒绝该信息?", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
-        alertController.addAction(cancelAction)
-        let agreeAction = UIAlertAction(title: "拒绝", style: .default, handler: { (_) in
-            self.notifyCheckReject(index: indexPath)
-        })
-        alertController.addAction(agreeAction)
-        present(alertController, animated: true, completion: nil)
+//        let alertController = UIAlertController(title: "提示", message: "是否拒绝该信息?", preferredStyle: .alert)
+//        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
+//        alertController.addAction(cancelAction)
+//        let agreeAction = UIAlertAction(title: "拒绝", style: .default, handler: { (_) in
+//
+//
+//        })
+//        alertController.addAction(agreeAction)
+//        present(alertController, animated: true, completion: nil)
+        let model = self.pendingData[indexPath.row]
+        let vc = ToExamineCommentController()
+        vc.title = (model.createdUserName ?? "") + "提交的《" + (model.processName ?? "") + "》"
+        vc.checkListId = model.id
+        vc.descType = .refuse
+        vc.commentBlock = { [weak self] in
+            self?.notifyCheckList(isMore: false)
+            self?.notifyList(isMore: false)
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     /// 处理提示
@@ -185,18 +226,18 @@ class NoticeHomeController: UIViewController {
         segmentView.setNumber(index: 0, number: pendingData.count)
         
         tabBarController?.tabBar.items?[3].badgeValue = pendingData.count > 0 ? "\(pendingData.count)" : nil
-        
-//        if systemData.count > 0 && !isCheckSystem { // 有数量  并且为读
-//            if pendingData.count == 0 {
-//                tabBarController?.tabBar.showBadgeOnItemIndex(index: 3)
-//            } else {
-//                tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
-//            }
-//            segmentView.setTips(index: 1, show: systemData.count > 0)
-//        } else {
-//            tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
-//            segmentView.setTips(index: 1, show: false)
-//        }
+        let isNotRead = tabBarController?.tabBar.itemStatus ?? false
+        if isNotRead && !isCheckSystem { // 有数量  并且未读
+            segmentView.setTips(index: 1, show: isNotRead)
+            if pendingData.count == 0 {
+                tabBarController?.tabBar.showBadgeOnItemIndex(index: 3)
+            } else {
+                tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
+            }
+        } else {
+            tabBarController?.tabBar.hideBadgeOnItemIndex(index: 3)
+            segmentView.setTips(index: 1, show: false)
+        }
         
         pendingTableView.isNoData = pendingData.count == 0
         systemTableView.isNoData = systemData.count == 0
@@ -323,6 +364,7 @@ class NoticeHomeController: UIViewController {
             ejectView.checkId = pendingData[index.row].id
             ejectView.changeBlock = { [weak self] in // 刷新审核列表
                 self?.notifyCheckList(isMore: false)
+                self?.notifyList(isMore: false)
             }
             ejectView.show()
         }
@@ -420,6 +462,7 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
             vc.checkListId = pendingData[indexPath.row].id
             vc.changeBlock = { [weak self] in
                 self?.notifyCheckList(isMore: false)
+                self?.notifyList(isMore: false)
             }
             navigationController?.pushViewController(vc, animated: true)
         } else {
@@ -431,6 +474,7 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
                 vc.checkListId = systemData[indexPath.row].checkId
                 vc.changeBlock = { [weak self] in
                     self?.notifyCheckList(isMore: false)
+                    self?.notifyList(isMore: false)
                 }
                 navigationController?.pushViewController(vc, animated: true)
             case "3": break // 工作交接 无跳转

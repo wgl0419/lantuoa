@@ -16,7 +16,7 @@ class ApplyCollectionCell: UICollectionViewCell {
             if let data = data {
 //                4  政策    5  合同内容    6  制作、下单    7  合同条款    8  客户/项目    9  其他
                 let imageArray = ["apply_policy", "apply_contract", "apply_make", "apply_clause", "apply_customer", "apply_other"]
-                let imageIndex = data.type - 4
+                let imageIndex = (data.type - 4) % 5
                 imageView.image = UIImage(named: imageArray[imageIndex])
                 titleLabel.text = data.name
             } else {

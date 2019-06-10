@@ -27,12 +27,12 @@ class NewlyBuildVisitController: UIViewController {
     private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入主要事宜"]
     /// 选中id
 //    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1, -1]
-    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1]
+    private var seleIdArray = [-1, -1, -1, -1, -1, -1]
     /// 拜访对象id数组
     private var contactArray = [Int]()
     /// 选中内容
 //    private var seleStrArray = ["", "", "", "", "", "", "", ""]
-    private var seleStrArray = ["", "", "", "", "", "", ""]
+    private var seleStrArray = ["", "", "", "", "", ""]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -186,13 +186,13 @@ class NewlyBuildVisitController: UIViewController {
         let customerId = seleIdArray[0]
         let projectId = seleIdArray[2]
         let type = seleIdArray[3]
-        let content = seleStrArray[5]
-        let result = seleStrArray[6]
+        let result = seleStrArray[5]
+//        let result = seleStrArray[6]
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         let visitTime = formatter.date(from: seleStrArray[4])?.timeIntervalSince1970 ?? Date().timeIntervalSince1970
-        _ = APIService.shared.getData(.visitSave(customerId, projectId, type, content, result, Int(visitTime), contactArray), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.visitSave(customerId, projectId, type, "", result, Int(visitTime), contactArray), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if self.addBlock != nil {
                 self.addBlock!()

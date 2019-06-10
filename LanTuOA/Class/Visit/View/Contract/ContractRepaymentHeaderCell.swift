@@ -44,7 +44,7 @@ class ContractRepaymentHeaderCell: UITableViewCell {
                 make.centerY.equalToSuperview()
         }
             .taxi.config { (label) in
-                label.text = "回款金额"
+                label.text = "付款金额"
                 label.textColor = blackColor
                 label.font = UIFont.boldSystemFont(ofSize: 12)
         }
@@ -55,7 +55,7 @@ class ContractRepaymentHeaderCell: UITableViewCell {
                 make.centerY.equalToSuperview()
             })
             .taxi.config({ (label) in
-                label.text = "回款时间"
+                label.text = "付款时间"
                 label.textColor = blackColor
                 label.font = UIFont.boldSystemFont(ofSize: 12)
             })

@@ -136,9 +136,12 @@ class FillInApplyController: UIViewController {
             var isEnabled = true
             for index in 0..<data.count {
                 let model = data[index]
-                if model.isNecessary == 1 && seleStrArray[index].count == 0 {
-                    isEnabled = false
-                    break
+                let seleArray = seleStrArray[index]
+                for str in seleArray {
+                    if model.isNecessary == 1 && str.count == 0 {
+                        isEnabled = false
+                        break
+                    }
                 }
             }
             if isEnabled && pricessType == 5 {
@@ -342,7 +345,7 @@ class FillInApplyController: UIViewController {
     }
     
     /// 处理添加人员
-    private func addPersonnelHandle() {
+    private func addPersonnelHandle(_ indexPath: IndexPath) {
         // 剩余的业绩百分比和提成百分比
         var achievemenhtsPercentage = 100
         var royaltyPercentage = 100
@@ -361,7 +364,7 @@ class FillInApplyController: UIViewController {
         ejectView.maxInput = [achievemenhtsPercentage, royaltyPercentage]
         ejectView.determineBlock = { [weak self] (userData, achievemenhts, royalty) in
             self?.contractData.append((userData, achievemenhts, royalty))
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: self?.data.count ?? 0)], with: .none)
+            self?.tableView.reloadRows(at: [indexPath], with: .none)
             self?.confirmHandle()
         }
         ejectView.seleBlock = { [weak self] in
@@ -386,7 +389,7 @@ class FillInApplyController: UIViewController {
     }
     
     /// 处理添加人员
-    private func addMoneyBackHandle() {
+    private func addMoneyBackHandle(_ indexPath: IndexPath) {
         if moneyBackData.count == 9 {
             MBProgressHUD.showSuccess("回款设置过多，不能继续添加")
             return
@@ -395,20 +398,20 @@ class FillInApplyController: UIViewController {
         ejectView.titleStr = "新增回款时间"
         ejectView.addBlock = { [weak self] (money, timeStamp) in
             self?.moneyBackData.append((money, timeStamp))
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: (self?.data.count ?? 0) + 1)], with: .none)
+            self?.tableView.reloadRows(at: [indexPath], with: .none)
             self?.confirmHandle()
         }
         ejectView.show()
     }
     
     /// 处理添加人员
-    private func deletePersonnelHandle(index: Int) {
+    private func deletePersonnelHandle(_ indexPath: IndexPath, index: Int) {
         let alertController = UIAlertController(title: "提示", message: "是否删除该合同人员", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         let deleteAction = UIAlertAction(title: "删除", style: .destructive) { (_) in
             self.contractData.remove(at: index)
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: self.data.count)], with: .none)
+            self.tableView.reloadRows(at: [indexPath], with: .none)
             self.confirmHandle()
         }
         alertController.addAction(deleteAction)
@@ -416,13 +419,13 @@ class FillInApplyController: UIViewController {
     }
     
     /// 处理添加人员
-    private func deleteMoneyBackHandle(index: Int) {
+    private func deleteMoneyBackHandle(_ indexPath: IndexPath, index: Int) {
         let alertController = UIAlertController(title: "提示", message: "是否该回款设置", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         let deleteAction = UIAlertAction(title: "删除", style: .destructive) { (_) in
             self.moneyBackData.remove(at: index)
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: self.data.count + 1)], with: .none)
+            self.tableView.reloadRows(at: [indexPath], with: .none)
             self.confirmHandle()
         }
         alertController.addAction(deleteAction)
@@ -436,6 +439,17 @@ class FillInApplyController: UIViewController {
         cell.isProcess = isProcess
         cell.data = processUsersData.checkUsers
         return cell
+    }
+    
+    /// 上传部分
+    private func getUpdataCell(_ indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 0 {
+            return getImageCell(indexPath)
+        } else if indexPath.row == 1 {
+            return getEnclosureTitleCell(indexPath)
+        } else {
+            return getEnclosureCell(indexPath)
+        }
     }
     
     /// 图片cell
@@ -491,6 +505,36 @@ class FillInApplyController: UIViewController {
         return cell
     }
     
+    /// 合同人员cell
+    private func getPersonnelCell(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyPersonnelCell", for: indexPath) as! FillInApplyPersonnelCell
+        cell.data = contractData
+        cell.addBlock = { [weak self] in
+            UIApplication.shared.keyWindow?.endEditing(true)
+            self?.addPersonnelHandle(indexPath)
+            self?.confirmHandle()
+        }
+        cell.deleteBlock = { [weak self] (index) in
+            self?.deletePersonnelHandle(indexPath, index: index)
+        }
+        return cell
+    }
+    
+    /// 回款设置cell
+    private func getMoneyBackCell(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyMoneyBackCell", for: indexPath) as! FillInApplyMoneyBackCell
+        cell.data = moneyBackData
+        cell.addBlock = { [weak self] in
+            UIApplication.shared.keyWindow?.endEditing(true)
+            self?.addMoneyBackHandle(indexPath)
+            self?.confirmHandle()
+        }
+        cell.deleteBlock = { [weak self] (index) in
+            self?.deleteMoneyBackHandle(indexPath, index: index)
+        }
+        return cell
+    }
+    
     /// 抄送人cell
     private func getCarbonCopyCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
@@ -537,7 +581,8 @@ class FillInApplyController: UIViewController {
     
     /// 刷新图片cell
     private func reloadImageCell() {
-        let section = pricessType == 5 ? data.count + 3 : data.count + 1
+//        let section = pricessType == 5 ? data.count + 3 : data.count + 1
+        let section = data.count
         tableView.reloadSections(IndexSet(arrayLiteral: section), with: .fade)
     }
     
@@ -674,13 +719,14 @@ class FillInApplyController: UIViewController {
         photoSheet.sender = self
         photoSheet.configuration.allowEditImage = false
         photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
-            let image = images![0]
-            let fileName = "".randomStringWithLength(len: 8) + ".png"
-            let fileData = image.pngData() ?? Data()
-            self?.fileArray.append((fileData, fileName))
+            for image in images ?? [] {
+                let fileName = "".randomStringWithLength(len: 8) + ".png"
+                let fileData = image.pngData() ?? Data()
+                self?.fileArray.append((fileData, fileName))
+            }
             self?.reloadImageCell()
         }
-        photoSheet.configuration.maxSelectCount = 1
+        photoSheet.configuration.maxSelectCount = 9
         photoSheet.configuration.allowSelectGif = false
         photoSheet.configuration.allowSelectVideo = false
         photoSheet.configuration.allowSlideSelect = false
@@ -852,7 +898,8 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if canUpload == 1 {
-            let upload = pricessType == 5 ? data.count + 3 : data.count + 1
+            let upload = data.count
+//            let upload = pricessType == 5 ? data.count + 3 : data.count + 1
             if section == upload {
                 return 2 + fileArray.count
             }
@@ -868,65 +915,46 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
         let row = indexPath.row
         let section = indexPath.section
         if section == data.count {
-            if pricessType == 5 { // 合同人员
-                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyPersonnelCell", for: indexPath) as! FillInApplyPersonnelCell
-                cell.data = contractData
-                cell.addBlock = { [weak self] in
-                    UIApplication.shared.keyWindow?.endEditing(true)
-                    self?.addPersonnelHandle()
-                    self?.confirmHandle()
-                }
-                cell.deleteBlock = { [weak self] (index) in
-                    self?.deletePersonnelHandle(index: index)
-                }
-                return cell
+            if canUpload == 1 { // 上传部分
+                return getUpdataCell(indexPath)
+            } else if pricessType == 5 { // 合同人员
+                return getPersonnelCell(indexPath)
             } else { // 审批人
                 return getApprovalCell(indexPath)
             }
         } else if section == data.count + 1 {
-            if pricessType == 5 { // 回款设置
-                let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyMoneyBackCell", for: indexPath) as! FillInApplyMoneyBackCell
-                cell.data = moneyBackData
-                cell.addBlock = { [weak self] in
-                    UIApplication.shared.keyWindow?.endEditing(true)
-                    self?.addMoneyBackHandle()
-                    self?.confirmHandle()
+            if canUpload == 1 { // 有上传
+                if pricessType == 5 { // 合同人员
+                    return getPersonnelCell(indexPath)
+                } else { // 审批人
+                    return getApprovalCell(indexPath)
                 }
-                cell.deleteBlock = { [weak self] (index) in
-                    self?.deleteMoneyBackHandle(index: index)
-                }
-                return cell
             } else {
-                if canUpload == 1 { // 上传部分
-                    if indexPath.row == 0 {
-                        return getImageCell(indexPath)
-                    } else if indexPath.row == 1 {
-                        return getEnclosureTitleCell(indexPath)
-                    } else {
-                        return getEnclosureCell(indexPath)
-                    }
+                if pricessType == 5 { // 回款设置
+                    return getMoneyBackCell(indexPath)
                 } else { // 抄送人cell
                     return getCarbonCopyCell(indexPath)
                 }
             }
-        } else if section > data.count {
-            if pricessType == 5 && section == data.count + 2 { // 审批人
-                return getApprovalCell(indexPath)
-            } else if pricessType == 5 && section == data.count + 3 {
-                if canUpload == 1 { // 上传部分
-                    if indexPath.row == 0 {
-                        return getImageCell(indexPath)
-                    } else if indexPath.row == 1 {
-                        return getEnclosureTitleCell(indexPath)
-                    } else {
-                        return getEnclosureCell(indexPath)
-                    }
+        } else if section == data.count + 2 {
+            if canUpload == 1 { // 有上传
+                if pricessType == 5 { // 回款设置
+                    return getMoneyBackCell(indexPath)
                 } else { // 抄送人cell
                     return getCarbonCopyCell(indexPath)
                 }
-            } else { // 抄送
+            } else { // 审批人
+                return getApprovalCell(indexPath)
+            }
+            
+        } else if section == data.count + 3 {
+            if canUpload == 1 { // 审批人
+                return getApprovalCell(indexPath)
+            } else { // 抄送人cell
                 return getCarbonCopyCell(indexPath)
             }
+        } else if section == data.count + 4 { // 抄送人cell
+            return getCarbonCopyCell(indexPath)
         } else {
             var model = data[section]
             if model.type == 8 {
@@ -968,8 +996,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         var isUpdata = false
         if canUpload == 1 {
-            let count = pricessType == 5 ? 2 : 0
-            if section == data.count + count {
+            if section == data.count - 1 {
                 isUpdata = true
             }
         }
@@ -997,8 +1024,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         var isUpdata = false
         if canUpload == 1 {
-            let count = pricessType == 5 ? 2 : 0
-            if section == data.count + count {
+            if section == data.count - 1 {
                 isUpdata = true
             }
         }

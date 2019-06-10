@@ -82,6 +82,7 @@ class ToExamineDetailsController: UIViewController {
                 make.width.equalTo(80)
             })
             .taxi.config({ (btn) in
+                btn.isHidden = true
                 btn.setTitle("同意", for: .normal)
                 btn.setTitleColor(.white, for: .normal)
                 
@@ -99,6 +100,7 @@ class ToExamineDetailsController: UIViewController {
                 make.width.equalTo(80)
             })
             .taxi.config({ (btn) in
+                btn.isHidden = true
                 btn.setTitle("拒绝", for: .normal)
                 btn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
                 
@@ -268,11 +270,10 @@ class ToExamineDetailsController: UIViewController {
                     return model.`self` == 1
                 }
                 if currentModel.count != 0 && checkListData.status != 2 && checkListData.status != 3 { // 到自己处理的阶段   展开同意拒绝按钮
-                    
+                    agreeBtn.isHidden = false
+                    refuseBtn.isHidden = false
                 } else {
                     isShow = false
-                    agreeBtn.isHidden = true
-                    refuseBtn.isHidden = true
                 }
             }
             if (checkListData.processType == 1 || checkListData.processType == 2) && !isShow {
@@ -451,7 +452,7 @@ class ToExamineDetailsController: UIViewController {
             vc.checkListId = checkListId
             vc.descType = .refuse
             vc.commentBlock = { [weak self] in
-                self?.notifyCheckCommentList()
+                self?.changeHandle()
             }
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -467,7 +468,7 @@ class ToExamineDetailsController: UIViewController {
             vc.checkListId = checkListId
             vc.descType = .agree
             vc.commentBlock = { [weak self] in
-                self?.notifyCheckCommentList()
+                self?.changeHandle()
             }
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -479,7 +480,7 @@ class ToExamineDetailsController: UIViewController {
         vc.checkListId = checkListId
         vc.descType = .approval
         vc.commentBlock = { [weak self] in
-            self?.notifyCheckCommentList()
+            self?.changeHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
     }

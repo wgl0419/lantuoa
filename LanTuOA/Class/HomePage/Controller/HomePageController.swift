@@ -168,6 +168,7 @@ class HomePageController: UIViewController {
         _ = APIService.shared.getData(.notifyNumber, t: NotifyNumberModel.self, successHandle: { (result) in
             let checkNum = result.data?.checkNum ?? 0
             let notReadNum = result.data?.notReadNum ?? 0
+            self.tabBarController?.tabBar.itemStatus = checkNum > 0
             if checkNum > 0 {
                 self.tabBarController?.tabBar.items?[3].badgeValue = "\(checkNum)"
             } else if notReadNum > 0 {

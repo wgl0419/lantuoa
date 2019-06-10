@@ -28,7 +28,7 @@ class ToExamineEnclosureTitleCell: UITableViewCell {
         
         let enclosureLabel = UILabel().taxi.adhere(toSuperView: contentView) // “附件”
             .taxi.layout { (make) in
-                make.top.equalToSuperview().offset(11)
+                make.top.equalToSuperview().offset(15)
                 make.left.equalToSuperview().offset(15)
                 make.bottom.equalToSuperview().offset(-11)
             }
@@ -40,8 +40,9 @@ class ToExamineEnclosureTitleCell: UITableViewCell {
         
         _ = UIButton().taxi.adhere(toSuperView: contentView) // 点击按钮
             .taxi.layout(snapKitMaker: { (make) in
-                make.right.equalToSuperview().offset(-15)
+                make.top.right.equalToSuperview()
                 make.centerY.equalTo(enclosureLabel)
+                make.width.equalTo(53)
             })
             .taxi.config({ (btn) in
                 btn.setImage(UIImage(named: "enclosure"), for: .normal)

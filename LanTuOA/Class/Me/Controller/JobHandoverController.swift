@@ -61,7 +61,8 @@ class JobHandoverController: UIViewController {
         
         tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
             .taxi.layout(snapKitMaker: { (make) in
-                make.edges.equalToSuperview()
+                make.bottom.left.right.equalToSuperview()
+                make.top.equalTo(searchView.snp.bottom)
             })
             .taxi.config({ (tableView) in
                 tableView.delegate = self

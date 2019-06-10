@@ -335,13 +335,14 @@ class ToExamineCommentController: UIViewController {
         photoSheet.sender = self
         photoSheet.configuration.allowEditImage = false
         photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
-            let image = images![0]
-            let fileName = "".randomStringWithLength(len: 8) + ".png"
-            let fileData = image.pngData() ?? Data()
-            self?.data.append((fileData, fileName))
+            for image in images ?? [] {
+                let fileName = "".randomStringWithLength(len: 8) + ".png"
+                let fileData = image.pngData() ?? Data()
+                self?.data.append((fileData, fileName))
+            }
             self?.collectionView.reloadData()
         }
-        photoSheet.configuration.maxSelectCount = 1
+        photoSheet.configuration.maxSelectCount = 9
         photoSheet.configuration.allowSelectGif = false
         photoSheet.configuration.allowSelectVideo = false
         photoSheet.configuration.allowSlideSelect = false

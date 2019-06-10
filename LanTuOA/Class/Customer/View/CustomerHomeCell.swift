@@ -42,23 +42,24 @@ class CustomerHomeCell: UITableViewCell {
                     timeLabel.text = timeStr
                 }
                 
-                let weekCount = setAttriMuStr(contentStr: "跟进人数：\(data.weekVisitUserNum)人", highlightStr: "跟进人数：", highlightColor:  UIColor(hex: "#999999"))
-                weekCountLabel.attributedText = weekCount
-                
-                let weekDeal = setAttriMuStr(contentStr: String(format: "成交：%.2f元", data.monthMoney), highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
-                weekDealLabel.attributedText = weekDeal
-                
-                let weekRebate = setAttriMuStr(contentStr: String(format: "支持：%.2f元", data.monthRebate), highlightStr: "支持：", highlightColor:  UIColor(hex: "#999999"))
-                weekRebateLabel.attributedText = weekRebate
-                
-                let moonCount = setAttriMuStr(contentStr: "跟进人数：\(data.monthVisitNum)人", highlightStr: "跟进人数：", highlightColor:  UIColor(hex: "#999999"))
-                moonCountLabel.attributedText = moonCount
-                
-                let moonDeal = setAttriMuStr(contentStr: String(format: "成交：%.2f元", data.seasonMoney), highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
-                moonDealLabel.attributedText = moonDeal
-                
-                let moonRebate = setAttriMuStr(contentStr: String(format: "支持：%.2f元", data.seasonRebate), highlightStr: "支持：", highlightColor:  UIColor(hex: "#999999"))
-                moonRebateLabel.attributedText = moonRebate
+                // 反优化 -> 任务名称：去掉现有统计信息（近一月、近三月...）
+//                let weekCount = setAttriMuStr(contentStr: "跟进人数：\(data.weekVisitUserNum)人", highlightStr: "跟进人数：", highlightColor:  UIColor(hex: "#999999"))
+//                weekCountLabel.attributedText = weekCount
+//
+//                let weekDeal = setAttriMuStr(contentStr: String(format: "成交：%.2f元", data.monthMoney), highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
+//                weekDealLabel.attributedText = weekDeal
+//
+//                let weekRebate = setAttriMuStr(contentStr: String(format: "支持：%.2f元", data.monthRebate), highlightStr: "支持：", highlightColor:  UIColor(hex: "#999999"))
+//                weekRebateLabel.attributedText = weekRebate
+//
+//                let moonCount = setAttriMuStr(contentStr: "跟进人数：\(data.monthVisitNum)人", highlightStr: "跟进人数：", highlightColor:  UIColor(hex: "#999999"))
+//                moonCountLabel.attributedText = moonCount
+//
+//                let moonDeal = setAttriMuStr(contentStr: String(format: "成交：%.2f元", data.seasonMoney), highlightStr: "成交：", highlightColor:  UIColor(hex: "#999999"))
+//                moonDealLabel.attributedText = moonDeal
+//
+//                let moonRebate = setAttriMuStr(contentStr: String(format: "支持：%.2f元", data.seasonRebate), highlightStr: "支持：", highlightColor:  UIColor(hex: "#999999"))
+//                moonRebateLabel.attributedText = moonRebate
             }
         }
     }
@@ -85,18 +86,20 @@ class CustomerHomeCell: UITableViewCell {
     private var stateLabel: UILabel!
     /// 锁定人
     private var ascriptionLabel: UILabel!
-    /// 一周跟进人数
-    private var weekCountLabel = UILabel()
-    /// 一周成交
-    private var weekDealLabel = UILabel()
-    /// 一周支持
-    private var weekRebateLabel = UILabel()
-    /// 一月跟进人数
-    private var moonCountLabel = UILabel()
-    /// 一月成交
-    private var moonDealLabel = UILabel()
-    /// 一月支持
-    private var moonRebateLabel = UILabel()
+    
+    // 反优化 -> 任务名称：去掉现有统计信息（近一月、近三月...）
+//    /// 一周跟进人数
+//    private var weekCountLabel = UILabel()
+//    /// 一周成交
+//    private var weekDealLabel = UILabel()
+//    /// 一周支持
+//    private var weekRebateLabel = UILabel()
+//    /// 一月跟进人数
+//    private var moonCountLabel = UILabel()
+//    /// 一月成交
+//    private var moonDealLabel = UILabel()
+//    /// 一月支持
+//    private var moonRebateLabel = UILabel()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -132,6 +135,8 @@ class CustomerHomeCell: UITableViewCell {
         let arrowView = UIView().taxi.adhere(toSuperView: whiteView) // 填充箭头
             .taxi.layout { (make) in
                 make.top.left.right.equalToSuperview()
+                // 反优化 -> 任务名称：去掉现有统计信息（近一月、近三月...）
+                make.bottom.equalToSuperview()
             }
             .taxi.config { (view) in
                 view.backgroundColor = .white
@@ -270,8 +275,9 @@ class CustomerHomeCell: UITableViewCell {
         setTitle(title: ascription, content: ascriptionLabel, lastLabel: state, isLast: true)
         ascription.text = "锁定人："
         
-        setCount(titleStr: "最近一月", count: weekCountLabel, deal: weekDealLabel, rebate: weekRebateLabel, lastView: arrowView)
-        setCount(titleStr: "最近三月", count: moonCountLabel, deal: moonDealLabel, rebate: moonRebateLabel, lastView: weekCountLabel, isLast: true)
+        // 反优化 -> 任务名称：去掉现有统计信息（近一月、近三月...）
+//        setCount(titleStr: "最近一月", count: weekCountLabel, deal: weekDealLabel, rebate: weekRebateLabel, lastView: arrowView)
+//        setCount(titleStr: "最近三月", count: moonCountLabel, deal: moonDealLabel, rebate: moonRebateLabel, lastView: weekCountLabel, isLast: true)
     }
     
     /// 设置标题和内容

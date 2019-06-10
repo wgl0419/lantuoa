@@ -185,7 +185,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     private func getData(isMore: Bool) {
         switch type {
         case .customer:
-            customerListStatistics(isMore: isMore)
+            customerList(isMore: isMore)
         case .visitor:
             customerContactList()
         case .project:
@@ -215,10 +215,10 @@ class NewlyBuildVisitSeleController: UIViewController {
     /// 获取客户列表
     ///
     /// - Parameter isMore: 是否是加载更多
-    private func customerListStatistics(isMore: Bool) {
+    private func customerList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.customerListStatistics(searchBar.text ?? "", nil, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.customerList(searchBar.text ?? "", nil, nil, newPage, 10), t: CustomerListStatisticsModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -333,7 +333,7 @@ class NewlyBuildVisitSeleController: UIViewController {
             let ejectView = AddCustomerEjectView()
             ejectView.isApply = isApply
             ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
-                self?.customerListStatistics(isMore: false)
+                self?.customerList(isMore: false)
             }
             ejectView.applyBlock = { [weak self] (model) in // 申请成功 -> 返回上层并填写
                 if self?.seleBlock != nil {
