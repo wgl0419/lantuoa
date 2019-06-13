@@ -25,6 +25,22 @@ let ScreenHeight: CGFloat = UIScreen.main.bounds.height
 let ScreenBounds: CGRect = UIScreen.main.bounds
 /// 间隔（用于处理iphone5屏幕小  显示不全问题）
 let spacing: CGFloat = isIphone5 ? 3 : 0
+/// 屏幕宽比率（一般使用此比率）
+let kWidthRate = UIScreen.main.bounds.width / 375.0
+/// 屏幕高比率
+let kHeightRate = UIScreen.main.bounds.height / 667.0
+
+/// 状态栏高度
+let kStatusBarHeight = UIApplication.shared.statusBarFrame.size.height
+
+/// 导航栏+状态栏高度
+let kNavBarHeight = UIApplication.shared.statusBarFrame.size.height + 44
+
+/// tabBar额外高度
+let kTabBarExtraHeight = ScreenHeight >= 812 ? CGFloat(34) : CGFloat(0)
+
+/// tabBar高度
+let kTabBarHeight = ScreenHeight >= 812 ? CGFloat(83) : CGFloat(49)
 
 // MARK: - 判断手机
 /// 获取宽高最大值
@@ -41,6 +57,10 @@ let isIphone5 = ScreenWidth == 320 && ScreenHeight == 568
 let isIphone = ScreenWidth == 375 && ScreenHeight == 667
 /// 是否是iPhone 6 Plus or 7 Plus or 8 Plus
 let isIphonePlus = ScreenWidth == 414 && ScreenHeight == 736
+///主色调UIColor(hex: "#2E4695")
+let kMainColor = UIColor(hex: "#2E4695")
+/// 主色调按下
+let kMainSelectedColor = UIColor(hex: "#999999")
 
 // MARK: - 各种颜色
 /// 黑色
@@ -67,3 +87,11 @@ let appBuild = appInfo!["CFBundleVersion"] as! String
 //let serverAddressURL = "192.168.1.111:9101"
 /// 测试服务器
 let serverAddressURL = "api.lantudev.danjuantaxi.com"
+///13800000000 123456//超级账号
+
+// MARK:- 自定义打印方法
+func NSLog<T>(_ message: T, file: String = #file, method: String = #function, line: Int = #line) {
+    #if DEBUG
+    print("文件名:\((file as NSString).lastPathComponent)[行号:\(line)], 方法:\(method): \(message)")
+    #endif
+}

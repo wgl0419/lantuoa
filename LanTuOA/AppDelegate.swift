@@ -115,8 +115,8 @@ extension AppDelegate {
                 item?.title = titles[index]
                 item?.selectedImage = UIImage(named: seleImageNames[index])?.withRenderingMode(.alwaysOriginal)
                 item?.image = UIImage(named: imageNames[index])?.withRenderingMode(.alwaysOriginal)
-                item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#999999")], for: .normal)
-                item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2E4695")], for: .selected)
+                item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: kMainSelectedColor], for: .normal)
+                item?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: kMainColor], for: .selected)
                 bar.addChild(nav)
             }
             if AppDelegate.isNotification {
