@@ -309,7 +309,8 @@ class VisitSeleTimeView: UIView {
             return 
         }
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.projectList("", customerId, 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
+        let customerIdStr = "\(customerId)"
+        _ = APIService.shared.getData(.projectList("", customerIdStr, 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             self.isProjectData = true
             self.projectData = result.data

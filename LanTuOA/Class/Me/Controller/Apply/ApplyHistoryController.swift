@@ -59,7 +59,7 @@ class ApplyHistoryController: UIViewController {
                 scrollView.delegate = self
                 scrollView.isPagingEnabled = true
                 scrollView.showsHorizontalScrollIndicator = false
-                scrollView.backgroundColor = UIColor(hex: "#F3F3F3")
+                scrollView.backgroundColor = kMainBackColor
             })
         
         var lastTableView: UITableView!
@@ -82,7 +82,7 @@ class ApplyHistoryController: UIViewController {
                     tableView.dataSource = self
                     tableView.separatorStyle = .none
                     tableView.estimatedRowHeight = 50
-                    tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                    tableView.backgroundColor = kMainBackColor
                     tableView.register(ApplyHistoryCell.self, forCellReuseIdentifier: "ApplyHistoryCell")
                     tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                         tableView.mj_footer.isHidden = true
@@ -96,7 +96,7 @@ class ApplyHistoryController: UIViewController {
                     let str = "暂无记录！"
                     let attriMuStr = NSMutableAttributedString(string: str)
                     attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
-                    attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+                    attriMuStr.changeColor(str: str, color: kMainSelectedColor)
                     tableView.noDataLabel?.attributedText = attriMuStr
                     tableView.noDataImageView?.image = UIImage(named: "noneData2")
             }
@@ -170,7 +170,6 @@ extension ApplyHistoryController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 }
-
 
 extension ApplyHistoryController: ProjectSegmentDelegate {
     func changeScrollView(page: Int) {

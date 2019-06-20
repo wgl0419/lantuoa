@@ -291,7 +291,14 @@ class NewlyBuildVisitSeleController: UIViewController {
     private func projectList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-        _ = APIService.shared.getData(.projectList(searchBar.text ?? "", customerId, newPage, 10), t: ProjectListModel.self, successHandle: { (result) in
+        var customerIdstr = "\(customerId)"
+//        guard customerId != -1 else {
+//            customerIdstr = ""
+//        }
+        if customerId == -1{
+            customerIdstr = ""
+        }
+        _ = APIService.shared.getData(.projectList(searchBar.text ?? "", customerIdstr, newPage, 10), t: ProjectListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

@@ -92,7 +92,7 @@ extension HandoverStaffController: UITableViewDelegate, UITableViewDataSource {
                 .taxi.config({ (label) in
                     label.text = "交接工作："
                     label.font = UIFont.medium(size: 10)
-                    label.textColor = UIColor(hex: "#999999")
+                    label.textColor = kMainSelectedColor
                 })
             return headerView
         } else {

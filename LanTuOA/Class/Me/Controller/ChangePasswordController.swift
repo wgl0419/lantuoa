@@ -73,7 +73,7 @@ class ChangePasswordController: UIViewController {
                 tableView.dataSource = self
                 tableView.estimatedRowHeight = 50
                 tableView.tableFooterView = UIView()
-                tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                tableView.backgroundColor = kMainBackColor
                 tableView.register(FillInApplyFieldViewCell.self, forCellReuseIdentifier: "FillInApplyFieldViewCell")
             })
     }
@@ -171,7 +171,7 @@ extension ChangePasswordController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
-        footerView.backgroundColor = UIColor(hex: "#F3F3F3")
+        footerView.backgroundColor = kMainBackColor
         return footerView
     }
 }

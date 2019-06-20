@@ -10,6 +10,10 @@ import UIKit
 
 class ToExamineImageCell: UITableViewCell {
     
+    /// 必选星星
+    private var mustLabel: UILabel!
+    
+    var imageLabel: UILabel!
     /// 添加回调
     var imageBlock: (() -> ())?
     /// 删除回调
@@ -20,6 +24,15 @@ class ToExamineImageCell: UITableViewCell {
             collectionView.reloadData()
             collectionView.snp.updateConstraints { (make) in
                 make.height.equalTo(data.count == 0 ? 0 : 53)
+            }
+        }
+    }
+    
+    /// 必选(默认非必选)
+    var isMust: Bool? {
+        didSet {
+            if let isMust = isMust {
+                mustLabel.isHidden = !isMust
             }
         }
     }
@@ -42,7 +55,7 @@ class ToExamineImageCell: UITableViewCell {
     private func initSubViews() {
         contentView.layer.masksToBounds = true
         
-        let imageLabel = UILabel().taxi.adhere(toSuperView: contentView) // “图片”
+         imageLabel = UILabel().taxi.adhere(toSuperView: contentView) // “图片”
             .taxi.layout { (make) in
                 make.left.equalToSuperview().offset(15)
                 make.top.equalToSuperview().offset(15)
@@ -52,6 +65,18 @@ class ToExamineImageCell: UITableViewCell {
                 label.textColor = blackColor
                 label.font = UIFont.regular(size: 16)
         }
+        
+        mustLabel = UILabel().taxi.adhere(toSuperView: contentView) // 必选星星
+            .taxi.layout(snapKitMaker: { (make) in
+                make.centerY.equalTo(imageLabel)
+                make.right.equalTo(imageLabel.snp.left).offset(-3)
+            })
+            .taxi.config({ (label) in
+                label.text = "*"
+                label.isHidden = true
+                label.font = UIFont.medium(size: 14)
+                label.textColor = UIColor(hex: "#FF4444")
+            })
         
         _ = UIButton().taxi.adhere(toSuperView: contentView) // 点击按钮
             .taxi.layout(snapKitMaker: { (make) in

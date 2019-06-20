@@ -48,7 +48,7 @@ enum APIManager {
     case projectMemberAdd(Int, [Int]) // 新增项目成员  （projectId:项目id  users:用户id数组）
     case projectMemberDelete(Int, Int) // 删除项目成员  （projectId:项目id  userId:用户id）
     case projectListStatistics(String, Int, Int, Int, Int?) // 项目统计列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据  manageUser:管理人Id)
-    case projectList(String, Int?, Int, Int) // 项目信息列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据)
+    case projectList(String, String, Int, Int) // 项目信息列表  (name:项目/客户名称  customerId:客户id  page:页码  limit:一页几条数据)
     case projectDetail(Int) // 项目详情 (项目id)
     case projectSaveRequire(String, Int, String) // 申请新增项目（拜访页面） （name:项目名称  customerId:客户id  address:地址）
     
@@ -323,7 +323,7 @@ extension APIManager: TargetType {
             if manageUser != nil { params["manageUser"] = manageUser! }
         case let .projectList(name, customerId, page, limit): // 项目统计列表
             params = ["name": name, "page": page, "limit": limit]
-            if customerId != nil { params["customerId"] = customerId! }
+            if customerId != nil { params["customerId"] = customerId }
         case let .customerSaveRequire(name, full_name, address, industry): // 申请新增客户（拜访页面）
             params = ["name": name, "full_name": full_name, "address": address, "industry": industry]
         case let .projectSaveRequire(name, customerId, address): // 申请新增项目（拜访页面）
@@ -411,9 +411,8 @@ extension APIManager: TargetType {
             if payback.count > 0 { params["payback"] = payback }
             if files.count > 0 { params["files"] = files }
             if imgs.count > 0 { params["imgs"] = imgs }
+            
             return .requestParameters(parameters: params, encoding: JSONEncoding.default)
-            
-            
         case let .contractList(name, customerId, projectId, userId, page, limit, startTime, endTime, processId): // 合同列表/查询合同
             params = ["name": name, "page": page, "limit": limit]
             if customerId != nil { params["customerId"] = customerId! }
@@ -450,8 +449,7 @@ extension APIManager: TargetType {
         case let .fileUploadGetKey(fileType, fileName, fileSize): // 上传文件报备
             params = ["fileType": fileType, "fileName": fileName, "fileSize": fileSize]
             
-            
-        default: params = [:] 
+        default: params = [:]
         }
         
         return .requestParameters(parameters: params, encoding: URLEncoding.default)

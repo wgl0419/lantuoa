@@ -30,7 +30,6 @@ class LoginController: UIViewController {
         super.viewDidLoad()
         initSubViews()
     }
-    
 
     // MARK: - 自定义私有方法
     
@@ -174,10 +173,12 @@ class LoginController: UIViewController {
             })
         
         agreementView = AgreementView().taxi.adhere(toSuperView: view) // 协议模块
+            
             .taxi.layout(snapKitMaker: { (make) in
                 make.centerX.equalTo(view)
                 make.bottom.equalToSuperview().offset((isIphoneX ? -SafeH : -20) - 25)
             })
+            
             .taxi.config({ (view) in
                 view.agreementBlock = { [weak self] in // 点击用户协议
                     let webController = WebController()

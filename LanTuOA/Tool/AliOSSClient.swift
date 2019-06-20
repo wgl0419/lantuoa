@@ -29,7 +29,6 @@ class AliOSSClient: NSObject {
     
     /// 上传图片
     func uploadData(_ data: Data, name: String, body: Int, callback: uploadCallblock) {
-        
         let put = OSSPutObjectRequest()
         put.bucketName = "danjuan-lantuoa"
         put.objectKey = name

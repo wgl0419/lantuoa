@@ -15,20 +15,21 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
         didSet {
             if let data = data {
                 initSubViews()
-                
                 titleLabel.text = data.createdUserName
-                
+                numLabel.attributedText = richText(title: "订单编号：", content: "\(data.id)")
                 let smallData = data.data
 //                if smallData.count == 1 {
 //                    let model = smallData.first!
 //                    _ = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastLabel: titleLabel, isLast: true)
 //                }
-                var lastView: UIView = titleLabel
+                var lastView: UIView = numLabel
                 for index in 0..<smallData.count {
                     let model = smallData[index]
+                    
                     if model.type == 1 { // 标题 + 文本
                         let label = setTitleAndContent(model.title ?? "", contentStr: model.value ?? "", lastView: lastView, isLast: index == smallData.count - 1)
                         lastView = label
+                        
                     } else if model.type == 2 { // 表单名称
                         lastView = setFormHeader(model.title ?? "", lastView: lastView, isLast: index == smallData.count - 1)
                     } else { // 分割线
@@ -54,7 +55,8 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
     
     /// 标题
     private var titleLabel: UILabel!
-    
+    ///订单编号
+    private var numLabel: UILabel!
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -78,10 +80,24 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
                 make.top.equalToSuperview().offset(20)
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-20)
+                make.height.equalTo(20)
             })
             .taxi.config({ (label) in
                 label.textColor = UIColor(hex: "#2E4695")
                 label.font = UIFont.boldSystemFont(ofSize:18)
+            })
+        
+        numLabel = UILabel().taxi.adhere(toSuperView: contentView) // 订单编号
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalTo(titleLabel.snp.bottom).offset(5)
+                make.left.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-20)
+                make.height.equalTo(15)
+            })
+            .taxi.config({ (label) in
+                label.font = UIFont.regular(size: 14)
+                label.textColor = UIColor(hex: "#999999")
+                label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
             })
         
         _ = UIView().taxi.adhere(toSuperView: contentView) // 标记线
@@ -107,6 +123,7 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
     /// - Returns: 内容控件
     private func setTitleAndContent(_ titleStr: String, contentStr: String, lastView: UIView, isLast: Bool) -> UILabel {
         
+        
         let titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
             .taxi.layout { (make) in
                 make.top.equalTo(lastView.snp.bottom).offset(5)
@@ -118,7 +135,7 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
                 label.textColor = UIColor(hex: "#999999")
                 label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
-        
+
         let contentLabel = UILabel().taxi.adhere(toSuperView: contentView) // 内容
             .taxi.layout { (make) in
                 make.top.equalTo(titleLabel)
@@ -180,4 +197,22 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
             return date.customTimeStr(customStr: "yyyy年MM月dd日 HH:mm")
         }
     }
+    
+    ///处理编号
+    private func richText(title:String,content:String) -> NSMutableAttributedString{
+        let attrs1 = [NSAttributedString.Key.font : UIFont.regular(size: 14), NSAttributedString.Key.foregroundColor : UIColor(hex: "#999999")]
+        
+        let attrs2 = [NSAttributedString.Key.font : UIFont.regular(size: 14), NSAttributedString.Key.foregroundColor : blackColor]
+        
+        let attributedString1 = NSMutableAttributedString(string:title, attributes:attrs1)
+        
+        let attributedString2 = NSMutableAttributedString(string:content, attributes:attrs2)
+        
+        attributedString1.append(attributedString2)
+        
+        return attributedString1
+    }
+    
+    
+
 }

@@ -47,7 +47,7 @@ class HandoverStaffSeleController: UIViewController {
     /// 初始化子控件
     private func initSubViews() {
         title = "工作接手"
-        view.backgroundColor = UIColor(hex: "#F3F3F3")
+        view.backgroundColor = kMainBackColor
         
         let searchView = UIView().taxi.adhere(toSuperView: view) // 搜索框背景
             .taxi.layout { (make) in

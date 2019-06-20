@@ -70,7 +70,7 @@ class MeHomeController: UIViewController {
                 tableView.dataSource = self
                 tableView.estimatedRowHeight = 45
                 tableView.tableFooterView = UIView()
-                tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                tableView.backgroundColor = kMainBackColor
                 if #available(iOS 11.0, *) {
                     tableView.contentInsetAdjustmentBehavior = .never
                 }
@@ -132,7 +132,7 @@ extension MeHomeController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section != 0 {
             let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
-            headerView.backgroundColor = UIColor(hex: "#F3F3F3")
+            headerView.backgroundColor = kMainBackColor
             return headerView
         } else {
             return nil

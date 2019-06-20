@@ -94,7 +94,7 @@ extension SetUpController: UITableViewDelegate, UITableViewDataSource {
                         label.tag = 10086
                         label.textAlignment = .center
                         label.font = UIFont.medium(size: 14)
-                        label.textColor = UIColor(hex: "#999999")
+                        label.textColor = kMainSelectedColor
                 }
             }
             let label = cell!.viewWithTag(10086) as! UILabel

@@ -87,7 +87,7 @@ class AgreementView: UIView {
             .taxi.config { (label) in
                 label.text = "和"
                 label.font = UIFont.medium(size: 12)
-                label.textColor = UIColor(hex: "#999999")
+                label.textColor = kMainSelectedColor
         }
         
         _ = UIButton().taxi.adhere(toSuperView: self) // 隐私协议

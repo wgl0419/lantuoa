@@ -157,4 +157,14 @@ extension Date {
         dateComp.day = days
         return (Calendar.current as NSCalendar).date(byAdding: dateComp, to: self, options: NSCalendar.Options(rawValue: 0))!
     }
+    
+    //时间转时间戳
+    func  getTimeStamp(dateTimne:String ,dateformatterStr:String) -> String {
+        let dfmatter = DateFormatter()
+        dfmatter.dateFormat=dateformatterStr
+        let date = dfmatter.date(from: dateTimne)
+        let dateStamp:TimeInterval = date!.timeIntervalSince1970
+        let dateSt:Int = Int(dateStamp)
+        return String(dateSt)
+    }
 }

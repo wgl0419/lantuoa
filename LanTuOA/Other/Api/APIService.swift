@@ -19,7 +19,6 @@ class APIService {
         return instance
     }
     
-    
     /// 请求节点配置闭包
     lazy var endpointClosure = { (target: APIManager) -> Endpoint in
         let url = target.baseURL.appendingPathComponent(target.path).absoluteString

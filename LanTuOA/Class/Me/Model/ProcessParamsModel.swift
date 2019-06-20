@@ -32,6 +32,6 @@ struct ProcessParamsData: HandyJSON {
     var children = [ProcessParamsData]()
     var title: String?
     var hint: String?
-    /// 字段类型：1.文本（高度可变），2.数字，3.日期，4.单选，5.多选，6.客户，7.项目
+    /// 字段类型：1.文本（高度可变），2.数字，3.日期，4.单选，5.多选，6.客户，7.项目，9.相册，10.附件，11.具体时间
     var type: Int = 0
 }

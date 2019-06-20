@@ -35,7 +35,7 @@ class HomePageController: UIViewController {
     private func setNav() {
         navigationItem.title = "蓝图OA"
         let nav = navigationController as! MainNavigationController
-        nav.setNavConfigure(type: .dark, color: UIColor(hex: "#2E4695"), isShadow: false)
+        nav.setNavConfigure(type: .dark, color: kMainColor, isShadow: false)
         nav.backBtn.isHidden = false
     }
     
@@ -47,7 +47,7 @@ class HomePageController: UIViewController {
                 let str = "网络异常！请检查您的网络状态"
                 let attriMuStr = NSMutableAttributedString(string: str)
                 attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
-                attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+                attriMuStr.changeColor(str: str, color: kMainSelectedColor)
                 view.noDataLabel?.attributedText = attriMuStr
                 view.isNoData = true
                 return
@@ -67,7 +67,7 @@ class HomePageController: UIViewController {
             let str = "数据加载失败！点击重新加载"
             let attriMuStr = NSMutableAttributedString(string: str)
             attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
-            attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+            attriMuStr.changeColor(str: str, color: kMainSelectedColor)
             attriMuStr.yy_setTextHighlight(NSRange(location: 7, length: 6),
                                            color: UIColor(hex: "#6B83D1"),
                                            backgroundColor: .clear) { (_, text, _, _) in
@@ -91,7 +91,7 @@ class HomePageController: UIViewController {
             let str = "您目前没有跟进的项目！"
             let attriMuStr = NSMutableAttributedString(string: str)
             attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
-            attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+            attriMuStr.changeColor(str: str, color: kMainSelectedColor)
             footerView.noDataLabel?.attributedText = attriMuStr
             self.tableView.tableFooterView = footerView
         }
@@ -99,7 +99,7 @@ class HomePageController: UIViewController {
     
     /// 初始化子控件
     private func initSubViews() {
-        view.backgroundColor = UIColor(hex: "#F3F3F3")
+        view.backgroundColor = kMainBackColor
         
         tableView = UITableView(frame: .zero, style: .grouped)
             .taxi.adhere(toSuperView: view)
@@ -111,7 +111,7 @@ class HomePageController: UIViewController {
                 tableView.dataSource = self
                 tableView.estimatedRowHeight = 50
                 tableView.tableFooterView = UIView()
-                tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                tableView.backgroundColor = kMainBackColor
                 tableView.separatorInset = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
                 tableView.register(HomePageVisitCell.self, forCellReuseIdentifier: "HomePageVisitCell")
                 tableView.register(HomePageNoticeCell.self, forCellReuseIdentifier: "HomePageNoticeCell")
@@ -127,7 +127,8 @@ class HomePageController: UIViewController {
     /// 项目信息列表
     private func projectList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.projectList("", nil, 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
+        
+        _ = APIService.shared.getData(.projectList("", "", 1, 9999), t: ProjectListModel.self, successHandle: { (result) in
             self.data = result.data
             self.view.isNoData = false
             self.tableView.reloadData()

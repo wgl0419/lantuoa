@@ -65,7 +65,6 @@ class VisitDetailsController: UIViewController {
                 btn.addTarget(self, action: #selector(commentClick), for: .touchUpInside)
             })
         
-        
         tableView = UITableView(frame: .zero, style: .grouped).taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.left.right.equalToSuperview()
@@ -201,13 +200,13 @@ extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineCommentNameCell", for: indexPath) as! ToExamineCommentNameCell
                 cell.data = visitCommentData[section - 3]
                 return cell
-            } else if imageArray.count > 0 && row == 1 {
+            } else if imageArray.count > 0 && row == 1 {//图片
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImagesCell", for: indexPath) as! ToExamineImagesCell
                 cell.isApproval = false
                 cell.datas = imageArray
                 cell.isComment = true
                 return cell
-            } else {
+            } else {//文件
                 let index = imageArray.count > 0 ? 2 : 1
                 let fileArray = commentsModel.filter { (model) -> Bool in
                     return model.fileType == 2

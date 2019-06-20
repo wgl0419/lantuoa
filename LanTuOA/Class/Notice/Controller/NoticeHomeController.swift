@@ -135,7 +135,7 @@ class NoticeHomeController: UIViewController {
                 tableView.separatorStyle = .none
                 tableView.estimatedRowHeight = 50
                 tableView.tableFooterView = UIView()
-                tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                tableView.backgroundColor = kMainBackColor
                 
                 let str = "暂无通知！"
                 let attriMuStr = NSMutableAttributedString(string: str)

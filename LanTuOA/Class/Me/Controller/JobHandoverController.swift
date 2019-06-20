@@ -78,7 +78,7 @@ class JobHandoverController: UIViewController {
         let str = "暂无工作交接！"
         let attriMuStr = NSMutableAttributedString(string: str)
         attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
-        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        attriMuStr.changeColor(str: str, color: kMainSelectedColor)
         tableView.noDataLabel?.attributedText = attriMuStr
         tableView.noDataImageView?.image = UIImage(named: "noneData2")
     }

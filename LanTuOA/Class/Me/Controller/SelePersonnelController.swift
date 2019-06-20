@@ -143,7 +143,7 @@ class SelePersonnelController: UIViewController {
     /// 初始化顶部视图
     private func initHeaderView() -> UIView {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 37))
-        headerView.backgroundColor = UIColor(hex: "#F3F3F3")
+        headerView.backgroundColor = kMainBackColor
         
         selectedLabel = UILabel().taxi.adhere(toSuperView: headerView) // 已选
             .taxi.layout(snapKitMaker: { (make) in
@@ -152,7 +152,7 @@ class SelePersonnelController: UIViewController {
             })
             .taxi.config({ (label) in
                 label.text = "已选 \(selectedIds.count)/\(data.count)"
-                label.textColor = UIColor(hex: "#999999")
+                label.textColor = kMainSelectedColor
                 label.font = UIFont.boldSystemFont(ofSize: 12)
             })
         

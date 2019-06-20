@@ -55,7 +55,7 @@ class ApplyController: UIViewController {
                 tableView.dataSource = self
                 tableView.separatorStyle = .none
                 tableView.estimatedRowHeight = 50
-                tableView.backgroundColor = UIColor(hex: "#F3F3F3")
+                tableView.backgroundColor = kMainBackColor
                 tableView.register(ApplyListCell.self, forCellReuseIdentifier: "ApplyListCell")
             })
     }

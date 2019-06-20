@@ -69,7 +69,7 @@ class WorkGroupController: UIViewController {
     private func setNoneData(str: String, imageStr: String) {
         let attriMuStr = NSMutableAttributedString(string: str)
         attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
-        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        attriMuStr.changeColor(str: str, color: kMainSelectedColor)
         tableView.noDataLabel?.attributedText = attriMuStr
         tableView.noDataImageView?.image = UIImage(named: imageStr)
     }
@@ -147,7 +147,7 @@ extension WorkGroupController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 37))
-        headerView.backgroundColor = UIColor(hex: "#F3F3F3")
+        headerView.backgroundColor = kMainBackColor
         _ = UILabel().taxi.adhere(toSuperView: headerView) // ”我参与的工作组“
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalToSuperview().offset(15)
@@ -156,7 +156,7 @@ extension WorkGroupController: UITableViewDelegate, UITableViewDataSource {
             .taxi.config({ (label) in
                 label.text = "我参与的工作组"
                 label.font = UIFont.medium(size: 12)
-                label.textColor = UIColor(hex: "#999999")
+                label.textColor = kMainSelectedColor
             })
         return headerView
     }

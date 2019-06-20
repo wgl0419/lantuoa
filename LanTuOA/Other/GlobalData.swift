@@ -61,6 +61,8 @@ let isIphonePlus = ScreenWidth == 414 && ScreenHeight == 736
 let kMainColor = UIColor(hex: "#2E4695")
 /// 主色调按下
 let kMainSelectedColor = UIColor(hex: "#999999")
+///控制器背景颜色
+let kMainBackColor = UIColor(hex: "#F3F3F3")
 
 // MARK: - 各种颜色
 /// 黑色

@@ -17,8 +17,6 @@ class ToExamineDetailsController: UIViewController {
     var checkListId = 0
     /// 修改回调
     var changeBlock: (() -> ())?
-    
-    
     /// tableview
     private var tableView: UITableView!
     /// 状态图标
@@ -229,6 +227,7 @@ class ToExamineDetailsController: UIViewController {
         let imageData = smallData.filter { (model) -> Bool in
             return model.type == 4
         }
+        
         for model in imageData {
             let imageValue = model.fileArr
             for value in imageValue {
@@ -742,7 +741,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
             }
         } else if section == 0 { // 详情
             let index = imagesData.count > 0 ? 3 : 1
-            if row >= index {
+            if row > index {
                 openFile(filesData[row - index - 1])
             }
         }
