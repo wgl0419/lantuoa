@@ -18,12 +18,12 @@ class AchievementsDetailsEjectView: UIView {
     private var tableView: UITableView!
     
     /// 数据
-    private var data = [PerformDetailData]()
+    private var data = [NewPerformDetailData]()
     
-    convenience init(year: String, month: Int, data: [PerformDetailData]) {
+    convenience init(year: String, month: String, name:String,data: [NewPerformDetailData]) {
         self.init(frame: ScreenBounds)
         self.data = data
-        let titleStr = year + "年\(month)月绩效"
+        let titleStr = year + "年\(month)月\(name)绩效"
         initSubViews(title: titleStr)
     }
     

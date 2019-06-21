@@ -35,7 +35,6 @@ class AchievementsListController: UIViewController {
     private func initSubViews() {
         title = "绩效查询"
         view.backgroundColor = UIColor(hex: "#F3F3F3")
-        
         let barView = UIView().taxi.adhere(toSuperView: view) // bar背景view
             .taxi.layout { (make) in
                 make.top.left.right.equalTo(view)

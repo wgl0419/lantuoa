@@ -88,7 +88,7 @@ let appBuild = appInfo!["CFBundleVersion"] as! String
 /// 测试服务器(李健电脑)
 //let serverAddressURL = "192.168.1.111:9101"
 /// 测试服务器
-let serverAddressURL = "api.lantudev.danjuantaxi.com"
+let serverAddressURL = "api.dev.lantuoa.com"
 ///13800000000 123456//超级账号
 
 // MARK:- 自定义打印方法

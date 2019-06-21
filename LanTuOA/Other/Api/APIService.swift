@@ -29,8 +29,8 @@ class APIService {
             task: target.task,
             httpHeaderFields: target.headers
         )
-        endpoint = endpoint.adding(newHTTPHeaderFields: ["token": UserInfo.share.token])
         
+        endpoint = endpoint.adding(newHTTPHeaderFields: ["token": UserInfo.share.token])
         return endpoint
     }
     

@@ -150,7 +150,8 @@ extension MeHomeController: UITableViewDelegate, UITableViewDataSource {
             case 1:
                 vc = ToExamineController()
             case 2:
-                vc = AchievementsListController()
+//                vc = AchievementsListController()
+                vc = NewAchievementsListController()
             case 3:
                 vc = ApplyControllers()
             case 4:

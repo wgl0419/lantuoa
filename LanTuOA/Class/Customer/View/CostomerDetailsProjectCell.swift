@@ -23,7 +23,7 @@ class CostomerDetailsProjectCell: UITableViewCell {
                     attriMuStr.append(attriStr)
                 }
                 nameLabel.attributedText = attriMuStr
-                
+
                 wordGroupLabel.text = preventEmpty(data.groupNames)
                 personLabel.text = preventEmpty(data.members)
                 stateLabel.text = preventEmpty(data.lastVisitResult)

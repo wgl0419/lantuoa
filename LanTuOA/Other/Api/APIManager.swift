@@ -111,6 +111,8 @@ enum APIManager {
     case contractPaybackUpdate(Int, String, Float, Int) // 修改回款 (回款id  desc:备注  money:金额  payTime:回款时间)
     case contractPaybackAdd(Int, String, Float, Int) // 添加回款 (contractId:合同id  desc:备注  money:金额  payTime:回款时间)
     case performUnder(String) // 绩效查询 (name:查询名称)
+    case newPerformUnder(Int?) // 最新查询（month：月份）
+    case IndividualNewPerformUnder(Int,Int?)
     case performDetail(Int?, Int?, String) // 绩效查询-详情-月份绩效 （userId:用户id  self:是否是自己  month:月份,格式yyyy-MM）
     case contractTypeList // 合同类型列表
     case contractDescList(Int) // 合同备注信息列表
@@ -221,6 +223,8 @@ extension APIManager: TargetType {
         case .contractPaybackUpdate(let id, _, _, _): return "/api/contract/payback/update/\(id)"
         case .contractPaybackAdd: return "/api/contract/payback/add"
         case .performUnder: return "/api/perform/under"
+        case .newPerformUnder:return "/api/perform/depts"
+        case .IndividualNewPerformUnder(let id, _): return "/api/perform/users/\(id)"
         case .performDetail: return "/api/perform/detail"
         case .contractTypeList: return "/api/contract/type/list"
         case .contractDescList(let id): return "/api/contract/desc/list/\(id)"
@@ -270,6 +274,7 @@ extension APIManager: TargetType {
         switch self {
         case let .login(phone, pwd): // 登录
             params = ["phone":phone, "pwd": pwd, "os": 2, "registrationId": UserInfo.share.registrationID]
+            
         case let .users(page, limit, realname, used): // 用户列表
             params = ["page": page, "limit": limit, "realname": realname, "used": used, "status": 1]
         case let .usersPwd(oldPwd, newPwd): // 修改密码
@@ -439,6 +444,11 @@ extension APIManager: TargetType {
             params = ["contractId": contractId, "desc": desc, "money": money, "payTime": payTime]
         case .performUnder(let name): // 绩效查询
             params = ["name": name]
+        case let .newPerformUnder(month): //最新的按月查询绩效
+            params = ["month": month!]
+        case let .IndividualNewPerformUnder(_,month):
+            params = ["month": month!]
+            
         case let .performDetail(userId, `self`, month): // 绩效查询-详情-月份绩效
             params = ["month": month]
             if userId != nil { params["userId"] = userId! }

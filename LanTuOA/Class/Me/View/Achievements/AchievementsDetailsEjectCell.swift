@@ -11,7 +11,7 @@ import UIKit
 class AchievementsDetailsEjectCell: UITableViewCell {
 
     /// 数据
-    var data: (Int, PerformDetailData)! {
+    var data: (Int, NewPerformDetailData)! {
         didSet {
             setContent(isTitle: false, number: data.0, contract: data.1.title ?? "", money: data.1.money)
         }

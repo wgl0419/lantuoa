@@ -150,9 +150,9 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         if picker == pickerView{
-            return (ScreenWidth-40) / 3
+            return 70
         }else{
-            return (ScreenWidth-40) / 2
+            return 70
         }
     }
     

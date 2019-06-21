@@ -13,7 +13,7 @@ class AchievementsDetailsController: UIViewController {
 
     /// 用户id
     var performUnderData: PerformUnderData!
-    
+    var id : Int!
     /// tableview
     private var tableView: UITableView!
     
@@ -53,7 +53,7 @@ class AchievementsDetailsController: UIViewController {
     /// 业绩列表
     private func performList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.performList(2, performUnderData.id, nil, nil), t: PerformListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.performList(2, id, nil, nil), t: PerformListModel.self, successHandle: { (result) in
             self.data = result.data
             for _ in result.data {
                 self.openArray.append(false)
@@ -68,14 +68,14 @@ class AchievementsDetailsController: UIViewController {
     /// 绩效查询-详情-月份绩效
     private func performDetail(setion: Int, row: Int) {
         MBProgressHUD.showWait("")
-        let month = data[setion].children[row].title ?? ""
-        _ = APIService.shared.getData(.performDetail(performUnderData.id, nil, month), t: PerformDetailModel.self, successHandle: { (result) in
-            let showView = AchievementsDetailsEjectView(year: self.data[setion].title ?? "", month: row + 1, data: result.data)
-            showView.show()
-            MBProgressHUD.dismiss()
-        }, errorHandle: { (error) in
-            MBProgressHUD.showError(error ?? "获取失败")
-        })
+//        let month = data[setion].children[row].title ?? ""
+//        _ = APIService.shared.getData(.performDetail(id, nil, month), t: PerformDetailModel.self, successHandle: { (result) in
+//            let showView = AchievementsDetailsEjectView(year: self.data[setion].title ?? "", month: row + 1, data: result.data)
+//            showView.show()
+//            MBProgressHUD.dismiss()
+//        }, errorHandle: { (error) in
+//            MBProgressHUD.showError(error ?? "获取失败")
+//        })
     }
 }
 

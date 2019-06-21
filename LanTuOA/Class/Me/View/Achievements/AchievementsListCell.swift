@@ -17,7 +17,6 @@ class AchievementsListCell: UITableViewCell {
                 nameLabel.text = data.realname
                 let departmentStr = data.departmentName ?? ""
                 departmentLabel.text = departmentStr.count > 0 ? departmentStr : " "
-                
                 let attriStr = data.monthPerform.getSpotMoneyStr()
                 let attriMuStr = NSMutableAttributedString(string: attriStr)
                 attriMuStr.addUnderline(color: UIColor(hex: "#FF7744"), range: NSRange(location: 0, length: attriMuStr.length))

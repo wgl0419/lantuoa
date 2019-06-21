@@ -14,6 +14,7 @@
 		180115332248BE3C00EA551F /* CustomerTextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180115322248BE3C00EA551F /* CustomerTextViewCell.swift */; };
 		180115352248C3C500EA551F /* CustomerIndustryListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180115342248C3C500EA551F /* CustomerIndustryListModel.swift */; };
 		180115372248CFD000EA551F /* AddProjectEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180115362248CFD000EA551F /* AddProjectEjectView.swift */; };
+		1801409522BCBE2E00FBE695 /* NewPerformDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801409422BCBE2E00FBE695 /* NewPerformDetailModel.swift */; };
 		1801AE90223F28C40027A5DB /* ProjectLlistStatisticsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801AE8F223F28C40027A5DB /* ProjectLlistStatisticsModel.swift */; };
 		1801AE92223F2FE60027A5DB /* CustomerListStatisticsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801AE91223F2FE60027A5DB /* CustomerListStatisticsModel.swift */; };
 		1801AE94223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801AE93223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift */; };
@@ -244,6 +245,12 @@
 		18A7C96D223F7E1B000B4007 /* NewlyBuildSeleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C96C223F7E1B000B4007 /* NewlyBuildSeleCell.swift */; };
 		18A7C96F223F9828000B4007 /* SeleVisitModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A7C96E223F9828000B4007 /* SeleVisitModelView.swift */; };
 		18F82A9822B86F810051E43E /* SpecificTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F82A9722B86F810051E43E /* SpecificTimeView.swift */; };
+		18F90A4F22BB2903002B72B1 /* NewAchievementsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F90A4E22BB2903002B72B1 /* NewAchievementsListCell.swift */; };
+		18F90A5122BB2E32002B72B1 /* NewPerformUnderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F90A5022BB2E32002B72B1 /* NewPerformUnderModel.swift */; };
+		18F90A5322BB34E7002B72B1 /* NewAchievementsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F90A5222BB34E7002B72B1 /* NewAchievementsListController.swift */; };
+		18F90A5522BB6CC8002B72B1 /* NewAchievementsHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F90A5422BB6CC8002B72B1 /* NewAchievementsHeadView.swift */; };
+		18F90A5722BB787A002B72B1 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F90A5622BB787A002B72B1 /* DateView.swift */; };
+		18F90A5922BB9868002B72B1 /* IndividualPerformanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F90A5822BB9868002B72B1 /* IndividualPerformanceController.swift */; };
 		20086A34FD370732D57E936F /* Pods_LanTuOA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731155E08D0F4362D82C88E7 /* Pods_LanTuOA.framework */; };
 /* End PBXBuildFile section */
 
@@ -256,6 +263,7 @@
 		180115322248BE3C00EA551F /* CustomerTextViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerTextViewCell.swift; sourceTree = "<group>"; };
 		180115342248C3C500EA551F /* CustomerIndustryListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerIndustryListModel.swift; sourceTree = "<group>"; };
 		180115362248CFD000EA551F /* AddProjectEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectEjectView.swift; sourceTree = "<group>"; };
+		1801409422BCBE2E00FBE695 /* NewPerformDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPerformDetailModel.swift; sourceTree = "<group>"; };
 		1801AE8F223F28C40027A5DB /* ProjectLlistStatisticsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectLlistStatisticsModel.swift; sourceTree = "<group>"; };
 		1801AE91223F2FE60027A5DB /* CustomerListStatisticsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerListStatisticsModel.swift; sourceTree = "<group>"; };
 		1801AE93223F3A100027A5DB /* NewlyBuildVisitTextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildVisitTextViewCell.swift; sourceTree = "<group>"; };
@@ -493,6 +501,12 @@
 		18A7C96C223F7E1B000B4007 /* NewlyBuildSeleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildSeleCell.swift; sourceTree = "<group>"; };
 		18A7C96E223F9828000B4007 /* SeleVisitModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeleVisitModelView.swift; sourceTree = "<group>"; };
 		18F82A9722B86F810051E43E /* SpecificTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecificTimeView.swift; sourceTree = "<group>"; };
+		18F90A4E22BB2903002B72B1 /* NewAchievementsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAchievementsListCell.swift; sourceTree = "<group>"; };
+		18F90A5022BB2E32002B72B1 /* NewPerformUnderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPerformUnderModel.swift; sourceTree = "<group>"; };
+		18F90A5222BB34E7002B72B1 /* NewAchievementsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAchievementsListController.swift; sourceTree = "<group>"; };
+		18F90A5422BB6CC8002B72B1 /* NewAchievementsHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAchievementsHeadView.swift; sourceTree = "<group>"; };
+		18F90A5622BB787A002B72B1 /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
+		18F90A5822BB9868002B72B1 /* IndividualPerformanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualPerformanceController.swift; sourceTree = "<group>"; };
 		731155E08D0F4362D82C88E7 /* Pods_LanTuOA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LanTuOA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB24B3DA4D604F5B5FD3373A /* Pods-LanTuOA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanTuOA.release.xcconfig"; path = "Pods/Target Support Files/Pods-LanTuOA/Pods-LanTuOA.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -604,6 +618,8 @@
 			children = (
 				1803A31A225EE73900B86F20 /* AchievementsListController.swift */,
 				1827ED872268223700EFF889 /* AchievementsDetailsController.swift */,
+				18F90A5222BB34E7002B72B1 /* NewAchievementsListController.swift */,
+				18F90A5822BB9868002B72B1 /* IndividualPerformanceController.swift */,
 			);
 			path = Achievements;
 			sourceTree = "<group>";
@@ -616,6 +632,9 @@
 				1827ED8B22684A3E00EFF889 /* AchievementsDetailsCell.swift */,
 				1827ED8D22685E9600EFF889 /* AchievementsDetailsEjectView.swift */,
 				1827ED8F2268620B00EFF889 /* AchievementsDetailsEjectCell.swift */,
+				18F90A4E22BB2903002B72B1 /* NewAchievementsListCell.swift */,
+				18F90A5422BB6CC8002B72B1 /* NewAchievementsHeadView.swift */,
+				18F90A5622BB787A002B72B1 /* DateView.swift */,
 			);
 			path = Achievements;
 			sourceTree = "<group>";
@@ -1048,6 +1067,8 @@
 				180736BC22700FAA001F1FA6 /* LoginUserModel.swift */,
 				18057D9F229406830087D05D /* FileUploadGetKeyModel.swift */,
 				1809CBE9229644F20036E9A0 /* NotifyCheckCommentListModel.swift */,
+				18F90A5022BB2E32002B72B1 /* NewPerformUnderModel.swift */,
+				1801409422BCBE2E00FBE695 /* NewPerformDetailModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1395,9 +1416,11 @@
 				1809CBEA229644F20036E9A0 /* NotifyCheckCommentListModel.swift in Sources */,
 				1810EC74222F5D4100CF6488 /* UiView.swift in Sources */,
 				1849C1C1227E782000883C61 /* ScreenTimeCell.swift in Sources */,
+				18F90A5122BB2E32002B72B1 /* NewPerformUnderModel.swift in Sources */,
 				180736BB226EFF83001F1FA6 /* UpdateHintsEjectView.swift in Sources */,
 				1809E400225DC4D400B615A8 /* DepartmentsUsersModel.swift in Sources */,
 				180736C3227067FF001F1FA6 /* ProjectSaveRequireModel.swift in Sources */,
+				18F90A5722BB787A002B72B1 /* DateView.swift in Sources */,
 				1810EC7B222F5D4100CF6488 /* String.swift in Sources */,
 				180BB0C5228AC60700CAA38A /* AgreementView.swift in Sources */,
 				18A7C96B223F7BA7000B4007 /* ProjectListModel.swift in Sources */,
@@ -1453,6 +1476,7 @@
 				180E4D5B228524160042FA87 /* FillInApplyMoneyBackCell.swift in Sources */,
 				183383012251B4650053F2BF /* WorkGroupListModel.swift in Sources */,
 				18050D6F224B5B2D00C9DB9A /* HandoverStaffSeleController.swift in Sources */,
+				18F90A4F22BB2903002B72B1 /* NewAchievementsListCell.swift in Sources */,
 				180E4D6522856CDE0042FA87 /* AddRemarksEjectView.swift in Sources */,
 				18067C2B22801EFF005D26AC /* ContractScreenTimeCell.swift in Sources */,
 				18057D9A2293E62C0087D05D /* ToExamineImageCollectionCell.swift in Sources */,
@@ -1491,6 +1515,7 @@
 				180273E5223B5A410033E083 /* ProjectListCell.swift in Sources */,
 				18057D982293AC050087D05D /* ToExamineImageCell.swift in Sources */,
 				1803A321225EF07300B86F20 /* ProcessListModel.swift in Sources */,
+				1801409522BCBE2E00FBE695 /* NewPerformDetailModel.swift in Sources */,
 				1849C1C3227E8A1600883C61 /* ScreenEjectView.swift in Sources */,
 				1827ED882268223700EFF889 /* AchievementsDetailsController.swift in Sources */,
 				1827ED982269660700EFF889 /* FillInApplyApprovalCollectionCell.swift in Sources */,
@@ -1541,6 +1566,7 @@
 				1827ED902268620B00EFF889 /* AchievementsDetailsEjectCell.swift in Sources */,
 				1807B6BD228413B800B21A14 /* VisitDetailModel.swift in Sources */,
 				181788502238D73F0015DC30 /* HomePageNoticeCell.swift in Sources */,
+				18F90A5322BB34E7002B72B1 /* NewAchievementsListController.swift in Sources */,
 				1849C1BF227E728800883C61 /* ScreenOtherCell.swift in Sources */,
 				1802B01022549D1300E94341 /* JobHandoverController.swift in Sources */,
 				18026DF1223BA3B300993B66 /* NewlyBuildVisitSeleCell.swift in Sources */,
@@ -1568,6 +1594,7 @@
 				18050D6B224B4E8500C9DB9A /* HandoverStaffHeaderCell.swift in Sources */,
 				180E4D5D228527AB0042FA87 /* AddMoneyBackEjectView.swift in Sources */,
 				180736BD22700FAA001F1FA6 /* LoginUserModel.swift in Sources */,
+				18F90A5922BB9868002B72B1 /* IndividualPerformanceController.swift in Sources */,
 				1805F3B52275500B00AF0AF7 /* ScreenView.swift in Sources */,
 				180273E7223B7ACC0033E083 /* WrokHomeCell.swift in Sources */,
 				180233642244C1DD0064A50E /* MeHomeHeaderCell.swift in Sources */,
@@ -1588,6 +1615,7 @@
 				180533D22260188200B785B7 /* FillInApplyTextViewCell.swift in Sources */,
 				180B8F9D2272AE9C00E6FDE5 /* ApplyFooterView.swift in Sources */,
 				1876A8DE2266BA52002EBDB2 /* PerformListModel.swift in Sources */,
+				18F90A5522BB6CC8002B72B1 /* NewAchievementsHeadView.swift in Sources */,
 				1810EC7C222F5D4100CF6488 /* UIButton.swift in Sources */,
 				1811AA92224089BA0073A794 /* SeleVisitTimeView.swift in Sources */,
 				1838BC48225C6AD300978E72 /* DepartmentsModel.swift in Sources */,

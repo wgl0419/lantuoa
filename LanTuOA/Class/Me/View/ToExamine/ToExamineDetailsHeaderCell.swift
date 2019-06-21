@@ -211,8 +211,6 @@ class ToExamineDetailsHeaderCell: UITableViewCell {
         attributedString1.append(attributedString2)
         
         return attributedString1
-    }
-    
-    
+    }    
 
 }
