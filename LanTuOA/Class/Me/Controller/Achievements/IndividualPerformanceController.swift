@@ -134,7 +134,6 @@ extension IndividualPerformanceController: UITableViewDelegate, UITableViewDataS
         }else{
             cell.data = data[indexPath.row]
         }
-
         return cell
     }
     

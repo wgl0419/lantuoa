@@ -1,17 +1,17 @@
 //
-//  ToExamineDetailsController.swift
+//  CheckReportDetailsViewController.swift
 //  LanTuOA
 //
-//  Created by HYH on 2019/4/10.
+//  Created by panzhijing on 2019/6/24.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  审核详情   控制器
+//
 
 import UIKit
 import MJRefresh
 import SnapKit
 import MBProgressHUD
 
-class ToExamineDetailsController: UIViewController {
+class CheckReportDetailsViewController: UIViewController {
 
     /// 审批数据
     var checkListId = 0
@@ -30,15 +30,15 @@ class ToExamineDetailsController: UIViewController {
     /// 评论
     private var commentBtn: UIButton!
     
-    /// 审批数据
+    /// 汇报数据
     private var checkListData: NotifyCheckListData!
-    /// 审批评论数据
+    /// 汇报评论数据
     private var commentListData = [NotifyCheckCommentListData]()
-    /// 审批详情中的图片数据
+    /// 汇报详情中的图片数据
     private var imagesData = [NotifyCheckListValue]()
-    /// 审批详情中的文件数据
+    /// 汇报详情中的文件数据
     private var filesData = [NotifyCheckListValue]()
-    /// 审批人数据
+    /// 汇报人数据
     private var checkUserData = [[NotifyCheckUserListData]]()
     /// 是否展开
     private var openArray = [Bool]()
@@ -71,44 +71,45 @@ class ToExamineDetailsController: UIViewController {
                 view.backgroundColor = .white
             })
         
-        agreeBtn = UIButton().taxi.adhere(toSuperView: btnView) // 同意按钮
-            .taxi.layout(snapKitMaker: { (make) in
-                make.bottom.equalToSuperview().offset(isIphoneX ? -SafeH : -18)
-                make.right.equalToSuperview().offset(-15)
-                make.top.equalToSuperview().offset(18)
-                make.height.equalTo(44)
-                make.width.equalTo(80)
-            })
-            .taxi.config({ (btn) in
-                btn.isHidden = true
-                btn.setTitle("同意", for: .normal)
-                btn.setTitleColor(.white, for: .normal)
-                btn.layer.cornerRadius = 4
-                btn.layer.masksToBounds = true
-                btn.backgroundColor = UIColor(hex: "#2E4695")
-                btn.addTarget(self, action: #selector(agreeClick), for: .touchUpInside)
-            })
-        
-        refuseBtn = UIButton().taxi.adhere(toSuperView: btnView) // 拒绝按钮
-            .taxi.layout(snapKitMaker: { (make) in
-                make.right.equalTo(agreeBtn.snp.left).offset(-15)
-                make.top.equalToSuperview().offset(18)
-                make.height.equalTo(44)
-                make.width.equalTo(80)
-            })
-            .taxi.config({ (btn) in
-                btn.isHidden = true
-                btn.setTitle("拒绝", for: .normal)
-                btn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
-                
-                btn.layer.cornerRadius = 4
-                btn.layer.masksToBounds = true
-                btn.layer.borderWidth = 1
-                btn.layer.borderColor = UIColor(hex: "#2E4695").cgColor
-                btn.addTarget(self, action: #selector(refuseClick), for: .touchUpInside)
-            })
-        
-        
+//        agreeBtn = UIButton().taxi.adhere(toSuperView: btnView) // 同意按钮
+//            .taxi.layout(snapKitMaker: { (make) in
+//                make.bottom.equalToSuperview().offset(isIphoneX ? -SafeH : -18)
+//                make.right.equalToSuperview().offset(-15)
+//                make.top.equalToSuperview().offset(18)
+//                make.height.equalTo(44)
+//                make.width.equalTo(80)
+//            })
+//            .taxi.config({ (btn) in
+//                btn.isHidden = true
+//                btn.setTitle("同意", for: .normal)
+//                btn.setTitleColor(.white, for: .normal)
+//
+//                btn.layer.cornerRadius = 4
+//                btn.layer.masksToBounds = true
+//                btn.backgroundColor = UIColor(hex: "#2E4695")
+//                btn.addTarget(self, action: #selector(agreeClick), for: .touchUpInside)
+//            })
+//
+//        refuseBtn = UIButton().taxi.adhere(toSuperView: btnView) // 拒绝按钮
+//            .taxi.layout(snapKitMaker: { (make) in
+//                make.right.equalTo(agreeBtn.snp.left).offset(-15)
+//                make.top.equalToSuperview().offset(18)
+//                make.height.equalTo(44)
+//                make.width.equalTo(80)
+//            })
+//            .taxi.config({ (btn) in
+//                btn.isHidden = true
+//                btn.setTitle("拒绝", for: .normal)
+//                btn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
+//
+//                btn.layer.cornerRadius = 4
+//                btn.layer.masksToBounds = true
+//                btn.layer.borderWidth = 1
+//                btn.layer.borderColor = UIColor(hex: "#2E4695").cgColor
+//                btn.addTarget(self, action: #selector(refuseClick), for: .touchUpInside)
+//            })
+
+//
         commentBtn = UIButton().taxi.adhere(toSuperView: btnView) // 评论按钮
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalToSuperview().offset(15)
@@ -151,7 +152,7 @@ class ToExamineDetailsController: UIViewController {
                 tableView.register(ToExamineDetailsHeaderCell.self, forCellReuseIdentifier: "ToExamineDetailsHeaderCell")
                 tableView.register(ToExamineDetailsCell.self, forCellReuseIdentifier: "ToExamineDetailsCell")
                 tableView.register(ToExamineDetailsSmallCell.self, forCellReuseIdentifier: "ToExamineDetailsSmallCell")
-                tableView.register(ToExamineDetailsCarbonCopyCell.self, forCellReuseIdentifier: "ToExamineDetailsCarbonCopyCell")
+                tableView.register(CheckReportDetailsReadCell.self, forCellReuseIdentifier: "CheckReportDetailsReadCell")
                 tableView.register(ToExamineImagesCell.self, forCellReuseIdentifier: "ToExamineImagesCell")
                 tableView.register(ToExamineTitleCell.self, forCellReuseIdentifier: "ToExamineTitleCell")
                 tableView.register(ToExamineEnclosureCell.self, forCellReuseIdentifier: "ToExamineEnclosureCell")
@@ -161,7 +162,7 @@ class ToExamineDetailsController: UIViewController {
                     self?.notifyCheckCommentList()
                 })
             })
-        
+
         statusImageView = UIImageView().taxi.adhere(toSuperView: tableView) // 状态图标
             .taxi.layout(snapKitMaker: { (make) in
                 make.right.equalTo(view).offset(-7)
@@ -174,23 +175,23 @@ class ToExamineDetailsController: UIViewController {
         agreeBtn.isHidden = true
         refuseBtn.isHidden = true
         notifyCheckDetail()
-        notifyCheckUserList()
+//        notifyCheckUserList()
         if changeBlock != nil {
             changeBlock!()
         }
     }
     
     /// 点击同意处理
-    private func agreeHandle() {
-        let alertController = UIAlertController(title: "提示", message: "是否同意该申请?", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
-        alertController.addAction(cancelAction)
-        let agreeAction = UIAlertAction(title: "同意", style: .default, handler: { (_) in
-            self.notifyCheckAgree()
-        })
-        alertController.addAction(agreeAction)
-        present(alertController, animated: true, completion: nil)
-    }
+//    private func agreeHandle() {
+//        let alertController = UIAlertController(title: "提示", message: "是否同意该申请?", preferredStyle: .alert)
+//        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
+//        alertController.addAction(cancelAction)
+//        let agreeAction = UIAlertAction(title: "同意", style: .default, handler: { (_) in
+//            self.notifyCheckAgree()
+//        })
+//        alertController.addAction(agreeAction)
+//        present(alertController, animated: true, completion: nil)
+//    }
     
     /// 审批人列表数据处理
     private func checkUserListHandle(data: [NotifyCheckUserListData]) {
@@ -206,7 +207,7 @@ class ToExamineDetailsController: UIViewController {
                 openArray.append(false)
             }
         }
-        
+
         carbonCopyData = data.filter({ (model) -> Bool in
             return model.type == 2
         })
@@ -316,7 +317,7 @@ class ToExamineDetailsController: UIViewController {
                         MBProgressHUD.showError("打开失败，请重试")
                     }
                 })
-
+                
             }
         } else {
             MBProgressHUD.showError("不支持浏览该类型文件")
@@ -325,9 +326,9 @@ class ToExamineDetailsController: UIViewController {
     
     
     // MARK: - APi
-    /// 获取审批详情
+    /// 获取汇报详情
     private func notifyCheckDetail() {
-        _ = APIService.shared.getData(.notifyCheckDetail(checkListId), t: NotifyCheckDetailModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.WorkReporCheckListDetail(checkListId), t: NotifyCheckDetailModel.self, successHandle: { (result) in
             self.checkListData = result.data
             self.notifyCheckHandle()
             self.title = result.data?.processName ?? ""
@@ -339,11 +340,11 @@ class ToExamineDetailsController: UIViewController {
             MBProgressHUD.showError(error ?? "获取审批人失败")
         })
     }
-    
+
     /// 审批人列表
     private func  notifyCheckUserList() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.notifyCheckUserList(checkListId), t: NotifyCheckUserListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.WorkReporCheckListDetailRecipient(checkListId), t: NotifyCheckUserListModel.self, successHandle: { (result) in
             self.checkUserListHandle(data: result.data)
             self.tableView.mj_header.endRefreshing()
             self.tableView.reloadData()
@@ -352,6 +353,16 @@ class ToExamineDetailsController: UIViewController {
             self.tableView.mj_header.endRefreshing()
             MBProgressHUD.showError(error ?? "获取审批人失败")
         })
+//        MBProgressHUD.showWait("")
+//        _ = APIService.shared.getData(.WorkReporCheckListDetailRecipient(checkListId), t: NotifyCheckUserListModel.self, successHandle: { (result) in
+//            self.checkUserListHandle(data: result.data)
+//            self.tableView.mj_header.endRefreshing()
+//            self.tableView.reloadData()
+//            MBProgressHUD.dismiss()
+//        }, errorHandle: { (error) in
+//            self.tableView.mj_header.endRefreshing()
+//            MBProgressHUD.showError(error ?? "获取审批人失败")
+//        })
     }
     
     /// 审批评论列表
@@ -433,9 +444,9 @@ class ToExamineDetailsController: UIViewController {
             MBProgressHUD.showError(error ?? "同意失败")
         })
     }
+
     
-    
-    // MARK: - 按钮点击
+    /// MARK: - 按钮点击
     /// 点击拒绝
     @objc private func refuseClick() {
         if checkListData.processType == 1 || checkListData.processType == 2 {
@@ -455,23 +466,23 @@ class ToExamineDetailsController: UIViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-    
+
     /// 点击同意
-    @objc private func agreeClick() {
-        if checkListData.processType == 1 || checkListData.processType == 2 {
-            agreeHandle()
-        } else {
-            let vc = ToExamineCommentController()
-            vc.title = (checkListData.createdUserName ?? "") + "提交的《" + (checkListData.processName ?? "") + "》"
-            vc.checkListId = checkListId
-            vc.descType = .agree
-            vc.commentBlock = { [weak self] in
-                self?.changeHandle()
-            }
-            navigationController?.pushViewController(vc, animated: true)
-        }
-    }
-    
+//    @objc private func agreeClick() {
+//        if checkListData.processType == 1 || checkListData.processType == 2 {
+//            agreeHandle()
+//        } else {
+//            let vc = ToExamineCommentController()
+//            vc.title = (checkListData.createdUserName ?? "") + "提交的《" + (checkListData.processName ?? "") + "》"
+//            vc.checkListId = checkListId
+//            vc.descType = .agree
+//            vc.commentBlock = { [weak self] in
+//                self?.changeHandle()
+//            }
+//            navigationController?.pushViewController(vc, animated: true)
+//        }
+//    }
+//
     @objc private func commentClick() {
         let vc = ToExamineCommentController()
         vc.title = (checkListData.createdUserName ?? "") + "提交的《" + (checkListData.processName ?? "") + "》"
@@ -484,24 +495,27 @@ class ToExamineDetailsController: UIViewController {
     }
 }
 
-extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource {
+extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if checkListData == nil { // 没有获取到详情 不显示
             return 0
         }
-        return checkUserData.count + (checkListData != nil ? 2 : 0) + commentListData.count + (carbonCopyData.count > 0 ? 1 : 0)
+//        return checkUserData.count + (checkListData != nil ? 2 : 0) + commentListData.count + (carbonCopyData.count > 0 ? 1 : 0)
+        return (checkListData != nil ? 1 : 0) + commentListData.count + checkUserData.count + (carbonCopyData.count > 0 ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
         if section == 0 { // 评论详情
             let images = imagesData.count
             let files = filesData.count
-            return 1 + (images > 0 ? 2 : 0) + (files > 0 ? files + 1 : 0)
-        } else if section == 1 || section > checkUserData.count + 1 + commentListData.count { // 发起人 || 抄送人
+            return 1 + (images > 0 ? 1 : 0) + (files > 0 ? files + 1 : 0)
+        }else if section == commentListData.count + checkUserData.count + 1 {
             return 1
-        } else if section <= checkUserData.count + 1 { /// 中间评论人
-            let datas = checkUserData[section - 2]
-            var data = checkUserData[section - 2][0]
+        }
+        else if section < checkUserData.count + 1 { /// 中间评论人
+            let datas = checkUserData[section - 1]
+            var data = checkUserData[section - 1][0]
             if datas.count > 1 {
                 let processedModel = datas.filter { (model1) -> Bool in // 处理过数据
                     return model1.status == 2 || model1.status == 3
@@ -513,10 +527,11 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
             let model = filterData(data.files)
             let imageArray = model.0
             let fileArray = model.1
-            let isOpen = openArray[section - 2]
-            return isOpen ? (checkUserData[section - 2].count + 1) : (1 + (imageArray.count > 0 ? 1 : 0) + fileArray.count)
-        } else { // 评论
-            let files = commentListData[section - 2 - checkUserData.count].commentsFiles
+            let isOpen = openArray[section - 1]
+            return isOpen ? (checkUserData[section - 1].count + 1) : (1 + (imageArray.count > 0 ? 1 : 0) + fileArray.count)
+        }
+        else  { // 评论
+            let files = commentListData[section - 1 - checkUserData.count].commentsFiles
             let model = filterData(files)
             let imageArray = model.0
             let fileArray = model.1
@@ -527,6 +542,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
         let row = indexPath.row
+        
         if section == 0 { // 顶部信息
             if row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsHeaderCell", for: indexPath) as! ToExamineDetailsHeaderCell
@@ -552,7 +568,8 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineTitleCell", for: indexPath) as! ToExamineTitleCell
                         cell.titleStr = "文件文档："
                         return cell
-                    } else {
+                    }
+                    else {
                         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureCell", for: indexPath) as! ToExamineEnclosureCell
                         cell.data = filesData[row - index - 1]
                         cell.isDelete = false
@@ -561,29 +578,35 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                     }
                 }
             }
-        } else if section == 1 { // 业务人员信息
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
-            cell.notifyCheckListData = checkListData
-            return cell
-        } else if section > checkUserData.count + 1 + commentListData.count { // 抄送人信息
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCarbonCopyCell", for: indexPath) as! ToExamineDetailsCarbonCopyCell
+        }
+//        else if section == 1 { // 业务人员信息
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
+//            cell.notifyCheckListData = checkListData
+//            return cell
+//        }
+        else if section == checkUserData.count + 1 + commentListData.count { // 抄送人信息
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportDetailsReadCell", for: indexPath) as! CheckReportDetailsReadCell
             cell.carbonCopyData = carbonCopyData
+            cell.moreBlock = {
+                NSLog("更多")
+            }
             return cell
-        } else if section <= checkUserData.count + 1 {
-            let isOpen = openArray[section - 2]
+        }
+        else if section < checkUserData.count + 1  {
+            let isOpen = openArray[section - 1]
             if row == 0 { // 审核人信息 or 多人审批
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
                 let step = checkListData != nil ? checkListData.step : 0
-                cell.data = (checkUserData[section - 2], step >= checkUserData[section - 2][0].sort, section - 1 == checkUserData.count, openArray[section - 2])
+                cell.data = (checkUserData[section - 1], step >= checkUserData[section - 1][0].sort, section - 0 == checkUserData.count, openArray[section - 1])
                 return cell
             } else if isOpen { // 展开的审核人
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsSmallCell", for: indexPath) as! ToExamineDetailsSmallCell
-                let userListModel = checkUserData[section - 2]
+                let userListModel = checkUserData[section - 1]
                 cell.data = (userListModel[row - 1], row == userListModel.count, checkListData.step >= userListModel[0].sort)
                 return cell
             } else { // 图片和附件cell
-                let datas = checkUserData[section - 2]
-                var data = checkUserData[section - 2][0]
+                let datas = checkUserData[section - 1]
+                var data = checkUserData[section - 1][0]
                 if datas.count > 1 {
                     let processedModel = datas.filter { (model1) -> Bool in // 处理过数据
                         return model1.status == 2 || model1.status == 3
@@ -610,13 +633,14 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                     return cell
                 }
             }
-        } else {
-            let files = commentListData[section - 2 - checkUserData.count].commentsFiles
+        }
+        else {
+            let files = commentListData[section - 1 - checkUserData.count ].commentsFiles
             let model = filterData(files)
             let imageArray = model.0
             if row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineCommentNameCell", for: indexPath) as! ToExamineCommentNameCell
-                cell.data = commentListData[section - 2 - checkUserData.count]
+                cell.data = commentListData[section - 1 - checkUserData.count]
                 return cell
             } else if row == 1 && imageArray.count > 0 { // 图片
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImagesCell", for: indexPath) as! ToExamineImagesCell
@@ -624,7 +648,8 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                 cell.datas = imageArray
                 cell.isComment = true
                 return cell
-            } else {
+            }
+            else {
                 let index = imageArray.count > 0 ? 1 : 0
                 let fileArray = model.1
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureCell", for: indexPath) as! ToExamineEnclosureCell
@@ -647,7 +672,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
             }
         } else if section == checkUserData.count + 1 + commentListData.count { // 评论尾部
             return 10
-        } else if section == checkUserData.count + 2 + commentListData.count { // 抄送人尾部
+        } else if section == checkUserData.count + commentListData.count { // 抄送人尾部
             return 10
         }
         return 0.01
@@ -672,7 +697,6 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
     
     func grayFooterView() -> UIView {
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
-        footerView.backgroundColor = .clear
         return footerView
     }
     
@@ -695,22 +719,29 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
         let section = indexPath.section
-        if section >= 2 && section < checkUserData.count + 2 { // 点击展开或收起 多人审批
-            let isOpen = openArray[section - 2]
+        if section == 0 { // 评论详情
+            let index = imagesData.count > 0 ? 3 : 1
+            if row > index {
+                openFile(filesData[row - index - 1])
+            }
+        }else if section == commentListData.count + checkUserData.count + 1 {
+            
+        }else if section < checkUserData.count + 1 { /// 中间评论人
+            let isOpen = openArray[section - 1]
             if indexPath.row == 0 {
-                let model = checkUserData[section - 2]
+                let model = checkUserData[section - 1]
                 if model.count > 1 {
                     let processedModel = model.filter { (model1) -> Bool in // 处理过数据
                         return model1.status == 2 || model1.status == 3
                     }
                     if processedModel.count == 0 {
-                        openArray[section - 2] = !openArray[section - 2]
+                        openArray[section - 1] = !openArray[section - 1]
                         tableView.reloadSections(IndexSet(integer: section), with: .fade)
                     }
                 }
             } else if !isOpen { // 点击图片或文件
-                let datas = checkUserData[section - 2]
-                var data = checkUserData[section - 2][0]
+                let datas = checkUserData[section - 1]
+                var data = checkUserData[section - 1][0]
                 if datas.count > 1 {
                     let processedModel = datas.filter { (model1) -> Bool in // 处理过数据
                         return model1.status == 2 || model1.status == 3
@@ -723,25 +754,20 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                 let imageArray = model.0
                 let fileArray = model.1
                 if imageArray.count > 0 && row == 1 { // 显示图片
-                    
                 } else { // 点击文件
                     let index = imageArray.count > 0 ? 2 : 1
                     openFile(fileArray[row - index])
                 }
             }
-        } else if section >= checkUserData.count + 2 && section <= checkUserData.count + 1 + commentListData.count { // 评论中的文件
-            let files = commentListData[section - 2 - checkUserData.count].commentsFiles
+        }
+        else  { // 评论
+            let files = commentListData[section - 1 - checkUserData.count].commentsFiles
             let model = filterData(files)
             let imageArray = model.0
             let fileArray = model.1
             let index = imageArray.count > 0 ? 2 : 1
             if row >= index {
                 openFile(fileArray[row - index])
-            }
-        } else if section == 0 { // 详情
-            let index = imagesData.count > 0 ? 3 : 1
-            if row > index {
-                openFile(filesData[row - index - 1])
             }
         }
     }

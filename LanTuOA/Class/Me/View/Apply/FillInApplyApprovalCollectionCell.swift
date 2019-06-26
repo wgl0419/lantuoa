@@ -24,32 +24,18 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
             if data.count > 1 {
                 nameBtn.setTitle("\(data.count)人审批", for: .normal)
                 nameBtn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
-                positionLabel.isHidden = true
             } else if data.count == 1 {
                 let model = data[0]
                 nameBtn.setTitleColor(blackColor, for: .normal)
                 nameBtn.setTitle(model.realname ?? "", for: .normal)
-                positionLabel.isHidden = false
                 if model.checkUserId == 0 {
                     nameBtn.setTitleColor(UIColor(hex: "#FF4444"), for: .normal)
-                    positionLabel.isHidden = true
                 } else {
                     nameBtn.setTitleColor(blackColor, for: .normal)
-                }
-                let str = model.roleName ?? ""
-                if str.count == 0 {
-                    positionLabel.isHidden = true
-                } else {
-                    positionLabel.text = str
-                    let width = str.getTextSize(font: UIFont.boldSystemFont(ofSize: 10), maxSize: CGSize(width: 999, height: 999)).width
-                    positionLabel.snp.updateConstraints { (make) in
-                        make.width.equalTo(width + 10)
-                    }
                 }
             } else {
                 nameBtn.setTitleColor(blackColor, for: .normal)
                 nameBtn.setTitleColor(.white, for: .normal)
-                positionLabel.isHidden = true
             }
         }
     }
@@ -59,15 +45,12 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
         didSet {
             if let data = detailsData {
                 nameBtn.setTitle(data.checkUserName, for: .normal)
-                positionLabel.isHidden = true
             }
         }
     }
     
     /// 名称/审批
     private var nameBtn: UIButton!
-    /// 职位
-    private var positionLabel: UILabel!
     /// 删除按钮
     private var deleteBtn: UIButton!
     
@@ -93,24 +76,6 @@ class FillInApplyApprovalCollectionCell: UICollectionViewCell {
                 btn.setTitleColor(blackColor, for: .normal)
                 btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
                 btn.addTarget(self, action: #selector(nameClick), for: .touchUpInside)
-            })
-        
-        positionLabel = UILabel().taxi.adhere(toSuperView: contentView) // 职位
-            .taxi.layout(snapKitMaker: { (make) in
-                make.width.lessThanOrEqualToSuperview().offset(-10).priority(800)
-                make.bottom.equalToSuperview().offset(-10).priority(800)
-                make.top.equalToSuperview().offset(40)
-                make.height.equalTo(20).priority(800)
-                make.centerX.equalToSuperview()
-                make.width.equalTo(60)
-            })
-            .taxi.config({ (label) in
-                label.layer.cornerRadius = 4
-                label.textAlignment = .center
-                label.layer.masksToBounds = true
-                label.textColor = UIColor(hex: "#2E4695")
-                label.font = UIFont.boldSystemFont(ofSize: 10)
-                label.backgroundColor = UIColor(hex: "#DCE4FF")
             })
         
         deleteBtn = UIButton().taxi.adhere(toSuperView: contentView) // 删除按钮

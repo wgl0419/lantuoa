@@ -25,7 +25,6 @@ class NewAchievementsListController: UIViewController {
     private var headView: NewAchievementsHeadView!
     var date :String!
     var year :String!
-//    var monthStr :String!
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()

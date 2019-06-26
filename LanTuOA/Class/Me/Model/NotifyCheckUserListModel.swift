@@ -27,4 +27,6 @@ struct NotifyCheckUserListData: HandyJSON {
     var type: Int = 0
     var `self`: Int = 0
     var files = [NotifyCheckListValue]()
+    var commentId = 0
+    var receiveTime = 0
 }

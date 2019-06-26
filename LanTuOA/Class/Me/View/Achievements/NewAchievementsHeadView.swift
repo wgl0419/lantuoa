@@ -18,7 +18,6 @@ class NewAchievementsHeadView: UIView {
     private var inputCout = 0
     var backDate: ((Int,String,String) -> Void)?
     var searchBlck: ((String,Int) -> Void)?
-    var xxxxx :String?
     override init(frame: CGRect) {
         super.init(frame: frame)
         initSubViews()
@@ -33,25 +32,10 @@ class NewAchievementsHeadView: UIView {
                     let model = arrData[index]
                     tota  = tota + model.totalValue
                 }
-                totalLabel.text = "合计：\(tota)"
+                totalLabel.text = "合计：\(tota)元"
             }
         }
     }
-//    var data2:NewPerformUnderOneselfModel?{
-//        didSet{
-//            if let data = data2 {
-//                let arrData = data.data
-//                var tota : Int = 0
-//                for index in 0..<arrData.count {
-//                    let model = arrData[index]
-////                    xxxxx = String(model.totalValue)//                    let totalIndex = Int(xxxxx!)!
-//                    
-//                }
-//                totalLabel.text = "合计：\(tota)"
-//            }
-//        }
-//    }
-    
     var placeholder: String? {
         didSet {
            searchBar.placeholder = placeholder

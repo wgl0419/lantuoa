@@ -1,18 +1,17 @@
 //
-//  FillInApplyController.swift
+//  CheckReportContentController.swift
 //  LanTuOA
 //
-//  Created by HYH on 2019/4/11.
+//  Created by panzhijing on 2019/6/25.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  填写申请  控制器
+//
 
 import UIKit
 import MBProgressHUD
 import AssetsLibrary
 import ZLPhotoBrowser
 
-class FillInApplyController: UIViewController {
-    
+class CheckReportContentController: UIViewController {
     /// 流程名称
     var processName = "流程名称"
     /// 流程id
@@ -125,7 +124,8 @@ class FillInApplyController: UIViewController {
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
                 tableView.register(FillInApplyTextViewCell.self, forCellReuseIdentifier: "FillInApplyTextViewCell")
                 tableView.register(FillInApplyFieldViewCell.self, forCellReuseIdentifier: "FillInApplyFieldViewCell")
-                tableView.register(FillInApplyApprovalCell.self, forCellReuseIdentifier: "FillInApplyApprovalCell")
+//                tableView.register(FillInApplyApprovalCell.self, forCellReuseIdentifier: "FillInApplyApprovalCell")
+                tableView.register(CheckReportRecipientCell.self, forCellReuseIdentifier: "CheckReportRecipientCell")
                 tableView.register(FillInApplyPersonnelCell.self, forCellReuseIdentifier: "FillInApplyPersonnelCell")
                 tableView.register(FillInApplyMoneyBackCell.self, forCellReuseIdentifier: "FillInApplyMoneyBackCell")
                 tableView.register(ToExamineImageCell.self, forCellReuseIdentifier: "ToExamineImageCell")
@@ -269,10 +269,7 @@ class FillInApplyController: UIViewController {
     
     /// 选择项目
     private func seleProjectHandle(indexPath: IndexPath) {
-        //        guard customerId != -1 else {
-        //            MBProgressHUD.showError("请先选择客户")
-        //            return
-        //        }
+
         let row = indexPath.row
         let section = indexPath.section
         let customerName = seleStrArray[projectPosition][0]
@@ -457,16 +454,6 @@ class FillInApplyController: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-    /// 审批人cell
-    private func getApprovalCell(_ indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
-            
-        cell.isApproval = true
-        cell.isProcess = isProcess
-        cell.data = processUsersData.checkUsers
-        return cell
-    }
-    
     /// 上传部分
     private func getUpdataCell(_ indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
@@ -533,7 +520,7 @@ class FillInApplyController: UIViewController {
         }else{
             return getEnclosureCell(indexPath)
         }
-
+        
     }
     
     /// 附件cell
@@ -583,7 +570,7 @@ class FillInApplyController: UIViewController {
     
     /// 抄送人cell
     private func getCarbonCopyCell(_ indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportRecipientCell", for: indexPath) as! CheckReportRecipientCell
         cell.isApproval = false
         cell.isProcess = true
         let oldCount = processUsersData.ccUsers.count - carbonCopyData.count // 原本的抄送人数量
@@ -668,38 +655,38 @@ class FillInApplyController: UIViewController {
         if imageArray.count == 0 && fileArray.count == 0 {
             //            self.processCommit()
         } else {
-                var  arr = imageArray[indexPath.section]
-                for index in 0..<arr.count {
-                    let size = 0
-                    var type: Int!
-                    var name: String!
-                    var uploadData: Data!
-                    type = 1
-                    name = "".randomStringWithLength(len: 8) + ".png"
-                    uploadData = arr[index].jpegData(compressionQuality: 0.5) ?? Data()
-                    fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
-                        if status {
-                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath)
-                        }
+            var  arr = imageArray[indexPath.section]
+            for index in 0..<arr.count {
+                let size = 0
+                var type: Int!
+                var name: String!
+                var uploadData: Data!
+                type = 1
+                name = "".randomStringWithLength(len: 8) + ".png"
+                uploadData = arr[index].jpegData(compressionQuality: 0.5) ?? Data()
+                fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                    if status {
+                        self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath)
                     }
                 }
+            }
             
-                var  fileArr = fileArray[indexPath.section]
-                for index in 0..<fileArr.count {
-                    var size = 0
-                    var type: Int!
-                    var name: String!
-                    var uploadData: Data!
-                    type = 2
-                    name = fileArr[index].1
-                    uploadData = fileArr[index].0
-                    size = fileArr[index].0.count
-                    fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
-                        if status {
-                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath)
-                        }
+            var  fileArr = fileArray[indexPath.section]
+            for index in 0..<fileArr.count {
+                var size = 0
+                var type: Int!
+                var name: String!
+                var uploadData: Data!
+                type = 2
+                name = fileArr[index].1
+                uploadData = fileArr[index].0
+                size = fileArr[index].0.count
+                fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                    if status {
+                        self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath)
                     }
                 }
+            }
         }
     }
     
@@ -746,7 +733,7 @@ class FillInApplyController: UIViewController {
     private func processDataHnadleImage(_ model: ProcessParamsData, str: String ,index:Int) -> Array<Any> {
         var images = [Any]()
         if model.type == 9 {
-//            if imageArray[index].count
+            //            if imageArray[index].count
             for indext in 0..<uploadImageIds[index].count {
                 let fileId = uploadImageIds[index][indext]
                 images.append(fileId)
@@ -962,18 +949,16 @@ class FillInApplyController: UIViewController {
                 return
             }
         }
-        let indexpath = NSIndexPath()
-
-            
-//        uploadGetKey(indexPath: indexpath.section)
+//        let indexpath = NSIndexPath()
+        //        uploadGetKey(indexPath: indexpath.section)
         processCommit()
     }
 }
 
-extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
+extension CheckReportContentController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if processUsersData != nil {
-            let pricesCount = pricessType == 5 ? data.count + 3 : data.count + 1
+            let pricesCount = pricessType == 5 ? data.count + 2 : data.count + 1
             return pricesCount + canUpload
         } else {
             return data.count
@@ -986,8 +971,6 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
         } else if section == data.count + 1 {
             return 1
         } else if section == data.count + 2 {
-            return 1
-        } else if section == data.count + 3 {
             return 1
         }else {
             let model = data[section]
@@ -1004,11 +987,12 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
         let section = indexPath.section
         if section == data.count {
             if canUpload == 1 { // 有上传
-                if pricessType == 5 { // 合同人员
+//                if pricessType == 5 { // 合同人员
                     return getPersonnelCell(indexPath)
-                } else { // 审批人
-                    return getApprovalCell(indexPath)
-                }
+//                }
+//                else { // 审批人
+//                    return getApprovalCell(indexPath)
+//                }
             } else {
                 if pricessType == 5 { // 回款设置
                     return getMoneyBackCell(indexPath)
@@ -1018,25 +1002,27 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
             }
             
         } else if section == data.count + 1 {
-            if canUpload == 1 { // 有上传
+//            if canUpload == 1 { // 有上传
                 if pricessType == 5 { // 回款设置
                     return getMoneyBackCell(indexPath)
                 } else { // 抄送人cell
                     return getCarbonCopyCell(indexPath)
                 }
-            } else { // 审批人
-                return getApprovalCell(indexPath)
-            }
+//            }
+//            else { // 审批人
+//                return getApprovalCell(indexPath)
+//            }
             
         } else if section == data.count + 2 {
-            if canUpload == 1 { // 审批人
-                return getApprovalCell(indexPath)
-            } else { // 抄送人cell
+//            if canUpload == 1 { // 审批人
+//                return getApprovalCell(indexPath)
+//            } else { // 抄送人cell
                 return getCarbonCopyCell(indexPath)
-            }
-        } else if section == data.count + 3 {
-            return getCarbonCopyCell(indexPath)
+//            }
         }
+//        else if section == data.count + 3 {
+//            return getCarbonCopyCell(indexPath)
+//        }
             
         else {
             var model = data[section]
@@ -1129,7 +1115,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension FillInApplyController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension CheckReportContentController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
         let library = ALAssetsLibrary()
@@ -1145,7 +1131,7 @@ extension FillInApplyController: UIImagePickerControllerDelegate, UINavigationCo
     }
 }
 
-extension FillInApplyController: UIDocumentPickerDelegate {
+extension CheckReportContentController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         let canAccessingResource = url.startAccessingSecurityScopedResource()
         if canAccessingResource {
@@ -1165,3 +1151,4 @@ extension FillInApplyController: UIDocumentPickerDelegate {
         url.stopAccessingSecurityScopedResource()
     }
 }
+

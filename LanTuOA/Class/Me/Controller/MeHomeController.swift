@@ -15,10 +15,10 @@ class MeHomeController: UIViewController {
     private var tableView: UITableView!
     
     /// 标题
-    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同", "工作组"], ["组织架构"], ["设置"]]
+    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同","工作汇报", "工作组"], ["组织架构"], ["设置"]]
 //    private var titleArray = [["", "我的审批", "绩效查询", "工作申请"], ["合同"], ["组织架构"], ["设置"]]
     /// 图标
-    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication", "me_workGroup"], ["me_departmentManagement"], ["me_setUp"]]
+    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication","组 276", "me_workGroup"], ["me_departmentManagement"], ["me_setUp"]]
 //    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication"], ["me_departmentManagement"], ["me_setUp"]]
     
     override func viewWillAppear(_ animated: Bool) {
@@ -150,7 +150,6 @@ extension MeHomeController: UITableViewDelegate, UITableViewDataSource {
             case 1:
                 vc = ToExamineController()
             case 2:
-//                vc = AchievementsListController()
                 vc = NewAchievementsListController()
             case 3:
                 vc = ApplyControllers()
@@ -161,7 +160,9 @@ extension MeHomeController: UITableViewDelegate, UITableViewDataSource {
         } else if section == 1 {
             if row == 0 {
                 vc = ContractListController()
-            } else {
+            } else if row == 1{
+                vc = WorkReportViewController()
+            }else{
                 vc = WorkGroupController()
             }
         } else if section == 2 {

@@ -49,6 +49,7 @@ struct NotifyCheckListData: HandyJSON {
     var projectName: String?
     var customerName: String?
     var personStatus: Int = 0
+    var commentCnt: Int = 0
 }
 
 struct NotifyCheckListValue: HandyJSON {
@@ -66,3 +67,9 @@ struct NotifyCheckListValue: HandyJSON {
     var type: Int = 0
 }
 
+struct unreadValueModel: HandyJSON {
+    var status: Int = 0
+    var data: Int = 0
+    var message: String?
+    var errCode: Int = 0
+}

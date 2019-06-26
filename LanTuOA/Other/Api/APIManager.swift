@@ -117,6 +117,15 @@ enum APIManager {
     case contractTypeList // 合同类型列表
     case contractDescList(Int) // 合同备注信息列表
     case contractDescCreate(Int, String) // 新建合同备注 （contractIdL: 合同id   desc: 备注信息）
+    
+    //MARK：-工作汇报
+    case WorkReportList
+    case WorkReporCheckList(Int, Int, Int, Int,[String],Int,Int) // 第几页，页数，未读，模板id，提交人id，开始时间，结束时间，
+    case WorkReporCheckListNumberUnread
+    case WorkReporCheckListHaveRead(Int)
+    case WorkReporCheckListDetail(Int)//日志详情
+    case WorkReporCheckListDetailRecipient(Int)
+    case WorkReporLogTemplate
 
     case fileOssToken // 获取安全令牌securityToken
     case fileUploadGetKey(Int, String, Int) // 上传文件报备
@@ -230,6 +239,14 @@ extension APIManager: TargetType {
         case .contractDescList(let id): return "/api/contract/desc/list/\(id)"
         case .contractDescCreate: return "api/contract/desc/create"
             
+        case .WorkReportList: return "/api/note/list"
+        case .WorkReporCheckList: return "/api/note/history"
+        case .WorkReporCheckListNumberUnread: return "/api/note/number/notRead"
+        case .WorkReporCheckListHaveRead(let id): return "/api/note/read/\(id)"
+        case .WorkReporCheckListDetail(let id): return "/api/note/detail/\(id)"
+        case .WorkReporCheckListDetailRecipient(let id): return "/api/notify/check/user/list/\(id)"
+        case .WorkReporLogTemplate: return "/api/note/list/all"
+            
         case .fileOssToken: return "/api/file/ossToken"
         case .fileUploadGetKey: return "/api/file/upload/getKey"
             
@@ -255,7 +272,7 @@ extension APIManager: TargetType {
             return .post
         case .workExtendExtend, .departmentsCreate, .departmentsAddUsers, .contractPaybackAdd, .processCommit:
             return .post
-        case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate, .passwordReset, .customerUpdateDevelop:
+        case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate, .passwordReset, .customerUpdateDevelop,.WorkReporCheckListHaveRead:
             return .put
         case .projectMemberDelete, .notifyCheckCommentDelete:
             return .delete
@@ -455,6 +472,13 @@ extension APIManager: TargetType {
             if `self` != nil { params["self"] = `self`! }
         case let .contractDescCreate(contractId, desc): // 新建合同备注
             params = ["contractId": contractId, "desc": desc]
+            
+        case let .WorkReporCheckList(page,limit,notRead,processId,commitUser,startTime,endTime): //查看汇报列表
+            params = ["page":page,"limit":limit,"notRead":notRead]
+            if startTime != 0 { params["startTime"] = startTime }
+            if endTime != 0 { params["endTime"] = endTime }
+            if processId > 0 { params["processId"] = processId }
+            if commitUser.count > 0 { params["commitUser"] = commitUser }
             
         case let .fileUploadGetKey(fileType, fileName, fileSize): // 上传文件报备
             params = ["fileType": fileType, "fileName": fileName, "fileSize": fileSize]
