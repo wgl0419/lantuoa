@@ -38,11 +38,23 @@ class NoticeHomeSystemCell: UITableViewCell {
                     imageNameStr = "notice_visit"
                 case "6": // 合同
                     imageNameStr = "notice_contract"
+                case "7": // 合同
+                    imageNameStr = "工作汇报"
                 default: break
                 }
                 portraitImageView.image = UIImage(named: imageNameStr)
                 statusLabel.textColor = data.checkStatus == 0 ? .clear : data.checkStatus == 1 ? UIColor(hex: "#FF7744") : data.checkStatus == 2 ? UIColor(hex: "#5FB9A1") : UIColor(hex: "#FF4444")
                 statusLabel.text = data.checkStatus == 0 ? "" : data.checkStatus == 1 ? "待审批" : data.checkStatus == 2 ? "已同意" : "已拒绝"
+
+                if type == "1"{
+                    redView.isHidden = true
+                }else{
+                    if data.status == 0 {
+                        redView.isHidden = false
+                    }else {
+                        redView.isHidden = true
+                    }
+                }
             }
         }
     }
@@ -77,6 +89,8 @@ class NoticeHomeSystemCell: UITableViewCell {
     private var refuseBtn: UIButton!
     /// 状态
     private var statusLabel: UILabel!
+    
+    private var redView: UIView!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -193,6 +207,18 @@ class NoticeHomeSystemCell: UITableViewCell {
             })
             .taxi.config({ (label) in
                 label.font = UIFont.medium(size: 16)
+            })
+        
+        redView = UIView().taxi.adhere(toSuperView: whiteView)
+            .taxi.layout(snapKitMaker: { (make) in
+                make.top.equalToSuperview().offset(10)
+                make.trailing.equalToSuperview().offset(-10)
+                make.width.height.equalTo(8)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#FF3333")
+                view.layer.cornerRadius = 4
+                view.layer.masksToBounds = true
             })
     }
     

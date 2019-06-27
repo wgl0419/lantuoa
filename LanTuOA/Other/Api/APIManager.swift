@@ -81,6 +81,7 @@ enum APIManager {
     case notifyCheckCommentCreate(Int, [Int], [Int], String) // 审批评论
     case notifyCheckCommentDelete(Int) // 删除评论
     case notifyCheckCommentList(Int) // 审批评论列表
+    case notifyCheckHaveRead(Int) //设置点击单条已读数据
     
     // MARK: - 工作交接
     case workExtendList(String, Int?) // 下级员工列表
@@ -204,7 +205,7 @@ extension APIManager: TargetType {
         case .notifyCheckCommentCreate(let id, _, _, _): return "/api/notify/check/comment/create/\(id)"
         case .notifyCheckCommentDelete(let id): return "/api/notify/check/comment/delete/\(id)"
         case .notifyCheckCommentList(let id): return "/api/notify/check/comment/list/\(id)"
-            
+        case .notifyCheckHaveRead(let id): return "/api/notify/read/\(id)"
             
         case .workExtendList: return "/api/workExtend/list"
             

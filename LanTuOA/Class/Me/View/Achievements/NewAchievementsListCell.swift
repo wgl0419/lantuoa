@@ -14,7 +14,8 @@ class NewAchievementsListCell: UITableViewCell {
         didSet {
             if let data = data {
                 titleLabel.text = data.name
-                totalLabel.attributedText = richText(title: "合计：", content: "\(data.totalValue)")
+                let tota = data.totalValue.getMoneyStr()
+                totalLabel.attributedText = richText(title: "合计：", content: tota)
                 let arrData = data.data
                 var lastView: UIView = titleLabel
                 for inex in 0..<10 {

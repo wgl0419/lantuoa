@@ -77,38 +77,30 @@ class CheckReportDetailsReadCell: UITableViewCell {
     // MAKR: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-//        let titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
-//            .taxi.layout { (make) in
-//                make.top.left.equalToSuperview().offset(15)
-//            }
-//            .taxi.config { (label) in
-//                label.text = "抄送人（审批发起和通过时，通知抄送人）"
-//                label.textColor = blackColor
-//                label.font = UIFont.medium(size: 16)
-//        }
-        moreBtn = UIButton().taxi.adhere(toSuperView: contentView)
-            .taxi.layout(snapKitMaker: { (make) in
-                make.trailing.equalToSuperview().offset(-20)
-                make.top.equalToSuperview()
-                make.width.equalTo(60)
-                make.height.equalTo(40)
-            })
-            .taxi.config({ (button) in
-                button.setTitle("查看更多", for: .normal)
-                button.setTitleColor(UIColor(hex: "#999999"), for: .normal)
-                button.addTarget(self, action: #selector(moreAction), for: .touchUpInside)
-                button.titleLabel?.font = UIFont.regular(size: 14)
-            })
-        rightImage = UIImageView().taxi.adhere(toSuperView: contentView)
-            .taxi.layout(snapKitMaker: { (make) in
-                make.trailing.equalToSuperview().offset(-10)
-                make.top.equalToSuperview().offset(16)
-                make.width.equalTo(6)
-                make.height.equalTo(8)
-            })
-            .taxi.config({ (image) in
-                image.image = UIImage(named: "arrow")
-            })
+
+//        moreBtn = UIButton().taxi.adhere(toSuperView: contentView)
+//            .taxi.layout(snapKitMaker: { (make) in
+//                make.trailing.equalToSuperview().offset(-20)
+//                make.top.equalToSuperview()
+//                make.width.equalTo(60)
+//                make.height.equalTo(40)
+//            })
+//            .taxi.config({ (button) in
+//                button.setTitle("查看更多", for: .normal)
+//                button.setTitleColor(UIColor(hex: "#999999"), for: .normal)
+//                button.addTarget(self, action: #selector(moreAction), for: .touchUpInside)
+//                button.titleLabel?.font = UIFont.regular(size: 14)
+//            })
+//        rightImage = UIImageView().taxi.adhere(toSuperView: contentView)
+//            .taxi.layout(snapKitMaker: { (make) in
+//                make.trailing.equalToSuperview().offset(-10)
+//                make.top.equalToSuperview().offset(16)
+//                make.width.equalTo(6)
+//                make.height.equalTo(8)
+//            })
+//            .taxi.config({ (image) in
+//                image.image = UIImage(named: "arrow")
+//            })
         
         let arr = ["已读","未读"]
         for index in 0..<arr.count {

@@ -16,6 +16,11 @@ class CheckReportListViewController: UIViewController {
     private var numberData = unreadValueModel()
     private var isNotRead = 0
     private var page = 1
+    private var processId = 0
+    private var startTime = 0
+    private var endTime = 0
+    private var commitUser = [String]()
+    var  headItmeArr = [[String:String]]()
     let headView = CheckReportListView()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +61,7 @@ class CheckReportListViewController: UIViewController {
                 tableView.estimatedRowHeight = 180
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
                 tableView.register(CheckReportListCell.self, forCellReuseIdentifier: "CheckReportListCell")
+                tableView.register(CheckReportHeadItmeCell.self, forCellReuseIdentifier: "CheckReportHeadItmeCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     tableView.mj_footer.isHidden = true
                     self?.CheckReportList(isMore: false,notRead: self!.isNotRead,processId: 0,commitUser: [],startTime: 0,endTime: 0)
@@ -64,7 +70,12 @@ class CheckReportListViewController: UIViewController {
                     tableView.mj_header.isHidden = true
                     self?.CheckReportList(isMore: true,notRead: self!.isNotRead,processId: 0,commitUser: [],startTime: 0,endTime: 0)
                 })
-                tableView.tableHeaderView = headView
+                if headItmeArr.count == 0 {
+                    tableView.tableHeaderView = headView
+                }else{
+                    headView.isHidden = true
+                }
+                
                 
                 headView.readBlck = {[weak self] number in
                     self!.isNotRead = number
@@ -83,9 +94,17 @@ class CheckReportListViewController: UIViewController {
     /// 点击筛选
     @objc func rightClick(){
         let vc = ReportScreeningViewController()
-        vc.screeningBlack = { [weak self] processId, commitUser, startTime, endTime, notRead in
+        vc.screeningBlack = { [weak self] processId, commitUser, startTime, endTime, notRead , itmeArr in
             self!.isNotRead = notRead
+            self!.processId = processId
+            self!.startTime = startTime
+            self!.endTime = endTime
+            self!.commitUser = commitUser
+            self!.headItmeArr = itmeArr
             self!.CheckReportList(isMore: false, notRead: self!.isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+            if self!.headItmeArr.count > 0 {
+                self!.headView.isHidden = true
+            }
         }
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -151,33 +170,124 @@ class CheckReportListViewController: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.WorkReporCheckListHaveRead(index), t: unreadValueModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
-            self.CheckListNumberUnread()//重新获取未读数量
-            self.tableView.reloadData()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "设置失败")
         })
-        
     }
 
 }
 extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return headItmeArr.count == 0 ? 1 : 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//            return data.count
+        if section == 0 {
+            if headItmeArr.count > 0 {
+                return 1
+            }else{
+                return data.count
+            }
+        }else{
             return data.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportListCell", for: indexPath) as! CheckReportListCell
-        cell.data = (data[indexPath.row], false)
-        cell.haveReadBlock = {[weak self] index in
-            self!.CheckListHaveRead(index: index!)
+        
+        if indexPath.section == 0 {
+            if headItmeArr.count > 0 {
+//                return headItmeArr.count
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportHeadItmeCell", for: indexPath) as! CheckReportHeadItmeCell
+//                cell.data = (data[indexPath.row], false)
+                cell.deleteBlack = {[weak self] index,indexpath in
+                    self!.headItmeArr.remove(at: indexpath)
+                    if self!.headItmeArr.count == 0 {
+                        self!.headView.isHidden = false
+                        self!.CheckReportList(isMore: false, notRead: 0,processId: 0,commitUser: [],startTime: 0,endTime: 0)
+                        self!.tableView.reloadData()
+                    }else{
+                        self!.retrieveData(index:index)
+                    }
+//                    self!.tableView.reloadData()
+                }
+                cell.data = headItmeArr
+                return cell
+            }else{
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportListCell", for: indexPath) as! CheckReportListCell
+                cell.data = (data[indexPath.row], false)
+                cell.haveReadBlock = {[weak self] index in
+                    self!.CheckListHaveRead(index: index!)
+                }
+                return cell
+            }
+        }else{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportListCell", for: indexPath) as! CheckReportListCell
+            cell.data = (data[indexPath.row], false)
+            cell.haveReadBlock = {[weak self] index in
+                self!.CheckListHaveRead(index: index!)
+            }
+            return cell
         }
-        return cell
+        
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if data[indexPath.row].status == 1 {
+            CheckListHaveRead(index: indexPath.row)
+        }
         let vc = CheckReportDetailsViewController()
         vc.checkListId = data[indexPath.row].id
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func retrieveData(index:String){
+//        if index == 0
+        if index == "1" {
+            processId = 0
+            CheckReportList(isMore: false, notRead: isNotRead,processId: 0,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "2"{
+            startTime = 0
+            endTime = 0
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: 0,endTime: 0)
+        }else if index == "3"{
+            isNotRead = 0
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "4"{
+            commitUser[0] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "5"{
+            commitUser[1] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "6"{
+            commitUser[2] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "7"{
+            commitUser[3] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "8"{
+            commitUser[4] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "9"{
+            commitUser[5] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "10"{
+            commitUser[6] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "10"{
+            commitUser[7] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "11"{
+            commitUser[8] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "12"{
+            commitUser[9] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else if index == "13"{
+            commitUser[10] = ""
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }
     }
 }

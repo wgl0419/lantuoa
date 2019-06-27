@@ -14,8 +14,12 @@ class ContractDetailsContentCell: UITableViewCell {
     var data: ContractListSmallData? {
         didSet {
             if let data = data {
-                titleLabel.text = (data.title ?? " ") + "："
-                contentLabel.text = data.value ?? " "
+               let  titStr = data.title ?? ""
+                if titStr != "" {
+                    titleLabel.text = titStr + "："
+                    contentLabel.text = data.value ?? " "
+                }
+
             }
         }
     }

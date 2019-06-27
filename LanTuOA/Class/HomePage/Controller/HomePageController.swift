@@ -16,7 +16,6 @@ class HomePageController: UIViewController {
     /// 主要tableview
     private var tableView: UITableView!
     
-    
     /// 项目数据
     private var data = [ProjectListStatisticsData]()
     /// 首页统计数据
@@ -114,6 +113,7 @@ class HomePageController: UIViewController {
                 tableView.backgroundColor = kMainBackColor
                 tableView.separatorInset = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
                 tableView.register(HomePageVisitCell.self, forCellReuseIdentifier: "HomePageVisitCell")
+                tableView.register(NewHomePageVisitCell.self, forCellReuseIdentifier: "NewHomePageVisitCell")
                 tableView.register(HomePageNoticeCell.self, forCellReuseIdentifier: "HomePageNoticeCell")
                 tableView.register(CostomerDetailsProjectCell.self, forCellReuseIdentifier: "CostomerDetailsProjectCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
@@ -197,6 +197,7 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "HomePageVisitCell", for: indexPath) as! HomePageVisitCell
             cell.data = startupSumData
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "NewHomePageVisitCell", for: indexPath) as! NewHomePageVisitCell
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsProjectCell", for: indexPath) as! CostomerDetailsProjectCell

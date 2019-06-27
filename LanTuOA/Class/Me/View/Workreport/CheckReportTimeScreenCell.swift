@@ -54,6 +54,8 @@ class CheckReportTimeScreenCell: UITableViewCell {
     var placeholderLabel: UILabel!
     /// 内容
     var contentLabel: UILabel!
+    //删除
+    var deleteBtn: UIButton!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -97,6 +99,19 @@ class CheckReportTimeScreenCell: UITableViewCell {
                 label.font = UIFont.boldSystemFont(ofSize: 16)
         }
         
+        deleteBtn = UIButton().taxi.adhere(toSuperView: contentView) // 职位
+            .taxi.layout(snapKitMaker: { (make) in
+                make.trailing.equalToSuperview().offset(-100)
+                make.top.equalToSuperview().offset(10)
+                make.width.height.equalTo(15)
+                
+            })
+            .taxi.config({ (button) in
+                button.layer.cornerRadius = 7.5
+                button.layer.masksToBounds = true
+                button.setImage(UIImage(named: "input_clear"), for: .normal)
+            })
+        
         placeholderLabel = UILabel().taxi.adhere(toSuperView: contentView) // 提示
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.right.bottom.equalTo(contentView)
@@ -115,5 +130,6 @@ class CheckReportTimeScreenCell: UITableViewCell {
         let show = str.count > 0 || attriMuStr.count > 0
         contentLabel.isHidden = !show
         placeholderLabel.isHidden = show
+        deleteBtn.isHidden = !show
     }
 }

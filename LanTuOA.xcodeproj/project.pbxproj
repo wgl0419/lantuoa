@@ -36,7 +36,7 @@
 		180284CA22C06D5600EA85A8 /* WorkReportListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180284C922C06D5600EA85A8 /* WorkReportListModel.swift */; };
 		180284CF22C07B1100EA85A8 /* WorkReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180284CE22C07B1100EA85A8 /* WorkReportCell.swift */; };
 		180284D422C07FFA00EA85A8 /* CheckReportListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180284D322C07FFA00EA85A8 /* CheckReportListViewController.swift */; };
-		180284D822C0AEF100EA85A8 /* CheckReportListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180284D722C0AEF100EA85A8 /* CheckReportListCell.swift */; };
+		180284D822C0AEF100EA85A8 /* CheckReportList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180284D722C0AEF100EA85A8 /* CheckReportList.swift */; };
 		180284DA22C0B7D600EA85A8 /* CheckReportListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180284D922C0B7D600EA85A8 /* CheckReportListView.swift */; };
 		180284DC22C0D6FE00EA85A8 /* ReportScreeningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180284DB22C0D6FE00EA85A8 /* ReportScreeningViewController.swift */; };
 		180284DE22C0D82B00EA85A8 /* CheckReportDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180284DD22C0D82B00EA85A8 /* CheckReportDetailsViewController.swift */; };
@@ -50,6 +50,10 @@
 		1802CD9A224C736F005997F1 /* NoticeHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1802CD99224C736F005997F1 /* NoticeHomeController.swift */; };
 		1802CD9E224CAB87005997F1 /* SegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1802CD9D224CAB87005997F1 /* SegmentView.swift */; };
 		1802CDA0224CC3D3005997F1 /* VisitSeleTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1802CD9F224CC3D3005997F1 /* VisitSeleTimeView.swift */; };
+		18033CD922C44759004AD769 /* CheckReportHeadItmeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18033CD822C44759004AD769 /* CheckReportHeadItmeCell.swift */; };
+		18033CDB22C44843004AD769 /* CheckHeadItmeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18033CDA22C44843004AD769 /* CheckHeadItmeCell.swift */; };
+		18033CDD22C4A8EF004AD769 /* NewHomePageVisitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18033CDC22C4A8EF004AD769 /* NewHomePageVisitCell.swift */; };
+		18033CDF22C4AA12004AD769 /* NewHomePageItmeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18033CDE22C4AA12004AD769 /* NewHomePageItmeCell.swift */; };
 		1803A321225EF07300B86F20 /* ProcessListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A320225EF07300B86F20 /* ProcessListModel.swift */; };
 		1803A324225F0A9100B86F20 /* ApplyCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A323225F0A9100B86F20 /* ApplyCollectionCell.swift */; };
 		1803A326225F0F3D00B86F20 /* ApplyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A325225F0F3D00B86F20 /* ApplyListCell.swift */; };
@@ -294,7 +298,7 @@
 		180284C922C06D5600EA85A8 /* WorkReportListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkReportListModel.swift; sourceTree = "<group>"; };
 		180284CE22C07B1100EA85A8 /* WorkReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkReportCell.swift; sourceTree = "<group>"; };
 		180284D322C07FFA00EA85A8 /* CheckReportListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportListViewController.swift; sourceTree = "<group>"; };
-		180284D722C0AEF100EA85A8 /* CheckReportListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportListCell.swift; sourceTree = "<group>"; };
+		180284D722C0AEF100EA85A8 /* CheckReportList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportList.swift; sourceTree = "<group>"; };
 		180284D922C0B7D600EA85A8 /* CheckReportListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportListView.swift; sourceTree = "<group>"; };
 		180284DB22C0D6FE00EA85A8 /* ReportScreeningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportScreeningViewController.swift; sourceTree = "<group>"; };
 		180284DD22C0D82B00EA85A8 /* CheckReportDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportDetailsViewController.swift; sourceTree = "<group>"; };
@@ -308,6 +312,10 @@
 		1802CD99224C736F005997F1 /* NoticeHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeHomeController.swift; sourceTree = "<group>"; };
 		1802CD9D224CAB87005997F1 /* SegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentView.swift; sourceTree = "<group>"; };
 		1802CD9F224CC3D3005997F1 /* VisitSeleTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitSeleTimeView.swift; sourceTree = "<group>"; };
+		18033CD822C44759004AD769 /* CheckReportHeadItmeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportHeadItmeCell.swift; sourceTree = "<group>"; };
+		18033CDA22C44843004AD769 /* CheckHeadItmeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckHeadItmeCell.swift; sourceTree = "<group>"; };
+		18033CDC22C4A8EF004AD769 /* NewHomePageVisitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomePageVisitCell.swift; sourceTree = "<group>"; };
+		18033CDE22C4AA12004AD769 /* NewHomePageItmeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomePageItmeCell.swift; sourceTree = "<group>"; };
 		1803A320225EF07300B86F20 /* ProcessListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessListModel.swift; sourceTree = "<group>"; };
 		1803A323225F0A9100B86F20 /* ApplyCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyCollectionCell.swift; sourceTree = "<group>"; };
 		1803A325225F0F3D00B86F20 /* ApplyListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyListCell.swift; sourceTree = "<group>"; };
@@ -597,7 +605,9 @@
 			isa = PBXGroup;
 			children = (
 				180284CE22C07B1100EA85A8 /* WorkReportCell.swift */,
-				180284D722C0AEF100EA85A8 /* CheckReportListCell.swift */,
+				180284D722C0AEF100EA85A8 /* CheckReportList.swift */,
+				18033CD822C44759004AD769 /* CheckReportHeadItmeCell.swift */,
+				18033CDA22C44843004AD769 /* CheckHeadItmeCell.swift */,
 				180284D922C0B7D600EA85A8 /* CheckReportListView.swift */,
 				18FD0CA122C1F354008AD0AC /* CheckReportDetailsReadCell.swift */,
 				18FD0CA522C22086008AD0AC /* CheckReportRecipientCell.swift */,
@@ -1261,6 +1271,8 @@
 				1817884F2238D73F0015DC30 /* HomePageNoticeCell.swift */,
 				181788512238E0B00015DC30 /* HomePageHeaderView.swift */,
 				181788532238E5F60015DC30 /* HomePageVisitCell.swift */,
+				18033CDC22C4A8EF004AD769 /* NewHomePageVisitCell.swift */,
+				18033CDE22C4AA12004AD769 /* NewHomePageItmeCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1456,6 +1468,7 @@
 				1802B00C2254555A00E94341 /* NoticeHomePendingCell.swift in Sources */,
 				180BFB332265B14C001879BD /* ContractListModel.swift in Sources */,
 				18057D9C2293EFBC0087D05D /* ToExamineEnclosureCell.swift in Sources */,
+				18033CDB22C44843004AD769 /* CheckHeadItmeCell.swift in Sources */,
 				1801AE92223F2FE60027A5DB /* CustomerListStatisticsModel.swift in Sources */,
 				1809CBEA229644F20036E9A0 /* NotifyCheckCommentListModel.swift in Sources */,
 				1810EC74222F5D4100CF6488 /* UiView.swift in Sources */,
@@ -1526,6 +1539,7 @@
 				180E4D6522856CDE0042FA87 /* AddRemarksEjectView.swift in Sources */,
 				18067C2B22801EFF005D26AC /* ContractScreenTimeCell.swift in Sources */,
 				18057D9A2293E62C0087D05D /* ToExamineImageCollectionCell.swift in Sources */,
+				18033CDD22C4A8EF004AD769 /* NewHomePageVisitCell.swift in Sources */,
 				1805FC3C2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift in Sources */,
 				180E4D5F22855B1E0042FA87 /* ContractTypeListModel.swift in Sources */,
 				180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */,
@@ -1546,6 +1560,7 @@
 				1876A8E42266DC08002EBDB2 /* ContractPerformanceHeaderCell.swift in Sources */,
 				18FD0CA222C1F354008AD0AC /* CheckReportDetailsReadCell.swift in Sources */,
 				1809E3FC225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift in Sources */,
+				18033CDF22C4AA12004AD769 /* NewHomePageItmeCell.swift in Sources */,
 				1809CBF422969FAA0036E9A0 /* PhotoBrowserImage.swift in Sources */,
 				1876A8DC2266B376002EBDB2 /* ContractPaybackListModel.swift in Sources */,
 				1804E1F9224A1231006AB973 /* CustomerEditController.swift in Sources */,
@@ -1576,7 +1591,7 @@
 				180B7709223A34EC0096403B /* LoginModel.swift in Sources */,
 				181788462238A7D60015DC30 /* HomePageController.swift in Sources */,
 				183383032251E10C0053F2BF /* EditProjectEjectView.swift in Sources */,
-				180284D822C0AEF100EA85A8 /* CheckReportListCell.swift in Sources */,
+				180284D822C0AEF100EA85A8 /* CheckReportList.swift in Sources */,
 				1810EC8E222F5F2F00CF6488 /* UIBarButtonItemFixSpace.swift in Sources */,
 				1809E3FE225DBB9700B615A8 /* AddDepartmentEjectView.swift in Sources */,
 				180115332248BE3C00EA551F /* CustomerTextViewCell.swift in Sources */,
@@ -1602,6 +1617,7 @@
 				1810EC79222F5D4100CF6488 /* NSMutableAttributedString.swift in Sources */,
 				180533D422601F7100B785B7 /* ProcessParamsModel.swift in Sources */,
 				180018872253679500832E60 /* VisitDetailsController.swift in Sources */,
+				18033CD922C44759004AD769 /* CheckReportHeadItmeCell.swift in Sources */,
 				180736C522706A4F001F1FA6 /* CustomerSaveRequireModel.swift in Sources */,
 				1809CBF322969FAA0036E9A0 /* PhotoBrowser.swift in Sources */,
 				180EF5FA2282D93F00735383 /* AlignedCollectionViewFlowLayout.swift in Sources */,

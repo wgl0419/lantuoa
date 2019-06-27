@@ -422,6 +422,17 @@ class NoticeHomeController: UIViewController {
             self.setTips()
         }, errorHandle: nil)
     }
+    
+    // MARK: - Api
+    ///设置已读
+    func notifyCheckHaveRead(id:Int){
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.notifyCheckHaveRead(id), t: unreadValueModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
+        }, errorHandle: { (error) in
+            MBProgressHUD.showError(error ?? "设置失败")
+        })
+    }
 }
 
 extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
@@ -466,10 +477,17 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
             }
             navigationController?.pushViewController(vc, animated: true)
         } else {
+
             let model = systemData[indexPath.row]
+            if model.type != "1" {
+                if model.status == 0 {
+                    notifyCheckHaveRead(id: model.id)
+                }
+            }
             switch model.type {
             case "1": break // 系统通知 无跳转
             case "2": // 审批通知 -> 审批详情
+                
                 let vc = ToExamineDetailsController()
                 vc.checkListId = systemData[indexPath.row].checkId
                 vc.changeBlock = { [weak self] in

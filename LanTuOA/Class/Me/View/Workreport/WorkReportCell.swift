@@ -64,30 +64,5 @@ class WorkReportCell: UICollectionViewCell {
             })
     }
     
-//        imageView = UIImageView().taxi.adhere(toSuperView: contentView) // 图标
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.bottom.equalToSuperview().offset(-50)
-//                make.top.equalToSuperview().offset(12)
-//                make.height.equalTo(40)
-//                make.centerX.equalToSuperview()
-//                make.width.equalTo(40)
-//            })
-//
-//        titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.width.equalToSuperview().offset(-30)
-//                make.width.equalTo(ScreenWidth / 4 - 31)
-//                make.top.equalTo(imageView.snp.bottom).offset(7)
-//                make.centerX.equalToSuperview()
-//            })
-//            .taxi.config({ (label) in
-//                label.numberOfLines = 2
-//                label.textColor = blackColor
-//                label.textAlignment = .center
-//                label.minimumScaleFactor = 0.5
-//                label.font = UIFont.medium(size: 12)
-//                label.adjustsFontSizeToFitWidth = true
-//            })
-//    }
     
 }

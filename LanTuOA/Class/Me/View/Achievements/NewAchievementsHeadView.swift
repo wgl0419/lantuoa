@@ -32,7 +32,8 @@ class NewAchievementsHeadView: UIView {
                     let model = arrData[index]
                     tota  = tota + model.totalValue
                 }
-                totalLabel.text = "合计：\(tota)元"
+                let tot = tota.getMoneyStr()
+                totalLabel.text = "合计：\(tot)元"
             }
         }
     }

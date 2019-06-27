@@ -27,8 +27,9 @@ class ReportScreeningViewController: UIViewController {
     private var startTime = 0
     private var endTime = 0
     let titleArr = ["开始时间","结束时间"]
-
-    var screeningBlack:((Int,[String],Int,Int,Int) -> ())?
+    var itmeArr = [[String:String]]()
+    var  processName = ""
+    var screeningBlack:((Int,[String],Int,Int,Int,[[String:String]]) -> ())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +61,6 @@ class ReportScreeningViewController: UIViewController {
                 make.height.equalTo(44)
             })
             .taxi.config({ (btn) in
-//                btn.isEnabled = false
                 btn.setTitle("提交", for: .normal)
                 btn.setTitleColor(.white, for: .normal)
                 btn.backgroundColor = kMainColor
@@ -109,16 +109,40 @@ class ReportScreeningViewController: UIViewController {
     /// 点击提交
     @objc private func submissionClick() {
         /// 提交人id
-        var commitUser = [String]()
-        for index in 0..<carbonCopyData.count {
-            let model = carbonCopyData[index]
-            commitUser.append("\(model.checkUserId)")
+//        itmeArr = []
+        if processName != "" {
+            let dic = ["name":processName,"index":"1"]
+            itmeArr.append(dic as! [String : String])
         }
         startTime = seleStrArray[0].getTimeStamp(customStr: "yyyy-MM-dd")
         endTime = seleStrArray[1].getTimeStamp(customStr: "yyyy-MM-dd")
         
+        if startTime != 0 && endTime != 0 {
+            let dic = ["name":"\(seleStrArray[0])至\(seleStrArray[1])","index":"2"]
+            itmeArr.append(dic)
+        }else if startTime != 0 && endTime == 0{
+//            itmeArr.append("\(seleStrArray[0])")
+            let dic = ["name":"\(seleStrArray[0])","index":"2"]
+            itmeArr.append(dic)
+        }else if startTime == 0 && endTime != 0{
+//            itmeArr.append("\(seleStrArray[1])")
+            let dic = ["name":"\(seleStrArray[1])","index":"2"]
+            itmeArr.append(dic)
+        }
+        if isNotRead == 1 {
+            let dic = ["name":"未读","index":"3"]
+            itmeArr.append(dic)
+        }
+        var commitUser = [String]()
+        for index in 0..<carbonCopyData.count {
+            let model = carbonCopyData[index]
+            commitUser.append("\(model.checkUserId)")
+            let dic = ["name":model.realname!,"index":"\(index+4)"]
+            itmeArr.append(dic)
+        }
+
         if screeningBlack != nil  {
-            screeningBlack?(processId,commitUser,startTime,endTime,isNotRead)
+            screeningBlack?(processId,commitUser,startTime,endTime,isNotRead,itmeArr)
         }
         navigationController?.popViewController(animated: true)
     }
@@ -179,7 +203,6 @@ class ReportScreeningViewController: UIViewController {
         carbonCopyData.remove(at: deleteRow)
         processUsersData.ccUsers.remove(at: row)
         tableView.reloadRows(at: [indexPath], with: .none)
-//        confirmHandle()
     }
     
     @objc private func reloadRows(indexPath: IndexPath) {
@@ -213,8 +236,9 @@ extension ReportScreeningViewController: UITableViewDelegate, UITableViewDataSou
         if section == 0 {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportTemplateFilterCell", for: indexPath) as! CheckReportTemplateFilterCell
             cell.data = data
-            cell.templateBlack = {[weak self] id in
+            cell.templateBlack = {[weak self] id ,name in
                 self!.processId = id
+                self!.processName = name
             }
             return cell
         }else if section == 1 {
@@ -239,6 +263,8 @@ extension ReportScreeningViewController: UITableViewDelegate, UITableViewDataSou
                 let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportTimeScreenCell", for: indexPath) as! CheckReportTimeScreenCell
                 cell.titleLabel.text = titleArr[indexPath.row-1]
                 cell.contentStr = seleStrArray[row-1]
+                cell.deleteBtn.tag = indexPath.row-1
+                cell.deleteBtn.addTarget(self, action: #selector(deleteCilck), for: .touchUpInside)
                 return cell
             }
         }else{
@@ -249,6 +275,14 @@ extension ReportScreeningViewController: UITableViewDelegate, UITableViewDataSou
             }
             return cell
         }
+    }
+    
+    @objc func deleteCilck(sender:UIButton){
+//        seleStrArray.remove(at: sender.tag)
+        seleStrArray[sender.tag] = ""
+//        tableView.reloadRows(at: [indexPath], with: .none)
+        
+        tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {

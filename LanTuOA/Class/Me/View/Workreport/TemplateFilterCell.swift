@@ -17,8 +17,6 @@ class TemplateFilterCell: UICollectionViewCell {
         didSet {
             if let data = data {
                 titleLabel.text = data.name
-//                nameBtn.setTitle(data.name, for: .normal)
-                
             }
         }
     }

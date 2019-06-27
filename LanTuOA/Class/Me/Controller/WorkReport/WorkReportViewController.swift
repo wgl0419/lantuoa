@@ -78,7 +78,6 @@ class WorkReportViewController: UIViewController {
     // MARK: - 按钮点击
     /// 点击查看汇报
     @objc func rightClick(){
-        NSLog("查看汇报")
         let vc = CheckReportListViewController()
         navigationController?.pushViewController(vc, animated: true)
     }

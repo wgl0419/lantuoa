@@ -935,6 +935,7 @@ class FillInApplyController: UIViewController {
     private func fileUploadGetKey(type: Int, name: String, size: Int, block: @escaping ((Bool, Int?, String?) -> ())) {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.fileUploadGetKey(type, name, size), t: FileUploadGetKeyModel.self, successHandle: { (result) in
+            MBProgressHUD.dismiss()
             block(true, result.data?.id, result.data?.objectName)
         }, errorHandle: { (error) in
             block(false, nil, nil)
