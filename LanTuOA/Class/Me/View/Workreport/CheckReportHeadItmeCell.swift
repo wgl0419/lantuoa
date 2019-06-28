@@ -87,13 +87,10 @@ extension CheckReportHeadItmeCell: UICollectionViewDelegate, UICollectionViewDat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CheckHeadItmeCell", for: indexPath) as! CheckHeadItmeCell
         let dic = titleData[indexPath.item]
         cell.titleLabel.text = dic["name"]
-//        cell.titleLabel.text = titleData[indexPath.item]
         cell.deleteBlock = { [weak self] in
             let dataDic = self?.titleData[indexPath.item]
             self?.deleteHandle(index: dataDic!["index"]!,indexpath: indexPath.item)
         }
-//        cell.deleteBtn.tag = indexPath.item
-//        cell.deleteBtn.addTarget(self, action: #selector(deleteCilck), for: .touchUpInside)
         return cell
     }
     

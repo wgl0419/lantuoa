@@ -13,6 +13,15 @@ class NewHomePageItmeCell: UICollectionViewCell {
     var nameLabel: UILabel!
     var numberLabel: UILabel!
     
+    var data : HomePageNameData? {
+        didSet {
+            if let data = data {
+                nameLabel.text = data.name
+                numberLabel.text = "\(data.value)"
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         initSubViews()

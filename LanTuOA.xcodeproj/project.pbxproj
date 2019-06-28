@@ -61,6 +61,7 @@
 		1803A32A225F293500B86F20 /* ApplyHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A329225F293500B86F20 /* ApplyHistoryCell.swift */; };
 		1803A32C225F32A600B86F20 /* ProcessHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A32B225F32A600B86F20 /* ProcessHistoryModel.swift */; };
 		1803A32E225F426400B86F20 /* FillInApplyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A32D225F426400B86F20 /* FillInApplyController.swift */; };
+		1804062822C5EAD700EE7427 /* HomePageMonthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1804062722C5EAD700EE7427 /* HomePageMonthModel.swift */; };
 		18045B0B229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18045B0A229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift */; };
 		18045B0D229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18045B0C229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift */; };
 		18045B0F229BE69700B3E493 /* ReasonsRefusalEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18045B0E229BE69700B3E493 /* ReasonsRefusalEjectView.swift */; };
@@ -199,7 +200,6 @@
 		1817884E2238ADC00015DC30 /* MeHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1817884D2238ADC00015DC30 /* MeHomeController.swift */; };
 		181788502238D73F0015DC30 /* HomePageNoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1817884F2238D73F0015DC30 /* HomePageNoticeCell.swift */; };
 		181788522238E0B00015DC30 /* HomePageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788512238E0B00015DC30 /* HomePageHeaderView.swift */; };
-		181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788532238E5F60015DC30 /* HomePageVisitCell.swift */; };
 		181FF96622714E9600ED5A2A /* ModifyNoticeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181FF96522714E9600ED5A2A /* ModifyNoticeEjectView.swift */; };
 		181FF96822719BB200ED5A2A /* StartupSumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181FF96722719BB200ED5A2A /* StartupSumModel.swift */; };
 		1827ED82226802E800EFF889 /* ContractDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED81226802E800EFF889 /* ContractDetailModel.swift */; };
@@ -323,6 +323,7 @@
 		1803A329225F293500B86F20 /* ApplyHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyHistoryCell.swift; sourceTree = "<group>"; };
 		1803A32B225F32A600B86F20 /* ProcessHistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHistoryModel.swift; sourceTree = "<group>"; };
 		1803A32D225F426400B86F20 /* FillInApplyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyController.swift; sourceTree = "<group>"; wrapsLines = 1; };
+		1804062722C5EAD700EE7427 /* HomePageMonthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageMonthModel.swift; sourceTree = "<group>"; };
 		18045B0A229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyCustomerTypeEjectView.swift; sourceTree = "<group>"; };
 		18045B0C229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerUpdateDevelopModel.swift; sourceTree = "<group>"; };
 		18045B0E229BE69700B3E493 /* ReasonsRefusalEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReasonsRefusalEjectView.swift; sourceTree = "<group>"; };
@@ -467,7 +468,6 @@
 		1817884D2238ADC00015DC30 /* MeHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeHomeController.swift; sourceTree = "<group>"; };
 		1817884F2238D73F0015DC30 /* HomePageNoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageNoticeCell.swift; sourceTree = "<group>"; };
 		181788512238E0B00015DC30 /* HomePageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageHeaderView.swift; sourceTree = "<group>"; };
-		181788532238E5F60015DC30 /* HomePageVisitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageVisitCell.swift; sourceTree = "<group>"; };
 		18195D9D2278406B0030A546 /* LanTuOA.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LanTuOA.entitlements; sourceTree = "<group>"; };
 		181FF96522714E9600ED5A2A /* ModifyNoticeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyNoticeEjectView.swift; sourceTree = "<group>"; };
 		181FF96722719BB200ED5A2A /* StartupSumModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupSumModel.swift; sourceTree = "<group>"; };
@@ -1261,6 +1261,7 @@
 			children = (
 				181FF96722719BB200ED5A2A /* StartupSumModel.swift */,
 				180B8FA2227300A200E6FDE5 /* NotifyNumberModel.swift */,
+				1804062722C5EAD700EE7427 /* HomePageMonthModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1270,7 +1271,6 @@
 			children = (
 				1817884F2238D73F0015DC30 /* HomePageNoticeCell.swift */,
 				181788512238E0B00015DC30 /* HomePageHeaderView.swift */,
-				181788532238E5F60015DC30 /* HomePageVisitCell.swift */,
 				18033CDC22C4A8EF004AD769 /* NewHomePageVisitCell.swift */,
 				18033CDE22C4AA12004AD769 /* NewHomePageItmeCell.swift */,
 			);
@@ -1515,6 +1515,7 @@
 				1803A32E225F426400B86F20 /* FillInApplyController.swift in Sources */,
 				18FD0CAA22C22896008AD0AC /* TemplateFilterCell.swift in Sources */,
 				1802B0062254410100E94341 /* VisitDetailsHeaderCell.swift in Sources */,
+				1804062822C5EAD700EE7427 /* HomePageMonthModel.swift in Sources */,
 				18067C2922801E42005D26AC /* ContractScreenView.swift in Sources */,
 				181FF96622714E9600ED5A2A /* ModifyNoticeEjectView.swift in Sources */,
 				1805F3B722758C9500AF0AF7 /* ReplacementDepartmentController.swift in Sources */,
@@ -1523,7 +1524,6 @@
 				18050D5D224B16C200C9DB9A /* ToExamineController.swift in Sources */,
 				180B76FD2239DFCC0096403B /* VisitHomeCell.swift in Sources */,
 				18026DEF223B9F7E00993B66 /* NewlyBuildVisitController.swift in Sources */,
-				181788542238E5F60015DC30 /* HomePageVisitCell.swift in Sources */,
 				1805FC3E2276F369001A2FF5 /* RetrievePasswordController.swift in Sources */,
 				180B8FA3227300A200E6FDE5 /* NotifyNumberModel.swift in Sources */,
 				18643F88229521DD003AAAFF /* ToExamineImagesCell.swift in Sources */,

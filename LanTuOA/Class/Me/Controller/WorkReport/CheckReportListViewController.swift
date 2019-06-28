@@ -20,6 +20,8 @@ class CheckReportListViewController: UIViewController {
     private var startTime = 0
     private var endTime = 0
     private var commitUser = [String]()
+    private var refreshArr = [String]()
+    
     var  headItmeArr = [[String:String]]()
     let headView = CheckReportListView()
     override func viewDidLoad() {
@@ -64,11 +66,11 @@ class CheckReportListViewController: UIViewController {
                 tableView.register(CheckReportHeadItmeCell.self, forCellReuseIdentifier: "CheckReportHeadItmeCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     tableView.mj_footer.isHidden = true
-                    self?.CheckReportList(isMore: false,notRead: self!.isNotRead,processId: 0,commitUser: [],startTime: 0,endTime: 0)
+                    self?.CheckReportList(isMore: false,notRead: self!.isNotRead,processId: self!.processId,commitUser: self!.refreshArr,startTime: self!.startTime,endTime: self!.endTime)
                 })
                 tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
                     tableView.mj_header.isHidden = true
-                    self?.CheckReportList(isMore: true,notRead: self!.isNotRead,processId: 0,commitUser: [],startTime: 0,endTime: 0)
+                    self?.CheckReportList(isMore: false,notRead: self!.isNotRead,processId: self!.processId,commitUser: self!.refreshArr,startTime: self!.startTime,endTime: self!.endTime)
                 })
                 if headItmeArr.count == 0 {
                     tableView.tableHeaderView = headView
@@ -100,6 +102,7 @@ class CheckReportListViewController: UIViewController {
             self!.startTime = startTime
             self!.endTime = endTime
             self!.commitUser = commitUser
+            self!.refreshArr = commitUser
             self!.headItmeArr = itmeArr
             self!.CheckReportList(isMore: false, notRead: self!.isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
             if self!.headItmeArr.count > 0 {
@@ -199,9 +202,7 @@ extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSourc
         
         if indexPath.section == 0 {
             if headItmeArr.count > 0 {
-//                return headItmeArr.count
                 let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportHeadItmeCell", for: indexPath) as! CheckReportHeadItmeCell
-//                cell.data = (data[indexPath.row], false)
                 cell.deleteBlack = {[weak self] index,indexpath in
                     self!.headItmeArr.remove(at: indexpath)
                     if self!.headItmeArr.count == 0 {
@@ -211,7 +212,6 @@ extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSourc
                     }else{
                         self!.retrieveData(index:index)
                     }
-//                    self!.tableView.reloadData()
                 }
                 cell.data = headItmeArr
                 return cell
@@ -235,16 +235,29 @@ extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSourc
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if data[indexPath.row].status == 1 {
-            CheckListHaveRead(index: indexPath.row)
+        if indexPath.section == 0 {
+            if headItmeArr.count > 0 {
+                
+            }else{
+                if data[indexPath.row].status == 1 {
+                    CheckListHaveRead(index: indexPath.row)
+                }
+                let vc = CheckReportDetailsViewController()
+                vc.checkListId = data[indexPath.row].id
+                navigationController?.pushViewController(vc, animated: true)
+            }
+        }else{
+            if data[indexPath.row].status == 1 {
+                CheckListHaveRead(index: indexPath.row)
+            }
+            let vc = CheckReportDetailsViewController()
+            vc.checkListId = data[indexPath.row].id
+            navigationController?.pushViewController(vc, animated: true)
         }
-        let vc = CheckReportDetailsViewController()
-        vc.checkListId = data[indexPath.row].id
-        navigationController?.pushViewController(vc, animated: true)
+
     }
     
     func retrieveData(index:String){
-//        if index == 0
         if index == "1" {
             processId = 0
             CheckReportList(isMore: false, notRead: isNotRead,processId: 0,commitUser: commitUser,startTime: startTime,endTime: endTime)
@@ -255,39 +268,15 @@ extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSourc
         }else if index == "3"{
             isNotRead = 0
             CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "4"{
-            commitUser[0] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "5"{
-            commitUser[1] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "6"{
-            commitUser[2] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "7"{
-            commitUser[3] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "8"{
-            commitUser[4] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "9"{
-            commitUser[5] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "10"{
-            commitUser[6] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "10"{
-            commitUser[7] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "11"{
-            commitUser[8] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "12"{
-            commitUser[9] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
-        }else if index == "13"{
-            commitUser[10] = ""
-            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
+        }else {
+            commitUser[Int(index)!-4] = ""
+            refreshArr.removeAll()
+            for item in commitUser {
+                if item != "" {
+                    refreshArr.append(item)
+                }
+            }
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: refreshArr,startTime: startTime,endTime: endTime)
         }
     }
 }

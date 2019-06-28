@@ -9,7 +9,7 @@
 import UIKit
 
 class SpecificTimeView: UIView {
-    
+    var mothxxx = 0
     var backDate: ((String) -> Void)?
     ///获取当前日期
     private var currentDateCom: DateComponents = Calendar.current.dateComponents([.year, .month, .day ,.hour,.minute],   from: Date())    //日期类型
@@ -20,7 +20,7 @@ class SpecificTimeView: UIView {
         super.init(frame: frame)
         setupUI()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -30,7 +30,8 @@ class SpecificTimeView: UIView {
         layer.masksToBounds = true
         backView.backgroundColor = UIColor.white
         addSubview(backView)
-        backView.frame = CGRect(x: 20, y: 80, width: ScreenWidth - 40, height: ScreenHeight-120)
+        backView.frame = CGRect(x: 20, y: ScreenHeight/2 - 190, width: ScreenWidth - 40, height:  380)
+        mothxxx = currentDateCom.month!
 
         //取消
         let cancel = UIButton(frame: CGRect(x: 0, y: 10, width: 70, height: 30))
@@ -51,17 +52,17 @@ class SpecificTimeView: UIView {
         picker.dataSource = self
         picker.backgroundColor = UIColor.clear
         picker.clipsToBounds = true//如果子视图的范围超出了父视图的边界，那么超出的部分就会被裁剪掉。
-        picker.reloadAllComponents()
+//        picker.reloadAllComponents()
         picker.selectRow(2, inComponent: 0, animated: true)
         picker.selectRow((self.currentDateCom.month!) - 1, inComponent: 1, animated:  true)
         picker.selectRow((self.currentDateCom.day!) - 1, inComponent: 2, animated: true)
-
-        //创建日期选择器
         backView.addSubview(picker)
+//        //创建日期选择器
+
         backView.addSubview(pickerMinutes)
         pickerMinutes.snp.makeConstraints { (make) in
             make.leading.equalTo(backView.snp.leading)
-            make.top.equalTo(picker.snp.bottom).offset(40)
+            make.top.equalTo(picker.snp.bottom).offset(20)
             make.trailing.equalTo(backView.snp.trailing)
             make.height.equalTo(150)
         }
@@ -71,10 +72,10 @@ class SpecificTimeView: UIView {
         pickerMinutes.clipsToBounds = true//如果子视图的范围超出了父视图的边界，那么超出的部分就会被裁剪掉。
         pickerMinutes.selectRow((self.currentDateCom.hour!)-1 , inComponent: 0, animated: true)
         pickerMinutes.selectRow((self.currentDateCom.minute!)-1 , inComponent: 1, animated:  true)
-        //创建日期选择器
-        
+//        //创建日期选择器
+
     }
-    
+
     //MARK: 取消按钮
     @objc func onClickCancel() {
         self.removeFromSuperview()
@@ -83,6 +84,7 @@ class SpecificTimeView: UIView {
     @objc func onClickSure() {
         let dateString = String(format: "%02ld-%02ld-%02ld %02ld:%02ld", self.picker.selectedRow(inComponent: 0) + (self.currentDateCom.year! - 2), self.picker.selectedRow(inComponent: 1) + 1, self.picker.selectedRow(inComponent: 2) + 1,self.pickerMinutes.selectedRow(inComponent: 0)+1,self.pickerMinutes.selectedRow(inComponent: 1)+1)
         /// 直接回调显示
+
         if self.backDate != nil{
             self.backDate!(dateString)
         }
@@ -93,12 +95,12 @@ class SpecificTimeView: UIView {
         super.touchesBegan(touches, with: event)
         self.removeFromSuperview()
     }
-    
+
 }
 
 //MARK: - PickerViewDelegate
 extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
-    
+
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if picker == pickerView{
             return 3
@@ -106,7 +108,7 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
             return 2
         }
     }
-    
+
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if picker == pickerView{
             if component == 0 {
@@ -115,8 +117,8 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
                 return 12
             }else {
                 let year: Int = pickerView.selectedRow(inComponent: 0) + currentDateCom.year!
-                let month: Int = pickerView.selectedRow(inComponent: 1) + 1
-                let days: Int = howManyDays(inThisYear: year, withMonth: month)
+                let days: Int = howManyDays(inThisYear: year, withMonth: mothxxx)
+//                let days: Int = getDaysInCurrentMonth(years: year, months: mothxxx)
                 return days
             }
         }else{
@@ -126,9 +128,49 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
                 return 59
             }
         }
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if picker == pickerView{
+            if component == 1 {
+                pickerView.reloadComponent(2)
+            }
+        }
 
     }
-    
+
+    //计算当月天数
+    func getDaysInCurrentMonth(years:Int,months:Int) -> Int {
+        let calendar = NSCalendar.current
+
+        let date = NSDate()
+//        let nowComps = calendar.dateComponents([.year, .month, .day], from: date as Date)
+//        let year =  nowComps.year
+//        let month = nowComps.month
+
+        let year =  years
+        let month = months
+        let startComps = NSDateComponents()
+        startComps.day = 1
+        startComps.month = month
+        startComps.year = year
+
+        let endComps = NSDateComponents()
+        endComps.day = 1
+        endComps.month = month == 12 ? 1 : month + 1
+        endComps.year = month == 12 ? year + 1 : year
+
+//        let startDate = calendar.dateComponents(startComps)!
+//        let endDate = calendar.dateComponents(endComps)!
+        let startDate = calendar.date(from: startComps as DateComponents)
+        let endDate = calendar.date(from: endComps as DateComponents)
+//        let diff = calendar.components(.day, fromDate: startDate, toDate: endDate,
+//                                       options: .MatchFirst)
+        let diff = calendar.dateComponents([.day], from: startDate!, to: endDate!)
+
+        return diff.day!
+    }
+
     private func howManyDays(inThisYear year: Int, withMonth month: Int) -> Int {
         if (month == 1) || (month == 3) || (month == 5) || (month == 7) || (month == 8) || (month == 10) || (month == 12) {
             return 31
@@ -147,7 +189,7 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
         }
         return 29
     }
-    
+
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         if picker == pickerView{
             return 70
@@ -155,11 +197,12 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
             return 70
         }
     }
-    
+
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 40
     }
-    
+
+
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int,
                     forComponent component: Int, reusing view: UIView?) -> UIView {
 
@@ -174,7 +217,7 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
             if component == 0 {
                 pickerLabel?.text = "\((currentDateCom.year!-2) + row )年"
             }else if component == 1 {
-                
+                mothxxx = row + 1
                 pickerLabel?.text = "\(row + 1)月"
             }else {
                 pickerLabel?.text = "\(row + 1)日"
@@ -197,8 +240,10 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
             pickerLabel?.textColor = UIColor(hex: "#333333")
             return pickerLabel!
         }
-        
+
     }
+
     
 }
+
 

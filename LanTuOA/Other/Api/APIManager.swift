@@ -22,6 +22,7 @@ enum APIManager {
     case startupSum // 首页统计
     case code(String) // 获取验证码
     case passwordReset(String, String, String) // 找回密码
+    case newHomePageMonthList //新的首页统计（月份）
     
     
     // MARK: - 客户
@@ -152,6 +153,7 @@ extension APIManager: TargetType {
         case .startupSum: return "/api/startup/sum"
         case .code: return "/api/code"
         case .passwordReset: return "/api/password/reset"
+        case .newHomePageMonthList: return "/api/startup/perform"
             
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"

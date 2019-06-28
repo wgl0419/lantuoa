@@ -78,7 +78,7 @@ class ContractDetailsController: UIViewController {
         
         var titleArray = ["发布内容", "付款情况", "业绩详情"]
         if Jurisdiction.share.isViewContractDesc {
-            titleArray.append("备注信息")
+            titleArray.append("补充说明")
         }
         segment = ProjectDetailsSegmentedView(title: titleArray) // 选择器
             .taxi.adhere(toSuperView: view)

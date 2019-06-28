@@ -13,7 +13,7 @@ class NewHomePageVisitCell: UITableViewCell {
     /// CollectionView
     private var collectionView: UICollectionView!
     var selectCollentViewIndex:Int?
-    private var titleData = [String]()
+    private var titleData = [HomePageNameData]()
     
     var deleteBlack: ((Int)->())?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -23,7 +23,7 @@ class NewHomePageVisitCell: UITableViewCell {
     }
     
     //数据
-    var data: [String]! {
+    var data: [HomePageNameData]? {
         didSet {
             titleData = []
             if let data = data {
@@ -54,7 +54,7 @@ class NewHomePageVisitCell: UITableViewCell {
             let flowLayout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
             collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout) // collectionView
         }
-        
+    
         collectionView.taxi.adhere(toSuperView: contentView)
             .taxi.layout(snapKitMaker: { (make) in
                 make.height.equalTo(200).priority(800)
@@ -81,11 +81,12 @@ class NewHomePageVisitCell: UITableViewCell {
 extension NewHomePageVisitCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        return titleData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewHomePageItmeCell", for: indexPath) as! NewHomePageItmeCell
+        cell.data = titleData[indexPath.item]
         return cell
     }
     

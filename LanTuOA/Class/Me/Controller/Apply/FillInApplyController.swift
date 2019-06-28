@@ -963,9 +963,6 @@ class FillInApplyController: UIViewController {
                 return
             }
         }
-        let indexpath = NSIndexPath()
-
-            
 //        uploadGetKey(indexPath: indexpath.section)
         processCommit()
     }

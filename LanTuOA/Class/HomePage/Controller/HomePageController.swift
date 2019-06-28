@@ -21,6 +21,9 @@ class HomePageController: UIViewController {
     /// 首页统计数据
     private var startupSumData: StartupSumData!
     
+    ///首页每月的统计数据
+    private var homePageMonthData: HomePageMonthData!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setNav()
@@ -112,7 +115,6 @@ class HomePageController: UIViewController {
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = kMainBackColor
                 tableView.separatorInset = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
-                tableView.register(HomePageVisitCell.self, forCellReuseIdentifier: "HomePageVisitCell")
                 tableView.register(NewHomePageVisitCell.self, forCellReuseIdentifier: "NewHomePageVisitCell")
                 tableView.register(HomePageNoticeCell.self, forCellReuseIdentifier: "HomePageNoticeCell")
                 tableView.register(CostomerDetailsProjectCell.self, forCellReuseIdentifier: "CostomerDetailsProjectCell")
@@ -153,8 +155,8 @@ class HomePageController: UIViewController {
     /// 首页统计
     private func startupSum() {
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.startupSum, t: StartupSumModel.self, successHandle: { (result) in
-            self.startupSumData = result.data
+        _ = APIService.shared.getData(.newHomePageMonthList, t: HomePageMonthModel.self, successHandle: { (result) in
+            self.homePageMonthData = result.data
             self.tableView.reloadData()
             self.tableView.mj_header.endRefreshing()
             MBProgressHUD.dismiss()
@@ -195,9 +197,8 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "HomePageVisitCell", for: indexPath) as! HomePageVisitCell
-            cell.data = startupSumData
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "NewHomePageVisitCell", for: indexPath) as! NewHomePageVisitCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NewHomePageVisitCell", for: indexPath) as! NewHomePageVisitCell
+            cell.data = homePageMonthData.data
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsProjectCell", for: indexPath) as! CostomerDetailsProjectCell
@@ -210,9 +211,17 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 54))
         let header = HomePageHeaderView(frame: CGRect(x: 0, y: 10, width: ScreenWidth, height: 44))
         var logoName = "visit"
-        var attriMuStr = NSMutableAttributedString(string: "本月统计")
-        attriMuStr.changeColor(str: "我的项目", color: UIColor(hex: "#2E4695"))
-        if section == 1 {
+        var attriMuStr = NSMutableAttributedString(string: "本月绩效")
+        attriMuStr.changeColor(str: "本月绩效", color: UIColor(hex: "#2E4695"))
+        if section == 0 {
+            let total = UILabel()
+            total.frame = CGRect(x: ScreenWidth/2, y: 0, width: ScreenWidth/2-10, height: 44)
+            total.textAlignment = .right
+            total.font = UIFont.medium(size: 12)
+            header.addSubview(total)
+            total.attributedText = richText(title: "合计：", content: homePageMonthData.totalValue!)
+
+        }else {
             logoName = "project"
             attriMuStr = NSMutableAttributedString(string: "我的项目")
             attriMuStr.changeColor(str: "我的项目", color: UIColor(hex: "#2E4695"))
@@ -239,5 +248,20 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
             vc.projectData = data[indexPath.row]
             navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    ///处理合计
+    private func richText(title:String,content:String) -> NSMutableAttributedString{
+        let attrs1 = [NSAttributedString.Key.font : UIFont.regular(size: 12), NSAttributedString.Key.foregroundColor : UIColor(hex: "#999999")]
+        
+        let attrs2 = [NSAttributedString.Key.font : UIFont.regular(size: 12), NSAttributedString.Key.foregroundColor : UIColor(hex: "#FF7744")]
+        
+        let attributedString1 = NSMutableAttributedString(string:title, attributes:attrs1)
+        
+        let attributedString2 = NSMutableAttributedString(string:content, attributes:attrs2)
+        
+        attributedString1.append(attributedString2)
+        
+        return attributedString1
     }
 }
