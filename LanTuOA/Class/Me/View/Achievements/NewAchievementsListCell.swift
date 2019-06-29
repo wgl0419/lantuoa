@@ -24,7 +24,17 @@ class NewAchievementsListCell: UITableViewCell {
                 }
                 for index in 0..<arrData.count {
                     let model = arrData[index]
-                        let label = setTitleAndContent(model.name ?? "", contentStr: model.value ?? "", lastView: lastView, isLast: index == arrData.count - 1)
+                    let testStr = model.value ?? ""
+                    let inde = testStr.characters.index(of: ".")
+                    var totStr:String?
+                    if let inde = inde {
+                        let subStr = testStr.substring(to: inde)
+                        totStr = subStr
+                    }
+                    if totStr == ""{
+                        totStr = "0"
+                    }
+                        let label = setTitleAndContent(model.name ?? "", contentStr: totStr ?? "", lastView: lastView, isLast: index == arrData.count - 1)
                         lastView.tag = index
                         lastView = label
                 }

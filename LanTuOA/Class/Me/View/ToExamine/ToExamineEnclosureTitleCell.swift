@@ -12,7 +12,7 @@ class ToExamineEnclosureTitleCell: UITableViewCell {
 
     /// 必选星星
     private var mustLabel: UILabel!
-    
+    var contentLabel: UILabel!
     var enclosureLabel:UILabel!
     /// 点击回调
     var enclosureBlock: (() -> ())?
@@ -32,6 +32,21 @@ class ToExamineEnclosureTitleCell: UITableViewCell {
             if let isMust = isMust {
                 mustLabel.isHidden = !isMust
             }
+        }
+    }
+    
+    var dataTile: (String, String)? {
+        didSet {
+            if let dataTile = dataTile {
+                let currentCharactorCount = dataTile.1.count
+                if currentCharactorCount > 5 {
+                    let sub1 = dataTile.1.prefix(5)
+                    contentLabel.text = String(sub1) + "..."
+                }else{
+                    contentLabel.text = dataTile.1
+                }
+            }
+
         }
     }
     
@@ -73,6 +88,19 @@ class ToExamineEnclosureTitleCell: UITableViewCell {
                 btn.setImage(UIImage(named: "enclosure"), for: .normal)
                 btn.addTarget(self, action: #selector(enclosureClick), for: .touchUpInside)
             })
+        
+        contentLabel = UILabel().taxi.adhere(toSuperView: contentView) // “内容”
+            .taxi.layout { (make) in
+                make.left.equalTo(enclosureLabel.snp.right)
+                make.top.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-45)
+            }
+            .taxi.config { (label) in
+                label.text = "提示语言"
+                label.textColor = UIColor(hex: "#666666")
+                label.font = UIFont.regular(size: 14)
+                label.textAlignment = .right
+        }
     }
     
     // MARK: - 按钮点击

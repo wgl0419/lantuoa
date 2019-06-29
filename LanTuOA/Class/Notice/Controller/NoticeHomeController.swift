@@ -417,11 +417,11 @@ class NoticeHomeController: UIViewController {
     }
     
     /// 全部已读
-    private func notifyReadAll() {
-        _ = APIService.shared.getData(.notifyReadAll, t: LoginModel.self, successHandle: { (_) in
-            self.setTips()
-        }, errorHandle: nil)
-    }
+//    private func notifyReadAll() {
+//        _ = APIService.shared.getData(.notifyReadAll, t: LoginModel.self, successHandle: { (_) in
+//            self.setTips()
+//        }, errorHandle: nil)
+//    }
     
     // MARK: - Api
     ///设置已读
@@ -429,6 +429,8 @@ class NoticeHomeController: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.notifyCheckHaveRead(id), t: unreadValueModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
+            self.notifyList(isMore: false)
+            self.systemTableView.reloadData()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "设置失败")
         })
@@ -527,7 +529,7 @@ extension NoticeHomeController: UIScrollViewDelegate {
             segmentView.changeBtn(page: page)
             if page == 1 && !isCheckSystem {
                 isCheckSystem = true
-                notifyReadAll()
+//                notifyReadAll()
                 setTips()
             }
         }
@@ -544,7 +546,7 @@ extension NoticeHomeController: UIScrollViewDelegate {
                 segmentView.changeBtn(page: page)
                 if page == 1 && !isCheckSystem {
                     isCheckSystem = true
-                    notifyReadAll()
+//                    notifyReadAll()
                     setTips()
                 }
             }
@@ -557,7 +559,7 @@ extension NoticeHomeController: SegmentViewDelegate {
         scrollView.setContentOffset(CGPoint(x: CGFloat(page) * ScreenWidth, y: 0), animated: true)
         if page == 1 && !isCheckSystem {
             isCheckSystem = true
-            notifyReadAll()
+//            notifyReadAll()
             setTips()
         }
     }

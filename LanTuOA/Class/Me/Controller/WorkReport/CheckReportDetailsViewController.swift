@@ -19,14 +19,8 @@ class CheckReportDetailsViewController: UIViewController {
     var changeBlock: (() -> ())?
     /// tableview
     private var tableView: UITableView!
-    /// 状态图标
-    private var statusImageView: UIImageView!
     /// 按钮框
     private var btnView: UIView!
-    /// 同意按钮
-    private var agreeBtn: UIButton!
-    /// 拒绝按钮
-    private var refuseBtn: UIButton!
     /// 评论
     private var commentBtn: UIButton!
     
@@ -55,7 +49,6 @@ class CheckReportDetailsViewController: UIViewController {
         notifyCheckUserList()
         notifyCheckCommentList()
     }
-    
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
@@ -63,7 +56,7 @@ class CheckReportDetailsViewController: UIViewController {
         
         btnView = UIView().taxi.adhere(toSuperView: view) // 按钮框
             .taxi.layout(snapKitMaker: { (make) in
-                btnConstraint = make.height.equalTo(0).constraint
+                btnConstraint = make.height.equalTo(80).constraint
                 make.bottom.left.right.equalToSuperview()
             })
             .taxi.config({ (view) in
@@ -71,45 +64,6 @@ class CheckReportDetailsViewController: UIViewController {
                 view.backgroundColor = .white
             })
         
-//        agreeBtn = UIButton().taxi.adhere(toSuperView: btnView) // 同意按钮
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.bottom.equalToSuperview().offset(isIphoneX ? -SafeH : -18)
-//                make.right.equalToSuperview().offset(-15)
-//                make.top.equalToSuperview().offset(18)
-//                make.height.equalTo(44)
-//                make.width.equalTo(80)
-//            })
-//            .taxi.config({ (btn) in
-//                btn.isHidden = true
-//                btn.setTitle("同意", for: .normal)
-//                btn.setTitleColor(.white, for: .normal)
-//
-//                btn.layer.cornerRadius = 4
-//                btn.layer.masksToBounds = true
-//                btn.backgroundColor = UIColor(hex: "#2E4695")
-//                btn.addTarget(self, action: #selector(agreeClick), for: .touchUpInside)
-//            })
-//
-//        refuseBtn = UIButton().taxi.adhere(toSuperView: btnView) // 拒绝按钮
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.right.equalTo(agreeBtn.snp.left).offset(-15)
-//                make.top.equalToSuperview().offset(18)
-//                make.height.equalTo(44)
-//                make.width.equalTo(80)
-//            })
-//            .taxi.config({ (btn) in
-//                btn.isHidden = true
-//                btn.setTitle("拒绝", for: .normal)
-//                btn.setTitleColor(UIColor(hex: "#2E4695"), for: .normal)
-//
-//                btn.layer.cornerRadius = 4
-//                btn.layer.masksToBounds = true
-//                btn.layer.borderWidth = 1
-//                btn.layer.borderColor = UIColor(hex: "#2E4695").cgColor
-//                btn.addTarget(self, action: #selector(refuseClick), for: .touchUpInside)
-//            })
-
-//
         commentBtn = UIButton().taxi.adhere(toSuperView: btnView) // 评论按钮
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalToSuperview().offset(15)
@@ -152,46 +106,27 @@ class CheckReportDetailsViewController: UIViewController {
                 tableView.register(ToExamineDetailsHeaderCell.self, forCellReuseIdentifier: "ToExamineDetailsHeaderCell")
                 tableView.register(ToExamineDetailsCell.self, forCellReuseIdentifier: "ToExamineDetailsCell")
                 tableView.register(ToExamineDetailsSmallCell.self, forCellReuseIdentifier: "ToExamineDetailsSmallCell")
-                tableView.register(CheckReportDetailsReadCell.self, forCellReuseIdentifier: "CheckReportDetailsReadCell")
+                tableView.register(ToExamineDetailsCarbonCopyCell.self, forCellReuseIdentifier: "ToExamineDetailsCarbonCopyCell")
                 tableView.register(ToExamineImagesCell.self, forCellReuseIdentifier: "ToExamineImagesCell")
                 tableView.register(ToExamineTitleCell.self, forCellReuseIdentifier: "ToExamineTitleCell")
                 tableView.register(ToExamineEnclosureCell.self, forCellReuseIdentifier: "ToExamineEnclosureCell")
                 tableView.register(ToExamineCommentNameCell.self, forCellReuseIdentifier: "ToExamineCommentNameCell")
+                tableView.register(CheckReportDetailsReadCell.self, forCellReuseIdentifier: "CheckReportDetailsReadCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     self?.notifyCheckUserList()
                     self?.notifyCheckCommentList()
                 })
             })
-
-        statusImageView = UIImageView().taxi.adhere(toSuperView: tableView) // 状态图标
-            .taxi.layout(snapKitMaker: { (make) in
-                make.right.equalTo(view).offset(-7)
-                make.top.equalToSuperview().offset(9)
-            })
     }
-    
+
     /// 修改处理
     private func changeHandle() {
-        agreeBtn.isHidden = true
-        refuseBtn.isHidden = true
         notifyCheckDetail()
-//        notifyCheckUserList()
+        notifyCheckUserList()
         if changeBlock != nil {
             changeBlock!()
         }
     }
-    
-    /// 点击同意处理
-//    private func agreeHandle() {
-//        let alertController = UIAlertController(title: "提示", message: "是否同意该申请?", preferredStyle: .alert)
-//        let cancelAction = UIAlertAction(title: "取消", style: .destructive, handler: nil)
-//        alertController.addAction(cancelAction)
-//        let agreeAction = UIAlertAction(title: "同意", style: .default, handler: { (_) in
-//            self.notifyCheckAgree()
-//        })
-//        alertController.addAction(agreeAction)
-//        present(alertController, animated: true, completion: nil)
-//    }
     
     /// 审批人列表数据处理
     private func checkUserListHandle(data: [NotifyCheckUserListData]) {
@@ -211,7 +146,6 @@ class CheckReportDetailsViewController: UIViewController {
         carbonCopyData = data.filter({ (model) -> Bool in
             return model.type == 2
         })
-        judgeStage()
     }
     
     /// 显示内容
@@ -242,43 +176,6 @@ class CheckReportDetailsViewController: UIViewController {
             let fileValue = model.fileArr
             for value in fileValue {
                 filesData.append(value)
-            }
-        }
-    }
-    
-    /// 状态图片处理
-    private func statusHandle() {
-        if checkListData.status == 1 {
-            statusImageView.image = UIImage()
-        } else if checkListData.status == 2 {
-            statusImageView.image = UIImage(named: "approval_agree")
-        } else {
-            statusImageView.image = UIImage(named: "approval_refuse")
-        }
-    }
-    
-    // 判断是否是自己处理阶段
-    private func judgeStage() {
-        var isShow = true
-        if checkListData != nil && checkUserData.count != 0 { // 顶部数据和审核人数据并存状态
-            let currentData = checkUserData.filter { (model) -> Bool in // 当前的数据
-                return model[0].sort == checkListData.step
-            }
-            if currentData.count > 0 {
-                let currentModel = currentData[0].filter { (model) -> Bool in
-                    return model.`self` == 1
-                }
-                if currentModel.count != 0 && checkListData.status != 2 && checkListData.status != 3 { // 到自己处理的阶段   展开同意拒绝按钮
-                    agreeBtn.isHidden = false
-                    refuseBtn.isHidden = false
-                } else {
-                    isShow = false
-                }
-            }
-            if (checkListData.processType == 1 || checkListData.processType == 2) && !isShow {
-                btnConstraint.activate()
-            } else {
-                btnConstraint.deactivate()
             }
         }
     }
@@ -334,8 +231,6 @@ class CheckReportDetailsViewController: UIViewController {
             self.title = result.data?.processName ?? ""
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
-            self.statusHandle()
-            self.judgeStage()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "获取审批人失败")
         })
@@ -353,16 +248,6 @@ class CheckReportDetailsViewController: UIViewController {
             self.tableView.mj_header.endRefreshing()
             MBProgressHUD.showError(error ?? "获取审批人失败")
         })
-//        MBProgressHUD.showWait("")
-//        _ = APIService.shared.getData(.WorkReporCheckListDetailRecipient(checkListId), t: NotifyCheckUserListModel.self, successHandle: { (result) in
-//            self.checkUserListHandle(data: result.data)
-//            self.tableView.mj_header.endRefreshing()
-//            self.tableView.reloadData()
-//            MBProgressHUD.dismiss()
-//        }, errorHandle: { (error) in
-//            self.tableView.mj_header.endRefreshing()
-//            MBProgressHUD.showError(error ?? "获取审批人失败")
-//        })
     }
     
     /// 审批评论列表
@@ -431,8 +316,6 @@ class CheckReportDetailsViewController: UIViewController {
         })
     }
     
-    
-    
     /// 同意审批
     private func notifyCheckAgree() {
         MBProgressHUD.showWait("")
@@ -445,7 +328,6 @@ class CheckReportDetailsViewController: UIViewController {
         })
     }
 
-    
     /// MARK: - 按钮点击
     /// 点击拒绝
     @objc private func refuseClick() {
@@ -466,23 +348,7 @@ class CheckReportDetailsViewController: UIViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-
-    /// 点击同意
-//    @objc private func agreeClick() {
-//        if checkListData.processType == 1 || checkListData.processType == 2 {
-//            agreeHandle()
-//        } else {
-//            let vc = ToExamineCommentController()
-//            vc.title = (checkListData.createdUserName ?? "") + "提交的《" + (checkListData.processName ?? "") + "》"
-//            vc.checkListId = checkListId
-//            vc.descType = .agree
-//            vc.commentBlock = { [weak self] in
-//                self?.changeHandle()
-//            }
-//            navigationController?.pushViewController(vc, animated: true)
-//        }
-//    }
-//
+    
     @objc private func commentClick() {
         let vc = ToExamineCommentController()
         vc.title = (checkListData.createdUserName ?? "") + "提交的《" + (checkListData.processName ?? "") + "》"

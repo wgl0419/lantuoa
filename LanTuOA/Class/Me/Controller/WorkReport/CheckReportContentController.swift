@@ -472,6 +472,7 @@ class CheckReportContentController: UIViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImageCell", for: indexPath) as! ToExamineImageCell
         cell.data = imageArray[indexPath.section]
         cell.imageLabel.text = model.title ?? ""
+        cell.dataTile = (model.title ?? "", model.hint ?? "")
         cell.isMust = model.isNecessary == 1
         cell.imageBlock = { [weak self] in
             UIApplication.shared.keyWindow?.endEditing(true)
@@ -495,6 +496,7 @@ class CheckReportContentController: UIViewController {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureTitleCell", for: indexPath) as! ToExamineEnclosureTitleCell
             cell.enclosureLabel.text = model.title ?? ""
+            cell.dataTile = (model.title ?? "", model.hint ?? "")
             cell.isMust = model.isNecessary == 1
             cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
             cell.enclosureBlock = {
@@ -626,8 +628,8 @@ class CheckReportContentController: UIViewController {
             self?.imageArray[IndexPath.section] = images!
             self?.PHArray[IndexPath.section] = assets
             self?.isOriginal = isOriginal
-            self?.reloadImageCell()
-            self!.uploadGetKey(indexPath: IndexPath as NSIndexPath)
+//            self?.reloadImageCell()
+            self!.uploadGetKey(indexPath: IndexPath as NSIndexPath,typ:1)
             self!.confirmHandle()
         }
         if indexPath < 0 { // 添加图片
@@ -651,41 +653,47 @@ class CheckReportContentController: UIViewController {
     }
     
     /// 上传文件
-    private func uploadGetKey(indexPath:NSIndexPath) {
+    private func uploadGetKey(indexPath:NSIndexPath,typ:Int) {
         if imageArray.count == 0 && fileArray.count == 0 {
             //            self.processCommit()
         } else {
-            var  arr = imageArray[indexPath.section]
-            for index in 0..<arr.count {
-                let size = 0
-                var type: Int!
-                var name: String!
-                var uploadData: Data!
-                type = 1
-                name = "".randomStringWithLength(len: 8) + ".png"
-                uploadData = arr[index].jpegData(compressionQuality: 0.5) ?? Data()
-                fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
-                    if status {
-                        self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath)
-                    }
-                }
-            }
             
-            var  fileArr = fileArray[indexPath.section]
-            for index in 0..<fileArr.count {
-                var size = 0
-                var type: Int!
-                var name: String!
-                var uploadData: Data!
-                type = 2
-                name = fileArr[index].1
-                uploadData = fileArr[index].0
-                size = fileArr[index].0.count
-                fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
-                    if status {
-                        self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath)
+            if typ == 1{
+                var  arr = imageArray[indexPath.section]
+                for index in 0..<arr.count {
+                    let size = 0
+                    var type: Int!
+                    var name: String!
+                    var uploadData: Data!
+                    type = 1
+                    name = "".randomStringWithLength(len: 8) + ".png"
+                    uploadData = arr[index].jpegData(compressionQuality: 0.5) ?? Data()
+                    
+                    fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                        if status {
+                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath)
+                        }
                     }
                 }
+            }else{
+                var  fileArr = fileArray[indexPath.section]
+                for index in 0..<fileArr.count {
+                    var size = 0
+                    var type: Int!
+                    var name: String!
+                    var uploadData: Data!
+                    type = 2
+                    name = fileArr[index].1
+                    uploadData = fileArr[index].0
+                    size = fileArr[index].0.count
+                    fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                        
+                        if status {
+                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath)
+                        }
+                    }
+                }
+                
             }
         }
     }
@@ -696,15 +704,16 @@ class CheckReportContentController: UIViewController {
             if status {
                 if type == 1 {
                     self.uploadImageIds[indexPath.section].append(body)
-                    
                     self.seleStrArray[self.photoIndex][0] = "\(self.photoIndex)"
                 } else {
+                    self.seleStrArray[self.fileIndex][0] = "xx"
                     self.uploadFileIds[indexPath.section].append(body)
                 }
                 if isLast {
                     DispatchQueue.main.async(execute: {
                         if self.uploadFileIds[indexPath.section].count == self.fileArray[indexPath.section].count && self.uploadImageIds[indexPath.section].count == self.imageArray[indexPath.section].count {
                             MBProgressHUD.showSuccess("图片上传成功")
+                            self.reloadImageCell()
                         } else {
                             MBProgressHUD.showError("上传失败")
                         }
@@ -780,9 +789,7 @@ class CheckReportContentController: UIViewController {
                 let fileData = image.pngData() ?? Data()
                 self?.fileArray[indexPath.section].append((fileData,fileName))
             }
-            self?.reloadImageCell()
-            self!.seleStrArray[self!.fileIndex][0] = "xx"
-            self!.uploadGetKey(indexPath: indexPath)
+            self!.uploadGetKey(indexPath: indexPath,typ:2)
             self!.confirmHandle()
         }
         photoSheet.configuration.maxSelectCount = 9

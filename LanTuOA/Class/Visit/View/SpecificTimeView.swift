@@ -52,7 +52,7 @@ class SpecificTimeView: UIView {
         picker.dataSource = self
         picker.backgroundColor = UIColor.clear
         picker.clipsToBounds = true//如果子视图的范围超出了父视图的边界，那么超出的部分就会被裁剪掉。
-//        picker.reloadAllComponents()
+        picker.reloadAllComponents()
         picker.selectRow(2, inComponent: 0, animated: true)
         picker.selectRow((self.currentDateCom.month!) - 1, inComponent: 1, animated:  true)
         picker.selectRow((self.currentDateCom.day!) - 1, inComponent: 2, animated: true)
@@ -72,8 +72,7 @@ class SpecificTimeView: UIView {
         pickerMinutes.clipsToBounds = true//如果子视图的范围超出了父视图的边界，那么超出的部分就会被裁剪掉。
         pickerMinutes.selectRow((self.currentDateCom.hour!)-1 , inComponent: 0, animated: true)
         pickerMinutes.selectRow((self.currentDateCom.minute!)-1 , inComponent: 1, animated:  true)
-//        //创建日期选择器
-
+        
     }
 
     //MARK: 取消按钮
@@ -117,8 +116,9 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
                 return 12
             }else {
                 let year: Int = pickerView.selectedRow(inComponent: 0) + currentDateCom.year!
-                let days: Int = howManyDays(inThisYear: year, withMonth: mothxxx)
-//                let days: Int = getDaysInCurrentMonth(years: year, months: mothxxx)
+//                let month: Int = pickerView.selectedRow(inComponent: 1) + 1
+                let days: Int = getDaysInCurrentMonth(years: year, months: mothxxx)
+                
                 return days
             }
         }else{
@@ -133,21 +133,18 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if picker == pickerView{
             if component == 1 {
+                let month: Int = pickerView.selectedRow(inComponent: 1) + 1
+                mothxxx = month
                 pickerView.reloadComponent(2)
             }
         }
-
     }
 
     //计算当月天数
     func getDaysInCurrentMonth(years:Int,months:Int) -> Int {
         let calendar = NSCalendar.current
 
-        let date = NSDate()
-//        let nowComps = calendar.dateComponents([.year, .month, .day], from: date as Date)
-//        let year =  nowComps.year
-//        let month = nowComps.month
-
+//        let date = NSDate()
         let year =  years
         let month = months
         let startComps = NSDateComponents()
@@ -160,12 +157,8 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
         endComps.month = month == 12 ? 1 : month + 1
         endComps.year = month == 12 ? year + 1 : year
 
-//        let startDate = calendar.dateComponents(startComps)!
-//        let endDate = calendar.dateComponents(endComps)!
         let startDate = calendar.date(from: startComps as DateComponents)
         let endDate = calendar.date(from: endComps as DateComponents)
-//        let diff = calendar.components(.day, fromDate: startDate, toDate: endDate,
-//                                       options: .MatchFirst)
         let diff = calendar.dateComponents([.day], from: startDate!, to: endDate!)
 
         return diff.day!
@@ -202,7 +195,6 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
         return 40
     }
 
-
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int,
                     forComponent component: Int, reusing view: UIView?) -> UIView {
 
@@ -217,7 +209,6 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
             if component == 0 {
                 pickerLabel?.text = "\((currentDateCom.year!-2) + row )年"
             }else if component == 1 {
-                mothxxx = row + 1
                 pickerLabel?.text = "\(row + 1)月"
             }else {
                 pickerLabel?.text = "\(row + 1)日"
@@ -240,10 +231,7 @@ extension SpecificTimeView:UIPickerViewDelegate,UIPickerViewDataSource {
             pickerLabel?.textColor = UIColor(hex: "#333333")
             return pickerLabel!
         }
-
     }
-
-    
 }
 
 

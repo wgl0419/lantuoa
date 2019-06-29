@@ -43,9 +43,11 @@ class FillInApplyController: UIViewController {
     /// 客户id
     private var customerId = -1
     /// 客户id数组
-    private var customerIdArray:Array = [-1,-1,-1,-1,-1,-1,-1]
+    private var customerIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
     /// 项目id
     private var projectId = -1
+    /// 项目id数组
+    private var projectIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
     /// 图片数据
     private var imageArray = [[UIImage]]()
     /// 图片信息数据
@@ -282,6 +284,8 @@ class FillInApplyController: UIViewController {
         
         vc.seleBlock = { [weak self] (customerArray) in
             self?.projectId = customerArray.first?.0 ?? -1
+            self?.projectIdArray.remove(at: section)
+            self?.projectIdArray.insert(self?.projectId ?? -1, at: section)
             self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
             self?.confirmHandle()
@@ -485,6 +489,7 @@ class FillInApplyController: UIViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImageCell", for: indexPath) as! ToExamineImageCell
         cell.data = imageArray[indexPath.section]
         cell.imageLabel.text = model.title ?? ""
+        cell.dataTile = (model.title ?? "", model.hint ?? "")
         cell.isMust = model.isNecessary == 1
         cell.imageBlock = { [weak self] in
             UIApplication.shared.keyWindow?.endEditing(true)
@@ -508,6 +513,7 @@ class FillInApplyController: UIViewController {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureTitleCell", for: indexPath) as! ToExamineEnclosureTitleCell
             cell.enclosureLabel.text = model.title ?? ""
+            cell.dataTile = (model.title ?? "", model.hint ?? "")
             cell.isMust = model.isNecessary == 1
             cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
             cell.enclosureBlock = {
@@ -639,8 +645,7 @@ class FillInApplyController: UIViewController {
             self?.imageArray[IndexPath.section] = images!
             self?.PHArray[IndexPath.section] = assets
             self?.isOriginal = isOriginal
-            self?.reloadImageCell()
-            self!.uploadGetKey(indexPath: IndexPath as NSIndexPath)
+            self!.uploadGetKey(indexPath: IndexPath as NSIndexPath,typ:1)
             self!.confirmHandle()
         }
         if indexPath < 0 { // 添加图片
@@ -664,10 +669,12 @@ class FillInApplyController: UIViewController {
     }
     
     /// 上传文件
-    private func uploadGetKey(indexPath:NSIndexPath) {
+    private func uploadGetKey(indexPath:NSIndexPath,typ:Int) {
         if imageArray.count == 0 && fileArray.count == 0 {
             //            self.processCommit()
         } else {
+            
+            if typ == 1{
                 var  arr = imageArray[indexPath.section]
                 for index in 0..<arr.count {
                     let size = 0
@@ -677,13 +684,14 @@ class FillInApplyController: UIViewController {
                     type = 1
                     name = "".randomStringWithLength(len: 8) + ".png"
                     uploadData = arr[index].jpegData(compressionQuality: 0.5) ?? Data()
+                    
                     fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
                         if status {
                             self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath)
                         }
                     }
                 }
-            
+            }else{
                 var  fileArr = fileArray[indexPath.section]
                 for index in 0..<fileArr.count {
                     var size = 0
@@ -695,34 +703,44 @@ class FillInApplyController: UIViewController {
                     uploadData = fileArr[index].0
                     size = fileArr[index].0.count
                     fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                        
                         if status {
                             self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath)
                         }
                     }
                 }
+                
+            }
         }
     }
     
     /// 上传数据
     private func uploadData(_ data: Data, name: String, body: Int, type: Int, isLast: Bool,indexPath:NSIndexPath) {
+        
         AliOSSClient.shared.uploadData(data, name: name, body: body) { (status) in
+            
             if status {
+                
                 if type == 1 {
                     self.uploadImageIds[indexPath.section].append(body)
-                    
                     self.seleStrArray[self.photoIndex][0] = "\(self.photoIndex)"
                 } else {
+                    self.seleStrArray[self.fileIndex][0] = "xx"
                     self.uploadFileIds[indexPath.section].append(body)
                 }
                 if isLast {
                     DispatchQueue.main.async(execute: {
+                        
                         if self.uploadFileIds[indexPath.section].count == self.fileArray[indexPath.section].count && self.uploadImageIds[indexPath.section].count == self.imageArray[indexPath.section].count {
                             MBProgressHUD.showSuccess("图片上传成功")
+                            self.reloadImageCell()
                         } else {
                             MBProgressHUD.showError("上传失败")
                         }
                     })
                 }
+            }else{
+                MBProgressHUD.showError("上传失败")
             }
         }
     }
@@ -731,14 +749,18 @@ class FillInApplyController: UIViewController {
     /// 获取提交时的data部分的数据处理
     private func processDataHnadle(_ model: ProcessParamsData, str: String ,index:Int) -> String {
         var contentStr = str
+        
         if model.type == 3 { // 时间
             contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd"))"
         } else if model.type == 6 { // 客户
             contentStr = "\(customerIdArray[index])"
         } else if model.type == 7 { // 项目
-            contentStr = "\(projectId)"
+            contentStr = "\(projectIdArray[index])"
         }else if model.type == 11 {
             contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm"))"
+        }else if model.type == 1 {
+            
+            contentStr = str
         }
         return contentStr
     }
@@ -795,7 +817,7 @@ class FillInApplyController: UIViewController {
             }
             self?.reloadImageCell()
             self!.seleStrArray[self!.fileIndex][0] = "xx"
-            self!.uploadGetKey(indexPath: indexPath)
+            self!.uploadGetKey(indexPath: indexPath,typ:0)
             self!.confirmHandle()
         }
         photoSheet.configuration.maxSelectCount = 9
@@ -844,6 +866,7 @@ class FillInApplyController: UIViewController {
             if model.type < 8 {
                 var contentStr = seleStrArray[index][0]
                 contentStr = processDataHnadle(model, str: contentStr,index:[index][0])
+                
                 dataDic.updateValue(contentStr, forKey: model.name ?? "")
             }else if model.type == 9 {
                 dataDic.updateValue(processDataHnadleImage(model, str: "", index: index), forKey: model.name ?? "")
@@ -934,9 +957,11 @@ class FillInApplyController: UIViewController {
     ///   - size: 文件大小
     private func fileUploadGetKey(type: Int, name: String, size: Int, block: @escaping ((Bool, Int?, String?) -> ())) {
         MBProgressHUD.showWait("")
+        
         _ = APIService.shared.getData(.fileUploadGetKey(type, name, size), t: FileUploadGetKeyModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             block(true, result.data?.id, result.data?.objectName)
+            
         }, errorHandle: { (error) in
             block(false, nil, nil)
             MBProgressHUD.showError(error ?? "上传失败")
@@ -963,6 +988,7 @@ class FillInApplyController: UIViewController {
                 return
             }
         }
+        
 //        uploadGetKey(indexPath: indexpath.section)
         processCommit()
     }

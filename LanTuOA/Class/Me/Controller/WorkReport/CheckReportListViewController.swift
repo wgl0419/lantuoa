@@ -30,7 +30,6 @@ class CheckReportListViewController: UIViewController {
         initSubViews()
         CheckReportList(isMore: false, notRead: isNotRead,processId: 0,commitUser: [],startTime: 0,endTime: 0)
         CheckListNumberUnread()
-
     }
     
     // MAKR: - 自定义自有方法
@@ -78,7 +77,6 @@ class CheckReportListViewController: UIViewController {
                     headView.isHidden = true
                 }
                 
-                
                 headView.readBlck = {[weak self] number in
                     self!.isNotRead = number
                     self!.CheckReportList(isMore: false, notRead: self!.isNotRead,processId: 0,commitUser: [],startTime: 0,endTime: 0)
@@ -108,6 +106,9 @@ class CheckReportListViewController: UIViewController {
             if self!.headItmeArr.count > 0 {
                 self!.headView.isHidden = true
             }
+        }
+        if processId != 0 {
+            vc.itmeStr = headItmeArr[0]["name"]
         }
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -173,6 +174,8 @@ class CheckReportListViewController: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.WorkReporCheckListHaveRead(index), t: unreadValueModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
+            self.CheckReportList(isMore: false, notRead: self.isNotRead,processId: self.processId,commitUser: self.refreshArr,startTime: self.startTime,endTime: self.endTime)
+            self.tableView.reloadData()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "设置失败")
         })
@@ -208,7 +211,7 @@ extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSourc
                     if self!.headItmeArr.count == 0 {
                         self!.headView.isHidden = false
                         self!.CheckReportList(isMore: false, notRead: 0,processId: 0,commitUser: [],startTime: 0,endTime: 0)
-                        self!.tableView.reloadData()
+//                        self!.tableView.reloadData()
                     }else{
                         self!.retrieveData(index:index)
                     }
@@ -260,7 +263,7 @@ extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSourc
     func retrieveData(index:String){
         if index == "1" {
             processId = 0
-            CheckReportList(isMore: false, notRead: isNotRead,processId: 0,commitUser: commitUser,startTime: startTime,endTime: endTime)
+            CheckReportList(isMore: false, notRead: isNotRead,processId: processId,commitUser: commitUser,startTime: startTime,endTime: endTime)
         }else if index == "2"{
             startTime = 0
             endTime = 0

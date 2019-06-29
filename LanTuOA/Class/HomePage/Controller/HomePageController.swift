@@ -219,7 +219,15 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
             total.textAlignment = .right
             total.font = UIFont.medium(size: 12)
             header.addSubview(total)
-            total.attributedText = richText(title: "合计：", content: homePageMonthData.totalValue!)
+            let testStr = homePageMonthData.totalValue!
+
+            let index = testStr.characters.index(of: ".")
+            var totStr:String?
+            if let index = index {
+                let subStr = testStr.substring(to: index)
+                totStr = subStr
+            }
+            total.attributedText = richText(title: "合计：", content: totStr!)
 
         }else {
             logoName = "project"

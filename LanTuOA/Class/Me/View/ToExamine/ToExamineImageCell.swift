@@ -14,6 +14,7 @@ class ToExamineImageCell: UITableViewCell {
     private var mustLabel: UILabel!
     
     var imageLabel: UILabel!
+    var contentLabel: UILabel!
     /// 添加回调
     var imageBlock: (() -> ())?
     /// 删除回调
@@ -24,6 +25,19 @@ class ToExamineImageCell: UITableViewCell {
             collectionView.reloadData()
             collectionView.snp.updateConstraints { (make) in
                 make.height.equalTo(data.count == 0 ? 0 : 53)
+            }
+        }
+    }
+    var dataTile: (String, String)? {
+        didSet {
+            if let dataTile = dataTile {
+                let currentCharactorCount = dataTile.1.count
+                if currentCharactorCount > 5 {
+                    let sub1 = dataTile.1.prefix(5)
+                    contentLabel.text = String(sub1) + "..."
+                }else{
+                    contentLabel.text = dataTile.1
+                }
             }
         }
     }
@@ -59,12 +73,15 @@ class ToExamineImageCell: UITableViewCell {
             .taxi.layout { (make) in
                 make.left.equalToSuperview().offset(15)
                 make.top.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-ScreenWidth/2-40)
         }
             .taxi.config { (label) in
                 label.text = "图片"
                 label.textColor = blackColor
                 label.font = UIFont.regular(size: 16)
         }
+        
+
         
         mustLabel = UILabel().taxi.adhere(toSuperView: contentView) // 必选星星
             .taxi.layout(snapKitMaker: { (make) in
@@ -88,6 +105,19 @@ class ToExamineImageCell: UITableViewCell {
                 btn.setImage(UIImage(named: "image"), for: .normal)
                 btn.addTarget(self, action: #selector(imageClick), for: .touchUpInside)
             })
+        
+        contentLabel = UILabel().taxi.adhere(toSuperView: contentView) // “内容”
+            .taxi.layout { (make) in
+                make.left.equalTo(imageLabel.snp.right)
+                make.top.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-45)
+            }
+            .taxi.config { (label) in
+                label.text = "提示语言"
+                label.textColor = UIColor(hex: "#666666")
+                label.font = UIFont.regular(size: 14)
+                label.textAlignment = .right
+        }
         
         
         let layout = UICollectionViewFlowLayout()

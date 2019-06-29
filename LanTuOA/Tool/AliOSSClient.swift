@@ -23,7 +23,8 @@ class AliOSSClient: NSObject {
     override init() {
         super.init()
         let endpoint = "http://oss-cn-shenzhen.aliyuncs.com/"
-        let credential = OSSAuthCredentialProvider(authServerUrl: "http://api.lantudev.danjuantaxi.com/api/stsRegistoer")
+//        let credential = OSSAuthCredentialProvider(authServerUrl: "http://api.lantudev.danjuantaxi.com/api/stsRegistoer")
+        let credential = OSSAuthCredentialProvider(authServerUrl: "http://api.lantuoa.com/api/stsRegistoer")
         client = OSSClient(endpoint: endpoint, credentialProvider: credential)
     }
     
@@ -34,7 +35,8 @@ class AliOSSClient: NSObject {
         put.objectKey = name
         
         put.uploadingData = data
-        put.callbackParam = ["callbackUrl": "http://api.lantudev.danjuantaxi.com/api/callback/fileUpload", "callbackBody": "\(body)", "callbackBodyType": "application/json"]
+//        put.callbackParam = ["callbackUrl": "http://api.lantudev.danjuantaxi.com/api/callback/fileUpload", "callbackBody": "\(body)", "callbackBodyType": "application/json"]
+        put.callbackParam = ["callbackUrl": "http://api.lantuoa.com/api/callback/fileUpload", "callbackBody": "\(body)", "callbackBodyType": "application/json"]
         put.contentType = "application/json"
         let putTask = self.client.putObject(put)
         

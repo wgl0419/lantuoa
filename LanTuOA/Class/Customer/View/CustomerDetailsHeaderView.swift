@@ -24,8 +24,13 @@ class CustomerDetailsHeaderView: UIView {
                 } else {
                     nameLabel.text = data.name ?? " "
                 }
+                let companyStr = data.fullName ?? ""
+                if companyStr == "" {
+                    companyLabel.text = "        "
+                }else{
+                    companyLabel.text = companyStr
+                }
                 
-                companyLabel.text = data.fullName ?? " "
                 addressLabel.text = data.address ?? " "
                 
                 let customerTypeName = data.type == 1 ? "customer_company" : data.type == 2 ? "customer_ordinary" : data.type == 3 ? "customer_development" : "customer_refuse"
@@ -123,11 +128,8 @@ class CustomerDetailsHeaderView: UIView {
             })
         
         _ = setTitle(titleStr: "公司全称：", content: companyLabel, lastView: nameLabel, position: -1)
-        
         let type = setTitle(titleStr: "客户类型：", content: typeBtn, lastView: companyLabel)
-        
         let address = setTitle(titleStr: "公司地址：", content: addressLabel, lastView: type, position: 1)
-        
         
         developerView = UIView().taxi.adhere(toSuperView: self) // 开发view
             .taxi.layout(snapKitMaker: { (make) in

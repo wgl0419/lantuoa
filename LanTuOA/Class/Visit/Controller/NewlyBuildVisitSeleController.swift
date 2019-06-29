@@ -416,8 +416,9 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
             }
             cell.data = (name, position, seleIndex == indexPath.row)
             return cell
-        case .project: // 项目
-            name = projectData[row].name ?? ""
+        case .project: // 项目fullName
+//            name = projectData[row].name ?? ""
+            name = projectData[row].fullName ?? ""
             if seleArray.count > 0 { // 防止报错
                 seleIndex = seleIndexArray.first ?? -1
             }

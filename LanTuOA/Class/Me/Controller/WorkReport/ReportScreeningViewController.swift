@@ -20,6 +20,7 @@ class ReportScreeningViewController: UIViewController {
     private var data = [WorkReportListData]()
     /// 添加的抄送人数据
     private var carbonCopyData = [ProcessUsersCheckUsers]()
+    var itmeStr: String?
     /// 选中内容
     private var seleStrArray = [String]()
     private var isNotRead = 0
@@ -190,7 +191,6 @@ class ReportScreeningViewController: UIViewController {
                 self?.processUsersData.ccUsers.append(newModel)
             }
             self?.tableView.reloadRows(at: [indexPath], with: .none)
-//            self?.confirmHandle()
             self?.perform(#selector(self?.reloadRows(indexPath:)), with: indexPath, afterDelay: 0.1)
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -236,6 +236,7 @@ extension ReportScreeningViewController: UITableViewDelegate, UITableViewDataSou
         if section == 0 {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportTemplateFilterCell", for: indexPath) as! CheckReportTemplateFilterCell
             cell.data = data
+            cell.itmeStr = itmeStr
             cell.templateBlack = {[weak self] id ,name in
                 self!.processId = id
                 self!.processName = name

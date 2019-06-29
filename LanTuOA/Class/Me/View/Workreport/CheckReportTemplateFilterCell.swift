@@ -96,6 +96,24 @@ class CheckReportTemplateFilterCell: UITableViewCell {
                 make.left.right.equalToSuperview()
             })
     }
+    
+    var itmeStr: String? {
+        didSet {
+            if let  itmeStr = itmeStr {
+                for index in 0..<titleData.count{
+                    let name = titleData[index].name
+                    if itmeStr == name{
+                        selectCollentViewIndex = index
+                        collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .top, animated: false)
+                        collectionView.reloadData()
+                        if templateBlack != nil {
+                            templateBlack!(titleData[index].id,titleData[index].name!)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }
 
@@ -107,7 +125,7 @@ extension CheckReportTemplateFilterCell: UICollectionViewDelegate, UICollectionV
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TemplateFilterCell", for: indexPath) as! TemplateFilterCell
-        cell.isSelect = selectCollentViewIndex == indexPath.item
+            cell.isSelect = selectCollentViewIndex == indexPath.item
         cell.data = titleData[indexPath.item]
         return cell
     }

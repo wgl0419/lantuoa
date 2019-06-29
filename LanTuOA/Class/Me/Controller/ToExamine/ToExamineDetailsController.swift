@@ -69,6 +69,7 @@ class ToExamineDetailsController: UIViewController {
             .taxi.config({ (view) in
                 btnConstraint.activate()
                 view.backgroundColor = .white
+                view.backgroundColor = UIColor.red
             })
         
         agreeBtn = UIButton().taxi.adhere(toSuperView: btnView) // 同意按钮
@@ -132,6 +133,7 @@ class ToExamineDetailsController: UIViewController {
             })
             .taxi.config({ (view) in
                 view.backgroundColor = UIColor(hex: "#F3F3F3")
+                view.backgroundColor = UIColor.red
             })
         
         tableView = UITableView(frame: .zero, style: .grouped).taxi.adhere(toSuperView: view) // tableview
