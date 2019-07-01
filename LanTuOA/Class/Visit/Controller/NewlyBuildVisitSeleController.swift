@@ -470,7 +470,7 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
                 case .visitor: break
                 case .project:
                     id = projectData[indexPath.row].id
-                    name = projectData[indexPath.row].name ?? ""
+                    name = projectData[indexPath.row].fullName ?? ""
                 }
                 seleArray[0] = (id, name)
                 seleIndexArray[0] = row

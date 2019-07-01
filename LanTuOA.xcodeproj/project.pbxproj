@@ -61,6 +61,7 @@
 		1803A32A225F293500B86F20 /* ApplyHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A329225F293500B86F20 /* ApplyHistoryCell.swift */; };
 		1803A32C225F32A600B86F20 /* ProcessHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A32B225F32A600B86F20 /* ProcessHistoryModel.swift */; };
 		1803A32E225F426400B86F20 /* FillInApplyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803A32D225F426400B86F20 /* FillInApplyController.swift */; };
+		1803ABBC22CA037C00193D97 /* ToExamineDetailsFootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803ABBB22CA037C00193D97 /* ToExamineDetailsFootView.swift */; };
 		1804062822C5EAD700EE7427 /* HomePageMonthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1804062722C5EAD700EE7427 /* HomePageMonthModel.swift */; };
 		18045B0B229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18045B0A229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift */; };
 		18045B0D229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18045B0C229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift */; };
@@ -323,6 +324,7 @@
 		1803A329225F293500B86F20 /* ApplyHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyHistoryCell.swift; sourceTree = "<group>"; };
 		1803A32B225F32A600B86F20 /* ProcessHistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHistoryModel.swift; sourceTree = "<group>"; };
 		1803A32D225F426400B86F20 /* FillInApplyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInApplyController.swift; sourceTree = "<group>"; wrapsLines = 1; };
+		1803ABBB22CA037C00193D97 /* ToExamineDetailsFootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsFootView.swift; sourceTree = "<group>"; };
 		1804062722C5EAD700EE7427 /* HomePageMonthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageMonthModel.swift; sourceTree = "<group>"; };
 		18045B0A229B7BFA00B3E493 /* ModifyCustomerTypeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyCustomerTypeEjectView.swift; sourceTree = "<group>"; };
 		18045B0C229BBFFB00B3E493 /* CustomerUpdateDevelopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerUpdateDevelopModel.swift; sourceTree = "<group>"; };
@@ -835,6 +837,7 @@
 				18643F852294F84B003AAAFF /* ToExamineTitleCell.swift */,
 				18643F87229521DD003AAAFF /* ToExamineImagesCell.swift */,
 				1809CBEB22964D890036E9A0 /* ToExamineCommentNameCell.swift */,
+				1803ABBB22CA037C00193D97 /* ToExamineDetailsFootView.swift */,
 			);
 			path = ToExamine;
 			sourceTree = "<group>";
@@ -1497,6 +1500,7 @@
 				18050D5F224B180600C9DB9A /* ToExamineCell.swift in Sources */,
 				180736B9226EE176001F1FA6 /* ProjectDetailModel.swift in Sources */,
 				180736B7226EBA5C001F1FA6 /* UsersPermissionsModel.swift in Sources */,
+				1803ABBC22CA037C00193D97 /* ToExamineDetailsFootView.swift in Sources */,
 				180BFB372265BE16001879BD /* ContractListController.swift in Sources */,
 				18057D9622939EAC0087D05D /* SeleEnclosureController.swift in Sources */,
 				180B6F6A228D38CC0086C0E8 /* AliOSSClient.swift in Sources */,

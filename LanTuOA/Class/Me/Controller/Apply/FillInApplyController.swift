@@ -257,11 +257,11 @@ class FillInApplyController: UIViewController {
             self?.customerIdArray.insert(self?.customerId ?? -1, at: section)
             self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
             // 重置数据 -> 防止出现选择项目后 修改客户
-            self?.projectId = -1
-            if position != -1 {
-                self?.seleStrArray[position][0] = ""
-                self?.tableView.reloadRows(at: [IndexPath(row: row, section: position)], with: .none)
-            }
+//            self?.projectId = -1
+//            if position != -1 {
+//                self?.seleStrArray[position][0] = ""
+//                self?.tableView.reloadRows(at: [IndexPath(row: row, section: position)], with: .none)
+//            }
             self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
@@ -872,6 +872,7 @@ class FillInApplyController: UIViewController {
                 dataDic.updateValue(processDataHnadleImage(model, str: "", index: index), forKey: model.name ?? "")
             }else if model.type == 10 {
                 dataDic.updateValue(processDataHnadleImage(model, str: "", index: index), forKey: model.name ?? "")
+                
             }else if model.type == 11 {
                 var contentStr = seleStrArray[index][0]
                 contentStr = processDataHnadle(model, str: contentStr,index:[index][0])
