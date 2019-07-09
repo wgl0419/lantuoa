@@ -124,7 +124,7 @@ class CheckReportContentController: UIViewController {
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
                 tableView.register(FillInApplyTextViewCell.self, forCellReuseIdentifier: "FillInApplyTextViewCell")
                 tableView.register(FillInApplyFieldViewCell.self, forCellReuseIdentifier: "FillInApplyFieldViewCell")
-//                tableView.register(FillInApplyApprovalCell.self, forCellReuseIdentifier: "FillInApplyApprovalCell")
+                //                tableView.register(FillInApplyApprovalCell.self, forCellReuseIdentifier: "FillInApplyApprovalCell")
                 tableView.register(CheckReportRecipientCell.self, forCellReuseIdentifier: "CheckReportRecipientCell")
                 tableView.register(FillInApplyPersonnelCell.self, forCellReuseIdentifier: "FillInApplyPersonnelCell")
                 tableView.register(FillInApplyMoneyBackCell.self, forCellReuseIdentifier: "FillInApplyMoneyBackCell")
@@ -269,7 +269,7 @@ class CheckReportContentController: UIViewController {
     
     /// 选择项目
     private func seleProjectHandle(indexPath: IndexPath) {
-
+        
         let row = indexPath.row
         let section = indexPath.section
         let customerName = seleStrArray[projectPosition][0]
@@ -628,7 +628,7 @@ class CheckReportContentController: UIViewController {
             self?.imageArray[IndexPath.section] = images!
             self?.PHArray[IndexPath.section] = assets
             self?.isOriginal = isOriginal
-//            self?.reloadImageCell()
+            //            self?.reloadImageCell()
             self!.uploadGetKey(indexPath: IndexPath as NSIndexPath,typ:1)
             self!.confirmHandle()
         }
@@ -956,7 +956,7 @@ class CheckReportContentController: UIViewController {
                 return
             }
         }
-//        let indexpath = NSIndexPath()
+        //        let indexpath = NSIndexPath()
         //        uploadGetKey(indexPath: indexpath.section)
         processCommit()
     }
@@ -965,8 +965,8 @@ class CheckReportContentController: UIViewController {
 extension CheckReportContentController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if processUsersData != nil {
-            let pricesCount = pricessType == 5 ? data.count + 2 : data.count + 1
-            return pricesCount + canUpload
+            let pricesCount = data.count + 1
+            return pricesCount
         } else {
             return data.count
         }
@@ -993,44 +993,14 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
         let row = indexPath.row
         let section = indexPath.section
         if section == data.count {
-            if canUpload == 1 { // 有上传
-//                if pricessType == 5 { // 合同人员
-                    return getPersonnelCell(indexPath)
-//                }
-//                else { // 审批人
-//                    return getApprovalCell(indexPath)
-//                }
-            } else {
-                if pricessType == 5 { // 回款设置
-                    return getMoneyBackCell(indexPath)
-                } else { // 抄送人cell
-                    return getCarbonCopyCell(indexPath)
-                }
-            }
+            return getCarbonCopyCell(indexPath)
             
         } else if section == data.count + 1 {
-//            if canUpload == 1 { // 有上传
-                if pricessType == 5 { // 回款设置
-                    return getMoneyBackCell(indexPath)
-                } else { // 抄送人cell
-                    return getCarbonCopyCell(indexPath)
-                }
-//            }
-//            else { // 审批人
-//                return getApprovalCell(indexPath)
-//            }
+            return getCarbonCopyCell(indexPath)
             
         } else if section == data.count + 2 {
-//            if canUpload == 1 { // 审批人
-//                return getApprovalCell(indexPath)
-//            } else { // 抄送人cell
-                return getCarbonCopyCell(indexPath)
-//            }
+            return getCarbonCopyCell(indexPath)
         }
-//        else if section == data.count + 3 {
-//            return getCarbonCopyCell(indexPath)
-//        }
-            
         else {
             var model = data[section]
             

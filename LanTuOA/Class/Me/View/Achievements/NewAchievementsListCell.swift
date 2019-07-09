@@ -34,7 +34,7 @@ class NewAchievementsListCell: UITableViewCell {
                     if totStr == ""{
                         totStr = "0"
                     }
-                        let label = setTitleAndContent(model.name ?? "", contentStr: totStr ?? "", lastView: lastView, isLast: index == arrData.count - 1)
+                        let label = setTitleAndContent(model.name ?? "", contentStr: totStr ?? "0", lastView: lastView, isLast: index == arrData.count - 1)
                         lastView.tag = index
                         lastView = label
                 }

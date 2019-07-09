@@ -511,6 +511,10 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
                 let vc = ContractDetailsController()
                 vc.contractId = systemData[indexPath.row].checkId
                 navigationController?.pushViewController(vc, animated: true)
+            case "7"://汇报
+                let vc = CheckReportDetailsViewController()
+                vc.checkListId = systemData[indexPath.row].checkId
+                navigationController?.pushViewController(vc, animated: true)
             default: break
             }
         }

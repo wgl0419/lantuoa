@@ -59,6 +59,8 @@ class FillInApplyController: UIViewController {
     private var uploadImageIds = [[Int]]()
     /// 上报附件
     private var uploadFileIds = [[Int]]()
+    
+    
     //获取时间
     var currentDateCom: DateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
     ///记录选择相片所在的位置
@@ -257,11 +259,11 @@ class FillInApplyController: UIViewController {
             self?.customerIdArray.insert(self?.customerId ?? -1, at: section)
             self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
             // 重置数据 -> 防止出现选择项目后 修改客户
-            self?.projectId = -1
-            if position != -1 {
-                self?.seleStrArray[position][0] = ""
-                self?.tableView.reloadRows(at: [IndexPath(row: row, section: position)], with: .none)
-            }
+            //            self?.projectId = -1
+            //            if position != -1 {
+            //                self?.seleStrArray[position][0] = ""
+            //                self?.tableView.reloadRows(at: [IndexPath(row: row, section: position)], with: .none)
+            //            }
             self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
@@ -311,8 +313,10 @@ class FillInApplyController: UIViewController {
                 var array = [String]()
                 for _ in smallArray {
                     array.append("")
+                    
                 }
                 seleStrArray.append(array)
+                
             }else{
                 seleStrArray.append([""])
                 imageArray.append([])
@@ -323,6 +327,15 @@ class FillInApplyController: UIViewController {
             }
             
         }
+        //        let pricesCount = pricessType == 5 ? 3 : 2
+        //        for ind in 0..<pricesCount {
+        //            seleStrArray.append([""])
+        //            imageArray.append([])
+        //            PHArray.append([])
+        //            fileArray.append([])
+        //            uploadImageIds.append([])
+        //            uploadFileIds.append([])
+        //        }
     }
     
     /// 审批人梳理
@@ -464,7 +477,7 @@ class FillInApplyController: UIViewController {
     /// 审批人cell
     private func getApprovalCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
-            
+        
         cell.isApproval = true
         cell.isProcess = isProcess
         cell.data = processUsersData.checkUsers
@@ -474,7 +487,8 @@ class FillInApplyController: UIViewController {
     /// 上传部分
     private func getUpdataCell(_ indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
-            return getImageCell(indexPath)
+            let model = ProcessParamsData()
+            return getImageCell(indexPath,model: model)
         } else if indexPath.row == 1 {
             return getEnclosureTitleCell(indexPath)
         } else {
@@ -483,14 +497,30 @@ class FillInApplyController: UIViewController {
     }
     
     /// 图片cell
-    private func getImageCell(_ indexPath: IndexPath) -> UITableViewCell {
-        let model = data[indexPath.section]
+    private func getImageCell(_ indexPath: IndexPath,model:ProcessParamsData) -> UITableViewCell {
+        
+        //        let pricesCount = pricessType == 5 ? 3 : 2
+        
+        //        var model = data[indexPath.section]
+        //        var model = data[indexPath.section]
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImageCell", for: indexPath) as! ToExamineImageCell
-        cell.data = imageArray[indexPath.section]
+        if imageArray.count > 0 {
+            cell.data = imageArray[indexPath.section]
+        }
+        //        if indexPath.section > data.count {
+        //
+        //        }else{
+        //            var model = data[indexPath.section]
+        
+        //            if model.type == 8 {
+        //                model = model.children[indexPath.row]
+        //            }
         cell.imageLabel.text = model.title ?? ""
         cell.dataTile = (model.title ?? "", model.hint ?? "")
         cell.isMust = model.isNecessary == 1
+        //        }
+        
         cell.imageBlock = { [weak self] in
             UIApplication.shared.keyWindow?.endEditing(true)
             self!.photoIndex = indexPath.section
@@ -509,7 +539,8 @@ class FillInApplyController: UIViewController {
     
     /// 附件标题cell
     private func getEnclosureTitleCell(_ indexPath: IndexPath) -> UITableViewCell {
-        let model = data[indexPath.section]
+        var model = data[indexPath.section]
+        
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureTitleCell", for: indexPath) as! ToExamineEnclosureTitleCell
             cell.enclosureLabel.text = model.title ?? ""
@@ -520,7 +551,7 @@ class FillInApplyController: UIViewController {
                 self.fileIndex  = indexPath.section
                 let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                 let action = UIAlertAction(title: "相册", style: .default) { _ in
-                    self.addImageEnclosure(indexPath: indexPath as NSIndexPath)
+                    self.addImageEnclosure(indexPath: indexPath as NSIndexPath,type:0)
                 }
                 let albumAction = UIAlertAction(title: "文档", style: .default) { _ in
                     let vc = UIDocumentPickerViewController(documentTypes: ["public.content","public.text"], in: .open)
@@ -539,13 +570,13 @@ class FillInApplyController: UIViewController {
         }else{
             return getEnclosureCell(indexPath)
         }
-
     }
     
     /// 附件cell
     private func getEnclosureCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureCell", for: indexPath) as! ToExamineEnclosureCell
         cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
+        //        var model = data[indexPath.section]
         cell.enclosureData = fileArray[indexPath.section][indexPath.row - 1]
         cell.deleteBlock = { [weak self] in
             self?.fileArray[indexPath.section].remove(at: indexPath.row)
@@ -645,13 +676,15 @@ class FillInApplyController: UIViewController {
             self?.imageArray[IndexPath.section] = images!
             self?.PHArray[IndexPath.section] = assets
             self?.isOriginal = isOriginal
-            self!.uploadGetKey(indexPath: IndexPath as NSIndexPath,typ:1)
+            self!.uploadGetKey(indexPath: IndexPath as NSIndexPath,typ:1, eight: 0)
             self!.confirmHandle()
         }
         if indexPath < 0 { // 添加图片
             let arrSelectedAssets = NSMutableArray()
-            for item in PHArray[IndexPath.section] {
-                arrSelectedAssets.add(item)
+            if PHArray.count > 0 {
+                for item in PHArray[IndexPath.section] {
+                    arrSelectedAssets.add(item)
+                }
             }
             photoSheet.arrSelectedAssets = arrSelectedAssets
             photoSheet.configuration.maxSelectCount = 9
@@ -669,11 +702,13 @@ class FillInApplyController: UIViewController {
     }
     
     /// 上传文件
-    private func uploadGetKey(indexPath:NSIndexPath,typ:Int) {
+    private func uploadGetKey(indexPath:NSIndexPath,typ:Int,eight:Int) {
+        if eight == 8{
+            
+        }
         if imageArray.count == 0 && fileArray.count == 0 {
             //            self.processCommit()
         } else {
-            
             if typ == 1{
                 var  arr = imageArray[indexPath.section]
                 for index in 0..<arr.count {
@@ -687,7 +722,7 @@ class FillInApplyController: UIViewController {
                     
                     fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
                         if status {
-                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath)
+                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath,eight:eight)
                         }
                     }
                 }
@@ -705,7 +740,7 @@ class FillInApplyController: UIViewController {
                     fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
                         
                         if status {
-                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath)
+                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath,eight:eight)
                         }
                     }
                 }
@@ -715,30 +750,35 @@ class FillInApplyController: UIViewController {
     }
     
     /// 上传数据
-    private func uploadData(_ data: Data, name: String, body: Int, type: Int, isLast: Bool,indexPath:NSIndexPath) {
+    private func uploadData(_ data: Data, name: String, body: Int, type: Int, isLast: Bool,indexPath:NSIndexPath,eight:Int) {
         
         AliOSSClient.shared.uploadData(data, name: name, body: body) { (status) in
             
             if status {
+                if eight == 8 {
+                    
+                }else{
+                    if type == 1 {
+                        self.uploadImageIds[indexPath.section].append(body)
+                        self.seleStrArray[self.photoIndex][0] = "\(self.photoIndex)"
+                    } else {
+                        self.seleStrArray[self.fileIndex][0] = "xx"
+                        self.uploadFileIds[indexPath.section].append(body)
+                    }
+                    if isLast {
+                        DispatchQueue.main.async(execute: {
+                            
+                            if self.uploadFileIds[indexPath.section].count == self.fileArray[indexPath.section].count && self.uploadImageIds[indexPath.section].count == self.imageArray[indexPath.section].count {
+                                MBProgressHUD.showSuccess("图片上传成功")
+                                self.reloadImageCell()
+                            } else {
+                                MBProgressHUD.showError("上传失败")
+                            }
+                        })
+                    }
+                    
+                }
                 
-                if type == 1 {
-                    self.uploadImageIds[indexPath.section].append(body)
-                    self.seleStrArray[self.photoIndex][0] = "\(self.photoIndex)"
-                } else {
-                    self.seleStrArray[self.fileIndex][0] = "xx"
-                    self.uploadFileIds[indexPath.section].append(body)
-                }
-                if isLast {
-                    DispatchQueue.main.async(execute: {
-                        
-                        if self.uploadFileIds[indexPath.section].count == self.fileArray[indexPath.section].count && self.uploadImageIds[indexPath.section].count == self.imageArray[indexPath.section].count {
-                            MBProgressHUD.showSuccess("图片上传成功")
-                            self.reloadImageCell()
-                        } else {
-                            MBProgressHUD.showError("上传失败")
-                        }
-                    })
-                }
             }else{
                 MBProgressHUD.showError("上传失败")
             }
@@ -759,7 +799,6 @@ class FillInApplyController: UIViewController {
         }else if model.type == 11 {
             contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm"))"
         }else if model.type == 1 {
-            
             contentStr = str
         }
         return contentStr
@@ -768,7 +807,7 @@ class FillInApplyController: UIViewController {
     private func processDataHnadleImage(_ model: ProcessParamsData, str: String ,index:Int) -> Array<Any> {
         var images = [Any]()
         if model.type == 9 {
-//            if imageArray[index].count
+            //            if imageArray[index].count
             for indext in 0..<uploadImageIds[index].count {
                 let fileId = uploadImageIds[index][indext]
                 images.append(fileId)
@@ -805,20 +844,32 @@ class FillInApplyController: UIViewController {
     }
     
     /// 添加图片附件
-    private func addImageEnclosure(indexPath:NSIndexPath) {
+    private func addImageEnclosure(indexPath:NSIndexPath,type:Int) {
         let photoSheet = ZLPhotoActionSheet()
         photoSheet.sender = self
         photoSheet.configuration.allowEditImage = false
         photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
-            for image in images ?? [] {
-                let fileName = "".randomStringWithLength(len: 8) + ".png"
-                let fileData = image.pngData() ?? Data()
-                self?.fileArray[indexPath.section].append((fileData,fileName))
+            if type == 8 {
+                for image in images ?? [] {
+                    let fileName = "".randomStringWithLength(len: 8) + ".png"
+                    let fileData = image.pngData() ?? Data()
+                    //                    self?.eightfileArray[indexPath.section][indexPath.row].append((fileData,fileName))
+                }
+                self?.reloadImageCell()
+                self!.seleStrArray[self!.fileIndex][0] = "xx"
+                self!.uploadGetKey(indexPath: indexPath,typ:0, eight: 8)
+                self!.confirmHandle()
+            }else{
+                for image in images ?? [] {
+                    let fileName = "".randomStringWithLength(len: 8) + ".png"
+                    let fileData = image.pngData() ?? Data()
+                    self?.fileArray[indexPath.section].append((fileData,fileName))
+                }
+                self?.reloadImageCell()
+                self!.seleStrArray[self!.fileIndex][0] = "xx"
+                self!.uploadGetKey(indexPath: indexPath,typ:0, eight: 0)
+                self!.confirmHandle()
             }
-            self?.reloadImageCell()
-            self!.seleStrArray[self!.fileIndex][0] = "xx"
-            self!.uploadGetKey(indexPath: indexPath,typ:0)
-            self!.confirmHandle()
         }
         photoSheet.configuration.maxSelectCount = 9
         photoSheet.configuration.allowSelectGif = false
@@ -872,6 +923,7 @@ class FillInApplyController: UIViewController {
                 dataDic.updateValue(processDataHnadleImage(model, str: "", index: index), forKey: model.name ?? "")
             }else if model.type == 10 {
                 dataDic.updateValue(processDataHnadleImage(model, str: "", index: index), forKey: model.name ?? "")
+                
             }else if model.type == 11 {
                 var contentStr = seleStrArray[index][0]
                 contentStr = processDataHnadle(model, str: contentStr,index:[index][0])
@@ -989,7 +1041,7 @@ class FillInApplyController: UIViewController {
             }
         }
         
-//        uploadGetKey(indexPath: indexpath.section)
+        //        uploadGetKey(indexPath: indexpath.section)
         processCommit()
     }
 }
@@ -997,8 +1049,8 @@ class FillInApplyController: UIViewController {
 extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if processUsersData != nil {
-            let pricesCount = pricessType == 5 ? data.count + 3 : data.count + 1
-            return pricesCount + canUpload
+            let pricesCount = pricessType == 5 ? data.count + 4 : data.count + 2
+            return pricesCount
         } else {
             return data.count
         }
@@ -1013,13 +1065,31 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
             return 1
         } else if section == data.count + 3 {
             return 1
-        }else {
+        }
+        else {
             let model = data[section]
+            //            var modelxx = data[section]
+            //            if model.type == 8 {
+            //                model = model.children[section]
+            //            }
+            //
             if model.type == 10 {
                 return 1+fileArray[section].count;
             }else{
                 return 1;
             }
+            
+            //            if model.type == 10 {
+            //                return 1+fileArray[section].count;
+            //            }else if model.type == 8 {
+            ////                for index in 0..<model.children.count {
+            ////                    modelxx = model.children[index]
+            ////                }
+            ////                let pricesCount = modelxx.type == 10 ? 1 : 0
+            //                return model.children.count
+            //            }else{
+            //                return 1;
+            //            }
         }
     }
     
@@ -1027,37 +1097,21 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
         let row = indexPath.row
         let section = indexPath.section
         if section == data.count {
-            if canUpload == 1 { // 有上传
-                if pricessType == 5 { // 合同人员
-                    return getPersonnelCell(indexPath)
-                } else { // 审批人
-                    return getApprovalCell(indexPath)
-                }
-            } else {
-                if pricessType == 5 { // 回款设置
-                    return getMoneyBackCell(indexPath)
-                } else { // 抄送人cell
-                    return getCarbonCopyCell(indexPath)
-                }
-            }
-            
-        } else if section == data.count + 1 {
-            if canUpload == 1 { // 有上传
-                if pricessType == 5 { // 回款设置
-                    return getMoneyBackCell(indexPath)
-                } else { // 抄送人cell
-                    return getCarbonCopyCell(indexPath)
-                }
+            if pricessType == 5 { // 合同人员
+                return getPersonnelCell(indexPath)
             } else { // 审批人
                 return getApprovalCell(indexPath)
             }
+        } else if section == data.count + 1 {
             
-        } else if section == data.count + 2 {
-            if canUpload == 1 { // 审批人
-                return getApprovalCell(indexPath)
+            if pricessType == 5 { // 回款设置
+                return getMoneyBackCell(indexPath)
             } else { // 抄送人cell
                 return getCarbonCopyCell(indexPath)
             }
+        } else if section == data.count + 2 {
+            return getApprovalCell(indexPath)
+            
         } else if section == data.count + 3 {
             return getCarbonCopyCell(indexPath)
         }
@@ -1068,6 +1122,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
             if model.type == 8 {
                 model = model.children[row]
             }
+            
             switch model.type {
             case 1: // 1.文本
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyTextViewCell", for: indexPath) as! FillInApplyTextViewCell
@@ -1091,7 +1146,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
                 }
                 return cell
             case 9: // 9相册
-                return getImageCell(indexPath)
+                return getImageCell(indexPath,model:model)
             case 10: // 10文件
                 return getEnclosureTitleCell(indexPath)
             case 3, 4, 5, 6, 7, 11: // 3.日期，4.单选，5.多选，6.客户，7.项目 11.日期到分钟
@@ -1105,23 +1160,75 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if canUpload == 1 {
-            if section == data.count - 1 {
-            }
-        }
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
-        footerView.backgroundColor = .clear
-        return footerView
+    //    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    ////        var isUpdata = false
+    ////        if canUpload == 1 {
+    ////            if section == data.count - 1 {
+    ////                isUpdata = true
+    ////            }
+    ////        }
+    //        if ((section) < data.count && data[section].type == 8) {
+    //            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 40))
+    //            footerView.backgroundColor = .clear
+    //            _ = UILabel().taxi.adhere(toSuperView: footerView) //
+    //                .taxi.layout(snapKitMaker: { (make) in
+    //                    make.left.equalToSuperview().offset(15)
+    //                    make.centerY.equalToSuperview()
+    //                })
+    //                .taxi.config({ (label) in
+    //                    label.font = UIFont.regular(size: 12)
+    //                    label.textColor = UIColor(hex: "#666666")
+    //                    label.text = data[section ].title ?? ""
+    //                })
+    //            return footerView
+    //        } else {
+    //            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
+    //            footerView.backgroundColor = .clear
+    //            return footerView
+    //        }
+    //    }
+    //
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.01
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if canUpload == 1 {
-            if section == data.count - 1 {
-            }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if ((section) < data.count && data[section].type == 8) {
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 40))
+            headerView.backgroundColor = .clear
+            _ = UILabel().taxi.adhere(toSuperView: headerView) //
+                .taxi.layout(snapKitMaker: { (make) in
+                    make.left.equalToSuperview().offset(15)
+                    make.centerY.equalToSuperview()
+                })
+                .taxi.config({ (label) in
+                    label.font = UIFont.regular(size: 12)
+                    label.textColor = UIColor(hex: "#666666")
+                    label.text = data[section ].title ?? ""
+                })
+            return headerView
+        } else {
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
+            headerView.backgroundColor = .clear
+            return headerView
         }
-        return 10
     }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        //        if ((section ) < data.count && data[section].type == 8) {
+        //            return 40
+        //        } else {
+        //            return 10
+        //        }
+        
+        if ((section ) < data.count && data[section].type == 8) {
+            return 40
+        } else {
+            return 10
+        }
+    }
+    
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

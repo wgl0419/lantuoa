@@ -26,6 +26,7 @@ class HomePageController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        homePageMonthData = HomePageMonthData()
         setNav()
         initSubViews()
         getData()
@@ -214,20 +215,27 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
         var attriMuStr = NSMutableAttributedString(string: "本月绩效")
         attriMuStr.changeColor(str: "本月绩效", color: UIColor(hex: "#2E4695"))
         if section == 0 {
-            let total = UILabel()
-            total.frame = CGRect(x: ScreenWidth/2, y: 0, width: ScreenWidth/2-10, height: 44)
-            total.textAlignment = .right
-            total.font = UIFont.medium(size: 12)
-            header.addSubview(total)
-            let testStr = homePageMonthData.totalValue!
-
-            let index = testStr.characters.index(of: ".")
-            var totStr:String?
-            if let index = index {
-                let subStr = testStr.substring(to: index)
-                totStr = subStr
-            }
-            total.attributedText = richText(title: "合计：", content: totStr!)
+//            let total = UILabel()
+//            total.frame = CGRect(x: ScreenWidth/2, y: 0, width: ScreenWidth/2-10, height: 44)
+//            total.textAlignment = .right
+//            total.font = UIFont.medium(size: 12)
+//            header.addSubview(total)
+//            var testStr = ""
+//            if (homePageMonthData != nil) {
+//                testStr = homePageMonthData.totalValue!
+//            }
+//            
+//            let index = testStr.characters.index(of: ".")
+//            var totStr:String?
+//            if let index = index {
+//                let subStr = testStr.substring(to: index)
+//                totStr = subStr
+//            }
+//            if totStr != nil {
+//                total.attributedText = richText(title: "合计：", content: totStr!)
+//            }else{
+//                total.text = testStr
+//            }
 
         }else {
             logoName = "project"

@@ -275,7 +275,7 @@ extension APIManager: TargetType {
             return .post
         case .workExtendExtend, .departmentsCreate, .departmentsAddUsers, .contractPaybackAdd, .processCommit:
             return .post
-        case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate, .passwordReset, .customerUpdateDevelop,.WorkReporCheckListHaveRead:
+        case .usersPwd, .departmentsChange, .contractUpdate, .contractPaybackUpdate, .passwordReset, .customerUpdateDevelop,.WorkReporCheckListHaveRead, .notifyCheckHaveRead:
             return .put
         case .projectMemberDelete, .notifyCheckCommentDelete:
             return .delete

@@ -34,7 +34,7 @@ class FillInApplyArrowCollectionCell: UICollectionViewCell {
         arrowImageView = UIImageView().taxi.adhere(toSuperView: contentView) // 箭头
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalToSuperview().offset(16).priority(800)
-                make.bottom.equalToSuperview().offset(-45)
+                make.bottom.equalToSuperview().offset(-20)
                 make.left.right.equalToSuperview()
             })
             .taxi.config({ (imageView) in
