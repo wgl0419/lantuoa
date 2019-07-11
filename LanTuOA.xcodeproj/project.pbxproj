@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -200,6 +200,9 @@
 		1817884E2238ADC00015DC30 /* MeHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1817884D2238ADC00015DC30 /* MeHomeController.swift */; };
 		181788502238D73F0015DC30 /* HomePageNoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1817884F2238D73F0015DC30 /* HomePageNoticeCell.swift */; };
 		181788522238E0B00015DC30 /* HomePageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181788512238E0B00015DC30 /* HomePageHeaderView.swift */; };
+		181ACDF822D5CED40084107D /* ToExamineFileImagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181ACDF722D5CED40084107D /* ToExamineFileImagesCell.swift */; };
+		181ACDFA22D5D76D0084107D /* ToExamineDetailsTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181ACDF922D5D76D0084107D /* ToExamineDetailsTitleCell.swift */; };
+		181ACDFC22D5E7D00084107D /* ToExamineDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181ACDFB22D5E7D00084107D /* ToExamineDetailsHeaderView.swift */; };
 		181FF96622714E9600ED5A2A /* ModifyNoticeEjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181FF96522714E9600ED5A2A /* ModifyNoticeEjectView.swift */; };
 		181FF96822719BB200ED5A2A /* StartupSumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181FF96722719BB200ED5A2A /* StartupSumModel.swift */; };
 		1827ED82226802E800EFF889 /* ContractDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1827ED81226802E800EFF889 /* ContractDetailModel.swift */; };
@@ -469,6 +472,9 @@
 		1817884F2238D73F0015DC30 /* HomePageNoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageNoticeCell.swift; sourceTree = "<group>"; };
 		181788512238E0B00015DC30 /* HomePageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageHeaderView.swift; sourceTree = "<group>"; };
 		18195D9D2278406B0030A546 /* LanTuOA.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LanTuOA.entitlements; sourceTree = "<group>"; };
+		181ACDF722D5CED40084107D /* ToExamineFileImagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineFileImagesCell.swift; sourceTree = "<group>"; };
+		181ACDF922D5D76D0084107D /* ToExamineDetailsTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsTitleCell.swift; sourceTree = "<group>"; };
+		181ACDFB22D5E7D00084107D /* ToExamineDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToExamineDetailsHeaderView.swift; sourceTree = "<group>"; };
 		181FF96522714E9600ED5A2A /* ModifyNoticeEjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyNoticeEjectView.swift; sourceTree = "<group>"; };
 		181FF96722719BB200ED5A2A /* StartupSumModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupSumModel.swift; sourceTree = "<group>"; };
 		1827ED81226802E800EFF889 /* ContractDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailModel.swift; sourceTree = "<group>"; };
@@ -835,6 +841,9 @@
 				18643F852294F84B003AAAFF /* ToExamineTitleCell.swift */,
 				18643F87229521DD003AAAFF /* ToExamineImagesCell.swift */,
 				1809CBEB22964D890036E9A0 /* ToExamineCommentNameCell.swift */,
+				181ACDF722D5CED40084107D /* ToExamineFileImagesCell.swift */,
+				181ACDF922D5D76D0084107D /* ToExamineDetailsTitleCell.swift */,
+				181ACDFB22D5E7D00084107D /* ToExamineDetailsHeaderView.swift */,
 			);
 			path = ToExamine;
 			sourceTree = "<group>";
@@ -1393,45 +1402,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-LanTuOA/Pods-LanTuOA-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/AliyunOSSiOS/AliyunOSSiOS.framework",
-				"${BUILT_PRODUCTS_DIR}/FSCalendar/FSCalendar.framework",
-				"${BUILT_PRODUCTS_DIR}/GPUImage/GPUImage.framework",
-				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
-				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
-				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
-				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
-				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
-				"${BUILT_PRODUCTS_DIR}/YCMenuView/YCMenuView.framework",
-				"${BUILT_PRODUCTS_DIR}/YYText/YYText.framework",
-				"${BUILT_PRODUCTS_DIR}/ZLPhotoBrowser/ZLPhotoBrowser.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LanTuOA/Pods-LanTuOA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AliyunOSSiOS.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FSCalendar.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GPUImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YCMenuView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYText.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZLPhotoBrowser.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LanTuOA/Pods-LanTuOA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LanTuOA/Pods-LanTuOA-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LanTuOA/Pods-LanTuOA-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FBD512A736E1E8910349EB25 /* [CP] Check Pods Manifest.lock */ = {
@@ -1553,6 +1533,7 @@
 				184407162264889300F10D83 /* NotifyCheckDetailModel.swift in Sources */,
 				1876A8E22266D92B002EBDB2 /* ContractPerformanceCell.swift in Sources */,
 				1827ED9E2269AAD900EFF889 /* FillInApplyCarbonCopyAddCell.swift in Sources */,
+				181ACDFC22D5E7D00084107D /* ToExamineDetailsHeaderView.swift in Sources */,
 				180233682244D7EA0064A50E /* AddCustomerEjectView.swift in Sources */,
 				1833DD3E2241F27700730FB9 /* ProjectDetailsHeaderView.swift in Sources */,
 				180018832252FB6100832E60 /* NewWorkingGroupController.swift in Sources */,
@@ -1566,6 +1547,7 @@
 				1804E1F9224A1231006AB973 /* CustomerEditController.swift in Sources */,
 				1876A8EC226736DF002EBDB2 /* ContractMoneyEjectView.swift in Sources */,
 				1809E402225DC55300B615A8 /* DepartmentalStaffCell.swift in Sources */,
+				181ACDFA22D5D76D0084107D /* ToExamineDetailsTitleCell.swift in Sources */,
 				180EF5F822825F8600735383 /* Int.swift in Sources */,
 				180115372248CFD000EA551F /* AddProjectEjectView.swift in Sources */,
 				1810EC73222F5D4100CF6488 /* Date.swift in Sources */,
@@ -1665,6 +1647,7 @@
 				18050D6B224B4E8500C9DB9A /* HandoverStaffHeaderCell.swift in Sources */,
 				180E4D5D228527AB0042FA87 /* AddMoneyBackEjectView.swift in Sources */,
 				180736BD22700FAA001F1FA6 /* LoginUserModel.swift in Sources */,
+				181ACDF822D5CED40084107D /* ToExamineFileImagesCell.swift in Sources */,
 				18F90A5922BB9868002B72B1 /* IndividualPerformanceController.swift in Sources */,
 				1805F3B52275500B00AF0AF7 /* ScreenView.swift in Sources */,
 				180273E7223B7ACC0033E083 /* WrokHomeCell.swift in Sources */,
@@ -1877,7 +1860,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.djkj.LanTuOA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "LanTuOA-Provisioning";
+				PROVISIONING_PROFILE_SPECIFIER = lantushangjia;
 				SWIFT_OBJC_BRIDGING_HEADER = LanTuOA/Other/Header.h;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;

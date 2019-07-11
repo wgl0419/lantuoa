@@ -23,13 +23,14 @@ class HomePageController: UIViewController {
     
     ///首页每月的统计数据
     private var homePageMonthData: HomePageMonthData!
+    private var testStr = "0"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         homePageMonthData = HomePageMonthData()
         setNav()
-        initSubViews()
         getData()
+        initSubViews()
         loginUser()
     }
     
@@ -158,6 +159,7 @@ class HomePageController: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.newHomePageMonthList, t: HomePageMonthModel.self, successHandle: { (result) in
             self.homePageMonthData = result.data
+            self.testStr = self.homePageMonthData.totalValue!
             self.tableView.reloadData()
             self.tableView.mj_header.endRefreshing()
             MBProgressHUD.dismiss()
@@ -215,27 +217,23 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
         var attriMuStr = NSMutableAttributedString(string: "本月绩效")
         attriMuStr.changeColor(str: "本月绩效", color: UIColor(hex: "#2E4695"))
         if section == 0 {
-//            let total = UILabel()
-//            total.frame = CGRect(x: ScreenWidth/2, y: 0, width: ScreenWidth/2-10, height: 44)
-//            total.textAlignment = .right
-//            total.font = UIFont.medium(size: 12)
-//            header.addSubview(total)
-//            var testStr = ""
-//            if (homePageMonthData != nil) {
-//                testStr = homePageMonthData.totalValue!
-//            }
-//            
-//            let index = testStr.characters.index(of: ".")
-//            var totStr:String?
-//            if let index = index {
-//                let subStr = testStr.substring(to: index)
-//                totStr = subStr
-//            }
-//            if totStr != nil {
-//                total.attributedText = richText(title: "合计：", content: totStr!)
-//            }else{
-//                total.text = testStr
-//            }
+            let total = UILabel()
+            total.frame = CGRect(x: ScreenWidth/2, y: 0, width: ScreenWidth/2-10, height: 44)
+            total.textAlignment = .right
+            total.font = UIFont.medium(size: 12)
+            header.addSubview(total)
+
+            let index = testStr.characters.index(of: ".")
+            var totStr:String?
+            if let index = index {
+                let subStr = testStr.substring(to: index)
+                totStr = subStr
+            }
+            if totStr != nil {
+                total.attributedText = richText(title: "合计：", content: totStr!)
+            }else{
+                total.attributedText = richText(title: "合计：", content: testStr)
+            }
 
         }else {
             logoName = "project"

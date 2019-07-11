@@ -235,6 +235,7 @@ class CheckReportContentController: UIViewController {
             }
             if seleStr.count > 0 { seleStr.remove(at: seleStr.startIndex) }
             self?.seleStrArray[section][row] = seleStr
+            self?.tableView.reloadData()
             self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)

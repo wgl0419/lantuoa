@@ -42,7 +42,7 @@ class CustomerHomeController: UIViewController {
         nav.backBtn.isHidden = false
         nav.setNavConfigure(type: .dark, color: UIColor(hex: "#2E4695"), isShadow: false)
         if Jurisdiction.share.isAddCustomer {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "新增客户",
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "创建新客户",
                                                                 titleColor: .white,
                                                                 titleFont: UIFont.medium(size: 15),
                                                                 titleEdgeInsets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0),
@@ -169,6 +169,7 @@ class CustomerHomeController: UIViewController {
     @objc private func rightClick() {
         UIApplication.shared.keyWindow?.endEditing(true)
         let ejectView = AddCustomerEjectView()
+        ejectView.isApply = false
         ejectView.addBlock = { [weak self] in // 添加成功 -> 刷新
             self?.customerListStatistics(isMore: false)
         }

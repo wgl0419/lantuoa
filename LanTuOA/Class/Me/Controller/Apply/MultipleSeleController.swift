@@ -15,7 +15,10 @@ class MultipleSeleController: UIViewController {
     /// 数据
     var contentArray: [String]! {
         didSet {
-            tableView.reloadData()
+//
+//            if let  contentArray = contentArray {
+//                tableView.reloadData()
+//            }
         }
     }
 
@@ -72,6 +75,7 @@ class MultipleSeleController: UIViewController {
     // MARK: - 按钮点击
     /// 点击确定
     @objc private func determineClick() {
+        
         if didBlock != nil {
             var seleArray = [String]()
             for index in 0..<contentArray.count {
@@ -81,9 +85,10 @@ class MultipleSeleController: UIViewController {
                         seleArray.append(str)
                     }
                 }
-                
+               
             }
-            didBlock!(seleArray)
+           didBlock!(seleArray)
+            navigationController?.popViewController(animated: true)
         }
     }
 }

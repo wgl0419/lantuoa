@@ -260,8 +260,10 @@ class AddProjectEjectView: UIView {
         }
         if isCan {
             if isApply {
+                
                 projectSaveRequire()
             } else {
+                
                 projectSave()
             }
         } else {

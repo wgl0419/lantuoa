@@ -332,10 +332,14 @@ class AddCustomerEjectView: UIView {
         }
         if isCan {
             if isModify {
+                
                 customerUpdate()
+
             } else if isApply {
+                
                 customerSaveRequire()
             } else {
+                
                 customerSave()
             }
         } else {

@@ -162,6 +162,12 @@ class CheckReportDetailsReadCell: UITableViewCell {
             btnArr[1].setTitleColor(UIColor(hex: "#999999"), for: .normal)
             isRead = 0
             collectionView.reloadData()
+//            layoutIfNeeded()
+//            var collectionHeight = collectionView.contentSize.height
+//            collectionHeight = collectionHeight == 0 ? 15 : 60
+//            collectionView.snp.updateConstraints { (make) in
+//                make.height.equalTo(collectionHeight).priority(800)
+//            }
         }else{
             btnArr[0].setTitleColor(UIColor(hex: "#999999"), for: .normal)
             sender.setTitleColor(UIColor(hex: "#222222"), for: .normal)
@@ -170,6 +176,12 @@ class CheckReportDetailsReadCell: UITableViewCell {
             }
             isRead = 1
             collectionView.reloadData()
+//            layoutIfNeeded()
+//            var collectionHeight = collectionView.contentSize.height
+//            collectionHeight = collectionHeight == 0 ? 15 : 60
+//            collectionView.snp.updateConstraints { (make) in
+//                make.height.equalTo(collectionHeight).priority(800)
+//            }
         }
         
     }

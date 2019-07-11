@@ -506,6 +506,7 @@ class CustomerDetailsTableView: UIView {
         if cellStyle == .project {
             let ejectView = AddProjectEjectView()
             ejectView.customerId = customerId
+            ejectView.isApply = false
             ejectView.customerName = customerName
             ejectView.addBlock = { // 添加成功 -> 刷新
                 self.reload()
