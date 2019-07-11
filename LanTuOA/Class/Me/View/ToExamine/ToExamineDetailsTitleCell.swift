@@ -69,9 +69,10 @@ class ToExamineDetailsTitleCell: UITableViewCell {
         
         line = UIView().taxi.adhere(toSuperView: contentView) // 线
             .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalToSuperview().offset(40)
+//                make.top.equalToSuperview().offset(40)
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview()
+                make.bottom.equalToSuperview().offset(0)
                 make.height.equalTo(1)
             })
             .taxi.config({ (line) in

@@ -48,6 +48,9 @@ class ToExamineDetailsController: UIViewController {
     private var btnConstraint: Constraint!
     let headview = ToExamineDetailsHeaderView()
     private var totalData = [NotifyCheckListSmallData]()
+    
+//    private var pictureArr = [NotifyCheckListSmallData]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
@@ -507,6 +510,10 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 { // 评论详情
             return totalData.count
+//            let images = imagesData.count
+//            let files = filesData.count
+//            return 1 + (images > 0 ? 2 : 0) + (files > 0 ? files + 1 : 0)
+//            return 1
         } else if section == 1 || section > checkUserData.count + 1 + commentListData.count { // 发起人 || 抄送人
             return 1
         } else if section <= checkUserData.count + 1 { /// 中间评论人
@@ -532,6 +539,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
             let fileArray = model.1
             return 1 + fileArray.count + (imageArray.count > 0 ? 1 : 0)
         }
+
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -671,11 +679,13 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                 return cell
             }
         }
+
     }
     
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0 {
+//            return CGFloat(imagesData.count*60+checkListData.data.count*30)
             return 10
         } else if section == checkUserData.count + 1 { // 审批人尾部
             if commentListData.count > 0 {
@@ -693,6 +703,9 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 0 {
+//            let view = ToExamineDetailsFootView()
+//            view.data = checkListData.data
+//            return view
             return grayFooterView()
         } else if section == checkUserData.count + 1 { // 审批人尾部
             if commentListData.count > 0 {
@@ -713,7 +726,7 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
         footerView.backgroundColor = .clear
         return footerView
     }
-    
+
     func commentFooterView() -> UIView {
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 40))
         footerView.backgroundColor = .clear
