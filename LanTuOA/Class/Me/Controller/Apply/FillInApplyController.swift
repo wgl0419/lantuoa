@@ -328,15 +328,15 @@ class FillInApplyController: UIViewController {
             }
             
         }
-        //        let pricesCount = pricessType == 5 ? 3 : 2
-        //        for ind in 0..<pricesCount {
-        //            seleStrArray.append([""])
-        //            imageArray.append([])
-        //            PHArray.append([])
-        //            fileArray.append([])
-        //            uploadImageIds.append([])
-        //            uploadFileIds.append([])
-        //        }
+                let pricesCount = pricessType == 5 ? 3 : 4
+                for ind in 0..<pricesCount {
+                    seleStrArray.append([""])
+                    imageArray.append([])
+                    PHArray.append([])
+                    fileArray.append([])
+                    uploadImageIds.append([])
+                    uploadFileIds.append([])
+                }
     }
     
     /// 审批人梳理
@@ -347,7 +347,6 @@ class FillInApplyController: UIViewController {
             }
         }
     }
-    
     /// 添加抄送人处理
     private func addCarbonCopyHandle(indexPath: IndexPath) {
         let vc = SelePersonnelController()
@@ -478,10 +477,10 @@ class FillInApplyController: UIViewController {
     /// 审批人cell
     private func getApprovalCell(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FillInApplyApprovalCell", for: indexPath) as! FillInApplyApprovalCell
-        
         cell.isApproval = true
         cell.isProcess = isProcess
         cell.data = processUsersData.checkUsers
+        
         return cell
     }
     
@@ -1069,28 +1068,12 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
         }
         else {
             let model = data[section]
-            //            var modelxx = data[section]
-            //            if model.type == 8 {
-            //                model = model.children[section]
-            //            }
-            //
+
             if model.type == 10 {
                 return 1+fileArray[section].count;
             }else{
                 return 1;
             }
-            
-            //            if model.type == 10 {
-            //                return 1+fileArray[section].count;
-            //            }else if model.type == 8 {
-            ////                for index in 0..<model.children.count {
-            ////                    modelxx = model.children[index]
-            ////                }
-            ////                let pricesCount = modelxx.type == 10 ? 1 : 0
-            //                return model.children.count
-            //            }else{
-            //                return 1;
-            //            }
         }
     }
     
@@ -1119,7 +1102,6 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
             
         else {
             var model = data[section]
-            
             if model.type == 8 {
                 model = model.children[row]
             }
@@ -1160,35 +1142,7 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-    
-    //    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-    ////        var isUpdata = false
-    ////        if canUpload == 1 {
-    ////            if section == data.count - 1 {
-    ////                isUpdata = true
-    ////            }
-    ////        }
-    //        if ((section) < data.count && data[section].type == 8) {
-    //            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 40))
-    //            footerView.backgroundColor = .clear
-    //            _ = UILabel().taxi.adhere(toSuperView: footerView) //
-    //                .taxi.layout(snapKitMaker: { (make) in
-    //                    make.left.equalToSuperview().offset(15)
-    //                    make.centerY.equalToSuperview()
-    //                })
-    //                .taxi.config({ (label) in
-    //                    label.font = UIFont.regular(size: 12)
-    //                    label.textColor = UIColor(hex: "#666666")
-    //                    label.text = data[section ].title ?? ""
-    //                })
-    //            return footerView
-    //        } else {
-    //            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
-    //            footerView.backgroundColor = .clear
-    //            return footerView
-    //        }
-    //    }
-    //
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
     }
@@ -1216,11 +1170,6 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        //        if ((section ) < data.count && data[section].type == 8) {
-        //            return 40
-        //        } else {
-        //            return 10
-        //        }
         
         if ((section ) < data.count && data[section].type == 8) {
             return 40
@@ -1228,8 +1177,6 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
             return 10
         }
     }
-    
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

@@ -41,7 +41,7 @@ class Jurisdiction: NSObject, NSCoding {
     private(set) var isLeavePerson = false
     /// 新增部门员工 -> 更换员工部门
 //    private(set) var isAddDepartmentMember = false
-    /// 查看他人绩效
+    /// 查看他人业绩
     private(set) var isViewPerform = false
     /// 工作交接功能
     private(set) var isViewWorkextend = false

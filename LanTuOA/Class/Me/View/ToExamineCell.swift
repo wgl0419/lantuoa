@@ -26,7 +26,7 @@ class ToExamineCell: UITableViewCell {
     private var projectLabel = UILabel()
     /// 客户
     private var cusiomerLabel = UILabel()
-    /// 拜访对象
+    /// 联系人
     private var visitLabel = UILabel()
     /// 状态按钮 -> 遮挡拒绝 同意按钮
     private var stateBtn: UIButton!
@@ -78,7 +78,7 @@ class ToExamineCell: UITableViewCell {
         let applicant = setTitle(titleStr: "申请人：", contentLabel: applicantLabel, lastView: detailsView, position: -1) // 申请人
         let project = setTitle(titleStr: "新增项目：", contentLabel: projectLabel, lastView: applicant) // 新增项目
         let cusiomer = setTitle(titleStr: "新增客户：", contentLabel: cusiomerLabel, lastView: project) // 新增客户
-        _ = setTitle(titleStr: "新增拜访对象：", contentLabel: visitLabel, lastView: cusiomer, position: 1) // 新增拜访对象
+        _ = setTitle(titleStr: "新增联系人：", contentLabel: visitLabel, lastView: cusiomer, position: 1) // 新增联系人
         
         _ = UIButton().taxi.adhere(toSuperView: whiteView) // 取消按钮
             .taxi.layout(snapKitMaker: { (make) in

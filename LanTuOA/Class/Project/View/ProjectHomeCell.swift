@@ -37,7 +37,7 @@ class ProjectHomeCell: UITableViewCell {
     private var customerLabel: UILabel!
     /// 业务人员
     private var initiateLabel: UILabel!
-    /// 拜访对象
+    /// 联系人
     private var visitNameLabel: UILabel!
     /// 拜访时间
     private var timeLabel: UILabel!
@@ -115,10 +115,10 @@ class ProjectHomeCell: UITableViewCell {
         setTitle(title: initiate, content: initiateLabel, lastLabel: customer)
         initiate.text = "业务人员："
         
-        let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “拜访对象”
-        visitNameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 拜访对象
+        let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “联系人”
+        visitNameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 联系人
         setTitle(title: visitName, content: visitNameLabel, lastLabel: initiate)
-        visitName.text = "最新拜访对象："
+        visitName.text = "最新联系人："
         
         let time = UILabel().taxi.adhere(toSuperView: whiteView) // “时间”
         timeLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 时间

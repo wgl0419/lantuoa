@@ -55,7 +55,7 @@ enum APIManager {
     
     
     // MARK: - 拜访
-    case visitSave(Int, Int, Int, String, String, Int, Array<Int>) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级   contact:拜访对象id数组)
+    case visitSave(Int, Int, Int, String, String, Int, Array<Int>) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级   contact:联系人id数组)
     case visitList(String, Int?, Int?, Int, Int, Int, Int?, Int?, Int?) // 拜访查询 (name:关键词，客户名称/项目名称  startTime:开始时间，秒级  endTime:结束时间，秒级  queryType:1.全部，2.只看自己，3.工作组，4.接手  page:页码  limit:一页几条数据  customerId:客户id   projectId:项目id     createdUser: 用户id)
     case visitDetail(Int) // 拜访详情
     case visitCommentCreate(Int, [Int], [Int], String) // 评论拜访
@@ -112,10 +112,10 @@ enum APIManager {
     case contractDetail(Int) // 合同详情 (合同id)
     case contractPaybackUpdate(Int, String, Float, Int) // 修改回款 (回款id  desc:备注  money:金额  payTime:回款时间)
     case contractPaybackAdd(Int, String, Float, Int) // 添加回款 (contractId:合同id  desc:备注  money:金额  payTime:回款时间)
-    case performUnder(String) // 绩效查询 (name:查询名称)
+    case performUnder(String) // 业绩查询 (name:查询名称)
     case newPerformUnder(Int?) // 最新查询（month：月份）
     case IndividualNewPerformUnder(Int,Int?)
-    case performDetail(Int?, Int?, String) // 绩效查询-详情-月份绩效 （userId:用户id  self:是否是自己  month:月份,格式yyyy-MM）
+    case performDetail(Int?, Int?, String) // 业绩查询-详情-月份业绩 （userId:用户id  self:是否是自己  month:月份,格式yyyy-MM）
     case contractTypeList // 合同类型列表
     case contractDescList(Int) // 合同备注信息列表
     case contractDescCreate(Int, String) // 新建合同备注 （contractIdL: 合同id   desc: 备注信息）
@@ -434,8 +434,8 @@ extension APIManager: TargetType {
             if member.count > 0 { params["member"] = member }
             if ccUsers.count > 0 { params["ccUsers"] = ccUsers }
             if payback.count > 0 { params["payback"] = payback }
-            if files.count > 0 { params["files"] = files }
-            if imgs.count > 0 { params["imgs"] = imgs }
+//            if files.count > 0 { params["files"] = files }
+//            if imgs.count > 0 { params["imgs"] = imgs }
             
             return .requestParameters(parameters: params, encoding: JSONEncoding.default)
         case let .contractList(name, customerId, projectId, userId, page, limit, startTime, endTime, processId): // 合同列表/查询合同
@@ -462,14 +462,14 @@ extension APIManager: TargetType {
             params = ["desc": desc, "money": money, "payTime": payTime]
         case let .contractPaybackAdd(contractId, desc, money, payTime): // 新增回款
             params = ["contractId": contractId, "desc": desc, "money": money, "payTime": payTime]
-        case .performUnder(let name): // 绩效查询
+        case .performUnder(let name): // 业绩查询
             params = ["name": name]
-        case let .newPerformUnder(month): //最新的按月查询绩效
+        case let .newPerformUnder(month): //最新的按月查询业绩
             params = ["month": month!]
         case let .IndividualNewPerformUnder(_,month):
             params = ["month": month!]
             
-        case let .performDetail(userId, `self`, month): // 绩效查询-详情-月份绩效
+        case let .performDetail(userId, `self`, month): // 业绩查询-详情-月份业绩
             params = ["month": month]
             if userId != nil { params["userId"] = userId! }
             if `self` != nil { params["self"] = `self`! }

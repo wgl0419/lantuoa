@@ -106,7 +106,7 @@ class AddVisitorEjectView: UIView {
                 make.top.left.right.equalToSuperview()
             })
             .taxi.config({ (label) in
-                label.text = "新增拜访对象"
+                label.text = "新增联系人"
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)

@@ -237,7 +237,7 @@ class NoticeHomeSystemCell: UITableViewCell {
     // MARK: - 按钮点击
     /// 点击拒绝
     @objc private func refuseClick() {
-        let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户/拜访对象", "名字不合理", "其它原因"])
+        let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户/联系人", "名字不合理", "其它原因"])
         view.didBlock = { [weak self] (seleIndex) in
             if self?.refuseBlock != nil {
                 self?.refuseBlock!(seleIndex)

@@ -27,7 +27,7 @@ class ProjectDetailsVisitCell: UITableViewCell {
         }
     }
     
-    /// 拜访对象
+    /// 联系人
     private var nameLabel: UILabel!
     /// 业务人员
     private var initiatedLabel: UILabel!
@@ -52,23 +52,23 @@ class ProjectDetailsVisitCell: UITableViewCell {
     /// 初始化子控件
     private func initSubViews() {
         
-        let name = UILabel().taxi.adhere(toSuperView: contentView) // “拜访对象”
+        let name = UILabel().taxi.adhere(toSuperView: contentView) // “联系人”
             .taxi.layout { (make) in
                 make.top.left.equalToSuperview().offset(15)
         }
             .taxi.config { (label) in
-                label.text = "拜访对象："
+                label.text = "联系人："
                 label.font = UIFont.medium(size: 12)
                 label.textColor = UIColor(hex: "#999999")
         }
 
-        nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 拜访对象名称
+        nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 联系人名称
             .taxi.layout(snapKitMaker: { (make) in
                 make.centerY.equalTo(name)
                 make.left.equalTo(name.snp.right)
             })
             .taxi.config({ (label) in
-                label.text = "拜访对象"
+                label.text = "联系人"
                 label.textColor = blackColor
                 label.font = UIFont.boldSystemFont(ofSize: 12)
             })

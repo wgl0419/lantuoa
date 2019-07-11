@@ -214,8 +214,8 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 54))
         let header = HomePageHeaderView(frame: CGRect(x: 0, y: 10, width: ScreenWidth, height: 44))
         var logoName = "visit"
-        var attriMuStr = NSMutableAttributedString(string: "本月绩效")
-        attriMuStr.changeColor(str: "本月绩效", color: UIColor(hex: "#2E4695"))
+        var attriMuStr = NSMutableAttributedString(string: "本月业绩")
+        attriMuStr.changeColor(str: "本月业绩", color: UIColor(hex: "#2E4695"))
         if section == 0 {
             let total = UILabel()
             total.frame = CGRect(x: ScreenWidth/2, y: 0, width: ScreenWidth/2-10, height: 44)

@@ -26,11 +26,13 @@ class FillInApplyApprovalCell: UITableViewCell {
     }
     var isProcess: Bool! {
         didSet {
-            let str = isProcess ? "" : "本流程有节点缺失审批人，请联系管理员覃甲修改设置"
-            let attriMuStr = NSMutableAttributedString(string: str)
-            attriMuStr.changeFont(str: "覃甲", font: UIFont.medium(size: 12))
-            attriMuStr.changeColor(str: "覃甲", color: UIColor(hex: "#2E4695"))
-            tipsLabel.attributedText = attriMuStr
+//            let str = isProcess ? "" : "本流程有节点缺失审批人，请联系管理员覃甲修改设置"
+//            let attriMuStr = NSMutableAttributedString(string: str)
+//            attriMuStr.changeFont(str: "覃甲", font: UIFont.medium(size: 12))
+//            attriMuStr.changeColor(str: "覃甲", color: UIColor(hex: "#2E4695"))
+//            tipsLabel.attributedText = attriMuStr
+            let str = isProcess ? "" : "本流程有节点缺失审批人，请联系管理员修改设置"
+            tipsLabel.text = str
         }
     }
     
@@ -122,18 +124,24 @@ class FillInApplyApprovalCell: UITableViewCell {
         } else { // 审批人 需要处理
             titleLabel.text = "审批人"
             var newData = data!
+            
             if newData.count > 0 {
                 newData.sort { (model1, model2) -> Bool in // 数据排序
                     return model1.sort < model2.sort
                 }
+                
                 for index in 1...newData.count {
                     let newModel = newData.filter { (model) -> Bool in
                         return model.sort == index
                     }
                     if newModel.count != 0 {
                         processedData.append(newModel)
+
                     }
                 }
+//                for model in newData {
+//                    processedData.append([model])
+//                }
             }
         }
         

@@ -35,7 +35,7 @@ class VisitHomeCell: UITableViewCell {
     
     /// 标题
     private var titleLabel: UILabel!
-    /// 拜访对象
+    /// 联系人
     private var visitNameLabel: UILabel!
     /// 业务人员
     private var initiateLabel: UILabel!
@@ -130,10 +130,10 @@ class VisitHomeCell: UITableViewCell {
                 imageView.image = UIImage(named: "arrow")
             })
         
-        let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “拜访对象”
-        visitNameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 拜访对象
+        let visitName = UILabel().taxi.adhere(toSuperView: whiteView) // “联系人”
+        visitNameLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 联系人
         setTitle(title: visitName, content: visitNameLabel, lastLabel: titleLabel, isFirst: true)
-        visitName.text = "拜访对象："
+        visitName.text = "联系人："
         
         let state = UILabel().taxi.adhere(toSuperView: whiteView) // “状态“
         stateLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 状态

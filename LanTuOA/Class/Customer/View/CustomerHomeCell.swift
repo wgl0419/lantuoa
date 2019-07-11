@@ -78,7 +78,7 @@ class CustomerHomeCell: UITableViewCell {
     private var titleLabel: UILabel!
     /// 客户类型
     private var customerTypeImageView : UIImageView!
-    /// 最新拜访对象
+    /// 最新联系人
     private var visitLabel: UILabel!
     /// 最新拜访时间
     private var timeLabel: UILabel!
@@ -255,10 +255,10 @@ class CustomerHomeCell: UITableViewCell {
                 label.font = UIFont.medium(size: 12)
             })
         
-        let visit = UILabel().taxi.adhere(toSuperView: arrowView) // "最新拜访对象"
-        visitLabel = UILabel().taxi.adhere(toSuperView: arrowView) // 最新拜访对象
+        let visit = UILabel().taxi.adhere(toSuperView: arrowView) // "最新联系人"
+        visitLabel = UILabel().taxi.adhere(toSuperView: arrowView) // 最新联系人
         setTitle(title: visit, content: visitLabel, lastLabel: project)
-        visit.text = "最新拜访对象："
+        visit.text = "最新联系人："
         
         let time = UILabel().taxi.adhere(toSuperView: arrowView) // "最新拜访时间"
         timeLabel = UILabel().taxi.adhere(toSuperView: arrowView) // 最新拜访时间

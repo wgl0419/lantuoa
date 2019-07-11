@@ -4,7 +4,7 @@
 //
 //  Created by HYH on 2019/4/18.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  绩效详情  弹出框
+//  业绩详情  弹出框
 
 import UIKit
 
@@ -23,7 +23,7 @@ class AchievementsDetailsEjectView: UIView {
     convenience init(year: String, month: String, name:String,data: [NewPerformDetailData]) {
         self.init(frame: ScreenBounds)
         self.data = data
-        let titleStr = year + "年\(month)月\(name)绩效"
+        let titleStr = year + "年\(month)月\(name)业绩"
         initSubViews(title: titleStr)
     }
     
@@ -72,7 +72,7 @@ class AchievementsDetailsEjectView: UIView {
                 label.font = UIFont.boldSystemFont(ofSize: 16)
                 
                 let attriMuStr = NSMutableAttributedString(string: title)
-                attriMuStr.changeColor(str: "绩效", color: blackColor)
+                attriMuStr.changeColor(str: "业绩", color: blackColor)
                 label.attributedText = attriMuStr
             })
         

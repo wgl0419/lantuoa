@@ -70,7 +70,7 @@ class ToExamineTitleCell: UITableViewCell {
                 make.top.equalTo(titleLabel.snp.bottom).offset(5)
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-15)
-                make.bottom.equalToSuperview().offset(-10)
+                make.bottom.equalToSuperview().offset(-5)
             })
             .taxi.config({ (collectionView) in
                 collectionView.delegate = self

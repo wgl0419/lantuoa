@@ -54,12 +54,14 @@ class ToExamineDetailsTitleCell: UITableViewCell {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        
+//        frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: 30)
         titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalToSuperview().offset(5)
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-20)
+//                make.height.equalTo(40)
+                make.bottom.equalTo(-5)
             })
             .taxi.config({ (label) in
                 label.font = UIFont.regular(size: 14)
@@ -69,7 +71,6 @@ class ToExamineDetailsTitleCell: UITableViewCell {
         
         line = UIView().taxi.adhere(toSuperView: contentView) // 线
             .taxi.layout(snapKitMaker: { (make) in
-//                make.top.equalToSuperview().offset(40)
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview()
                 make.bottom.equalToSuperview().offset(0)

@@ -78,8 +78,8 @@ class CustomerEditController: UIViewController {
         
         headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
         headerHeight = headerView.height // 并保存
-//        let titleArray = ["在线项目", "参与人员", "历史拜访", "历史合同", "拜访对象"]
-        let titleArray = ["在线项目", "历史拜访", "历史合同", "拜访对象"]
+//        let titleArray = ["在线项目", "参与人员", "历史拜访", "历史合同", "联系人"]
+        let titleArray = ["在线项目", "历史拜访", "历史合同", "联系人"]
         segment = ProjectDetailsSegmentedView(title: titleArray) // 选择器
             .taxi.adhere(toSuperView: view)
             .taxi.layout(snapKitMaker: { (make) in

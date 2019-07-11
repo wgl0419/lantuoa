@@ -100,7 +100,7 @@ class CheckReportDetailsViewController: UIViewController {
                 tableView.delegate = self
                 tableView.dataSource = self
                 tableView.separatorStyle = .none
-                tableView.estimatedRowHeight = 50
+                tableView.estimatedRowHeight = 30
                 tableView.sectionHeaderHeight = 0.01
                 tableView.tableFooterView = UIView()
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
@@ -162,6 +162,7 @@ class CheckReportDetailsViewController: UIViewController {
         }
         let smallData = checkListData.data
         totalData = checkListData.data
+        headview.ishiddenNuber = true
         headview.data = checkListData
         
         let strData = smallData.filter { (model) -> Bool in
@@ -367,6 +368,7 @@ class CheckReportDetailsViewController: UIViewController {
         vc.checkListId = checkListId
         vc.descType = .approval
         vc.commentBlock = { [weak self] in
+            self?.tableView.mj_header.beginRefreshing()
             self?.changeHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -387,43 +389,7 @@ extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-//        if section == 0 { // 评论详情
-////            let images = imagesData.count
-////            let files = filesData.count
-////            return 1 + (images > 0 ? 1 : 0) + (files > 0 ? files + 1 : 0)
-//            return totalData.count
-//        }else if section == commentListData.count + checkUserData.count + 1 {
-//            return 1
-//        }
-//        else if section < checkUserData.count + 1 { /// 中间评论人
-//            let datas = checkUserData[section - 1]
-//            var data = checkUserData[section - 1][0]
-//            if datas.count > 1 {
-//                let processedModel = datas.filter { (model1) -> Bool in // 处理过数据
-//                    return model1.status == 2 || model1.status == 3
-//                }
-//                if processedModel.count != 0 {
-//                    data = processedModel[0]
-//                }
-//            }
-//            let model = filterData(data.files)
-//            let imageArray = model.0
-//            let fileArray = model.1
-//            let isOpen = openArray[section - 1]
-//            return isOpen ? (checkUserData[section - 1].count + 1) : (1 + (imageArray.count > 0 ? 1 : 0) + fileArray.count)
-//        }
-//        else  { // 评论
-//            let files = commentListData[section - 1 - checkUserData.count].commentsFiles
-//            let model = filterData(files)
-//            let imageArray = model.0
-//            let fileArray = model.1
-//            return 1 + fileArray.count + (imageArray.count > 0 ? 1 : 0)
-//        }
-        
         if section == 0 { // 评论详情
-            //            let images = imagesData.count
-            //            let files = filesData.count
-            //            return 1 + (images > 0 ? 1 : 0) + (files > 0 ? files + 1 : 0)
             return totalData.count
         }else if section == commentListData.count + checkUserData.count + 1 {
             return 1
@@ -457,48 +423,6 @@ extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
         let row = indexPath.row
-        
-//        if section == 0 { // 顶部信息
-//            if row == 0 {
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsHeaderCell", for: indexPath) as! ToExamineDetailsHeaderCell
-//                cell.data = checkListData
-//                return cell
-//            } else {
-//                let images = imagesData.count
-//                if images > 0 && row < 3 {
-//                    if row == 1 { // 标题
-//                        let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineTitleCell", for: indexPath) as! ToExamineTitleCell
-//                        cell.titleStr = "图片："
-//                        return cell
-//                    } else {
-//                        let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImagesCell", for: indexPath) as! ToExamineImagesCell
-//                        cell.isApproval = true
-//                        cell.datas = imagesData
-//                        cell.isComment = false
-//                        return cell
-//                    }
-//                } else {
-//                    let index = images > 0 ? 3 : 1
-//                    if row == index { // 标题
-//                        let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineTitleCell", for: indexPath) as! ToExamineTitleCell
-//                        cell.titleStr = "文件文档："
-//                        return cell
-//                    }
-//                    else {
-//                        let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureCell", for: indexPath) as! ToExamineEnclosureCell
-//                        cell.data = filesData[row - index - 1]
-//                        cell.isDelete = false
-//                        cell.isComment = false
-//                        return cell
-//                    }
-//                }
-//            }
-//        }
-//        else if section == 1 { // 业务人员信息
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsCell", for: indexPath) as! ToExamineDetailsCell
-//            cell.notifyCheckListData = checkListData
-//            return cell
-//        }
         if section == 0 { // 顶部信息
             if totalData[row].type == 4 && totalData[row].fileArr.count > 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineTitleCell", for: indexPath) as! ToExamineTitleCell
@@ -525,10 +449,11 @@ extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewData
             }else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsTitleCell", for: indexPath) as! ToExamineDetailsTitleCell
                 cell.data = totalData[row]
+//                cell.backgroundColor = UIColor.red
                 return cell
             }
         }
-        else if section == checkUserData.count + 1 + commentListData.count { // 抄送人信息
+        else if section == checkUserData.count + 1 + commentListData.count { // 已读，未读
             let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportDetailsReadCell", for: indexPath) as! CheckReportDetailsReadCell
             cell.carbonCopyData = carbonCopyData
             cell.moreBlock = {
@@ -606,14 +531,15 @@ extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
         if section == 0 {
-            return 10
-        } else if section == checkUserData.count + 1 { // 审批人尾部
             if commentListData.count > 0 {
                 return 40
             } else {
                 return 10
             }
+        } else if section == 1 { // 审批人尾部
+            return 10
         } else if section == checkUserData.count + 1 + commentListData.count { // 评论尾部
             return 10
         } else if section == checkUserData.count + commentListData.count { // 抄送人尾部
@@ -624,13 +550,13 @@ extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 0 {
-            return grayFooterView()
-        } else if section == checkUserData.count + 1 { // 审批人尾部
             if commentListData.count > 0 {
                 return commentFooterView()
             } else {
                 return grayFooterView()
             }
+        } else if section == 1 { // 审批人尾部
+           return grayFooterView()
         } else if section == checkUserData.count + 1 + commentListData.count { // 评论尾部
             return grayFooterView()
         } else if section == checkUserData.count + 2 + commentListData.count { // 抄送人尾部

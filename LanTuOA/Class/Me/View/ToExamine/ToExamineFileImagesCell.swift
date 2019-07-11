@@ -69,7 +69,7 @@ class ToExamineFileImagesCell: UITableViewCell {
                 make.top.equalTo(titleLabel.snp.bottom).offset(5)
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-15)
-                make.bottom.equalToSuperview().offset(-10)
+                make.bottom.equalToSuperview().offset(0)
             })
             .taxi.config({ (collectionView) in
                 collectionView.delegate = self
@@ -237,7 +237,7 @@ class ToMineFileImagesCell: UICollectionViewCell {
     private func initSubViews() {
         logoImage = UIImageView().taxi.adhere(toSuperView: contentView) // 图标
             .taxi.layout(snapKitMaker: { (make) in
-                make.bottom.equalToSuperview().offset(-10)
+                make.bottom.equalToSuperview().offset(0)
                 make.left.equalToSuperview().offset(15)
                 make.width.height.equalTo(47)
                 make.top.equalToSuperview()

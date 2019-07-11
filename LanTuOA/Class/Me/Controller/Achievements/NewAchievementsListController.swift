@@ -37,7 +37,7 @@ class NewAchievementsListController: UIViewController {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
-        title = "绩效查询"
+        title = "业绩查询"
         view.backgroundColor = kMainBackColor
 
         tableView = UITableView().taxi.adhere(toSuperView: view) // tableview
@@ -79,7 +79,7 @@ class NewAchievementsListController: UIViewController {
                 self?.tableView.reloadData()
             }
         }
-        let str = "暂无绩效！"
+        let str = "暂无业绩！"
         let attriMuStr = NSMutableAttributedString(string: str)
         attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
         attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))

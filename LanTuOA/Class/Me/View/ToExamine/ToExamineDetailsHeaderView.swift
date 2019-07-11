@@ -10,16 +10,25 @@ import UIKit
 
 class ToExamineDetailsHeaderView: UIView {
     
+    var ishiddenNuber: Bool!
     /// 数据
     var data: NotifyCheckListData? {
         didSet {
             if let data = data {
                 initSubViews()
                 titleLabel.text = data.createdUserName
-                numLabel.attributedText = richText(title: "订单编号：", content: "\(data.id)")
+                
+                if ishiddenNuber {
+                    frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: 40)
+                    numLabel.isHidden = true
+                }else{
+                    frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: 60)
+                    numLabel.attributedText = richText(title: "订单编号：", content: "\(data.id)")
+                }
             }
         }
     }
+
     
     /// 标题
     private var titleLabel: UILabel!
@@ -37,7 +46,7 @@ class ToExamineDetailsHeaderView: UIView {
     }
     
     private func initSubViews() {
-        frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: 60)
+
         titleLabel = UILabel().taxi.adhere(toSuperView: self) // 标题
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.equalToSuperview().offset(10)

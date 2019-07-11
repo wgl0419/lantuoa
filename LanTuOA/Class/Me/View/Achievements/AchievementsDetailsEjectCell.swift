@@ -4,7 +4,7 @@
 //
 //  Created by HYH on 2019/4/18.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
-//  绩效弹框 cell
+//  业绩弹框 cell
 
 import UIKit
 
@@ -82,7 +82,7 @@ class AchievementsDetailsEjectCell: UITableViewCell {
             moneyLabel.textColor = UIColor(hex: "#999999")
             numberLabel.text = "序号"
             contractLabel.text = "合同编号"
-            moneyLabel.text = "绩效金额"
+            moneyLabel.text = "业绩金额"
         } else {
             numberLabel.textColor = blackColor
             contractLabel.textColor = blackColor

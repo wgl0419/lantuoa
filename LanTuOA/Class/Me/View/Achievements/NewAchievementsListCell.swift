@@ -31,12 +31,21 @@ class NewAchievementsListCell: UITableViewCell {
                         let subStr = testStr.substring(to: inde)
                         totStr = subStr
                     }
-                    if totStr == ""{
-                        totStr = "0"
-                    }
-                        let label = setTitleAndContent(model.name ?? "", contentStr: totStr ?? "0", lastView: lastView, isLast: index == arrData.count - 1)
+//                    if totStr == ""{
+//                        totStr = "0"
+//                    }
+                    if totStr != nil {
+//                        total.attributedText = richText(title: "合计：", content: totStr!)
+                        let label = setTitleAndContent(model.name ?? "", contentStr: totStr!, lastView: lastView, isLast: index == arrData.count - 1)
                         lastView.tag = index
                         lastView = label
+                    }else{
+//                        total.attributedText = richText(title: "合计：", content: testStr)
+                        let label = setTitleAndContent(model.name ?? "", contentStr: testStr, lastView: lastView, isLast: index == arrData.count - 1)
+                        lastView.tag = index
+                        lastView = label
+                    }
+
                 }
             }
         }

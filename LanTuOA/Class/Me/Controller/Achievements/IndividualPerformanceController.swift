@@ -78,7 +78,7 @@ class IndividualPerformanceController: UIViewController {
             }
         }
         self.performUnder(id:id,date: month)
-        let str = "暂无绩效！"
+        let str = "暂无业绩！"
         let attriMuStr = NSMutableAttributedString(string: str)
         attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
         attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
@@ -102,7 +102,7 @@ class IndividualPerformanceController: UIViewController {
             MBProgressHUD.showError(error ?? "获取失败")
         })
     }
-    /// 绩效查询-详情-月份绩效
+    /// 业绩查询-详情-月份业绩
     private func performDetail(setion: Int, row: Int) {
         MBProgressHUD.showWait("")
         let sub = year.prefix(4)

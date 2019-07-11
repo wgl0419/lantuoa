@@ -22,7 +22,7 @@ class ContractPerformanceHeaderCell: UITableViewCell {
     
     /// 年份
     private var yearLabel: UILabel!
-    /// 绩效金额
+    /// 业绩金额
     private var moneyLabel: UILabel!
     /// 箭头
     private var arrowBtn: UIButton!
@@ -69,7 +69,7 @@ class ContractPerformanceHeaderCell: UITableViewCell {
                 label.font = UIFont.boldSystemFont(ofSize: 12)
             })
         
-        moneyLabel = UILabel().taxi.adhere(toSuperView: contentView) // 绩效金额
+        moneyLabel = UILabel().taxi.adhere(toSuperView: contentView) // 业绩金额
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalTo(yearLabel.snp.right).offset(7)
                 make.centerY.equalToSuperview()

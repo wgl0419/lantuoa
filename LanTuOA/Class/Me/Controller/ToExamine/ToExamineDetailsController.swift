@@ -227,6 +227,7 @@ class ToExamineDetailsController: UIViewController {
         }
         let smallData = checkListData.data
         totalData = checkListData.data
+        headview.ishiddenNuber = false
         headview.data = checkListData
         let strData = smallData.filter { (model) -> Bool in
             return model.type < 4 && model.type > 0
@@ -488,6 +489,7 @@ class ToExamineDetailsController: UIViewController {
         vc.checkListId = checkListId
         vc.descType = .approval
         vc.commentBlock = { [weak self] in
+            self?.tableView.mj_header.beginRefreshing()
             self?.changeHandle()
         }
         navigationController?.pushViewController(vc, animated: true)

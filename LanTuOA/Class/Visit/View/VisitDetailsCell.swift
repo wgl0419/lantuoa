@@ -34,7 +34,7 @@ class VisitDetailsCell: UITableViewCell {
                         time = Date(timeIntervalSince1970: TimeInterval(data.createdTime)).yearTimeStr()
                     }
                     let create = setTitleAndContent("业务人员：", contentStr: createStr, lastLabel: nil, position: -1)
-                    let visit = setTitleAndContent("拜访对象：", contentStr: visitStr, lastLabel: create, position: 0)
+                    let visit = setTitleAndContent("联系人：", contentStr: visitStr, lastLabel: create, position: 0)
                     let type = setTitleAndContent("拜访方式：", contentStr: typeStr, lastLabel: visit, position: 0)
                     _ = setTitleAndContent("拜访时间：", contentStr: time, lastLabel: type, position: 1)
                 case .content:

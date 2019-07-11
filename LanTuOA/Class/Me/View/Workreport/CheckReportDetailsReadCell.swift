@@ -52,13 +52,14 @@ class CheckReportDetailsReadCell: UITableViewCell {
             }
             btnArr[0].setTitle("已读(\(haveReadData.count))", for: .normal)
             btnArr[1].setTitle("未读(\(didReadData.count))", for: .normal)
+            
+//            layoutIfNeeded()
+//            var collectionHeight = collectionView.contentSize.height
+//            collectionHeight = collectionHeight == 0 ? 60 : collectionHeight
+//            collectionView.snp.updateConstraints { (make) in
+//                make.height.equalTo(collectionHeight).priority(800)
+//            }
             collectionView.reloadData()
-            layoutIfNeeded()
-            var collectionHeight = collectionView.contentSize.height
-            collectionHeight = collectionHeight == 0 ? 15 : collectionHeight
-            collectionView.snp.updateConstraints { (make) in
-                make.height.equalTo(collectionHeight).priority(800)
-            }
         }
     }
     
@@ -78,30 +79,6 @@ class CheckReportDetailsReadCell: UITableViewCell {
     /// 初始化子控件
     private func initSubViews() {
 
-//        moreBtn = UIButton().taxi.adhere(toSuperView: contentView)
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.trailing.equalToSuperview().offset(-20)
-//                make.top.equalToSuperview()
-//                make.width.equalTo(60)
-//                make.height.equalTo(40)
-//            })
-//            .taxi.config({ (button) in
-//                button.setTitle("查看更多", for: .normal)
-//                button.setTitleColor(UIColor(hex: "#999999"), for: .normal)
-//                button.addTarget(self, action: #selector(moreAction), for: .touchUpInside)
-//                button.titleLabel?.font = UIFont.regular(size: 14)
-//            })
-//        rightImage = UIImageView().taxi.adhere(toSuperView: contentView)
-//            .taxi.layout(snapKitMaker: { (make) in
-//                make.trailing.equalToSuperview().offset(-10)
-//                make.top.equalToSuperview().offset(16)
-//                make.width.equalTo(6)
-//                make.height.equalTo(8)
-//            })
-//            .taxi.config({ (image) in
-//                image.image = UIImage(named: "arrow")
-//            })
-        
         let arr = ["已读","未读"]
         for index in 0..<arr.count {
             let btn = UIButton()
@@ -162,12 +139,6 @@ class CheckReportDetailsReadCell: UITableViewCell {
             btnArr[1].setTitleColor(UIColor(hex: "#999999"), for: .normal)
             isRead = 0
             collectionView.reloadData()
-//            layoutIfNeeded()
-//            var collectionHeight = collectionView.contentSize.height
-//            collectionHeight = collectionHeight == 0 ? 15 : 60
-//            collectionView.snp.updateConstraints { (make) in
-//                make.height.equalTo(collectionHeight).priority(800)
-//            }
         }else{
             btnArr[0].setTitleColor(UIColor(hex: "#999999"), for: .normal)
             sender.setTitleColor(UIColor(hex: "#222222"), for: .normal)
@@ -176,13 +147,8 @@ class CheckReportDetailsReadCell: UITableViewCell {
             }
             isRead = 1
             collectionView.reloadData()
-//            layoutIfNeeded()
-//            var collectionHeight = collectionView.contentSize.height
-//            collectionHeight = collectionHeight == 0 ? 15 : 60
-//            collectionView.snp.updateConstraints { (make) in
-//                make.height.equalTo(collectionHeight).priority(800)
-//            }
         }
+        
         
     }
     

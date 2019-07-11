@@ -23,7 +23,7 @@ class CustomerDetailsTableView: UIView {
         case history = 1
         /// 历史合同
         case contract = 2
-        /// 拜访对象
+        /// 联系人
         case visitor = 3
     }
     
@@ -250,7 +250,7 @@ class CustomerDetailsTableView: UIView {
             addBtn.setTitle(" 添加项目", for: .normal)
         } else if cellStyle == .visitor { // 联系人
             tipsLabel.text = "注：可看到您和您的下级的拜访对象"
-            addBtn.setTitle(" 添加拜访对象", for: .normal)
+            addBtn.setTitle(" 添加联系人", for: .normal)
         } else if cellStyle == .contract { // 合同
             addBtn.snp.updateConstraints { (make) in
                 make.height.equalTo(0)
@@ -300,7 +300,7 @@ class CustomerDetailsTableView: UIView {
             .taxi.config({ (btn) in
                 var str =  " 添加项目"
                 if cellStyle == .visitor {
-                    str = " 新增拜访对象"
+                    str = " 新增联系人"
                 }
                 btn.setTitle(str, for: .normal)
                 btn.titleLabel?.font = UIFont.medium(size: 14)
@@ -398,7 +398,7 @@ class CustomerDetailsTableView: UIView {
         }, errorHandle: { (error) in
             self.tableView.mj_header.endRefreshing()
             self.tableView.isNoData = self.contactListData.count == 0
-            MBProgressHUD.showError(error ?? "获取拜访对象失败")
+            MBProgressHUD.showError(error ?? "获取联系人失败")
         })
     }
     
@@ -548,7 +548,7 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if cellStyle == .project { // 在线项目
             return projectData.count
-        } else if cellStyle == .visitor { // 拜访对象
+        } else if cellStyle == .visitor { // 联系人
             return contactListData.count
         } else if cellStyle == .history { // 拜访历史
             return section == 0 ? 0 : visitData.count
@@ -565,13 +565,13 @@ extension CustomerDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsProjectCell", for: indexPath) as! CostomerDetailsProjectCell
             cell.data = projectData[row]
             return cell
-        } else if cellStyle == .visitor { // 拜访对象
+        } else if cellStyle == .visitor { // 联系人
             let cell = tableView.dequeueReusableCell(withIdentifier: "CostomerDetailsVisitorCell", for: indexPath) as! CostomerDetailsVisitorCell
             let data = contactListData[row]
             cell.editBlock = {
                 let ejectView = AddVisitorEjectView()
                 let contentArray = [data.name ?? "", data.phone ?? "", data.position ?? ""]
-                ejectView.modifyData = ("修改拜访对象信息", contentArray, data.id)
+                ejectView.modifyData = ("修改联系人信息", contentArray, data.id)
                 ejectView.addBlock = { // 添加成功 -> 刷新
                     self.reload()
                 }

@@ -16,7 +16,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     enum SeleType {
         /// 客户
         case customer
-        /// 拜访对象
+        /// 联系人
         case visitor(Int)
         /// 项目
         case project(Int, String)
@@ -52,15 +52,15 @@ class NewlyBuildVisitSeleController: UIViewController {
     private var searchStr = ""
     /// 页码
     private var page = 1
-    /// 客户id (拜访对象，项目使用)
+    /// 客户id (联系人，项目使用)
     private var customerId = -1
     /// 记录输入次数  -> 用于减少计算次数
     private var inputCout = 0
     /// 客户数据
     private var customerData = [CustomerListStatisticsData]()
-    /// 拜访对象数据
+    /// 联系人数据
     private var visitorData = [CustomerContactListData]()
-    /// 拜访对象数据 -> 保存源数据
+    /// 联系人数据 -> 保存源数据
     private var oldVisitorData = [CustomerContactListData]()
     /// 项目数据
     private var projectData = [ProjectListStatisticsData]()
@@ -93,9 +93,9 @@ class NewlyBuildVisitSeleController: UIViewController {
         case .visitor(let id):
             customerId = id
             isMultiple = true
-            title = "拜访对象"
-            rightStr = "新增拜访对象"
-            searchStr = "拜访对象名称"
+            title = "联系人"
+            rightStr = "新增联系人"
+            searchStr = "联系人名称"
         case .project(let id, _):
             customerId = id
             title = "项目"
@@ -405,7 +405,7 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
             if seleArray.count > 0 { // 防止报错
                 seleIndex = seleIndexArray.first ?? -1
             }
-        case .visitor: // 拜访对象 多选
+        case .visitor: // 联系人 多选
             name = visitorData[row].name ?? ""
             let position = visitorData[row].position ?? ""
             for index in seleIndexArray {
@@ -431,7 +431,7 @@ extension NewlyBuildVisitSeleController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
-        if isMultiple { // 可多选 (必定是选择拜访对象)
+        if isMultiple { // 可多选 (必定是选择联系人)
             var seleIndex = -1 // 是否已经选择过
             for index in 0..<seleIndexArray.count {
                 let seleRow = seleIndexArray[index]

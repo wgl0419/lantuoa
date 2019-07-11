@@ -19,7 +19,7 @@ class MeHomeController: UIViewController {
 //    private var iconArray = [["", "me_approval", "me_achievements", "me_contract"], ["me_jobApplication","组 276", "me_workGroup"], ["me_departmentManagement"], ["me_setUp"]]
     
     /// 标题
-    private var titleArray = [["", "我的审批", "工作申请", "工作汇报"], ["合同", "绩效查询"],["工作组"], ["组织架构"], ["设置"]]
+    private var titleArray = [["", "我的审批", "工作申请", "工作汇报"], ["合同", "业绩查询"],["工作组"], ["组织架构"], ["设置"]]
     private var iconArray = [["", "me_approval", "me_jobApplication", "组 276"], ["me_contract","me_achievements" ],["me_workGroup"], ["me_departmentManagement"], ["me_setUp"]]
     
     override func viewWillAppear(_ animated: Bool) {
