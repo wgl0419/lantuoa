@@ -15,7 +15,6 @@ class HandoverStaffSeleCell: UITableViewCell {
         didSet {
             if let usersData = data?.0, let isSele = data?.1 {
                 seleBtn.isSelected = isSele
-                
                 let nameStr = (usersData.realname ?? "") + " " + (usersData.phone ?? "")
                 nameLabel.text = nameStr
                 departmentLabel.text = usersData.departmentName
@@ -51,6 +50,7 @@ class HandoverStaffSeleCell: UITableViewCell {
             .taxi.config({ (btn) in
                 btn.setImage(UIImage(named: "unsele"), for: .normal)
                 btn.setImage(UIImage(named: "sele"), for: .selected)
+                btn.isUserInteractionEnabled = false
             })
         
         nameLabel = UILabel().taxi.adhere(toSuperView: contentView) // 名称 + 电话号码

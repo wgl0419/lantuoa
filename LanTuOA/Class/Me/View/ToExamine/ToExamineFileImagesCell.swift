@@ -21,7 +21,29 @@ class ToExamineFileImagesCell: UITableViewCell {
     /// 图片连接s
     var datas = [NotifyCheckListValue]() {
         didSet {
+            
+            
             collectionView.reloadData()
+            
+            layoutIfNeeded()
+            var collectionHeight = collectionView.contentSize.height
+            collectionHeight = collectionHeight == 0 ? 15 : collectionHeight
+            collectionView.snp.updateConstraints { (make) in
+                make.height.equalTo(collectionHeight).priority(800)
+            }
+        }
+    }
+    
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        perform(#selector(collectionViewHandle), with: nil, afterDelay: 0.1)
+        
+    }
+    
+    /// 处理collectionView高度
+    @objc private func collectionViewHandle() {
+        collectionView.snp.updateConstraints { (make) in
+            make.height.equalTo(collectionView.contentSize.height).priority(800)
         }
     }
     
@@ -59,13 +81,13 @@ class ToExamineFileImagesCell: UITableViewCell {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 0
-        layout.scrollDirection = .horizontal
+//        layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: ScreenWidth, height: 60)
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
             .taxi.adhere(toSuperView: contentView)
             .taxi.layout(snapKitMaker: { (make) in
-                make.height.equalTo(60)
+                make.height.equalTo(200).priority(800)
                 make.top.equalTo(titleLabel.snp.bottom).offset(5)
                 make.left.equalToSuperview().offset(15)
                 make.right.equalToSuperview().offset(-15)

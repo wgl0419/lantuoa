@@ -34,6 +34,13 @@ class NewlyBuildVisitController: UIViewController {
 //    private var seleStrArray = ["", "", "", "", "", "", "", ""]
     private var seleStrArray = ["", "", "", "", "", ""]
     
+    //MARK: - Properties
+    let defaultLocationTimeout = 6
+    let defaultReGeocodeTimeout = 3
+    var displayLabel: UILabel!
+    var completionBlock: AMapLocatingCompletionBlock!
+    lazy var locationManager = AMapLocationManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
@@ -215,7 +222,7 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
-        if section != 5 && section != 6 {
+        if section != 5  {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitSeleCell", for: indexPath) as! NewlyBuildVisitSeleCell
             cell.data = (titleArray[section], placeholderArray[section])
             cell.contentStr = seleStrArray[section]

@@ -22,9 +22,9 @@ class ContractListController: UIViewController {
     private var tableView: UITableView!
     
     /// 内容
-    private var contentArray = ["", "", ""]
+    private var contentArray = ["", "", "", ""]
     /// 选中的id
-    private var idArray = [-1, -1, -1]
+    private var idArray = [-1, -1, -1, -1]
     /// 发布时间
     private var releaseTimeStamp: Int!
     

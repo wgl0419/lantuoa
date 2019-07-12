@@ -18,4 +18,7 @@
 
 #import "LPPZSendContentTextParser.h"
 
+#import <AMapLocationKit/AMapLocationKit.h>
+#import <AMapFoundationKit/AMapFoundationKit.h>
+
 #endif /* Header_h */

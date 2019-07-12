@@ -21,14 +21,24 @@ class HandoverStaffCell: UITableViewCell {
                 if time != 0 {
                     timeStr = Date(timeIntervalSince1970: TimeInterval(data.lastExtend?.createdTime ?? 0)).customTimeStr(customStr: "yyyy-MM-dd")
                 }
+//                if newUserStr.count > 0 {
+//                    let changeStr = "（已交接\(newUserStr)\(timeStr)）"
+//                    nameStr = nameStr + changeStr
+//
+//                    let attriMuStr = NSMutableAttributedString(string: nameStr)
+//                    attriMuStr.changeColor(str: changeStr, color: UIColor(hex: "#5FB9A1"))
+//                    attriMuStr.changeFont(str: changeStr, font: UIFont.boldSystemFont(ofSize: 12))
+//                    nameLabel.attributedText = attriMuStr
+//                } else {
+//                    nameLabel.text = nameStr
+//                }
+                
                 if newUserStr.count > 0 {
                     let changeStr = "（已交接\(newUserStr)\(timeStr)）"
                     nameStr = nameStr + changeStr
-                    
-                    let attriMuStr = NSMutableAttributedString(string: nameStr)
-                    attriMuStr.changeColor(str: changeStr, color: UIColor(hex: "#5FB9A1"))
-                    attriMuStr.changeFont(str: changeStr, font: UIFont.boldSystemFont(ofSize: 12))
-                    nameLabel.attributedText = attriMuStr
+                    nameLabel.text = nameStr
+                    nameLabel.textColor = UIColor(hex: "#999999")
+                    handoverBtn.isHidden = true
                 } else {
                     nameLabel.text = nameStr
                 }
@@ -59,6 +69,7 @@ class HandoverStaffCell: UITableViewCell {
                 make.width.equalTo(48)
                 make.top.equalToSuperview().offset(10)
                 make.right.equalToSuperview().offset(-5)
+                make.bottom.equalToSuperview().offset(-10)
             })
             .taxi.config({ (btn) in
                 btn.setTitle("交接", for: .normal)

@@ -24,11 +24,11 @@ class ContractScreenView: UIView {
     private var endBtn = UIButton()
     
     /// 标题
-    private let titleArray = ["客户", "合同类型", "参与人员"]
+    private let titleArray = ["客户", "合同类型", "参与人员","合同状态"]
     /// 内容
-    private var contentArray = ["", "", ""]
+    private var contentArray = ["", "", "",""]
     /// 选中的id
-    private var idArray = [-1, -1, -1]
+    private var idArray = [-1, -1, -1, -1]
     /// 发布时间
     private var releaseTimeStamp: Int!
     
@@ -236,12 +236,24 @@ class ContractScreenView: UIView {
         }
     }
     
+    ///合同状态
+    private func contractStatesScreening() {
+        let contentStrArray = ["全部", "发布中", "逾期付款"]
+        let view = SeleVisitModelView(title: "条件筛选", content: contentStrArray)
+        view.didBlock = { [weak self] (seleIndex) in
+            self?.contentArray[3] = contentStrArray[seleIndex]
+            self?.idArray[3] = seleIndex
+            self?.tableView.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .none)
+        }
+        view.show()
+    }
+    
     // MAKR: - 按钮点击
     /// 点击重置
     @objc private func resetClick() {
         releaseTimeStamp = nil
-        contentArray = ["", "", ""]
-        idArray = [-1, -1, -1]
+        contentArray = ["", "", "",""]
+        idArray = [-1, -1, -1, -1]
         tableView.reloadData()
     }
     
@@ -308,7 +320,7 @@ extension ContractScreenView: UIGestureRecognizerDelegate {
 
 extension ContractScreenView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return titleArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -328,6 +340,7 @@ extension ContractScreenView: UITableViewDelegate, UITableViewDataSource {
             case 0: self?.customerScreening()
             case 1: self?.contractTypeScreening()
             case 2: self?.usersScreening()
+            case 3: self?.contractStatesScreening()
             default: break
             }
         }

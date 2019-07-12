@@ -597,10 +597,12 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
                     cell.titleStr = totalData[row].title
                     cell.isApproval = true
                     let filesValue = totalData[row].fileArr
+                
                     var files = [NotifyCheckListValue]()
                     for value in filesValue {
                         files.append(value)
                     }
+                
                     cell.datas = files
                     return cell
             }else{

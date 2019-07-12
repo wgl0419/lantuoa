@@ -183,6 +183,8 @@ extension HandoverStaffSeleController: UITableViewDelegate, UITableViewDataSourc
         
         let row = seleRow
         seleRow = indexPath.row
+        
+        
         if row != -1 { // 有选中过
             tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .fade)
         } else {

@@ -30,5 +30,7 @@ pod 'FSCalendar'
 pod 'JPush', '3.1.0'
 ############  阿里云OSS  ############
 pod 'AliyunOSSiOS'
+############高德定位################
+pod 'AMapLocation'
 end
 

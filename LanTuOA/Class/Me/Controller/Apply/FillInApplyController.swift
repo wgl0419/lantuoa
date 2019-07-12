@@ -899,6 +899,7 @@ class FillInApplyController: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.processUsers(processId), t: ProcessUsersModel.self, successHandle: { (result) in
             self.processUsersData = result.data
+            
             self.processHandld()
             self.tableView.reloadData()
             MBProgressHUD.dismiss()
@@ -1040,7 +1041,6 @@ class FillInApplyController: UIViewController {
                 return
             }
         }
-        
         //        uploadGetKey(indexPath: indexpath.section)
         processCommit()
     }
@@ -1068,7 +1068,6 @@ extension FillInApplyController: UITableViewDelegate, UITableViewDataSource {
         }
         else {
             let model = data[section]
-
             if model.type == 10 {
                 return 1+fileArray[section].count;
             }else{

@@ -1,6 +1,16 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
+## AMapFoundation
+
+Copyright © 2014 AutoNavi. All Rights Reserved.
+
+
+## AMapLocation
+
+Copyright © 2014 AutoNavi. All Rights Reserved.
+
+
 ## Alamofire
 
 Copyright (c) 2014 Alamofire Software Foundation (http://alamofire.org/)

@@ -82,7 +82,7 @@ extension HandoverStaffController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
-            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 25))
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 35))
             headerView.backgroundColor = .white
             _ = UILabel().taxi.adhere(toSuperView: headerView)
                 .taxi.layout(snapKitMaker: { (make) in
@@ -94,6 +94,9 @@ extension HandoverStaffController: UITableViewDelegate, UITableViewDataSource {
                     label.font = UIFont.medium(size: 10)
                     label.textColor = kMainSelectedColor
                 })
+            let line = UIView(frame: CGRect(x: 15, y: 34.4, width: ScreenWidth-15, height: 0.6))
+            line.backgroundColor = UIColor(hex: "#E0E0E0")
+            headerView.addSubview(line)
             return headerView
         } else {
             return nil
@@ -102,7 +105,7 @@ extension HandoverStaffController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 25
+            return 35
         }
         return 0.01
     }
@@ -124,6 +127,13 @@ extension HandoverStaffController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 {
+//            if data[indexPath.row].status == 0 {
+//                return
+//            }
+            let newUserStr = data[indexPath.row].lastExtend?.newUserName ?? ""
+            if newUserStr.count > 0 {
+                return
+            }
             let vc = HandoverStaffSeleController()
             vc.oldUserId = userData.id
             vc.projectId = data[indexPath.row].id

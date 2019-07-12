@@ -115,6 +115,36 @@ class FillInApplyApprovalCell: UITableViewCell {
     
     /// 数据处理
     private func dataHandle() {
+//        processedData = []
+//        if !isApproval { // 抄送人不需要处理
+//            titleLabel.text = "抄送人（审批发起和通过时，通知抄送人）"
+//            for model in data {
+//                processedData.append([model])
+//            }
+//        } else { // 审批人 需要处理
+//            titleLabel.text = "审批人"
+//            var newData = data!
+//
+//            if newData.count > 0 {
+//                newData.sort { (model1, model2) -> Bool in // 数据排序
+//                    return model1.sort < model2.sort
+//                }
+//
+//                for index in 1...newData.count {
+//                    let newModel = newData.filter { (model) -> Bool in
+//                        return model.sort == index
+//                    }
+//                    if newModel.count != 0 {
+//                        processedData.append(newModel)
+//
+//                    }
+//
+//                }
+//
+//            }
+//        }
+//
+        
         processedData = []
         if !isApproval { // 抄送人不需要处理
             titleLabel.text = "抄送人（审批发起和通过时，通知抄送人）"
@@ -139,9 +169,12 @@ class FillInApplyApprovalCell: UITableViewCell {
 
                     }
                 }
-//                for model in newData {
-//                    processedData.append([model])
-//                }
+                
+                for  model in newData {
+                    if model.checkUserId == 0 {
+                        processedData.append([model])
+                    }
+                }
             }
         }
         
@@ -178,6 +211,7 @@ extension FillInApplyApprovalCell: UICollectionViewDelegate, UICollectionViewDat
                 cell.isCanDelete = false
                 let row = indexPath.row / 2
                 cell.data = processedData[row]
+                
                 return cell
             } else { // 箭头
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FillInApplyArrowCollectionCell", for: indexPath) as! FillInApplyArrowCollectionCell
