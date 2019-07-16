@@ -127,6 +127,7 @@ class NewlyBuildVisitController: UIViewController {
         } else {
             vc.isApply = true
             vc.type = .project(customerId, customerName)
+            vc.projectStr = "拜访"
         }
         
         vc.seleBlock = { [weak self] (customerArray) in

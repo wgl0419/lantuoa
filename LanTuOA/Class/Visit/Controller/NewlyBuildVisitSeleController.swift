@@ -34,6 +34,7 @@ class NewlyBuildVisitSeleController: UIViewController {
     /// 是否能添加 -> 从工作申请进入不能添加
     var isAdd = true
     
+    var projectStr = ""
     
     /// 搜索框
     private var searchBar: UISearchBar!
@@ -291,14 +292,14 @@ class NewlyBuildVisitSeleController: UIViewController {
     private func projectList(isMore: Bool) {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
-//        var customerIdstr = "\(customerId)"
-//        guard customerId != -1 else {
-//            customerIdstr = ""
-//        }
-//        if customerId == -1{
-//            customerIdstr = ""
-//        }
-        _ = APIService.shared.getData(.projectList(searchBar.text ?? "", "", newPage, 10), t: ProjectListModel.self, successHandle: { (result) in
+        var customerIdstr = ""
+        if projectStr == "拜访" {
+            customerIdstr = "\(customerId)"
+        }else{
+            customerIdstr = ""
+        }
+        
+        _ = APIService.shared.getData(.projectList(searchBar.text ?? "", customerIdstr, newPage, 10), t: ProjectListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
