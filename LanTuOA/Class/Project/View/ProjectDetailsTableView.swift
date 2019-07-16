@@ -441,7 +441,7 @@ class ProjectDetailsTableView: UIView {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
         let startTimeStamp = timeStamp == 0 ? nil : timeStamp
-        _ = APIService.shared.getData(.contractList("", nil, projectId, nil, newPage, 10, startTimeStamp, nil, nil), t: ContractListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.contractList("", nil, projectId, nil, newPage, 10, startTimeStamp, nil, nil,nil,nil,nil), t: ContractListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {

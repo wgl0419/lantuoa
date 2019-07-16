@@ -165,8 +165,27 @@ class ContractListController: UIViewController {
         let customerId = idArray[0] == -1 ? nil : idArray[0] // 客户id
         let processId = idArray[1] == -1 ? nil : idArray[1] // 合同类型id
         let userId = idArray[2] == -1 ? nil : idArray[2] // 用户id
+        let contractStates = idArray[3]
+        var paid = 0
+        var overdue = 0
+        var active = 0
+        switch contractStates {
+        case 0: paid = 0
+        case 1: active = 1
+        case 2: overdue = 1
+        case 3: break
+        default: break
+        }
+        
+//        if contractStates == 0 {
+//
+//        }else if contractStates == 1 {
+//
+//        }else if contractStates == 2 {
+//
+//        }
         let startTimeStamp = releaseTimeStamp == 0 ? nil : releaseTimeStamp
-        _ = APIService.shared.getData(.contractList(searchBar.text ?? "", customerId, nil, userId, newPage, 10, startTimeStamp, nil, processId), t: ContractListModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.contractList(searchBar.text ?? "", customerId, nil, userId, newPage, 10, startTimeStamp, nil, processId,paid,overdue,active), t: ContractListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if isMore {
                 for model in result.data {
@@ -208,6 +227,7 @@ class ContractListController: UIViewController {
         showView.setDefault(release: releaseTimeStamp, id: idArray, content: contentArray)
         showView.confirmBlock = { [weak self] (release, id, content) in
             self?.releaseTimeStamp = release
+            
             self?.idArray = id
             self?.contentArray = content
             self?.contractList(isMore: false)

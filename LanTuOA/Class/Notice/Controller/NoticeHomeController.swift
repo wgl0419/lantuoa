@@ -46,6 +46,7 @@ class NoticeHomeController: UIViewController {
         setNav()
         initSubViews()
         relaodData(show: false)
+        notifyNumber()
     }
     
     func relaodData(show: Bool = true) {
@@ -79,6 +80,7 @@ class NoticeHomeController: UIViewController {
             })
             .taxi.config({ (segmentView) in
                 segmentView.delegate = self
+//                segmentView.backgroundColor = UIColor.red
             })
         
         scrollView = UIScrollView().taxi.adhere(toSuperView: view) // 装载tableview的滚动视图
@@ -194,6 +196,7 @@ class NoticeHomeController: UIViewController {
         vc.commentBlock = { [weak self] in
             self?.notifyCheckList(isMore: false)
             self?.notifyList(isMore: false)
+            self?.notifyNumber()
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -217,15 +220,16 @@ class NoticeHomeController: UIViewController {
         vc.commentBlock = { [weak self] in
             self?.notifyCheckList(isMore: false)
             self?.notifyList(isMore: false)
+            self?.notifyNumber()
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     /// 处理提示
     private func setTips() {
-        segmentView.setNumber(index: 0, number: pendingData.count)
+//        segmentView.setNumber(index: 0, number: pendingData.count)
         
-        tabBarController?.tabBar.items?[3].badgeValue = pendingData.count > 0 ? "\(pendingData.count)" : nil
+//        tabBarController?.tabBar.items?[3].badgeValue = pendingData.count > 0 ? "\(pendingData.count)" : nil
         let isNotRead = tabBarController?.tabBar.itemStatus ?? false
         if isNotRead && !isCheckSystem { // 有数量  并且未读
             segmentView.setTips(index: 1, show: isNotRead)
@@ -434,6 +438,22 @@ class NoticeHomeController: UIViewController {
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "设置失败")
         })
+    }
+    
+    /// 未读信息数
+    private func notifyNumber() {
+        _ = APIService.shared.getData(.notifyNumber, t: NotifyNumberModel.self, successHandle: { (result) in
+            let checkNum = result.data?.checkNum ?? 0
+            let notReadNum = result.data?.notReadNum ?? 0
+            self.tabBarController?.tabBar.itemStatus = checkNum > 0
+            if checkNum > 0 {
+                self.segmentView.setNumber(index: 0, number: checkNum)
+                
+                self.tabBarController?.tabBar.items?[3].badgeValue = "\(checkNum)"
+            } else if notReadNum > 0 {
+                self.tabBarController?.tabBar.showBadgeOnItemIndex(index: 3)
+            }
+        }, errorHandle: nil)
     }
 }
 

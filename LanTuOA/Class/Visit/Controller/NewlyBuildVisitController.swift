@@ -20,30 +20,33 @@ class NewlyBuildVisitController: UIViewController {
     private var confirmBtn: UIButton!
     
     /// 标题
-//    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "内容", "结果", "所在位置"]
-    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "主要事宜"]
+    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "内容", "所在位置"]
+//    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "主要事宜"]
     /// 提示
-//    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请输入拜访结果", "请选择"]
-    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入主要事宜"]
+    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请选择"]
+//    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入主要事宜"]
     /// 选中id
-//    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1, -1]
-    private var seleIdArray = [-1, -1, -1, -1, -1, -1]
+    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1]
+//    private var seleIdArray = [-1, -1, -1, -1, -1, -1]
     /// 联系人id数组
     private var contactArray = [Int]()
     /// 选中内容
-//    private var seleStrArray = ["", "", "", "", "", "", "", ""]
-    private var seleStrArray = ["", "", "", "", "", ""]
+    private var seleStrArray = ["", "", "", "", "", "", ""]
+//    private var seleStrArray = ["", "", "", "", "", ""]
     
     //MARK: - Properties
     let defaultLocationTimeout = 6
     let defaultReGeocodeTimeout = 3
-    var displayLabel: UILabel!
     var completionBlock: AMapLocatingCompletionBlock!
     lazy var locationManager = AMapLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
+        
+        initCompleteBlock()
+//
+        configLocationManager()
     }
 
     // MARK: - 自定义私有方法
@@ -88,6 +91,7 @@ class NewlyBuildVisitController: UIViewController {
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
                 tableView.register(NewlyBuildVisitTextViewCell.self, forCellReuseIdentifier: "NewlyBuildVisitTextViewCell")
+                tableView.register(NewlyBuildVisitLocationCell.self, forCellReuseIdentifier: "NewlyBuildVisitLocationCell")
             })
     }
     
@@ -210,6 +214,70 @@ class NewlyBuildVisitController: UIViewController {
             MBProgressHUD.showError(error ?? "提交失败，请重新提交")
         })
     }
+    
+    //MARK: - Action Handle
+    
+    func configLocationManager() {
+        locationManager.delegate = self
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        
+        locationManager.pausesLocationUpdatesAutomatically = false
+        
+        locationManager.locationTimeout = defaultLocationTimeout
+
+        locationManager.reGeocodeTimeout = defaultReGeocodeTimeout
+    }
+    
+    func reGeocodeAction() {
+        locationManager.requestLocation(withReGeocode: true, completionBlock: completionBlock)
+        locationManager.requestLocation(withReGeocode: false, completionBlock: completionBlock)
+    }
+    
+    //MARK: - Initialization
+    func initCompleteBlock() {
+        
+        completionBlock = { [weak self] (location: CLLocation?, regeocode: AMapLocationReGeocode?, error: Error?) in
+            if let error = error {
+                let error = error as NSError
+                
+                if error.code == AMapLocationErrorCode.locateFailed.rawValue {
+                    //定位错误：此时location和regeocode没有返回值，不进行annotation的添加
+                    NSLog("定位错误:{\(error.code) - \(error.localizedDescription)};")
+                    return
+                }
+                else if error.code == AMapLocationErrorCode.reGeocodeFailed.rawValue
+                    || error.code == AMapLocationErrorCode.timeOut.rawValue
+                    || error.code == AMapLocationErrorCode.cannotFindHost.rawValue
+                    || error.code == AMapLocationErrorCode.badURL.rawValue
+                    || error.code == AMapLocationErrorCode.notConnectedToInternet.rawValue
+                    || error.code == AMapLocationErrorCode.cannotConnectToHost.rawValue {
+                    
+                    //逆地理错误：在带逆地理的单次定位中，逆地理过程可能发生错误，此时location有返回值，regeocode无返回值，进行annotation的添加
+                    NSLog("逆地理错误:{\(error.code) - \(error.localizedDescription)};")
+                }
+                else {
+                    //没有错误：location有返回值，regeocode是否有返回值取决于是否进行逆地理操作，进行annotation的添加
+                }
+            }
+            
+            //修改label显示内容
+            if let location = location {
+                if let regeocode = regeocode {
+                    let str = regeocode.formattedAddress
+                    self!.seleStrArray[6] = str!
+//                    self!.tableView.reloadData()
+                    self!.tableView.reloadRows(at: [IndexPath(row: 0, section: 6)], with: .fade)
+                    self!.confirmHandle()
+                }
+                else {
+                    //经纬度
+                    let str = "lat:\(location.coordinate.latitude); lon:\(location.coordinate.longitude)"
+                }
+            }
+            
+        }
+    }
 }
 
 extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource {
@@ -223,12 +291,7 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
-        if section != 5  {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitSeleCell", for: indexPath) as! NewlyBuildVisitSeleCell
-            cell.data = (titleArray[section], placeholderArray[section])
-            cell.contentStr = seleStrArray[section]
-            return cell
-        } else {
+        if section == 5  {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitTextViewCell", for: indexPath) as! NewlyBuildVisitTextViewCell
             cell.data = (titleArray[section], placeholderArray[section])
             cell.contentStr = seleStrArray[section]
@@ -240,6 +303,16 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
                 self?.confirmHandle()
             }
             return cell
+        }else if section == 6 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitLocationCell", for: indexPath) as! NewlyBuildVisitLocationCell
+            cell.addressStr = seleStrArray[section]
+            return cell
+        }else  {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitSeleCell", for: indexPath) as! NewlyBuildVisitSeleCell
+            cell.data = (titleArray[section], placeholderArray[section])
+            cell.contentStr = seleStrArray[section]
+            return cell
+
         }
     }
     
@@ -263,8 +336,18 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
         case 1, 2: seleOtherHandle(section: section)
         case 3: seleModelHandle()
         case 4: seleTimeHandle()
+        case 6: reGeocodeAction()
         case 7: break
         default: break
         }
     }
 }
+
+//MARK: - AMapLocationManagerDelegate
+extension NewlyBuildVisitController: AMapLocationManagerDelegate {
+    
+    func amapLocationManager(_ manager: AMapLocationManager!, doRequireLocationAuth locationManager: CLLocationManager!) {
+        locationManager.requestAlwaysAuthorization()
+    }
+}
+

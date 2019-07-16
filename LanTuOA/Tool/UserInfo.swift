@@ -34,7 +34,7 @@ class UserInfo: NSObject, NSCoding {
     private(set) var securityToken = ""
     /// securityToken 获取时间戳
 //    private(set) var 
-    
+    private(set) var unreadMessage = ""
     private override init() {
 //        super.init()
     }
@@ -48,6 +48,7 @@ class UserInfo: NSObject, NSCoding {
         aCoder.encode(position, forKey: "position")
         aCoder.encode(registrationID, forKey: "registrationID")
         aCoder.encode(securityToken, forKey: "securityToken")
+        aCoder.encode(unreadMessage,forKey: "unreadMessage")
     }
     
     /// 解档
@@ -59,6 +60,7 @@ class UserInfo: NSObject, NSCoding {
         position = aDecoder.decodeObject(forKey: "position") as? String ?? ""
         registrationID = aDecoder.decodeObject(forKey: "registrationID") as? String ?? ""
         securityToken = aDecoder.decodeObject(forKey: "securityToken") as? String ?? ""
+        unreadMessage = aDecoder.decodeObject(forKey: "unreadMessage") as? String ?? ""
     }
     
     // MARK: - 数据修改
@@ -90,6 +92,7 @@ class UserInfo: NSObject, NSCoding {
         position = ""
         registrationID = ""
         securityToken = ""
+        unreadMessage = ""
         userSave()
     }
     
@@ -126,6 +129,12 @@ class UserInfo: NSObject, NSCoding {
     /// 修改securityToken
     func setSecurityToken(_ securityToken: String) {
         self.securityToken = securityToken
+        userSave()
+    }
+    
+    ///修改未读消息数量
+    func setUnreadMessage(_ unreadMessage: String) {
+        self.unreadMessage = unreadMessage
         userSave()
     }
 }

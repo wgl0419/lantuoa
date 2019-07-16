@@ -42,9 +42,11 @@ class CheckReportContentController: UIViewController {
     /// 客户id
     private var customerId = -1
     /// 客户id数组
-    private var customerIdArray:Array = [-1,-1,-1,-1,-1,-1,-1]
+    private var customerIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
     /// 项目id
     private var projectId = -1
+    /// 项目id数组
+    private var projectIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
     /// 图片数据
     private var imageArray = [[UIImage]]()
     /// 图片信息数据
@@ -56,12 +58,30 @@ class CheckReportContentController: UIViewController {
     private var uploadImageIds = [[Int]]()
     /// 上报附件
     private var uploadFileIds = [[Int]]()
+    
+    //type==8
+    /// 图片数据
+    private var typeimageArray = [[[UIImage]]]()
+    /// 图片信息数据
+    private var typePHArray = [[[PHAsset]]]()
+    private var typeisOriginal = false
+    /// 选中文件
+    private var typefileArray = [[[(Data,String)]]]()
+    /// 上报的图片
+    private var typeuploadImageIds = [[[Int]]]()
+    /// 上报附件
+    private var typeuploadFileIds = [[[Int]]]()
+    
     //获取时间
     var currentDateCom: DateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
     ///记录选择相片所在的位置
     private var photoIndex = -1
+    ///type == 8
+    private var typephotoIndex = -1
     //记录选择文件所在的位置
     private var fileIndex = -2
+    ///type == 8
+    private var typefileIndex = -2
     /// 没有审批人
     private var isProcess = true {
         didSet {
@@ -140,15 +160,27 @@ class CheckReportContentController: UIViewController {
         if isProcess {
             var isEnabled = true
             for index in 0..<data.count {
-                let model = data[index]
-                let seleArray = seleStrArray[index]
-                for str in seleArray {
-                    if model.isNecessary == 1 && str.count == 0 {
-                        isEnabled = false
-                        break
+                var model = data[index]
+                if model.type == 8 {
+                    for ind in 0..<model.children.count {
+                        let  mode = model.children[ind]
+                        let seleArray = seleStrArray[index][ind]
+                        if mode.isNecessary == 1 && seleArray.count == 0 {
+                            isEnabled = false
+                            break
+                        }
+                    }
+                }else{
+                    let seleArray = seleStrArray[index]
+                    for str in seleArray {
+                        if model.isNecessary == 1 && str.count == 0 {
+                            isEnabled = false
+                            break
+                        }
                     }
                 }
             }
+            
             if isEnabled && pricessType == 5 {
                 isEnabled = contractData.count > 0 && moneyBackData.count > 0
             }
@@ -292,6 +324,7 @@ class CheckReportContentController: UIViewController {
         data.sort { (model1, model2) -> Bool in
             return model1.sort < model2.sort
         }
+        
         for index in 0..<data.count {
             let model = data[index]
             if model.type == 7 { // 客户
@@ -305,8 +338,14 @@ class CheckReportContentController: UIViewController {
                 var array = [String]()
                 for _ in smallArray {
                     array.append("")
+                    typeimageArray.append([[]])
+                    typePHArray.append([[]])
+                    typefileArray.append([[]])
+                    typeuploadImageIds.append([[]])
+                    typeuploadFileIds.append([[]])
                 }
                 seleStrArray.append(array)
+                
             }else{
                 seleStrArray.append([""])
                 imageArray.append([])
@@ -317,6 +356,22 @@ class CheckReportContentController: UIViewController {
             }
             
         }
+        let pricesCount = pricessType == 5 ? 3 : 4
+        for ind in 0..<pricesCount {
+            seleStrArray.append([""])
+            imageArray.append([])
+            PHArray.append([])
+            fileArray.append([])
+            uploadImageIds.append([])
+            uploadFileIds.append([])
+            
+            typeimageArray.append([[]])
+            typePHArray.append([[]])
+            typefileArray.append([[]])
+            typeuploadImageIds.append([[]])
+            typeuploadFileIds.append([[]])
+        }
+        
     }
     
     /// 审批人梳理
@@ -458,43 +513,66 @@ class CheckReportContentController: UIViewController {
     /// 上传部分
     private func getUpdataCell(_ indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
-            return getImageCell(indexPath)
+            let model = ProcessParamsData()
+            return getImageCell(indexPath,model: model)
         } else if indexPath.row == 1 {
-            return getEnclosureTitleCell(indexPath)
+            let model = ProcessParamsData()
+            return getEnclosureTitleCell(indexPath,model:model )
         } else {
-            return getEnclosureCell(indexPath)
+            return getEnclosureCell(indexPath,type: 0)
         }
     }
     
     /// 图片cell
-    private func getImageCell(_ indexPath: IndexPath) -> UITableViewCell {
-        let model = data[indexPath.section]
-        
+    private func getImageCell(_ indexPath: IndexPath,model:ProcessParamsData) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImageCell", for: indexPath) as! ToExamineImageCell
-        cell.data = imageArray[indexPath.section]
-        cell.imageLabel.text = model.title ?? ""
-        cell.dataTile = (model.title ?? "", model.hint ?? "")
-        cell.isMust = model.isNecessary == 1
-        cell.imageBlock = { [weak self] in
-            UIApplication.shared.keyWindow?.endEditing(true)
-            self!.photoIndex = indexPath.section
-            self?.imageClick(indexPath: indexPath)
-        }
-        cell.deleteBlock = { [weak self] (row) in
-            self?.imageArray[indexPath.section].remove(at: row)
-            self?.PHArray[indexPath.section].remove(at:row)
-            if self?.imageArray.count == 0 {
-                self!.seleStrArray[self!.photoIndex][0] = ""
+        let mod = data[indexPath.section]
+        if mod.type == 8 {
+            cell.data = typeimageArray[indexPath.section][indexPath.row]
+            cell.imageLabel.text = model.title ?? ""
+            cell.dataTile = (model.title ?? "", model.hint ?? "")
+            cell.isMust = model.isNecessary == 1
+            cell.imageBlock = { [weak self] in
+                UIApplication.shared.keyWindow?.endEditing(true)
+                self!.photoIndex = indexPath.section
+                self!.typephotoIndex = indexPath.row
+                self?.imageClick(indexPath: indexPath)
             }
-            self?.reloadImageCell()
+            cell.deleteBlock = { [weak self] (row) in
+                self?.typeimageArray[indexPath.section][indexPath.row].remove(at: row)
+                self?.typePHArray[indexPath.section][indexPath.row].remove(at:row)
+                if self?.typeimageArray.count == 0 {
+                    self!.seleStrArray[indexPath.section][indexPath.row] = ""
+                }
+                self?.reloadImageCell()
+            }
+        }else{
+            cell.data = imageArray[indexPath.section]
+            cell.imageLabel.text = model.title ?? ""
+            cell.dataTile = (model.title ?? "", model.hint ?? "")
+            cell.isMust = model.isNecessary == 1
+            cell.imageBlock = { [weak self] in
+                UIApplication.shared.keyWindow?.endEditing(true)
+                self!.photoIndex = indexPath.section
+                self?.imageClick(indexPath: indexPath)
+            }
+            cell.deleteBlock = { [weak self] (row) in
+                self?.imageArray[indexPath.section].remove(at: row)
+                self?.PHArray[indexPath.section].remove(at:row)
+                if self?.imageArray.count == 0 {
+                    self!.seleStrArray[self!.photoIndex][row] = ""
+                }
+                self?.reloadImageCell()
+            }
         }
         return cell
     }
     
     /// 附件标题cell
-    private func getEnclosureTitleCell(_ indexPath: IndexPath) -> UITableViewCell {
-        let model = data[indexPath.section]
-        if indexPath.row == 0 {
+    private func getEnclosureTitleCell(_ indexPath: IndexPath,model:ProcessParamsData) -> UITableViewCell {
+        
+        let mod = data[indexPath.section]
+        if  mod.type == 8 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureTitleCell", for: indexPath) as! ToExamineEnclosureTitleCell
             cell.enclosureLabel.text = model.title ?? ""
             cell.dataTile = (model.title ?? "", model.hint ?? "")
@@ -502,9 +580,10 @@ class CheckReportContentController: UIViewController {
             cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
             cell.enclosureBlock = {
                 self.fileIndex  = indexPath.section
+                self.typefileIndex = indexPath.row
                 let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                 let action = UIAlertAction(title: "相册", style: .default) { _ in
-                    self.addImageEnclosure(indexPath: indexPath as NSIndexPath)
+                    self.addImageEnclosure(indexPath: indexPath as NSIndexPath,type:8)
                 }
                 let albumAction = UIAlertAction(title: "文档", style: .default) { _ in
                     let vc = UIDocumentPickerViewController(documentTypes: ["public.content","public.text"], in: .open)
@@ -519,26 +598,67 @@ class CheckReportContentController: UIViewController {
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
             }
+            cell.typefileArray = typefileArray[indexPath.section][indexPath.row]
+            cell.deleteBlock = { [weak self] number in
+                self?.typefileArray[indexPath.section][indexPath.row].remove(at: number)
+                if self?.typefileArray[indexPath.section][indexPath.row].count == 0 {
+                    self!.seleStrArray[indexPath.section][indexPath.row] = ""
+                }
+                self?.reloadImageCell()
+            }
             return cell
+            
         }else{
-            return getEnclosureCell(indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureTitleCell", for: indexPath) as! ToExamineEnclosureTitleCell
+            cell.enclosureLabel.text = model.title ?? ""
+            cell.dataTile = (model.title ?? "", model.hint ?? "")
+            cell.isMust = model.isNecessary == 1
+            cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
+            cell.enclosureBlock = {
+                self.fileIndex  = indexPath.section
+                let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                let action = UIAlertAction(title: "相册", style: .default) { _ in
+                    self.addImageEnclosure(indexPath: indexPath as NSIndexPath,type:0)
+                }
+                let albumAction = UIAlertAction(title: "文档", style: .default) { _ in
+                    let vc = UIDocumentPickerViewController(documentTypes: ["public.content","public.text"], in: .open)
+                    vc.delegate = self
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: true, completion: nil)
+                }
+                
+                let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+                alert.addAction(action)
+                alert.addAction(albumAction)
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+            cell.typefileArray = fileArray[indexPath.section]
+            cell.deleteBlock = { [weak self] number in
+                self?.fileArray[indexPath.section].remove(at: number)
+                if self?.fileArray[indexPath.section].count == 0 {
+                    self!.seleStrArray[indexPath.section][indexPath.row] = ""
+                }
+                self?.reloadImageCell()
+            }
+            return cell
         }
-        
     }
     
     /// 附件cell
-    private func getEnclosureCell(_ indexPath: IndexPath) -> UITableViewCell {
+    private func getEnclosureCell(_ indexPath: IndexPath, type:Int) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineEnclosureCell", for: indexPath) as! ToExamineEnclosureCell
         cell.separatorInset = UIEdgeInsets(top: 0, left: ScreenWidth, bottom: 0, right: 0)
         cell.enclosureData = fileArray[indexPath.section][indexPath.row - 1]
         cell.deleteBlock = { [weak self] in
             self?.fileArray[indexPath.section].remove(at: indexPath.row)
             if self?.fileArray[indexPath.section].count == 0 {
-                self!.seleStrArray[self!.fileIndex][0] = ""
+                self!.seleStrArray[self!.fileIndex][indexPath.row] = ""
             }
             self?.reloadImageCell()
         }
         return cell
+        
     }
     
     /// 合同人员cell
@@ -625,105 +745,211 @@ class CheckReportContentController: UIViewController {
         let photoSheet = ZLPhotoActionSheet()
         photoSheet.sender = self
         photoSheet.configuration.allowEditImage = false
-        photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
-            self?.imageArray[IndexPath.section] = images!
-            self?.PHArray[IndexPath.section] = assets
-            self?.isOriginal = isOriginal
-            //            self?.reloadImageCell()
-            self!.uploadGetKey(indexPath: IndexPath as NSIndexPath,typ:1)
-            self!.confirmHandle()
-        }
-        if indexPath < 0 { // 添加图片
-            let arrSelectedAssets = NSMutableArray()
-            for item in PHArray[IndexPath.section] {
-                arrSelectedAssets.add(item)
+        let model = data[IndexPath.section]
+        if model.type == 8 {
+            photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
+                self?.typeimageArray[IndexPath.section][IndexPath.row] = images!
+                self?.typePHArray[IndexPath.section][IndexPath.row] = assets
+                self?.typeisOriginal = isOriginal
+                self!.uploadGetKey(indexPath: IndexPath as NSIndexPath,typ:1, eight: 8)
+                self!.confirmHandle()
             }
-            photoSheet.arrSelectedAssets = arrSelectedAssets
-            photoSheet.configuration.maxSelectCount = 9
-            photoSheet.configuration.allowSelectGif = false
-            photoSheet.configuration.allowSelectVideo = false
-            photoSheet.configuration.allowSlideSelect = false
-            photoSheet.configuration.allowSelectLivePhoto = false
-            photoSheet.configuration.allowTakePhotoInLibrary = false
-            photoSheet.showPhotoLibrary()
-        } else { // 浏览图片
+            if indexPath < 0 { // 添加图片
+                let arrSelectedAssets = NSMutableArray()
+                if typePHArray[IndexPath.section].count > 0 {
+                    for item in typePHArray[IndexPath.section][IndexPath.row] {
+                        arrSelectedAssets.add(item)
+                    }
+                }
+                photoSheet.arrSelectedAssets = arrSelectedAssets
+                photoSheet.configuration.maxSelectCount = 9
+                photoSheet.configuration.allowSelectGif = false
+                photoSheet.configuration.allowSelectVideo = false
+                photoSheet.configuration.allowSlideSelect = false
+                photoSheet.configuration.allowSelectLivePhoto = false
+                photoSheet.configuration.allowTakePhotoInLibrary = false
+                photoSheet.showPhotoLibrary()
+            } else { // 浏览图片
+                
+                photoSheet.previewSelectedPhotos(typeimageArray[IndexPath.section][IndexPath.row], assets: typePHArray[IndexPath.section][IndexPath.row], index: indexPath, isOriginal: isOriginal)
+                //            photoSheet.previewPhotos(<#T##photos: [[AnyHashable : Any]]##[[AnyHashable : Any]]#>, index: <#T##Int#>, hideToolBar: <#T##Bool#>, complete: <#T##([Any]) -> Void#>)
+            }
             
-            photoSheet.previewSelectedPhotos(imageArray[IndexPath.section], assets: PHArray[IndexPath.section], index: indexPath, isOriginal: isOriginal)
-            //            photoSheet.previewPhotos(<#T##photos: [[AnyHashable : Any]]##[[AnyHashable : Any]]#>, index: <#T##Int#>, hideToolBar: <#T##Bool#>, complete: <#T##([Any]) -> Void#>)
+        }else{
+            photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
+                self?.imageArray[IndexPath.section] = images!
+                self?.PHArray[IndexPath.section] = assets
+                self?.isOriginal = isOriginal
+                self!.uploadGetKey(indexPath: IndexPath as NSIndexPath,typ:1, eight: 0)
+                self!.confirmHandle()
+            }
+            if indexPath < 0 { // 添加图片
+                let arrSelectedAssets = NSMutableArray()
+                if PHArray.count > 0 {
+                    for item in PHArray[IndexPath.section] {
+                        arrSelectedAssets.add(item)
+                    }
+                }
+                photoSheet.arrSelectedAssets = arrSelectedAssets
+                photoSheet.configuration.maxSelectCount = 9
+                photoSheet.configuration.allowSelectGif = false
+                photoSheet.configuration.allowSelectVideo = false
+                photoSheet.configuration.allowSlideSelect = false
+                photoSheet.configuration.allowSelectLivePhoto = false
+                photoSheet.configuration.allowTakePhotoInLibrary = false
+                photoSheet.showPhotoLibrary()
+            } else { // 浏览图片
+                
+                photoSheet.previewSelectedPhotos(imageArray[IndexPath.section], assets: PHArray[IndexPath.section], index: indexPath, isOriginal: isOriginal)
+                //            photoSheet.previewPhotos(<#T##photos: [[AnyHashable : Any]]##[[AnyHashable : Any]]#>, index: <#T##Int#>, hideToolBar: <#T##Bool#>, complete: <#T##([Any]) -> Void#>)
+            }
         }
+        
+        
     }
     
     /// 上传文件
-    private func uploadGetKey(indexPath:NSIndexPath,typ:Int) {
-        if imageArray.count == 0 && fileArray.count == 0 {
-            //            self.processCommit()
-        } else {
-            
-            if typ == 1{
-                var  arr = imageArray[indexPath.section]
-                for index in 0..<arr.count {
-                    let size = 0
-                    var type: Int!
-                    var name: String!
-                    var uploadData: Data!
-                    type = 1
-                    name = "".randomStringWithLength(len: 8) + ".png"
-                    uploadData = arr[index].jpegData(compressionQuality: 0.5) ?? Data()
-                    
-                    fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
-                        if status {
-                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath)
-                        }
-                    }
-                }
-            }else{
-                var  fileArr = fileArray[indexPath.section]
-                for index in 0..<fileArr.count {
-                    var size = 0
-                    var type: Int!
-                    var name: String!
-                    var uploadData: Data!
-                    type = 2
-                    name = fileArr[index].1
-                    uploadData = fileArr[index].0
-                    size = fileArr[index].0.count
-                    fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+    private func uploadGetKey(indexPath:NSIndexPath,typ:Int,eight:Int) {
+        if eight == 8{
+            if typeimageArray.count == 0 && typefileArray.count == 0 {
+                //            self.processCommit()
+            } else {
+                if typ == 1{
+                    var  arr = typeimageArray[indexPath.section][indexPath.row]
+                    for index in 0..<arr.count {
+                        let size = 0
+                        var type: Int!
+                        var name: String!
+                        var uploadData: Data!
+                        type = 1
+                        name = "".randomStringWithLength(len: 8) + ".png"
+                        uploadData = arr[index].jpegData(compressionQuality: 0.5) ?? Data()
                         
-                        if status {
-                            self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath)
+                        fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                            if status {
+                                self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath,eight:eight)
+                            }
                         }
                     }
+                }else{
+                    var  fileArr = typefileArray[indexPath.section][indexPath.row]
+                    for index in 0..<fileArr.count {
+                        var size = 0
+                        var type: Int!
+                        var name: String!
+                        var uploadData: Data!
+                        type = 2
+                        name = fileArr[index].1
+                        uploadData = fileArr[index].0
+                        size = fileArr[index].0.count
+                        fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                            
+                            if status {
+                                self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath,eight:eight)
+                            }
+                        }
+                    }
+                    
                 }
-                
+            }
+        }else{
+            if imageArray.count == 0 && fileArray.count == 0 {
+                //            self.processCommit()
+            } else {
+                if typ == 1{
+                    var  arr = imageArray[indexPath.section]
+                    for index in 0..<arr.count {
+                        let size = 0
+                        var type: Int!
+                        var name: String!
+                        var uploadData: Data!
+                        type = 1
+                        name = "".randomStringWithLength(len: 8) + ".png"
+                        uploadData = arr[index].jpegData(compressionQuality: 0.5) ?? Data()
+                        
+                        fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                            if status {
+                                self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == arr.count - 1,indexPath: indexPath,eight:eight)
+                            }
+                        }
+                    }
+                }else{
+                    var  fileArr = fileArray[indexPath.section]
+                    for index in 0..<fileArr.count {
+                        var size = 0
+                        var type: Int!
+                        var name: String!
+                        var uploadData: Data!
+                        type = 2
+                        name = fileArr[index].1
+                        uploadData = fileArr[index].0
+                        size = fileArr[index].0.count
+                        fileUploadGetKey(type: type, name: name, size: size) { (status, body, path) in
+                            
+                            if status {
+                                self.uploadData(uploadData, name: path ?? "", body: body!, type: type, isLast: index == fileArr.count - 1,indexPath: indexPath,eight:eight)
+                            }
+                        }
+                    }
+                    
+                }
             }
         }
+        
     }
     
     /// 上传数据
-    private func uploadData(_ data: Data, name: String, body: Int, type: Int, isLast: Bool,indexPath:NSIndexPath) {
+    private func uploadData(_ data: Data, name: String, body: Int, type: Int, isLast: Bool,indexPath:NSIndexPath,eight:Int) {
+        
         AliOSSClient.shared.uploadData(data, name: name, body: body) { (status) in
+            
             if status {
-                if type == 1 {
-                    self.uploadImageIds[indexPath.section].append(body)
-                    self.seleStrArray[self.photoIndex][0] = "\(self.photoIndex)"
-                } else {
-                    self.seleStrArray[self.fileIndex][0] = "xx"
-                    self.uploadFileIds[indexPath.section].append(body)
+                if eight == 8 {
+                    if type == 1 {
+                        self.typeuploadImageIds[indexPath.section][indexPath.row].append(body)
+                        self.seleStrArray[indexPath.section][indexPath.row] = "\(self.photoIndex)"
+                    } else {
+                        self.seleStrArray[indexPath.section][indexPath.row] = "xx"
+                        self.typeuploadFileIds[indexPath.section][indexPath.row].append(body)
+                    }
+                    if isLast {
+                        
+                        DispatchQueue.main.async(execute: {
+                            if self.typeuploadFileIds[indexPath.section][indexPath.row].count == self.typefileArray[indexPath.section][indexPath.row].count && self.typeuploadImageIds[indexPath.section][indexPath.row].count == self.typeimageArray[indexPath.section][indexPath.row].count {
+                                MBProgressHUD.showSuccess("图片上传成功")
+                                self.reloadImageCell()
+                            } else {
+                                MBProgressHUD.showError("上传失败")
+                            }
+                        })
+                    }
+                }else{
+                    if type == 1 {
+                        self.uploadImageIds[indexPath.section].append(body)
+                        self.seleStrArray[self.photoIndex][indexPath.row] = "\(self.photoIndex)"
+                    } else {
+                        self.seleStrArray[self.fileIndex][indexPath.row] = "xx"
+                        self.uploadFileIds[indexPath.section].append(body)
+                    }
+                    if isLast {
+                        DispatchQueue.main.async(execute: {
+                            
+                            if self.uploadFileIds[indexPath.section].count == self.fileArray[indexPath.section].count && self.uploadImageIds[indexPath.section].count == self.imageArray[indexPath.section].count {
+                                MBProgressHUD.showSuccess("图片上传成功")
+                                self.reloadImageCell()
+                            } else {
+                                MBProgressHUD.showError("上传失败")
+                            }
+                        })
+                    }
+                    
                 }
-                if isLast {
-                    DispatchQueue.main.async(execute: {
-                        if self.uploadFileIds[indexPath.section].count == self.fileArray[indexPath.section].count && self.uploadImageIds[indexPath.section].count == self.imageArray[indexPath.section].count {
-                            MBProgressHUD.showSuccess("图片上传成功")
-                            self.reloadImageCell()
-                        } else {
-                            MBProgressHUD.showError("上传失败")
-                        }
-                    })
-                }
+                
+            }else{
+                MBProgressHUD.showError("上传失败")
             }
         }
     }
-    
     
     /// 获取提交时的data部分的数据处理
     private func processDataHnadle(_ model: ProcessParamsData, str: String ,index:Int) -> String {
@@ -733,9 +959,11 @@ class CheckReportContentController: UIViewController {
         } else if model.type == 6 { // 客户
             contentStr = "\(customerIdArray[index])"
         } else if model.type == 7 { // 项目
-            contentStr = "\(projectId)"
+            contentStr = "\(projectIdArray[index])"
         }else if model.type == 11 {
             contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm"))"
+        }else if model.type == 1 {
+            contentStr = str
         }
         return contentStr
     }
@@ -743,55 +971,107 @@ class CheckReportContentController: UIViewController {
     private func processDataHnadleImage(_ model: ProcessParamsData, str: String ,index:Int) -> Array<Any> {
         var images = [Any]()
         if model.type == 9 {
-            //            if imageArray[index].count
             for indext in 0..<uploadImageIds[index].count {
                 let fileId = uploadImageIds[index][indext]
+                
                 images.append(fileId)
             }
         }else if model.type == 10{
             for indext in 0..<uploadFileIds[index].count {
                 let fileId = uploadFileIds[index][indext]
+                
                 images.append(fileId)
             }
         }
         return images
     }
     
+    ///type == 8获取提交时的处理图片问题
+    private func typeProcessDataHnadleImage(_ model: ProcessParamsData, str: String ,index:Int,row:Int) -> Array<Any> {
+        var images = [Any]()
+        if model.type == 9 {
+            let fileId = typeuploadImageIds[index][row]
+            for itme in fileId {
+                images.append(itme)
+            }
+        }else if model.type == 10{
+            let fileId = typeuploadFileIds[index][row]
+            for itme in fileId {
+                images.append(itme)
+            }
+        }
+        return images
+    }
+    
     /// 生成文件名称
-    private func initFileName(_ name: String) -> String {
+    private func initFileName(_ name: String,typeEight:Int) -> String {
         let fileName = name.components(separatedBy: ".").first ?? ""
         let type = name.components(separatedBy: ".").last ?? ""
-        let similarName = fileArray[fileIndex].filter { (model) -> Bool in
-            return model.1.contains(fileName)
-        }
-        if similarName.count > 0 {
-            let lastSimilar = similarName.last ?? (Data(), "")
-            if lastSimilar.1.contains("(") {
-                var index = lastSimilar.1.components(separatedBy: "(").last ?? ""
-                index = index.components(separatedBy: ")").first ?? ""
-                let number = 1 + (Int(index) ?? 0)
-                return fileName + "(\(number))." + type
-            } else {
-                return fileName + "(1)." + type
+        if typeEight == 8 {
+            let similarName = typefileArray[fileIndex][typefileIndex].filter { (model) -> Bool in
+                return model.1.contains(fileName)
             }
-        } else {
-            return name
+            if similarName.count > 0 {
+                let lastSimilar = similarName.last ?? (Data(), "")
+                if lastSimilar.1.contains("(") {
+                    var index = lastSimilar.1.components(separatedBy: "(").last ?? ""
+                    index = index.components(separatedBy: ")").first ?? ""
+                    let number = 1 + (Int(index) ?? 0)
+                    return fileName + "(\(number))." + type
+                } else {
+                    return fileName + "(1)." + type
+                }
+            } else {
+                return name
+            }
+        }else{
+            let similarName = fileArray[fileIndex].filter { (model) -> Bool in
+                return model.1.contains(fileName)
+            }
+            if similarName.count > 0 {
+                let lastSimilar = similarName.last ?? (Data(), "")
+                if lastSimilar.1.contains("(") {
+                    var index = lastSimilar.1.components(separatedBy: "(").last ?? ""
+                    index = index.components(separatedBy: ")").first ?? ""
+                    let number = 1 + (Int(index) ?? 0)
+                    return fileName + "(\(number))." + type
+                } else {
+                    return fileName + "(1)." + type
+                }
+            } else {
+                return name
+            }
         }
+        
     }
     
     /// 添加图片附件
-    private func addImageEnclosure(indexPath:NSIndexPath) {
+    private func addImageEnclosure(indexPath:NSIndexPath,type:Int) {
         let photoSheet = ZLPhotoActionSheet()
         photoSheet.sender = self
         photoSheet.configuration.allowEditImage = false
         photoSheet.selectImageBlock = { [weak self] images, assets, isOriginal in
-            for image in images ?? [] {
-                let fileName = "".randomStringWithLength(len: 8) + ".png"
-                let fileData = image.pngData() ?? Data()
-                self?.fileArray[indexPath.section].append((fileData,fileName))
+            if type == 8 {
+                for image in images ?? [] {
+                    let fileName = "".randomStringWithLength(len: 8) + ".png"
+                    let fileData = image.pngData() ?? Data()
+                    self?.typefileArray[indexPath.section][indexPath.row].append((fileData,fileName))
+                }
+                self?.reloadImageCell()
+                self!.seleStrArray[self!.fileIndex][self!.typefileIndex] = "xx"
+                self!.uploadGetKey(indexPath: indexPath,typ:0, eight: 8)
+                self!.confirmHandle()
+            }else{
+                for image in images ?? [] {
+                    let fileName = "".randomStringWithLength(len: 8) + ".png"
+                    let fileData = image.pngData() ?? Data()
+                    self?.fileArray[indexPath.section].append((fileData,fileName))
+                }
+                self?.reloadImageCell()
+                self!.seleStrArray[self!.fileIndex][0] = "xx"
+                self!.uploadGetKey(indexPath: indexPath,typ:0, eight: 0)
+                self!.confirmHandle()
             }
-            self!.uploadGetKey(indexPath: indexPath,typ:2)
-            self!.confirmHandle()
         }
         photoSheet.configuration.maxSelectCount = 9
         photoSheet.configuration.allowSelectGif = false
@@ -801,6 +1081,7 @@ class CheckReportContentController: UIViewController {
         photoSheet.configuration.allowTakePhotoInLibrary = false
         photoSheet.showPhotoLibrary()
     }
+    
     
     // MARK: - Api
     /// 获取流程内容
@@ -836,10 +1117,12 @@ class CheckReportContentController: UIViewController {
         var dataDic: [String:Any] = [:]
         for index in 0..<data.count {
             let model = data[index]
+            
             if model.type < 8 {
                 var contentStr = seleStrArray[index][0]
                 contentStr = processDataHnadle(model, str: contentStr,index:[index][0])
                 dataDic.updateValue(contentStr, forKey: model.name ?? "")
+                
             }else if model.type == 9 {
                 dataDic.updateValue(processDataHnadleImage(model, str: "", index: index), forKey: model.name ?? "")
             }else if model.type == 10 {
@@ -849,14 +1132,28 @@ class CheckReportContentController: UIViewController {
                 contentStr = processDataHnadle(model, str: contentStr,index:[index][0])
                 dataDic.updateValue(contentStr, forKey: model.name ?? "")
             }
-            else { // 表单
-                var dic: [String:String] = [:]
+            else if model.type == 8 { // 表单
+                var dic: [String:Any] = [:]
                 let children = model.children
                 for childrenIndex in 0..<children.count {
                     let smallModel = children[childrenIndex]
-                    var contentStr = seleStrArray[index][childrenIndex]
-                    contentStr = processDataHnadle(model, str: contentStr,index:[index][0])
-                    dic.updateValue(contentStr, forKey: smallModel.name ?? "")
+                    
+                    if smallModel.type < 8 {
+                        var contentStr = seleStrArray[index][0]
+                        contentStr = processDataHnadle(smallModel, str: contentStr,index:[index][0])
+                        dic.updateValue(contentStr, forKey: smallModel.name ?? "")
+                    }else if smallModel.type == 9 {
+                        dic.updateValue(typeProcessDataHnadleImage(smallModel , str: "", index: index,row: childrenIndex), forKey: smallModel.name ?? "")
+                        
+                    }else if smallModel.type == 10 {
+                        
+                        dic.updateValue(typeProcessDataHnadleImage(smallModel, str: "", index: index,row: childrenIndex), forKey: smallModel.name ?? "")
+                    }else if smallModel.type == 11 {
+                        var contentStr = seleStrArray[index][childrenIndex]
+                        contentStr = processDataHnadle(smallModel, str: contentStr,index:[index][childrenIndex])
+                        dic.updateValue(contentStr, forKey: smallModel.name ?? "")
+                    }
+                    
                 }
                 dataDic.updateValue(dic, forKey: model.name ?? "")
             }
@@ -980,13 +1277,24 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
             return 1
         } else if section == data.count + 2 {
             return 1
-        }else {
+        }
+//        else {
+//            let model = data[section]
+//            if model.type == 10 {
+//                return 1+fileArray[section].count;
+//            }else{
+//                return 1;
+//            }
+//        }
+        
+        else {
             let model = data[section]
-            if model.type == 10 {
-                return 1+fileArray[section].count;
+            if model.type == 8 {
+                return model.children.count
             }else{
-                return 1;
+                return 1
             }
+            
         }
     }
     
@@ -1007,6 +1315,21 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
             
             if model.type == 8 {
                 model = model.children[row]
+                
+                typeimageArray[indexPath.section].append([])
+                typePHArray[indexPath.section].append([])
+                typefileArray[indexPath.section].append([])
+                typeuploadImageIds[indexPath.section].append([])
+                typeuploadFileIds[indexPath.section].append([])
+                
+                let pricesCount = pricessType == 5 ? 3 : 4
+                for ind in 0..<pricesCount {
+                    typeimageArray[indexPath.section].append([])
+                    typePHArray[indexPath.section].append([])
+                    typefileArray[indexPath.section].append([])
+                    typeuploadImageIds[indexPath.section].append([])
+                    typeuploadFileIds[indexPath.section].append([])
+                }
             }
             switch model.type {
             case 1: // 1.文本
@@ -1031,9 +1354,9 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
                 }
                 return cell
             case 9: // 9相册
-                return getImageCell(indexPath)
+                return getImageCell(indexPath,model:model)
             case 10: // 10文件
-                return getEnclosureTitleCell(indexPath)
+                return getEnclosureTitleCell(indexPath,model: model)
             case 3, 4, 5, 6, 7, 11: // 3.日期，4.单选，5.多选，6.客户，7.项目 11.日期到分钟
                 let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitSeleCell", for: indexPath) as! NewlyBuildVisitSeleCell
                 cell.data = (model.title ?? "", model.hint ?? "")
@@ -1045,22 +1368,39 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if canUpload == 1 {
-            if section == data.count - 1 {
-            }
-        }
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
-        footerView.backgroundColor = .clear
-        return footerView
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.01
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if canUpload == 1 {
-            if section == data.count - 1 {
-            }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if ((section) < data.count && data[section].type == 8) {
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 40))
+            headerView.backgroundColor = .clear
+            _ = UILabel().taxi.adhere(toSuperView: headerView) //
+                .taxi.layout(snapKitMaker: { (make) in
+                    make.left.equalToSuperview().offset(15)
+                    make.centerY.equalToSuperview()
+                })
+                .taxi.config({ (label) in
+                    label.font = UIFont.regular(size: 12)
+                    label.textColor = UIColor(hex: "#666666")
+                    label.text = data[section ].title ?? ""
+                })
+            return headerView
+        } else {
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
+            headerView.backgroundColor = .clear
+            return headerView
         }
-        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        if ((section ) < data.count && data[section].type == 8) {
+            return 40
+        } else {
+            return 10
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -1099,10 +1439,21 @@ extension CheckReportContentController: UIImagePickerControllerDelegate, UINavig
         let library = ALAssetsLibrary()
         library.writeImage(toSavedPhotosAlbum: image?.cgImage, orientation: ALAssetOrientation(rawValue: image?.imageOrientation.rawValue ?? 0)!) { (assetURL, error) in
             if error == nil {
-                let result = PHAsset.fetchAssets(withALAssetURLs: [assetURL!], options: nil)
-                self.imageArray[self.photoIndex].append(image!)
-                self.PHArray[self.photoIndex].append(result.firstObject!)
-                self.reloadImageCell()
+                for index in 0..<self.data.count {
+                    let model = self.data[index]
+                    if model.type == 8 { // 表单
+                        let result = PHAsset.fetchAssets(withALAssetURLs: [assetURL!], options: nil)
+                        self.typeimageArray[self.photoIndex][self.typephotoIndex].append(image!)
+                        self.typePHArray[self.photoIndex][self.typephotoIndex].append(result.firstObject!)
+                        self.reloadImageCell()
+                    }else{
+                        let result = PHAsset.fetchAssets(withALAssetURLs: [assetURL!], options: nil)
+                        self.imageArray[self.photoIndex].append(image!)
+                        self.PHArray[self.photoIndex].append(result.firstObject!)
+                        self.reloadImageCell()
+                    }
+                    
+                }
             }
         }
         picker.dismiss(animated: true, completion: nil)
@@ -1117,10 +1468,22 @@ extension CheckReportContentController: UIDocumentPickerDelegate {
             let fileCoordinator = NSFileCoordinator()
             fileCoordinator.coordinate(readingItemAt: url, options: .withoutChanges, error: &error) { (newURL) in
                 do { // 不缓存，只获取data和名称
-                    var fileName = url.lastPathComponent
-                    let fileData = try Data(contentsOf: newURL)
-                    fileName = initFileName(fileName)
-                    self.fileArray[fileIndex].append((fileData, fileName))
+                    for index in 0..<self.data.count {
+                        let model = self.data[index]
+                        if model.type == 8 { // 表单
+                            var fileName = url.lastPathComponent
+                            let fileData = try Data(contentsOf: newURL)
+                            fileName = initFileName(fileName,typeEight: 8)
+                            self.typefileArray[fileIndex][typefileIndex].append((fileData, fileName))
+                            
+                        }else{
+                            var fileName = url.lastPathComponent
+                            let fileData = try Data(contentsOf: newURL)
+                            fileName = initFileName(fileName,typeEight: 0)
+                            self.fileArray[fileIndex].append((fileData, fileName))
+                        }
+                    }
+                    
                 } catch {
                     MBProgressHUD.showError("添加失败")
                 }
@@ -1129,4 +1492,3 @@ extension CheckReportContentController: UIDocumentPickerDelegate {
         url.stopAccessingSecurityScopedResource()
     }
 }
-

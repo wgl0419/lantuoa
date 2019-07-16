@@ -105,7 +105,7 @@ enum APIManager {
     case processCommit(Int, [String:Any], [[String:String]], [[String:String]], [[String:String]], [[String:String]], [[String:String]]) // 提交流程
     
     // MARK: - 合同
-    case contractList(String, Int?, Int?, Int?, Int, Int, Int?, Int?, Int?) // 合同列表/查询合同 (name:客户名称/项目名称/合同编码   customerId:客户id  projectId:项目id   userId:用户id，查询他人合同时使用  page:页码   limit:一页数据)
+    case contractList(String, Int?, Int?, Int?, Int, Int, Int?, Int?, Int?, Int?, Int?, Int?) // 合同列表/查询合同 (name:客户名称/项目名称/合同编码   customerId:客户id  projectId:项目id   userId:用户id，查询他人合同时使用  page:页码   limit:一页数据,paid:1表示已付款完成，2未完成付款，不传显示全部,overdue:传1表示逾期未付款，不传显示全部,active:1表示发布中，其他表示不限制)
     case contractPaybackList(Int) // 回款列表  (合同id)
     case performList(Int, Int?, Int?, Int?)  // 业绩列表  (queryType: 1.按人-合同查询 2.按人查询总业绩      userId:用户id(与self排斥)    self:查看自己的业绩(与userId排斥)       contractId:合同id（queryType = 1时传）)
     case contractUpdate(Int, Float?, Float?, Int?, Int?, Int?) // 修改合同内容  (合同id  totalMoney：合同总额   rebate:支持总额   startTime:开始时间戳  endTime:结束时间戳)
@@ -438,7 +438,7 @@ extension APIManager: TargetType {
 //            if imgs.count > 0 { params["imgs"] = imgs }
             
             return .requestParameters(parameters: params, encoding: JSONEncoding.default)
-        case let .contractList(name, customerId, projectId, userId, page, limit, startTime, endTime, processId): // 合同列表/查询合同
+        case let .contractList(name, customerId, projectId, userId, page, limit, startTime, endTime, processId , paid,overdue ,active): // 合同列表/查询合同
             params = ["name": name, "page": page, "limit": limit]
             if customerId != nil { params["customerId"] = customerId! }
             if projectId != nil { params["projectId"] = projectId! }
@@ -446,6 +446,9 @@ extension APIManager: TargetType {
             if startTime != nil { params["startTime"] = startTime! }
             if endTime != nil { params["endTime"] = endTime! }
             if processId != nil { params["processId"] = processId! }
+            if paid != nil { params["paid"] = paid! }
+            if overdue != nil { params["overdue"] = overdue! }
+            if active != nil { params["active"] = active! }
         case let .performList(queryType, userId, `self`, contractId): // 业绩列表
             params = ["queryType": queryType]
             if userId != nil { params["userId"] = userId! }

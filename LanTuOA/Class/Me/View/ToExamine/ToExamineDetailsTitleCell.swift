@@ -14,7 +14,7 @@ class ToExamineDetailsTitleCell: UITableViewCell {
     
     ///线
     private var line: UIView!
-    private var line2: UIView!
+//    private var line2: UIView!
     
     /// 数据
     var data: NotifyCheckListSmallData? {
@@ -26,7 +26,7 @@ class ToExamineDetailsTitleCell: UITableViewCell {
                     titleLabel.attributedText = richText(title: stringStr, content: data.value ?? "")
                 }else if data.type == 2 {
                     titleLabel.text = data.title ?? ""
-                    line2.isHidden = false
+//                    line2.isHidden = false
                 }else if data.type == 3 {
                     self.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: 20)
                     line.isHidden = false
@@ -82,18 +82,18 @@ class ToExamineDetailsTitleCell: UITableViewCell {
 
             })
         
-        line2 = UIView().taxi.adhere(toSuperView: contentView) // 线
-            .taxi.layout(snapKitMaker: { (make) in
-                make.top.equalToSuperview().offset(0)
-                make.left.equalToSuperview().offset(15)
-                make.right.equalToSuperview()
-                make.height.equalTo(1)
-            })
-            .taxi.config({ (line) in
-                line.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
-                line.isHidden = true
-
-            })
+//        line2 = UIView().taxi.adhere(toSuperView: contentView) // 线
+//            .taxi.layout(snapKitMaker: { (make) in
+//                make.top.equalToSuperview().offset(0)
+//                make.left.equalToSuperview().offset(15)
+//                make.right.equalToSuperview()
+//                make.height.equalTo(1)
+//            })
+//            .taxi.config({ (line) in
+//                line.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+//                line.isHidden = true
+//
+//            })
     }
     
     ///处理编号

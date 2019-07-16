@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         configJPush(launchOptions: launchOptions)
-        AMapServices.shared().apiKey = ""
+        AMapServices.shared().apiKey = "7f5abacf03a0d00ff9d48b7bc412d1cf"
         setDifferenceForIOS11()
         setIQKeyboardManager()
         setMainController()

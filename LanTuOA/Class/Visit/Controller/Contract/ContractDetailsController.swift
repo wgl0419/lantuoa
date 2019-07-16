@@ -76,7 +76,7 @@ class ContractDetailsController: UIViewController {
         headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
         headerHeight = headerView.height // 并保存
         
-        var titleArray = ["发布内容", "付款情况", "业绩详情","补充说明"]
+        let titleArray = ["发布内容", "付款情况", "业绩详情","补充说明"]
 //        if Jurisdiction.share.isViewContractDesc {
 //            titleArray.append("补充说明")
 //        }

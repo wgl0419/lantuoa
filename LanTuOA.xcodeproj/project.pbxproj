@@ -268,6 +268,7 @@
 		18FD0CA622C22086008AD0AC /* CheckReportRecipientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FD0CA522C22086008AD0AC /* CheckReportRecipientCell.swift */; };
 		18FD0CA822C225BD008AD0AC /* CheckReportTemplateFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FD0CA722C225BD008AD0AC /* CheckReportTemplateFilterCell.swift */; };
 		18FD0CAA22C22896008AD0AC /* TemplateFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FD0CA922C22896008AD0AC /* TemplateFilterCell.swift */; };
+		18FFA83C22DD812A002E8FA6 /* NewlyBuildVisitLocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FFA83B22DD812A002E8FA6 /* NewlyBuildVisitLocationCell.swift */; };
 		20086A34FD370732D57E936F /* Pods_LanTuOA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731155E08D0F4362D82C88E7 /* Pods_LanTuOA.framework */; };
 /* End PBXBuildFile section */
 
@@ -541,6 +542,7 @@
 		18FD0CA522C22086008AD0AC /* CheckReportRecipientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportRecipientCell.swift; sourceTree = "<group>"; };
 		18FD0CA722C225BD008AD0AC /* CheckReportTemplateFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportTemplateFilterCell.swift; sourceTree = "<group>"; };
 		18FD0CA922C22896008AD0AC /* TemplateFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateFilterCell.swift; sourceTree = "<group>"; };
+		18FFA83B22DD812A002E8FA6 /* NewlyBuildVisitLocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildVisitLocationCell.swift; sourceTree = "<group>"; };
 		731155E08D0F4362D82C88E7 /* Pods_LanTuOA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LanTuOA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB24B3DA4D604F5B5FD3373A /* Pods-LanTuOA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanTuOA.release.xcconfig"; path = "Pods/Target Support Files/Pods-LanTuOA/Pods-LanTuOA.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1227,6 +1229,7 @@
 				18067C2822801E42005D26AC /* ContractScreenView.swift */,
 				18067C2A22801EFF005D26AC /* ContractScreenTimeCell.swift */,
 				18F82A9722B86F810051E43E /* SpecificTimeView.swift */,
+				18FFA83B22DD812A002E8FA6 /* NewlyBuildVisitLocationCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1601,6 +1604,7 @@
 				1810EC7E222F5D4100CF6488 /* UIFont.swift in Sources */,
 				18057D91229391090087D05D /* LPPZLabelImage.m in Sources */,
 				1810EC79222F5D4100CF6488 /* NSMutableAttributedString.swift in Sources */,
+				18FFA83C22DD812A002E8FA6 /* NewlyBuildVisitLocationCell.swift in Sources */,
 				180533D422601F7100B785B7 /* ProcessParamsModel.swift in Sources */,
 				180018872253679500832E60 /* VisitDetailsController.swift in Sources */,
 				18033CD922C44759004AD769 /* CheckReportHeadItmeCell.swift in Sources */,

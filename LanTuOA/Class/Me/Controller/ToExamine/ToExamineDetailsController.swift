@@ -512,10 +512,6 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 { // 评论详情
             return totalData.count
-//            let images = imagesData.count
-//            let files = filesData.count
-//            return 1 + (images > 0 ? 2 : 0) + (files > 0 ? files + 1 : 0)
-//            return 1
         } else if section == 1 || section > checkUserData.count + 1 + commentListData.count { // 发起人 || 抄送人
             return 1
         } else if section <= checkUserData.count + 1 { /// 中间评论人
