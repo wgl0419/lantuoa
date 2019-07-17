@@ -24,6 +24,8 @@ class ContractDetailsTableView: UITableView {
         case performance = 2
         /// 备注信息
         case remarks = 3
+        
+        case operationLog = 4
     }
     /// 已经偏移高度
     var offsetY: CGFloat! {
@@ -68,6 +70,9 @@ class ContractDetailsTableView: UITableView {
     //**************备注****************//
     var contractDescData = [ContractDescListData]()
     
+    //操作日志
+    var OperationLogData = [OperationLogListData]()
+    
     /// 加载刷新
     func getData() {
         if isFirst {
@@ -84,8 +89,10 @@ class ContractDetailsTableView: UITableView {
             contractPaybackList()
         } else if cellStyle == .performance { // 业绩详情
             performList()
-        } else { // 备注信息
+        } else if cellStyle == .remarks { // 备注信息
             contractDescList()
+        }else{
+            operationLogList()
         }
     }
     
@@ -129,11 +136,14 @@ class ContractDetailsTableView: UITableView {
         register(ContractPerformanceHeaderCell.self, forCellReuseIdentifier: "ContractPerformanceHeaderCell")
         register(ContractPerformanceCell.self, forCellReuseIdentifier: "ContractPerformanceCell")
         register(ContractRemarksCell.self, forCellReuseIdentifier: "ContractRemarksCell")
+        register(ContrqctOperationLogCell.self, forCellReuseIdentifier: "ContrqctOperationLogCell")
         
         if cellStyle == .repayment { // 回款详情
             setNoneData(str: "暂无回款记录！", imageStr: "noneData5")
         } else if cellStyle == .remarks { // 备注信息
             setNoneData(str: "暂无备注记录！", imageStr: "noneData")
+        }else if cellStyle == .operationLog {
+            setNoneData(str: "暂无操作说明！", imageStr: "noneData")
         }
         
         if cellStyle == .content { // 发布内容
@@ -327,10 +337,26 @@ class ContractDetailsTableView: UITableView {
             MBProgressHUD.showError(error ?? "添加备注失败")
         })
     }
+    private func operationLogList() {
+        
+        MBProgressHUD.showWait("")
+        _ = APIService.shared.getData(.operationLogLists(contractId,1,15), t: OperationLogModel.self, successHandle: { (result) in
+            
+            MBProgressHUD.dismiss()
+            self.OperationLogData = result.data
+            self.mj_header.endRefreshing()
+            self.reloadData()
+            self.isNoData = self.OperationLogData.count == 0
+        }, errorHandle: { (error) in
+            self.mj_header.endRefreshing()
+            MBProgressHUD.showError(error ?? "获取操作日志失败")
+        })
+    }
     
     // MARK: - 按钮点击
     /// 点击添加
     @objc private func addClick() {
+        
         if cellStyle == .repayment { // 回款列表
             let showView = ContractRepaymentEjectView()
             showView.titleStr = "新增回款"
@@ -342,6 +368,7 @@ class ContractDetailsTableView: UITableView {
             let showView = AddRemarksEjectView()
             showView.confirmBlock = { [weak self] (str) in
                 self?.contractDescCreate(desc: str)
+                self?.mj_header.beginRefreshing()
             }
             showView.show()
         }
@@ -370,8 +397,10 @@ extension ContractDetailsTableView: UITableViewDelegate, UITableViewDataSource {
                 let isOpen = openArray[trueSection]
                 return isOpen ? performanceData[trueSection].children.count : 0
             }
-        } else {
+        } else  if cellStyle == .remarks {
             return contractDescData.count
+        }else{
+           return OperationLogData.count
         }
     }
     
@@ -411,12 +440,18 @@ extension ContractDetailsTableView: UITableViewDelegate, UITableViewDataSource {
             } else { // 月份数据
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ContractPerformanceCell", for: indexPath) as! ContractPerformanceCell
                 let trueSection = section / 2
-                cell.data = (performanceData[trueSection].title ?? "", row + 1, performanceData[trueSection].children[row].money)
+//                cell.data = (performanceData[trueSection].title ?? "", row + 1, performanceData[trueSection].children[row].money)
+                cell.data = (performanceData[trueSection].children[row].title ?? "", performanceData[trueSection].children[row].money)
+                
                 return cell
             }
-        } else {
+        } else if cellStyle == .remarks {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ContractRemarksCell", for: indexPath) as! ContractRemarksCell
             cell.contentStr = contractDescData[row].desc ?? ""
+            return cell
+        }else{//新增操作日志
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ContrqctOperationLogCell", for: indexPath) as! ContrqctOperationLogCell
+            cell.data = OperationLogData[row]
             return cell
         }
     }
@@ -431,7 +466,7 @@ extension ContractDetailsTableView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if cellStyle == .remarks && Jurisdiction.share.isManageContractDesc {
-            return setRepaymentFooter(title: " 新增备注信息")
+            return setRepaymentFooter(title: " 新增说明")
         }else {
             return nil
         }

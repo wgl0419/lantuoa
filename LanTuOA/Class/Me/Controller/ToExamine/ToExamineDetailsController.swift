@@ -334,7 +334,6 @@ class ToExamineDetailsController: UIViewController {
         }
     }
     
-    
     // MARK: - APi
     /// 获取审批详情
     private func notifyCheckDetail() {
@@ -543,39 +542,6 @@ extension ToExamineDetailsController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
         let row = indexPath.row
-//        if section == 0 { // 顶部信息ToExamineDetailsTitleCell
-//            if row == 0 {
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsHeaderCell", for: indexPath) as! ToExamineDetailsHeaderCell
-//                cell.data = checkListData
-//                return cell
-//            } else {
-//
-//                let images = imageArr.count
-//                if images > 0 && row < images + 1 {
-////                    if row == 1 { // 标题
-//                        let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineTitleCell", for: indexPath) as! ToExamineTitleCell
-//                        cell.titleStr = imageArr[row-1].title
-//                        cell.isApproval = true
-//                    let imageValue = imageArr[row-1].fileArr
-//                    var img = [NotifyCheckListValue]()
-//                    for value in imageValue {
-//                        img.append(value)
-//                    }
-//                    cell.datas = img
-//                    return cell
-//                }else{
-//                    let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineFileImagesCell", for: indexPath) as! ToExamineFileImagesCell
-//                    cell.titleStr = filesArr[row-1-imageArr.count].title
-//                    cell.isApproval = true
-//                    let filesValue = filesArr[row-1-imageArr.count].fileArr
-//                    var files = [NotifyCheckListValue]()
-//                    for value in filesValue {
-//                        files.append(value)
-//                    }
-//                    cell.datas = files
-//                    return cell
-//                }
-//            }
         if section == 0 { // 顶部信息
             if totalData[row].type == 4 && totalData[row].fileArr.count > 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineTitleCell", for: indexPath) as! ToExamineTitleCell

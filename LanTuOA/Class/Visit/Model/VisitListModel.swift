@@ -35,5 +35,6 @@ struct VisitListData: HandyJSON {
     var visitTime: Int = 0
     var contactInfo: String?
     var projectAddress: String?
+    var address: String?
 }
 

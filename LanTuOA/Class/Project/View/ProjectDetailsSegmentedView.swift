@@ -138,6 +138,7 @@ class ProjectDetailsSegmentedView: UIView {
     /// 点击选项
     @objc private func optionClick(btn: UIButton) {
         btnChange(btn: btn)
+        
         if changeBlock != nil {
             changeBlock!(seleTag - 100)
         }

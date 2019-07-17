@@ -119,6 +119,8 @@ class VisitDetailsController: UIViewController {
     // MARK: - Api
     /// 项目详情
     private func visitDetail() {
+        
+        
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.visitDetail(visitListId), t: VisitDetailModel.self, successHandle: { (result) in
             self.visitListData = result.data

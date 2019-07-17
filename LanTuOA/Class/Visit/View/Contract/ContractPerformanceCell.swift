@@ -10,14 +10,21 @@ import UIKit
 
 class ContractPerformanceCell: UITableViewCell {
 
+//    /// 数据 (年份  月份  金额)
+//    var data: (String, Int, Float)! {
+//        didSet {
+//            yearLabel.text = String(format: "%@年%d月", data.0, data.1)
+//            moneyLabel.text = data.2.getAllMoneyStr()
+//        }
+//    }
+    
     /// 数据 (年份  月份  金额)
-    var data: (String, Int, Float)! {
+    var data: (String, Float)! {
         didSet {
-            yearLabel.text = String(format: "%@年%d月", data.0, data.1)
-            moneyLabel.text = data.2.getAllMoneyStr()
+            yearLabel.text = String(format: "%@", data.0)
+            moneyLabel.text = data.1.getAllMoneyStr()
         }
     }
-    
     /// 年份
     private var yearLabel: UILabel!
     /// 金额

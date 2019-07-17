@@ -238,7 +238,7 @@ class ContractScreenView: UIView {
     
     ///合同状态
     private func contractStatesScreening() {
-        let contentStrArray = ["全部", "发布中", "逾期付款"]
+        let contentStrArray = ["发布中", "逾期付款"]
         let view = SeleVisitModelView(title: "条件筛选", content: contentStrArray)
         view.didBlock = { [weak self] (seleIndex) in
             self?.contentArray[3] = contentStrArray[seleIndex]

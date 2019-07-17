@@ -20,19 +20,19 @@ class NewlyBuildVisitController: UIViewController {
     private var confirmBtn: UIButton!
     
     /// 标题
-    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "内容", "所在位置"]
-//    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "主要事宜"]
+//    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "内容", "所在位置"]
+    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "主要事宜"]
     /// 提示
-    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请选择"]
-//    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入主要事宜"]
+//    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请选择"]
+    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入主要事宜"]
     /// 选中id
-    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1]
-//    private var seleIdArray = [-1, -1, -1, -1, -1, -1]
+//    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1]
+    private var seleIdArray = [-1, -1, -1, -1, -1, -1]
     /// 联系人id数组
     private var contactArray = [Int]()
     /// 选中内容
-    private var seleStrArray = ["", "", "", "", "", "", ""]
-//    private var seleStrArray = ["", "", "", "", "", ""]
+//    private var seleStrArray = ["", "", "", "", "", "", "       "]
+    private var seleStrArray = ["", "", "", "", "", ""]
     
     //MARK: - Properties
     let defaultLocationTimeout = 6
@@ -40,13 +40,14 @@ class NewlyBuildVisitController: UIViewController {
     var completionBlock: AMapLocatingCompletionBlock!
     lazy var locationManager = AMapLocationManager()
     
+    private var lats = 0.0 ///纬度
+    private var lons = 0.0 ///经度
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
         
-        initCompleteBlock()
-//
-        configLocationManager()
+//        initCompleteBlock()
+//        configLocationManager()
     }
 
     // MARK: - 自定义私有方法
@@ -91,7 +92,7 @@ class NewlyBuildVisitController: UIViewController {
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
                 tableView.register(NewlyBuildVisitTextViewCell.self, forCellReuseIdentifier: "NewlyBuildVisitTextViewCell")
-                tableView.register(NewlyBuildVisitLocationCell.self, forCellReuseIdentifier: "NewlyBuildVisitLocationCell")
+//                tableView.register(NewlyBuildVisitLocationCell.self, forCellReuseIdentifier: "NewlyBuildVisitLocationCell")
             })
     }
     
@@ -168,14 +169,45 @@ class NewlyBuildVisitController: UIViewController {
     }
     
     /// 选择时间处理
-    private func seleTimeHandle() {
-        let view = SeleVisitTimeView(limit: true)
-        view.seleBlock = { [weak self] (timeStr) in
-            self?.seleStrArray[4] = timeStr
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 4)], with: .fade)
+//    private func seleTimeHandle() {
+//        let view = SeleVisitTimeView(limit: true)
+//        view.seleBlock = { [weak self] (timeStr) in
+//            self?.seleStrArray[4] = timeStr
+//
+//            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 4)], with: .fade)
+//            self?.confirmHandle()
+//        }
+//        view.show()
+//    }
+    
+    /// 选择时间
+    private func seleTimeHandle(section: Int) {
+        UIApplication.shared.keyWindow?.endEditing(true)
+//        let section = indexPath.section
+//        let timeStr = seleStrArray[section]
+//        var timeStamp: Int!
+//        if timeStr.count > 0 {
+//            timeStamp = timeStr.getTimeStamp(customStr: "yyyy-MM-dd")
+//        }
+////        let titleStr = data[section].type != 8 ? data[section].title : data[section].children[row].name
+//        let ejectView = SeleTimeEjectView(timeStamp: timeStamp, titleStr: "拜访时间")
+//        ejectView.determineBlock = { [weak self] (timeStamp) in
+//            let timeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).customTimeStr(customStr: "yyyy-MM-dd")
+//            self?.seleStrArray[section] = timeStr
+//            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+//            self?.confirmHandle()
+//        }
+//        ejectView.show()
+        
+        let dataPicker = SpecificTimeView()
+        dataPicker.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)
+        //         回调显示方法
+        dataPicker.backDate = { [weak self] date in
+            self?.seleStrArray[section] = date
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
             self?.confirmHandle()
         }
-        view.show()
+        UIApplication.shared.delegate?.window??.addSubview(dataPicker)
     }
     
     /// 点亮确认按钮
@@ -272,7 +304,14 @@ class NewlyBuildVisitController: UIViewController {
                 }
                 else {
                     //经纬度
-                    let str = "lat:\(location.coordinate.latitude); lon:\(location.coordinate.longitude)"
+//                    let str = "lat:\(location.coordinate.latitude); lon:\(location.coordinate.longitude)"
+//                    let lat = String(format:"%04d",location.coordinate.latitude)
+//                    let lon = String(format:"%04d",location.coordinate.longitude)
+//                    self!.lats = location.coordinate.latitude
+//                    self!.lons = location.coordinate.longitude
+//
+//                    NSLog("%d---------%d",self!.lats,self!.lons)
+                    
                 }
             }
             
@@ -303,11 +342,13 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
                 self?.confirmHandle()
             }
             return cell
-        }else if section == 6 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitLocationCell", for: indexPath) as! NewlyBuildVisitLocationCell
-            cell.addressStr = seleStrArray[section]
-            return cell
-        }else  {
+        }
+//        else if section == 6 {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitLocationCell", for: indexPath) as! NewlyBuildVisitLocationCell
+//            cell.addressStr = seleStrArray[section]
+//            return cell
+//        }
+        else  {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitSeleCell", for: indexPath) as! NewlyBuildVisitSeleCell
             cell.data = (titleArray[section], placeholderArray[section])
             cell.contentStr = seleStrArray[section]
@@ -335,7 +376,8 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
         case 0: seleCustomerHandle()
         case 1, 2: seleOtherHandle(section: section)
         case 3: seleModelHandle()
-        case 4: seleTimeHandle()
+//        case 4: seleTimeHandle()
+        case 4: seleTimeHandle(section:section)
         case 6: reGeocodeAction()
         case 7: break
         default: break

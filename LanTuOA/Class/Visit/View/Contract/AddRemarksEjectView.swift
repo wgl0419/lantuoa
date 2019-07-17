@@ -80,7 +80,7 @@ class AddRemarksEjectView: UIView {
                 make.height.equalTo(55)
             })
             .taxi.config({ (label) in
-                label.text = "新增备注信息"
+                label.text = "新增说明"
                 label.textColor = blackColor
                 label.textAlignment = .center
                 label.font = UIFont.boldSystemFont(ofSize: 16)
@@ -182,6 +182,13 @@ class AddRemarksEjectView: UIView {
     @objc private func confirmClick() {
         if confirmBlock != nil {
             confirmBlock!(textView.text)
+        }
+//        self.removeAllSubviews()
+        UIView.animate(withDuration: 0.3, animations: {
+            self.backgroundColor = .clear
+            self.removeAllSubviews()
+        }) { _ in
+            self.removeFromSuperview()
         }
     }
 }

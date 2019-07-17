@@ -159,7 +159,10 @@ class HomePageController: UIViewController {
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.newHomePageMonthList, t: HomePageMonthModel.self, successHandle: { (result) in
             self.homePageMonthData = result.data
-            self.testStr = self.homePageMonthData.totalValue!
+            if self.homePageMonthData.totalValue != nil {
+                self.testStr = self.homePageMonthData.totalValue!
+            }
+            
             self.tableView.reloadData()
             self.tableView.mj_header.endRefreshing()
             MBProgressHUD.dismiss()

@@ -123,6 +123,7 @@ class FillInApplyFieldViewCell: UITableViewCell {
                 textField.textColor = blackColor
                 textField.delegate = self
                 textField.font = UIFont.medium(size: 16)
+                textField.keyboardType = .numbersAndPunctuation
                 textField.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
             })
     }

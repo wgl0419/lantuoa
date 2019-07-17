@@ -119,6 +119,8 @@ enum APIManager {
     case contractTypeList // 合同类型列表
     case contractDescList(Int) // 合同备注信息列表
     case contractDescCreate(Int, String) // 新建合同备注 （contractIdL: 合同id   desc: 备注信息）
+    case operationLogLists(Int, Int, Int)
+//    case operationLogLists()
     
     //MARK：-工作汇报
     case WorkReportList
@@ -241,6 +243,7 @@ extension APIManager: TargetType {
         case .contractTypeList: return "/api/contract/type/list"
         case .contractDescList(let id): return "/api/contract/desc/list/\(id)"
         case .contractDescCreate: return "api/contract/desc/create"
+        case .operationLogLists: return "/api/contract/operation/list"
             
         case .WorkReportList: return "/api/note/list"
         case .WorkReporCheckList: return "/api/note/history"
@@ -447,8 +450,10 @@ extension APIManager: TargetType {
             if endTime != nil { params["endTime"] = endTime! }
             if processId != nil { params["processId"] = processId! }
             if paid != nil { params["paid"] = paid! }
-            if overdue != nil { params["overdue"] = overdue! }
+            if overdue != nil  { params["overdue"] = overdue! }
             if active != nil { params["active"] = active! }
+            
+            
         case let .performList(queryType, userId, `self`, contractId): // 业绩列表
             params = ["queryType": queryType]
             if userId != nil { params["userId"] = userId! }
@@ -478,6 +483,9 @@ extension APIManager: TargetType {
             if `self` != nil { params["self"] = `self`! }
         case let .contractDescCreate(contractId, desc): // 新建合同备注
             params = ["contractId": contractId, "desc": desc]
+        case let .operationLogLists(contractId,page,limit): //操作日志
+            params = ["page": page, "limit": limit]
+            if contractId != 0 {params["contractId"] = contractId }
             
         case let .WorkReporCheckList(page,limit,notRead,processId,commitUser,startTime,endTime): //查看汇报列表
             params = ["page":page,"limit":limit,"notRead":notRead]

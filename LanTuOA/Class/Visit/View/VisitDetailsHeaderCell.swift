@@ -15,7 +15,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
         didSet {
             if let data = data {
                 projectNameLabel.text = data.projectName
-                customerNameLabel.text = data.customerName
+                customerNameLabel.text = data.address
                 projectAddressLabel.text = data.projectAddress
             }
         }
@@ -25,6 +25,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
     private var projectNameLabel: UILabel!
     /// 客户名称
     private var customerNameLabel: UILabel!
+
     /// 项目地址
     private var projectAddressLabel: UILabel!
     
@@ -71,7 +72,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
                 make.left.equalToSuperview().offset(15)
         }
             .taxi.config { (label) in
-                label.text = "客户："
+                label.text = "客户地址："
                 label.font = UIFont.medium(size: 14)
                 label.textColor = UIColor(hex: "#999999")
         }

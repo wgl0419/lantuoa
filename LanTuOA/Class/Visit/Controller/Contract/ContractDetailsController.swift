@@ -76,7 +76,7 @@ class ContractDetailsController: UIViewController {
         headerView.layoutIfNeeded() // 立即获得layout后的真实view尺寸
         headerHeight = headerView.height // 并保存
         
-        let titleArray = ["发布内容", "付款情况", "业绩详情","补充说明"]
+        let titleArray = ["发布内容", "付款情况", "业绩详情","补充说明","操作日志"]
 //        if Jurisdiction.share.isViewContractDesc {
 //            titleArray.append("补充说明")
 //        }
@@ -101,9 +101,9 @@ class ContractDetailsController: UIViewController {
         var lastTableView: ContractDetailsTableView!
         var maxCount = 3
         if Jurisdiction.share.isViewContractDesc {
-            maxCount = 4
+            maxCount = 5
         }
-        for index in 0..<maxCount {
+        for index in 0..<5 {
             let tableView = ContractDetailsTableView(style: ContractDetailsTableView.CellStyle(rawValue: index)!, height: headerHeight, contractId: contractListData.id).taxi.adhere(toSuperView: scrollView) // tableview
                 .taxi.layout { (make) in
                     if index == 0 {

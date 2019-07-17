@@ -268,6 +268,8 @@
 		18FD0CA622C22086008AD0AC /* CheckReportRecipientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FD0CA522C22086008AD0AC /* CheckReportRecipientCell.swift */; };
 		18FD0CA822C225BD008AD0AC /* CheckReportTemplateFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FD0CA722C225BD008AD0AC /* CheckReportTemplateFilterCell.swift */; };
 		18FD0CAA22C22896008AD0AC /* TemplateFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FD0CA922C22896008AD0AC /* TemplateFilterCell.swift */; };
+		18FECE7B22DEC77B00D729F0 /* ContrqctOperationLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FECE7A22DEC77B00D729F0 /* ContrqctOperationLogCell.swift */; };
+		18FECE7D22DEC8F100D729F0 /* OperationLogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FECE7C22DEC8F100D729F0 /* OperationLogModel.swift */; };
 		18FFA83C22DD812A002E8FA6 /* NewlyBuildVisitLocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FFA83B22DD812A002E8FA6 /* NewlyBuildVisitLocationCell.swift */; };
 		20086A34FD370732D57E936F /* Pods_LanTuOA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731155E08D0F4362D82C88E7 /* Pods_LanTuOA.framework */; };
 /* End PBXBuildFile section */
@@ -542,6 +544,8 @@
 		18FD0CA522C22086008AD0AC /* CheckReportRecipientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportRecipientCell.swift; sourceTree = "<group>"; };
 		18FD0CA722C225BD008AD0AC /* CheckReportTemplateFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckReportTemplateFilterCell.swift; sourceTree = "<group>"; };
 		18FD0CA922C22896008AD0AC /* TemplateFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateFilterCell.swift; sourceTree = "<group>"; };
+		18FECE7A22DEC77B00D729F0 /* ContrqctOperationLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContrqctOperationLogCell.swift; sourceTree = "<group>"; };
+		18FECE7C22DEC8F100D729F0 /* OperationLogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationLogModel.swift; sourceTree = "<group>"; };
 		18FFA83B22DD812A002E8FA6 /* NewlyBuildVisitLocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewlyBuildVisitLocationCell.swift; sourceTree = "<group>"; };
 		731155E08D0F4362D82C88E7 /* Pods_LanTuOA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LanTuOA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB24B3DA4D604F5B5FD3373A /* Pods-LanTuOA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanTuOA.release.xcconfig"; path = "Pods/Target Support Files/Pods-LanTuOA/Pods-LanTuOA.release.xcconfig"; sourceTree = "<group>"; };
@@ -879,6 +883,7 @@
 				1827ED832268076D00EFF889 /* ContractRepaymentEjectView.swift */,
 				180E4D60228561400042FA87 /* ContractRemarksCell.swift */,
 				180E4D6422856CDE0042FA87 /* AddRemarksEjectView.swift */,
+				18FECE7A22DEC77B00D729F0 /* ContrqctOperationLogCell.swift */,
 			);
 			path = Contract;
 			sourceTree = "<group>";
@@ -1247,6 +1252,7 @@
 				180E4D5E22855B1E0042FA87 /* ContractTypeListModel.swift */,
 				180E4D62228564A20042FA87 /* ContractDescListModel.swift */,
 				180ACA5D22978B5F00D68018 /* VisitCommentListModel.swift */,
+				18FECE7C22DEC8F100D729F0 /* OperationLogModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1527,6 +1533,7 @@
 				18067C2B22801EFF005D26AC /* ContractScreenTimeCell.swift in Sources */,
 				18057D9A2293E62C0087D05D /* ToExamineImageCollectionCell.swift in Sources */,
 				18033CDD22C4A8EF004AD769 /* NewHomePageVisitCell.swift in Sources */,
+				18FECE7D22DEC8F100D729F0 /* OperationLogModel.swift in Sources */,
 				1805FC3C2276C6BB001A2FF5 /* ToExamineDetailsCarbonCopyCell.swift in Sources */,
 				180E4D5F22855B1E0042FA87 /* ContractTypeListModel.swift in Sources */,
 				180BFB2D22656AF3001879BD /* NotifyCheckUserListModel.swift in Sources */,
@@ -1658,6 +1665,7 @@
 				181ACDF822D5CED40084107D /* ToExamineFileImagesCell.swift in Sources */,
 				18F90A5922BB9868002B72B1 /* IndividualPerformanceController.swift in Sources */,
 				1805F3B52275500B00AF0AF7 /* ScreenView.swift in Sources */,
+				18FECE7B22DEC77B00D729F0 /* ContrqctOperationLogCell.swift in Sources */,
 				180273E7223B7ACC0033E083 /* WrokHomeCell.swift in Sources */,
 				180233642244C1DD0064A50E /* MeHomeHeaderCell.swift in Sources */,
 				18FD0CA822C225BD008AD0AC /* CheckReportTemplateFilterCell.swift in Sources */,
