@@ -189,7 +189,6 @@ extension ToExamineEnclosureTitleCell: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photoBrowser = PhotoBrowser()
-        
         var array = [(String, String)]()
         for itme in datas {
             let objectName = itme.objectName ?? ""

@@ -30,7 +30,7 @@ class VisitDetailsCell: UITableViewCell {
                     let visitStr = data.contactInfo ?? ""
                     let typeStr = data.type == 1 ? "面谈" : data.type == 2 ? "电话沟通" : "网络聊天"
                     var time = "未设置"
-                    if data.createdTime != 0 {
+                    if data.visitTime != 0 {
                         time = Date(timeIntervalSince1970: TimeInterval(data.visitTime)).yearTimeStr()
                     }
                     let create = setTitleAndContent("业务人员：", contentStr: createStr, lastLabel: nil, position: -1)

@@ -24,6 +24,10 @@ enum APIManager {
     case passwordReset(String, String, String) // 找回密码
     case newHomePageMonthList //新的首页统计（月份）
     
+    // MARK: - 公告
+    case checkAnnouncement
+    ///历史公共列表
+    case AnnouncementList(Int, Int,Int)
     
     // MARK: - 客户
     case customerSave(String, String, String, Int, Int) // 新建客户（管理界面） (name:客户简称 full_name:客户全称  address:客户地址  type:客户类型：1.公司客户，2.待开发客户，3.开发中客户  industry:行业类型id，从行业列表中获取)
@@ -157,6 +161,8 @@ extension APIManager: TargetType {
         case .passwordReset: return "/api/password/reset"
         case .newHomePageMonthList: return "/api/startup/perform"
             
+        case .checkAnnouncement: return "/api/broadcast/list/receive"
+        case .AnnouncementList: return "/api/broadcast/list/all"
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"
         case .customerContactList: return "/api/customer/contact/list"
@@ -309,6 +315,9 @@ extension APIManager: TargetType {
         case let .passwordReset(phone, code, newPwd): // 忘记密码
             params = ["phone": phone, "code": code, "newPwd": newPwd]
             
+            //MARK:历史公告列表
+        case let .AnnouncementList(type,page,limit):
+            params = ["type": type, "page": page, "limit": limit]
             
         case let .customerSave(name, full_name, address, type, industry): // 新建客户
             params = ["name": name, "full_name": full_name, "address": address, "type": type, "industry": industry]

@@ -535,6 +535,15 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
                 let vc = CheckReportDetailsViewController()
                 vc.checkListId = systemData[indexPath.row].checkId
                 navigationController?.pushViewController(vc, animated: true)
+                
+            case "8"://公告
+                UIApplication.shared.keyWindow?.endEditing(true)
+                let announcement = AnnouncementView()
+                announcement.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)
+//                announcement.data = self.announcementData[indexPath.row]
+                let data = systemData[indexPath.row]
+//                announcement.data = data
+                UIApplication.shared.delegate?.window??.addSubview(announcement)
             default: break
             }
         }

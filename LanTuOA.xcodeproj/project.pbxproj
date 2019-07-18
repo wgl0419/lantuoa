@@ -100,6 +100,11 @@
 		1805FC3E2276F369001A2FF5 /* RetrievePasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1805FC3D2276F369001A2FF5 /* RetrievePasswordController.swift */; };
 		18067C2922801E42005D26AC /* ContractScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18067C2822801E42005D26AC /* ContractScreenView.swift */; };
 		18067C2B22801EFF005D26AC /* ContractScreenTimeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18067C2A22801EFF005D26AC /* ContractScreenTimeCell.swift */; };
+		1806B10322DFFBB100B5D572 /* AnnouncementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806B10222DFFBB100B5D572 /* AnnouncementView.swift */; };
+		1806B10522DFFF7600B5D572 /* AnnouncementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806B10422DFFF7600B5D572 /* AnnouncementCell.swift */; };
+		1806B10722E021F700B5D572 /* AnnouncementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806B10622E021F700B5D572 /* AnnouncementModel.swift */; };
+		1806B10A22E056FF00B5D572 /* HistoryAnnouncementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806B10922E056FF00B5D572 /* HistoryAnnouncementController.swift */; };
+		1806B10D22E058DD00B5D572 /* HistoryAnnouncementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806B10C22E058DD00B5D572 /* HistoryAnnouncementCell.swift */; };
 		1806FBD92243305A005A4A77 /* ProjectDetailsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBD82243305A005A4A77 /* ProjectDetailsTableView.swift */; };
 		1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */; };
 		1806FBDD2243637D005A4A77 /* ProjectDetailsSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */; };
@@ -372,6 +377,11 @@
 		1805FC3D2276F369001A2FF5 /* RetrievePasswordController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrievePasswordController.swift; sourceTree = "<group>"; };
 		18067C2822801E42005D26AC /* ContractScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractScreenView.swift; sourceTree = "<group>"; };
 		18067C2A22801EFF005D26AC /* ContractScreenTimeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractScreenTimeCell.swift; sourceTree = "<group>"; };
+		1806B10222DFFBB100B5D572 /* AnnouncementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementView.swift; sourceTree = "<group>"; };
+		1806B10422DFFF7600B5D572 /* AnnouncementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementCell.swift; sourceTree = "<group>"; };
+		1806B10622E021F700B5D572 /* AnnouncementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementModel.swift; sourceTree = "<group>"; };
+		1806B10922E056FF00B5D572 /* HistoryAnnouncementController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryAnnouncementController.swift; sourceTree = "<group>"; };
+		1806B10C22E058DD00B5D572 /* HistoryAnnouncementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryAnnouncementCell.swift; sourceTree = "<group>"; };
 		1806FBD82243305A005A4A77 /* ProjectDetailsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsTableView.swift; sourceTree = "<group>"; };
 		1806FBDA22433515005A4A77 /* ProjectDetailsPersonnelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsPersonnelCell.swift; sourceTree = "<group>"; };
 		1806FBDC2243637D005A4A77 /* ProjectDetailsSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailsSegmentedView.swift; sourceTree = "<group>"; };
@@ -774,6 +784,22 @@
 			path = LPPZSendContentTextParser;
 			sourceTree = "<group>";
 		};
+		1806B10822E056B700B5D572 /* Announcement */ = {
+			isa = PBXGroup;
+			children = (
+				1806B10922E056FF00B5D572 /* HistoryAnnouncementController.swift */,
+			);
+			path = Announcement;
+			sourceTree = "<group>";
+		};
+		1806B10B22E058BF00B5D572 /* Announcement */ = {
+			isa = PBXGroup;
+			children = (
+				1806B10C22E058DD00B5D572 /* HistoryAnnouncementCell.swift */,
+			);
+			path = Announcement;
+			sourceTree = "<group>";
+		};
 		1809CBEF22969F9D0036E9A0 /* New Group */ = {
 			isa = PBXGroup;
 			children = (
@@ -1084,6 +1110,7 @@
 		1830BE6C2237A7B600ADC03A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1806B10B22E058BF00B5D572 /* Announcement */,
 				180284CD22C07AED00EA85A8 /* Workreport */,
 				180BFB2922655F9E001879BD /* ToExamine */,
 				180533D822606F9E00B785B7 /* Department */,
@@ -1105,6 +1132,7 @@
 		1830BE6D2237A7BB00ADC03A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				1806B10822E056B700B5D572 /* Announcement */,
 				180284D022C07EEB00EA85A8 /* WorkReport */,
 				180BFB2822655F90001879BD /* ToExamine */,
 				180533D722606F8900B785B7 /* Department */,
@@ -1283,6 +1311,7 @@
 				181FF96722719BB200ED5A2A /* StartupSumModel.swift */,
 				180B8FA2227300A200E6FDE5 /* NotifyNumberModel.swift */,
 				1804062722C5EAD700EE7427 /* HomePageMonthModel.swift */,
+				1806B10622E021F700B5D572 /* AnnouncementModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1294,6 +1323,8 @@
 				181788512238E0B00015DC30 /* HomePageHeaderView.swift */,
 				18033CDC22C4A8EF004AD769 /* NewHomePageVisitCell.swift */,
 				18033CDE22C4AA12004AD769 /* NewHomePageItmeCell.swift */,
+				1806B10222DFFBB100B5D572 /* AnnouncementView.swift */,
+				1806B10422DFFF7600B5D572 /* AnnouncementCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1469,6 +1500,7 @@
 				180736BB226EFF83001F1FA6 /* UpdateHintsEjectView.swift in Sources */,
 				1809E400225DC4D400B615A8 /* DepartmentsUsersModel.swift in Sources */,
 				180736C3227067FF001F1FA6 /* ProjectSaveRequireModel.swift in Sources */,
+				1806B10D22E058DD00B5D572 /* HistoryAnnouncementCell.swift in Sources */,
 				18F90A5722BB787A002B72B1 /* DateView.swift in Sources */,
 				1810EC7B222F5D4100CF6488 /* String.swift in Sources */,
 				180BB0C5228AC60700CAA38A /* AgreementView.swift in Sources */,
@@ -1554,6 +1586,7 @@
 				1801AE90223F28C40027A5DB /* ProjectLlistStatisticsModel.swift in Sources */,
 				1876A8E42266DC08002EBDB2 /* ContractPerformanceHeaderCell.swift in Sources */,
 				18FD0CA222C1F354008AD0AC /* CheckReportDetailsReadCell.swift in Sources */,
+				1806B10A22E056FF00B5D572 /* HistoryAnnouncementController.swift in Sources */,
 				1809E3FC225D8C8700B615A8 /* ToExamineDetailsHeaderCell.swift in Sources */,
 				18033CDF22C4AA12004AD769 /* NewHomePageItmeCell.swift in Sources */,
 				1809CBF422969FAA0036E9A0 /* PhotoBrowserImage.swift in Sources */,
@@ -1579,6 +1612,7 @@
 				1838BC56225C9EBD00978E72 /* CostomerDetailsVisitorCell.swift in Sources */,
 				18045B0F229BE69700B3E493 /* ReasonsRefusalEjectView.swift in Sources */,
 				1876A8E02266C1F0002EBDB2 /* ContractPerformanceHeaderView.swift in Sources */,
+				1806B10722E021F700B5D572 /* AnnouncementModel.swift in Sources */,
 				1804E1FF224A2ACC006AB973 /* ChangePasswordController.swift in Sources */,
 				1810EC80222F5D4100CF6488 /* UITextView.swift in Sources */,
 				183383092251F1270053F2BF /* UsersModel.swift in Sources */,
@@ -1625,6 +1659,7 @@
 				1876A8EA22672850002EBDB2 /* MoreTimeSeleEjectView.swift in Sources */,
 				18057DA0229406830087D05D /* FileUploadGetKeyModel.swift in Sources */,
 				1806FBDB22433515005A4A77 /* ProjectDetailsPersonnelCell.swift in Sources */,
+				1806B10522DFFF7600B5D572 /* AnnouncementCell.swift in Sources */,
 				1807B6BD228413B800B21A14 /* VisitDetailModel.swift in Sources */,
 				181788502238D73F0015DC30 /* HomePageNoticeCell.swift in Sources */,
 				18F90A5322BB34E7002B72B1 /* NewAchievementsListController.swift in Sources */,
@@ -1710,6 +1745,7 @@
 				1804E1FD224A2124006AB973 /* SetUpController.swift in Sources */,
 				180233602244900D0064A50E /* ProjectDetailsVisitCell.swift in Sources */,
 				1811AA942240E30D0073A794 /* ProjectListStatisticsModel.swift in Sources */,
+				1806B10322DFFBB100B5D572 /* AnnouncementView.swift in Sources */,
 				180BFB432265DE70001879BD /* ContractDetailsContentCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

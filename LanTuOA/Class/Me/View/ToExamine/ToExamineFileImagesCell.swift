@@ -21,10 +21,7 @@ class ToExamineFileImagesCell: UITableViewCell {
     /// 图片连接s
     var datas = [NotifyCheckListValue]() {
         didSet {
-            
-            
             collectionView.reloadData()
-            
             layoutIfNeeded()
             var collectionHeight = collectionView.contentSize.height
             collectionHeight = collectionHeight == 0 ? 15 : collectionHeight

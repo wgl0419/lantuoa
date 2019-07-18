@@ -183,22 +183,6 @@ class NewlyBuildVisitController: UIViewController {
     /// 选择时间
     private func seleTimeHandle(section: Int) {
         UIApplication.shared.keyWindow?.endEditing(true)
-//        let section = indexPath.section
-//        let timeStr = seleStrArray[section]
-//        var timeStamp: Int!
-//        if timeStr.count > 0 {
-//            timeStamp = timeStr.getTimeStamp(customStr: "yyyy-MM-dd")
-//        }
-////        let titleStr = data[section].type != 8 ? data[section].title : data[section].children[row].name
-//        let ejectView = SeleTimeEjectView(timeStamp: timeStamp, titleStr: "拜访时间")
-//        ejectView.determineBlock = { [weak self] (timeStamp) in
-//            let timeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).customTimeStr(customStr: "yyyy-MM-dd")
-//            self?.seleStrArray[section] = timeStr
-//            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
-//            self?.confirmHandle()
-//        }
-//        ejectView.show()
-        
         let dataPicker = SpecificTimeView()
         dataPicker.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)
         //         回调显示方法

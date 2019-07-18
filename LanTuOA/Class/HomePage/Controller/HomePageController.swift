@@ -25,6 +25,9 @@ class HomePageController: UIViewController {
     private var homePageMonthData: HomePageMonthData!
     private var testStr = "0"
     
+    ///公告数据
+    private var announcementData = [AnnouncementListData]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         homePageMonthData = HomePageMonthData()
@@ -32,6 +35,7 @@ class HomePageController: UIViewController {
         getData()
         initSubViews()
         loginUser()
+        checkAnnouncement()
     }
     
     // MARK: - 自定义私有方法
@@ -185,6 +189,22 @@ class HomePageController: UIViewController {
             }
         }, errorHandle: nil)
     }
+    /// 获取是否弹出公告
+    private func checkAnnouncement() {
+        _ = APIService.shared.getData(.checkAnnouncement, t: AnnouncementModel.self, successHandle: { (result) in
+            
+            self.announcementData = result.data
+            if self.announcementData.count > 0 {
+                UIApplication.shared.keyWindow?.endEditing(true)
+                let announcement = AnnouncementView()
+                announcement.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)
+                announcement.data = self.announcementData[0]
+                UIApplication.shared.delegate?.window??.addSubview(announcement)
+            }
+            
+        }, errorHandle: nil)
+    }
+    
 }
 
 extension HomePageController: UITableViewDelegate, UITableViewDataSource {
