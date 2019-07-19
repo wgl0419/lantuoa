@@ -38,8 +38,10 @@ class NoticeHomeSystemCell: UITableViewCell {
                     imageNameStr = "notice_visit"
                 case "6": // 合同
                     imageNameStr = "notice_contract"
-                case "7": // 合同
+                case "7": // 工作汇报
                     imageNameStr = "工作汇报"
+                case "8":
+                    imageNameStr = "组 348"
                 default: break
                 }
                 portraitImageView.image = UIImage(named: imageNameStr)

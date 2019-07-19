@@ -72,7 +72,7 @@ class HistoryAnnouncementCell: UITableViewCell {
             .taxi.config({ (image) in
                 image.layer.cornerRadius = 8
                 image.layer.masksToBounds = true
-                image.image = UIImage(named: "me_handover")
+                image.image = UIImage(named: "组 348")
             })
         
         titleLabel = UILabel().taxi.adhere(toSuperView: whiteView) // 标题

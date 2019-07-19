@@ -83,7 +83,7 @@ class CheckReportListViewController: UIViewController {
                 }
         }
         
-        let str = "暂无审批！"
+        let str = "暂无汇报！"
         let attriMuStr = NSMutableAttributedString(string: str)
         attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
         attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
@@ -211,7 +211,6 @@ extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSourc
                     if self!.headItmeArr.count == 0 {
                         self!.headView.isHidden = false
                         self!.CheckReportList(isMore: false, notRead: 0,processId: 0,commitUser: [],startTime: 0,endTime: 0)
-//                        self!.tableView.reloadData()
                     }else{
                         self!.retrieveData(index:index)
                     }

@@ -1,29 +1,20 @@
 //
-//  NewlyBuildVisitLocationCell.swift
+//  WorkreportLocationCell.swift
 //  LanTuOA
 //
-//  Created by panzhijing on 2019/7/16.
+//  Created by panzhijing on 2019/7/19.
 //  Copyright © 2019 广西蛋卷科技有限公司. All rights reserved.
 //
 
 import UIKit
 
-class NewlyBuildVisitLocationCell: UITableViewCell {
-    
+class WorkreportLocationCell: UITableViewCell {
+
     /// 位置
     var addressStr: String? {
         didSet {
             if let addressStr = addressStr {
                 contentLabel.text = addressStr
-            }
-        }
-    }
-    
-    /// 必选(默认非必选)
-    var isMust: Bool? {
-        didSet {
-            if let isMust = isMust {
-                mustLabel.isHidden = !isMust
             }
         }
     }
@@ -37,17 +28,15 @@ class NewlyBuildVisitLocationCell: UITableViewCell {
         }
     }
     
-    //是否显示图标
-    var isImage: Bool? {
-        didSet {
-            if let isImage = isImage {
-                locationImage.isHidden = !isImage
-            }
-        }
-    }
-    
-    /// 必选星星
-    private var mustLabel: UILabel!
+//    //是否显示图标
+//    var isImage: Bool? {
+//        didSet {
+//            if let isImage = isImage {
+//                locationImage.isHidden = !isImage
+//            }
+//        }
+//    }
+    private var line : UIView!
     private var titleLabel : UILabel!
     private var contentLabel : UILabel!
     private var locationImage : UIImageView!
@@ -55,7 +44,7 @@ class NewlyBuildVisitLocationCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initSubViews()
-
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -65,6 +54,18 @@ class NewlyBuildVisitLocationCell: UITableViewCell {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
+        
+        line = UIView().taxi.adhere(toSuperView: contentView)
+            .taxi.layout(snapKitMaker: { (make) in
+                make.leading.equalToSuperview().offset(15)
+                make.trailing.equalToSuperview()
+                make.top.equalTo(5)
+                make.height.equalTo(1)
+            })
+            .taxi.config({ (view) in
+                view.backgroundColor = UIColor(hex: "#E0E0E0", alpha: 0.55)
+            })
+        
         titleLabel = UILabel().taxi.adhere(toSuperView: contentView)
             .taxi.layout(snapKitMaker: { (make) in
                 make.top.left.equalTo(contentView).offset(15)
@@ -77,22 +78,12 @@ class NewlyBuildVisitLocationCell: UITableViewCell {
                 label.text = "所在位置"
         }
         
-        mustLabel = UILabel().taxi.adhere(toSuperView: contentView) // 必选星星
-            .taxi.layout(snapKitMaker: { (make) in
-                make.centerY.equalTo(titleLabel)
-                make.right.equalTo(titleLabel.snp.left).offset(-3)
-            })
-            .taxi.config({ (label) in
-                label.text = "*"
-                label.isHidden = true
-                label.font = UIFont.medium(size: 14)
-                label.textColor = UIColor(hex: "#FF4444")
-            })
+
         
         contentLabel = UILabel().taxi.adhere(toSuperView: contentView)
             .taxi.layout(snapKitMaker: { (make) in
                 make.height.equalTo(43).priority(800)
-                make.left.equalToSuperview().offset(15)
+                make.leading.equalToSuperview().offset(40)
                 make.top.equalTo(titleLabel.snp.bottom).offset(5)
                 make.bottom.right.equalToSuperview().offset(-15)
             })
@@ -104,15 +95,18 @@ class NewlyBuildVisitLocationCell: UITableViewCell {
         
         locationImage = UIImageView().taxi.adhere(toSuperView: contentView)
             .taxi.layout(snapKitMaker: { (make) in
-                make.trailing.equalToSuperview().offset(-15)
-                make.top.equalToSuperview().offset(15)
+                make.leading.equalToSuperview().offset(15)
+//                make.top.equalToSuperview().offset(15)
                 make.width.equalTo(16)
                 make.height.equalTo(20)
+                make.centerY.equalTo(contentLabel)
             })
             .taxi.config({ (image) in
                 image.image = UIImage(named: "定位")
             })
+
         
     }
     
 }
+

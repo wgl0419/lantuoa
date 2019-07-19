@@ -33,6 +33,9 @@ class NoticeHomeController: UIViewController {
     /// 查看系统信息
     private var isCheckSystem = false
     
+    ///公告数据
+    private var announcementData: AnnouncementListData?
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if AppDelegate.isNotification {
@@ -490,6 +493,7 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         if tableView == pendingTableView {
             let vc = ToExamineDetailsController()
             vc.checkListId = pendingData[indexPath.row].id
@@ -537,13 +541,14 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
                 navigationController?.pushViewController(vc, animated: true)
                 
             case "8"://公告
-                UIApplication.shared.keyWindow?.endEditing(true)
-                let announcement = AnnouncementView()
-                announcement.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)
-//                announcement.data = self.announcementData[indexPath.row]
-                let data = systemData[indexPath.row]
-//                announcement.data = data
-                UIApplication.shared.delegate?.window??.addSubview(announcement)
+                _ = APIService.shared.getData(.AnnouncementDetails(systemData[indexPath.row].checkId), t: AnnouncementNoticeModel.self, successHandle: { (result) in
+                    self.announcementData = result.data
+                        UIApplication.shared.keyWindow?.endEditing(true)
+                        let announcement = AnnouncementView()
+                        announcement.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)
+                        announcement.data = self.announcementData
+                        UIApplication.shared.delegate?.window??.addSubview(announcement)
+                }, errorHandle: nil)
             default: break
             }
         }

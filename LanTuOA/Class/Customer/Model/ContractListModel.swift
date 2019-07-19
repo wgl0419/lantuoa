@@ -34,6 +34,7 @@ struct ContractListContractUsers: HandyJSON {
     var propMoney: Int = 0
     var propPerform: Int = 0
     var contractId: Int = 0
+    var status :Int = 0
 }
 
 struct ContractListData: HandyJSON {

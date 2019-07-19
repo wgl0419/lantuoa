@@ -119,6 +119,7 @@ class CheckReportDetailsViewController: UIViewController {
                 tableView.register(ToExamineDetailsTitleCell.self, forCellReuseIdentifier: "ToExamineDetailsTitleCell")
                 tableView.register(ToExamineFileImagesCell.self, forCellReuseIdentifier: "ToExamineFileImagesCell")
 //                tableView.register(ToExamineDetailsCell.self, forCellReuseIdentifier: "ToExamineDetailsCell")
+                tableView.register(WorkreportLocationCell.self, forCellReuseIdentifier: "WorkreportLocationCell")
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     self?.notifyCheckUserList()
                     self?.notifyCheckCommentList()
@@ -380,11 +381,9 @@ extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewData
         if checkListData == nil { // 没有获取到详情 不显示
             return 0
         }
-//        return checkUserData.count + (checkListData != nil ? 2 : 0) + commentListData.count + (carbonCopyData.count > 0 ? 1 : 0)
+//        return checkUserData.count + (checkListData != nil ? 2 : 0) + commentListData.count + (carbonCopyData.count > 0 ? 1 : 0)//原始
+        return (checkListData != nil ? 1 : 0) + commentListData.count + checkUserData.count + (carbonCopyData.count > 0 ? 1 : 0)
         
-        return (checkListData != nil ? 1 : 0) + commentListData.count + checkUserData.count + (carbonCopyData.count > 0 ? 1 : 0)//这个正确7.11日
-        
-//        return 1 + (checkListData != nil ? 1 : 0) + commentListData.count + (carbonCopyData.count > 0 ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -446,10 +445,16 @@ extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewData
                 }
                 cell.datas = files
                 return cell
-            }else{
+            }else if totalData[row].type == 6 {//定位信息
+                let cell = tableView.dequeueReusableCell(withIdentifier: "WorkreportLocationCell", for: indexPath) as! WorkreportLocationCell
+                cell.addressStr = totalData[row].value
+                cell.titleStr = totalData[row].title
+                return cell
+            }
+
+            else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineDetailsTitleCell", for: indexPath) as! ToExamineDetailsTitleCell
                 cell.data = totalData[row]
-//                cell.backgroundColor = UIColor.red
                 return cell
             }
         }
@@ -590,10 +595,10 @@ extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewData
         let row = indexPath.row
         let section = indexPath.section
         if section == 0 { // 评论详情
-            let index = imagesData.count > 0 ? 3 : 1
-            if row > index {
-                openFile(filesData[row - index - 1])
-            }
+//            let index = imagesData.count > 0 ? 3 : 1
+//            if row > index {
+//                openFile(filesData[row - index - 1])
+//            }
         }else if section == commentListData.count + checkUserData.count + 1 {
             
         }else if section < checkUserData.count + 1 { /// 中间评论人

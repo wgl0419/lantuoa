@@ -38,3 +38,10 @@ struct filesData: HandyJSON {
     var uploadTime: Int = 0
     var uploadUser : Int = 0
 }
+
+struct AnnouncementNoticeModel: HandyJSON {
+    var status: Int = 0
+    var data: AnnouncementListData?
+    var message: String?
+    var errCode: Int = 0
+}

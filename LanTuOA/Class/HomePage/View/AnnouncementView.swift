@@ -27,23 +27,19 @@ class AnnouncementView: UIView {
         }
     }
     
-//    var data2 :NotifyListData? {
+//    var announcement_id :Int? {
 //        didSet {
-//            if let data2 = data2 {
-//                titleLabel.text = data2.title
-//                contentLabel.text = data2.content
-//                userNameLabel.text = data2.createdUserName
-//                if data2.createdTime != 0 {
-//                    timeLabel.text = Date(timeIntervalSince1970: TimeInterval(data.createdTime)).yearTimeStr()
-//                }else{
-//                    timeLabel.text = "未设置"
-//                }
-//                collectionView.reloadData()
+//            if let announcement_id = announcement_id {
+//                _ = APIService.shared.getData(.AnnouncementDetails(announcement_id), t: AnnouncementModel.self, successHandle: { (result) in
+//                    self.data = result.data[0]
+//                }, errorHandle: nil)
 //            }
-//            
 //        }
 //    }
-
+    
+//    ///公告数据
+//    private var announcementData = [AnnouncementListData]()
+    
     let backView = UIView()
 
     /// collectionview

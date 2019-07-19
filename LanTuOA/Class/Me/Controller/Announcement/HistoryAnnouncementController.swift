@@ -61,8 +61,6 @@ class HistoryAnnouncementController: UIViewController {
         MBProgressHUD.showWait("")
         let newPage = isMore ? page + 1 : 1
         _ = APIService.shared.getData(.AnnouncementList(1,newPage,15), t: AnnouncementModel.self, successHandle: { (result) in
-//            self.announcementData = result.data
-//            self.tableView.reloadData()
             
             if isMore {
                 for model in result.data {
@@ -84,6 +82,7 @@ class HistoryAnnouncementController: UIViewController {
             }
             MBProgressHUD.dismiss()
             self.tableView.reloadData()
+            self.noneDataHandle()
         }, errorHandle: { (error) in
             if isMore {
                 self.tableView.mj_footer.endRefreshing()
@@ -94,6 +93,28 @@ class HistoryAnnouncementController: UIViewController {
             }
             MBProgressHUD.showError(error ?? "获取失败")
         })
+    }
+    
+    /// 设置无数据信息
+    ///
+    /// - Parameters:
+    ///   - str: 提示内容
+    ///   - imageStr: 提示图片名称
+    private func setNoneData(str: String, imageStr: String) {
+        
+        let attriMuStr = NSMutableAttributedString(string: str)
+        attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
+        attriMuStr.changeColor(str: str, color: UIColor(hex: "#999999"))
+        tableView.noDataLabel?.attributedText = attriMuStr
+        tableView.noDataImageView?.image = UIImage(named: imageStr)
+    }
+    
+    /// 处理无数据
+    private func noneDataHandle() {
+        if announcementData.count == 0 {
+            setNoneData(str: "暂无公告内容！", imageStr: "noneData2")
+        }
+        tableView.isNoData = announcementData.count == 0
     }
     
 }
@@ -116,6 +137,8 @@ extension HistoryAnnouncementController: UITableViewDelegate ,UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        
         UIApplication.shared.keyWindow?.endEditing(true)
         let announcement = AnnouncementView()
         announcement.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)

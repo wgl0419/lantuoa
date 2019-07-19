@@ -17,7 +17,6 @@ class ToExamineDetailsHeaderView: UIView {
             if let data = data {
                 initSubViews()
                 titleLabel.text = data.createdUserName
-                
                 if ishiddenNuber {
                     frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: 40)
                     numLabel.isHidden = true

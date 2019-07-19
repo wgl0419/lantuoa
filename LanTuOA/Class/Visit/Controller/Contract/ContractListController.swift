@@ -179,6 +179,7 @@ class ContractListController: UIViewController {
         let startTimeStamp = releaseTimeStamp == 0 ? nil : releaseTimeStamp
         _ = APIService.shared.getData(.contractList(searchBar.text ?? "", customerId, nil, userId, newPage, 10, startTimeStamp, nil, processId,nil,overdue,active), t: ContractListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
+            
             if isMore {
                 for model in result.data {
                     self.data.append(model)

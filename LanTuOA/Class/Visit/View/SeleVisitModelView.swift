@@ -38,14 +38,26 @@ class SeleVisitModelView: UIView {
     
     /// 内容数组
     private var contentStrArray = [String]()
+    ///状态
+    private var statusArr = [Int]()
     /// 标题
     private var titleStr = ""
     
+    var statusArray : [Int]? {
+        didSet {
+            if let statusArray = statusArray {
+                statusArr = statusArray
+                tableView.reloadData()
+            }
+            
+        }
+    }
     
     convenience init(title: String, content: [String]) {
         self.init(frame: ScreenBounds)
         titleStr = title
         contentStrArray = content
+//        statusArray = status
         initSubViews()
     }
     
@@ -132,6 +144,11 @@ extension SeleVisitModelView: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SeleVisitModelCell", for: indexPath) as! SeleVisitModelCell
         let row = indexPath.row
         cell.data = (contentStrArray[row], blackColor)
+
+        if statusArr.count > 0 {
+            cell.data1 = statusArr[row]
+        }
+        
         if !isClick { cell.selectionStyle = .none }
         return cell
     }

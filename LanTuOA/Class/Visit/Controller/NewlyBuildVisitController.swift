@@ -232,7 +232,6 @@ class NewlyBuildVisitController: UIViewController {
     }
     
     //MARK: - Action Handle
-    
     func configLocationManager() {
         locationManager.delegate = self
         

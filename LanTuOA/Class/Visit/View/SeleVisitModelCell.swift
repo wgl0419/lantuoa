@@ -16,6 +16,17 @@ class SeleVisitModelCell: UITableViewCell {
             if let data = data {
                 contentLabel.text = data.0
                 contentLabel.textColor = data.1
+
+            }
+        }
+    }
+    
+    var data1 : Int? {
+        didSet {
+            if let nuber = data1 {
+                if nuber == 1 {
+                    contentLabel.textColor = UIColor(hex: "#999999")
+                }
             }
         }
     }

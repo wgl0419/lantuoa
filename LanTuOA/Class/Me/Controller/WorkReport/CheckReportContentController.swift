@@ -89,11 +89,22 @@ class CheckReportContentController: UIViewController {
         }
     }
     
+    //MARK: - Properties
+    let defaultLocationTimeout = 6
+    let defaultReGeocodeTimeout = 3
+    var completionBlock: AMapLocatingCompletionBlock!
+    lazy var locationManager = AMapLocationManager()
+    
+    private var lats = 0.0 ///纬度
+    private var lons = 0.0 ///经度
+    private var addStr = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
         processParams()
         processUsers()
+
     }
     
     // MARK: - 自定义私有方法
@@ -144,13 +155,13 @@ class CheckReportContentController: UIViewController {
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
                 tableView.register(FillInApplyTextViewCell.self, forCellReuseIdentifier: "FillInApplyTextViewCell")
                 tableView.register(FillInApplyFieldViewCell.self, forCellReuseIdentifier: "FillInApplyFieldViewCell")
-                //                tableView.register(FillInApplyApprovalCell.self, forCellReuseIdentifier: "FillInApplyApprovalCell")
                 tableView.register(CheckReportRecipientCell.self, forCellReuseIdentifier: "CheckReportRecipientCell")
                 tableView.register(FillInApplyPersonnelCell.self, forCellReuseIdentifier: "FillInApplyPersonnelCell")
                 tableView.register(FillInApplyMoneyBackCell.self, forCellReuseIdentifier: "FillInApplyMoneyBackCell")
                 tableView.register(ToExamineImageCell.self, forCellReuseIdentifier: "ToExamineImageCell")
                 tableView.register(ToExamineEnclosureCell.self, forCellReuseIdentifier: "ToExamineEnclosureCell")
                 tableView.register(ToExamineEnclosureTitleCell.self, forCellReuseIdentifier: "ToExamineEnclosureTitleCell")
+                tableView.register(NewlyBuildVisitLocationCell.self, forCellReuseIdentifier: "NewlyBuildVisitLocationCell")
             })
     }
     
@@ -166,6 +177,7 @@ class CheckReportContentController: UIViewController {
                         let  mode = model.children[ind]
                         let seleArray = seleStrArray[index][ind]
                         if mode.isNecessary == 1 && seleArray.count == 0 {
+                            
                             isEnabled = false
                             break
                         }
@@ -174,6 +186,7 @@ class CheckReportContentController: UIViewController {
                     let seleArray = seleStrArray[index]
                     for str in seleArray {
                         if model.isNecessary == 1 && str.count == 0 {
+                            
                             isEnabled = false
                             break
                         }
@@ -192,6 +205,76 @@ class CheckReportContentController: UIViewController {
                 submissionBtn.isEnabled = false
                 submissionBtn.backgroundColor = UIColor(hex: "#CCCCCC")
             }
+        }
+    }
+    
+    //MARK: - Action Handle
+    func configLocationManager() {
+        locationManager.delegate = self
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        
+        locationManager.pausesLocationUpdatesAutomatically = false
+        
+        locationManager.locationTimeout = defaultLocationTimeout
+        
+        locationManager.reGeocodeTimeout = defaultReGeocodeTimeout
+    }
+    
+    func reGeocodeAction(indexPath: IndexPath) {
+
+        locationManager.requestLocation(withReGeocode: true, completionBlock: completionBlock)
+        locationManager.requestLocation(withReGeocode: false, completionBlock: completionBlock)
+    }
+    
+    //MARK: - Initialization
+    func initCompleteBlock(indexPath: IndexPath) {
+        
+        completionBlock = { [weak self] (location: CLLocation?, regeocode: AMapLocationReGeocode?, error: Error?) in
+            if let error = error {
+                let error = error as NSError
+                
+                if error.code == AMapLocationErrorCode.locateFailed.rawValue {
+                    //定位错误：此时location和regeocode没有返回值，不进行annotation的添加
+                    NSLog("定位错误:{\(error.code) - \(error.localizedDescription)};")
+                    return
+                }
+                else if error.code == AMapLocationErrorCode.reGeocodeFailed.rawValue
+                    || error.code == AMapLocationErrorCode.timeOut.rawValue
+                    || error.code == AMapLocationErrorCode.cannotFindHost.rawValue
+                    || error.code == AMapLocationErrorCode.badURL.rawValue
+                    || error.code == AMapLocationErrorCode.notConnectedToInternet.rawValue
+                    || error.code == AMapLocationErrorCode.cannotConnectToHost.rawValue {
+                    
+                    //逆地理错误：在带逆地理的单次定位中，逆地理过程可能发生错误，此时location有返回值，regeocode无返回值，进行annotation的添加
+                    NSLog("逆地理错误:{\(error.code) - \(error.localizedDescription)};")
+                }
+                else {
+                    //没有错误：location有返回值，regeocode是否有返回值取决于是否进行逆地理操作，进行annotation的添加
+                }
+            }
+            
+            //修改label显示内容
+            if let location = location {
+                if let regeocode = regeocode {
+                    let str = regeocode.formattedAddress
+                    let row = indexPath.row
+                    let section = indexPath.section
+                    self!.seleStrArray[section][row] = str!
+                    self!.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .fade)
+                    self?.confirmHandle()
+                }
+                else {
+                    //经纬度
+                    let lat = location.coordinate.latitude
+                    let lats = String(format: "%.4f", lat)
+                    let lon = location.coordinate.longitude
+                    let lons = String(format: "%.4f", lon)
+                    self!.addStr = ";\(lats);\(lons)"
+                    
+                }
+            }
+            
         }
     }
     
@@ -275,6 +358,26 @@ class CheckReportContentController: UIViewController {
     
     /// 选择客户
     private func seleCustomerHandle(indexPath: IndexPath) {
+//        let vc = NewlyBuildVisitSeleController()
+//        vc.isAdd = false
+//        vc.type = .customer
+//        let row = indexPath.row
+//        let section = indexPath.section
+//        vc.seleBlock = { [weak self] (customerArray) in
+//            //            if self?.customerId != customerArray.first?.0 ?? -1 {
+//            let position = self?.projectPosition ?? 0
+//            self?.customerId = customerArray.first?.0 ?? -1
+//            self?.customerIdArray.remove(at: section)
+//            self?.customerIdArray.insert(self?.customerId ?? -1, at: section)
+//            self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
+//            // 重置数据 -> 防止出现选择项目后 修改客户
+//            self?.projectId = -1
+//            if position != -1 {
+//                self?.seleStrArray[position][0] = ""
+//                self?.tableView.reloadRows(at: [IndexPath(row: row, section: position)], with: .none)
+//            }
+//            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
+//            self?.confirmHandle()
         let vc = NewlyBuildVisitSeleController()
         vc.isAdd = false
         vc.type = .customer
@@ -282,17 +385,11 @@ class CheckReportContentController: UIViewController {
         let section = indexPath.section
         vc.seleBlock = { [weak self] (customerArray) in
             //            if self?.customerId != customerArray.first?.0 ?? -1 {
-            let position = self?.projectPosition ?? 0
+//            let position = self?.projectPosition ?? 0
             self?.customerId = customerArray.first?.0 ?? -1
             self?.customerIdArray.remove(at: section)
             self?.customerIdArray.insert(self?.customerId ?? -1, at: section)
             self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
-            // 重置数据 -> 防止出现选择项目后 修改客户
-            self?.projectId = -1
-            if position != -1 {
-                self?.seleStrArray[position][0] = ""
-                self?.tableView.reloadRows(at: [IndexPath(row: row, section: position)], with: .none)
-            }
             self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
@@ -303,6 +400,21 @@ class CheckReportContentController: UIViewController {
     /// 选择项目
     private func seleProjectHandle(indexPath: IndexPath) {
         
+//        let row = indexPath.row
+//        let section = indexPath.section
+//        let customerName = seleStrArray[projectPosition][0]
+//        let vc = NewlyBuildVisitSeleController()
+//        vc.type = .project(customerId, customerName)
+//        vc.isAdd = false
+//
+//        vc.seleBlock = { [weak self] (customerArray) in
+//            self?.projectId = customerArray.first?.0 ?? -1
+//            self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
+//            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+//            self?.confirmHandle()
+//        }
+//        navigationController?.pushViewController(vc, animated: true)
+        
         let row = indexPath.row
         let section = indexPath.section
         let customerName = seleStrArray[projectPosition][0]
@@ -312,8 +424,12 @@ class CheckReportContentController: UIViewController {
         
         vc.seleBlock = { [weak self] (customerArray) in
             self?.projectId = customerArray.first?.0 ?? -1
+            self?.projectIdArray.remove(at: section)
+            self?.projectIdArray.insert(self?.projectId ?? -1, at: section)
             self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
+            
+            
             self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -338,13 +454,17 @@ class CheckReportContentController: UIViewController {
                 var array = [String]()
                 for _ in smallArray {
                     array.append("")
-                    typeimageArray.append([[]])
-                    typePHArray.append([[]])
-                    typefileArray.append([[]])
-                    typeuploadImageIds.append([[]])
-                    typeuploadFileIds.append([[]])
+
                 }
                 seleStrArray.append(array)
+//                let pricesCounts = pricessType == 5 ? seleStrArray.count + 3 : seleStrArray.count + 4
+//                for ind in 0..<pricesCounts {
+//                    typeimageArray.append([[]])
+//                    typePHArray.append([[]])
+//                    typefileArray.append([[]])
+//                    typeuploadImageIds.append([[]])
+//                    typeuploadFileIds.append([[]])
+//                }
                 
             }else{
                 seleStrArray.append([""])
@@ -356,7 +476,7 @@ class CheckReportContentController: UIViewController {
             }
             
         }
-        let pricesCount = pricessType == 5 ? 3 : 4
+        let pricesCount = pricessType == 5 ? seleStrArray.count + 3 : seleStrArray.count + 4
         for ind in 0..<pricesCount {
             seleStrArray.append([""])
             imageArray.append([])
@@ -370,6 +490,7 @@ class CheckReportContentController: UIViewController {
             typefileArray.append([[]])
             typeuploadImageIds.append([[]])
             typeuploadFileIds.append([[]])
+
         }
         
     }
@@ -964,6 +1085,8 @@ class CheckReportContentController: UIViewController {
             contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm"))"
         }else if model.type == 1 {
             contentStr = str
+        }else if model.type == 12 {
+            contentStr = str + addStr
         }
         return contentStr
     }
@@ -1131,6 +1254,10 @@ class CheckReportContentController: UIViewController {
                 var contentStr = seleStrArray[index][0]
                 contentStr = processDataHnadle(model, str: contentStr,index:[index][0])
                 dataDic.updateValue(contentStr, forKey: model.name ?? "")
+            }else if model.type == 12 {
+                var contentStr = seleStrArray[index][0]
+                contentStr = processDataHnadle(model, str: contentStr,index:[index][0])
+                dataDic.updateValue(contentStr, forKey: model.name ?? "")
             }
             else if model.type == 8 { // 表单
                 var dic: [String:Any] = [:]
@@ -1151,6 +1278,10 @@ class CheckReportContentController: UIViewController {
                     }else if smallModel.type == 11 {
                         var contentStr = seleStrArray[index][childrenIndex]
                         contentStr = processDataHnadle(smallModel, str: contentStr,index:[index][childrenIndex])
+                        dic.updateValue(contentStr, forKey: smallModel.name ?? "")
+                    }else if smallModel.type == 12 {
+                        var contentStr = seleStrArray[index][0]
+                        contentStr = processDataHnadle(smallModel, str: contentStr,index:[index][0])
                         dic.updateValue(contentStr, forKey: smallModel.name ?? "")
                     }
                     
@@ -1278,15 +1409,7 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
         } else if section == data.count + 2 {
             return 1
         }
-//        else {
-//            let model = data[section]
-//            if model.type == 10 {
-//                return 1+fileArray[section].count;
-//            }else{
-//                return 1;
-//            }
-//        }
-        
+
         else {
             let model = data[section]
             if model.type == 8 {
@@ -1315,21 +1438,22 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
             
             if model.type == 8 {
                 model = model.children[row]
-                
-                typeimageArray[indexPath.section].append([])
-                typePHArray[indexPath.section].append([])
-                typefileArray[indexPath.section].append([])
-                typeuploadImageIds[indexPath.section].append([])
-                typeuploadFileIds[indexPath.section].append([])
-                
-                let pricesCount = pricessType == 5 ? 3 : 4
-                for ind in 0..<pricesCount {
                     typeimageArray[indexPath.section].append([])
                     typePHArray[indexPath.section].append([])
                     typefileArray[indexPath.section].append([])
                     typeuploadImageIds[indexPath.section].append([])
                     typeuploadFileIds[indexPath.section].append([])
-                }
+
+//                    let pricesCount = pricessType == 5 ? 3 : 4
+//                    for ind in 0..<pricesCount {
+//                        typeimageArray[indexPath.section].append([])
+//                        typePHArray[indexPath.section].append([])
+//                        typefileArray[indexPath.section].append([])
+//                        typeuploadImageIds[indexPath.section].append([])
+//                        typeuploadFileIds[indexPath.section].append([])
+//                    }
+                
+
             }
             switch model.type {
             case 1: // 1.文本
@@ -1362,6 +1486,12 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
                 cell.data = (model.title ?? "", model.hint ?? "")
                 cell.contentStr = seleStrArray[section][row]
                 cell.isMust = model.isNecessary == 1
+                return cell
+            case 12:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitLocationCell", for: indexPath) as! NewlyBuildVisitLocationCell
+                cell.isMust = model.isNecessary == 1
+                cell.addressStr = seleStrArray[section][row]
+                cell.titleStr = model.title ?? ""
                 return cell
             default: return UITableViewCell()
             }
@@ -1428,6 +1558,11 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
             seleProjectHandle(indexPath: indexPath)
         case 11: // 11.选择到分钟
             seleSpecificTime(indexPath: indexPath)
+        case 12:
+            initCompleteBlock(indexPath: indexPath)
+            configLocationManager()
+            reGeocodeAction(indexPath: indexPath)
+//            NSLog("type == 12")
         default: break
         }
     }
@@ -1490,5 +1625,12 @@ extension CheckReportContentController: UIDocumentPickerDelegate {
             }
         }
         url.stopAccessingSecurityScopedResource()
+    }
+}
+//MARK: - AMapLocationManagerDelegate
+extension CheckReportContentController: AMapLocationManagerDelegate {
+    
+    func amapLocationManager(_ manager: AMapLocationManager!, doRequireLocationAuth locationManager: CLLocationManager!) {
+        locationManager.requestAlwaysAuthorization()
     }
 }

@@ -28,6 +28,8 @@ enum APIManager {
     case checkAnnouncement
     ///历史公共列表
     case AnnouncementList(Int, Int,Int)
+    ///公告详情
+    case AnnouncementDetails(Int)
     
     // MARK: - 客户
     case customerSave(String, String, String, Int, Int) // 新建客户（管理界面） (name:客户简称 full_name:客户全称  address:客户地址  type:客户类型：1.公司客户，2.待开发客户，3.开发中客户  industry:行业类型id，从行业列表中获取)
@@ -163,6 +165,8 @@ extension APIManager: TargetType {
             
         case .checkAnnouncement: return "/api/broadcast/list/receive"
         case .AnnouncementList: return "/api/broadcast/list/all"
+        case .AnnouncementDetails(let id): return "/api/broadcast/detail/\(id)"
+            
         case .customerSave: return "/api/customer/save"
         case .customerUpdate: return "/api/customer/update"
         case .customerContactList: return "/api/customer/contact/list"

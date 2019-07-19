@@ -21,6 +21,22 @@ class HandoverStaffCell: UITableViewCell {
                 if time != 0 {
                     timeStr = Date(timeIntervalSince1970: TimeInterval(data.lastExtend?.createdTime ?? 0)).customTimeStr(customStr: "yyyy-MM-dd")
                 }
+                
+                if data.status == 0 && time == 0 {
+                    nameLabel.text = nameStr
+                    nameLabel.textColor = UIColor(hex: "#999999")
+                    handoverBtn.isHidden = true
+                }else if data.status == 0 && time != 0 {
+                    let changeStr = "（已交接\(newUserStr)\(timeStr)）"
+                    nameStr = nameStr + changeStr
+                    nameLabel.text = nameStr
+                    nameLabel.textColor = UIColor(hex: "#999999")
+                    handoverBtn.isHidden = true
+                }else{
+                    nameLabel.text = nameStr
+                }
+                
+                
 //                if newUserStr.count > 0 {
 //                    let changeStr = "（已交接\(newUserStr)\(timeStr)）"
 //                    nameStr = nameStr + changeStr
@@ -33,15 +49,15 @@ class HandoverStaffCell: UITableViewCell {
 //                    nameLabel.text = nameStr
 //                }
                 
-                if newUserStr.count > 0 {
-                    let changeStr = "（已交接\(newUserStr)\(timeStr)）"
-                    nameStr = nameStr + changeStr
-                    nameLabel.text = nameStr
-                    nameLabel.textColor = UIColor(hex: "#999999")
-                    handoverBtn.isHidden = true
-                } else {
-                    nameLabel.text = nameStr
-                }
+//                if newUserStr.count > 0 {
+//                    let changeStr = "（已交接\(newUserStr)\(timeStr)）"
+//                    nameStr = nameStr + changeStr
+//                    nameLabel.text = nameStr
+//                    nameLabel.textColor = UIColor(hex: "#999999")
+//                    handoverBtn.isHidden = true
+//                } else {
+//                    nameLabel.text = nameStr
+//                }
                 
             }
         }

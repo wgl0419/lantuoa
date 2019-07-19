@@ -40,6 +40,7 @@ class ContractDetailsTableView: UITableView {
         didSet {
             contractListSmallData = contractListData.data
             contractUsersData = contractListData.contractUsers
+
         }
     }
     /// 合同数据 （用于发布内容使用）
@@ -442,7 +443,6 @@ extension ContractDetailsTableView: UITableViewDelegate, UITableViewDataSource {
                 let trueSection = section / 2
 //                cell.data = (performanceData[trueSection].title ?? "", row + 1, performanceData[trueSection].children[row].money)
                 cell.data = (performanceData[trueSection].children[row].title ?? "", performanceData[trueSection].children[row].money)
-                
                 return cell
             }
         } else if cellStyle == .remarks {

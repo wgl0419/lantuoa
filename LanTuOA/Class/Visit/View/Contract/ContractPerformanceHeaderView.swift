@@ -125,11 +125,32 @@ class ContractPerformanceHeaderView: UIView {
     /// 点击选择人
     @objc private func seleClick() {
         var contentArray = [String]()
+        var statusArray = [String]()
+        var statuIntsArray = [Int]()
+        var OneIntsArray = [Int]()
         for model in contractUsersData {
-            let contentStr = "\(model.realname ?? "")(\(model.propPerform)%)"
-            contentArray.append(contentStr)
+//            let contentStr = "\(model.realname ?? "")(\(model.propPerform)%)"
+//            contentArray.append(contentStr)
+            if model.status == 1 {
+                let contentStr = "\(model.realname ?? "")(\(model.propPerform)%)"
+                statusArray.append(contentStr)
+                OneIntsArray.append(model.status)
+            }else {
+                let contentStr = "\(model.realname ?? "")(\(model.propPerform)%)"
+                contentArray.append(contentStr)
+                statuIntsArray.append(model.status)
+            }
+        }
+        for itme in statusArray {
+            contentArray.append(itme)
+            
+        }
+        
+        for itme in OneIntsArray {
+            statuIntsArray.append(itme)
         }
         let view = SeleVisitModelView(title: "选择参与人员", content: contentArray)
+        view.statusArray = statuIntsArray
         view.didBlock = { [weak self] (seleIndex) in
             if self?.seleBlock != nil {
                 self?.seleBlock!(seleIndex)

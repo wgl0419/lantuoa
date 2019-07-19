@@ -127,11 +127,7 @@ extension HandoverStaffController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 {
-//            if data[indexPath.row].status == 0 {
-//                return
-//            }
-            let newUserStr = data[indexPath.row].lastExtend?.newUserName ?? ""
-            if newUserStr.count > 0 {
+            if data[indexPath.row].status == 0 {
                 return
             }
             let vc = HandoverStaffSeleController()
