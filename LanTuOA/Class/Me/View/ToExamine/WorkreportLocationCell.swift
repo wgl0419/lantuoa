@@ -28,14 +28,15 @@ class WorkreportLocationCell: UITableViewCell {
         }
     }
     
-//    //是否显示图标
-//    var isImage: Bool? {
-//        didSet {
-//            if let isImage = isImage {
-//                locationImage.isHidden = !isImage
-//            }
-//        }
-//    }
+//    //是否显示线
+    var isLine: Bool? {
+        didSet {
+            if let isLine = isLine {
+                line.isHidden = !isLine
+            }
+        }
+    }
+    
     private var line : UIView!
     private var titleLabel : UILabel!
     private var contentLabel : UILabel!

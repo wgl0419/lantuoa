@@ -20,19 +20,19 @@ class NewlyBuildVisitController: UIViewController {
     private var confirmBtn: UIButton!
     
     /// 标题
-//    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "内容", "所在位置"]
-    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "主要事宜"]
+    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "内容", "所在位置"]
+//    private let titleArray = ["客户", "联系人", "项目", "拜访方式", "拜访时间", "拜访内容"]
     /// 提示
-//    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请选择"]
-    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入主要事宜"]
+    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入拜访内容", "请选择"]
+//    private let placeholderArray = ["请选择", "请选择", "请选择", "请选择", "请选择", "请输入主要事宜"]
     /// 选中id
-//    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1]
-    private var seleIdArray = [-1, -1, -1, -1, -1, -1]
+    private var seleIdArray = [-1, -1, -1, -1, -1, -1, -1]
+//    private var seleIdArray = [-1, -1, -1, -1, -1, -1]
     /// 联系人id数组
     private var contactArray = [Int]()
     /// 选中内容
-//    private var seleStrArray = ["", "", "", "", "", "", "       "]
-    private var seleStrArray = ["", "", "", "", "", ""]
+    private var seleStrArray = ["", "", "", "", "", "", "       "]
+//    private var seleStrArray = ["", "", "", "", "", ""]
     
     //MARK: - Properties
     let defaultLocationTimeout = 6
@@ -40,14 +40,16 @@ class NewlyBuildVisitController: UIViewController {
     var completionBlock: AMapLocatingCompletionBlock!
     lazy var locationManager = AMapLocationManager()
     
-    private var lats = 0.0 ///纬度
-    private var lons = 0.0 ///经度
+//    private var lats = 0.0 ///纬度
+//    private var lons = 0.0 ///经度
+    var flats : Float = 0.0
+    var flons : Float = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()
         
-//        initCompleteBlock()
-//        configLocationManager()
+        initCompleteBlock()
+        configLocationManager()
     }
 
     // MARK: - 自定义私有方法
@@ -92,7 +94,7 @@ class NewlyBuildVisitController: UIViewController {
                 tableView.backgroundColor = UIColor(hex: "#F3F3F3")
                 tableView.register(NewlyBuildVisitSeleCell.self, forCellReuseIdentifier: "NewlyBuildVisitSeleCell")
                 tableView.register(NewlyBuildVisitTextViewCell.self, forCellReuseIdentifier: "NewlyBuildVisitTextViewCell")
-//                tableView.register(NewlyBuildVisitLocationCell.self, forCellReuseIdentifier: "NewlyBuildVisitLocationCell")
+                tableView.register(NewlyBuildVisitLocationCell.self, forCellReuseIdentifier: "NewlyBuildVisitLocationCell")
             })
     }
     
@@ -215,12 +217,12 @@ class NewlyBuildVisitController: UIViewController {
         let projectId = seleIdArray[2]
         let type = seleIdArray[3]
         let result = seleStrArray[5]
-//        let result = seleStrArray[6]
+        let address = seleStrArray[6]
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         let visitTime = formatter.date(from: seleStrArray[4])?.timeIntervalSince1970 ?? Date().timeIntervalSince1970
-        _ = APIService.shared.getData(.visitSave(customerId, projectId, type, "", result, Int(visitTime), contactArray), t: LoginModel.self, successHandle: { (result) in
+        _ = APIService.shared.getData(.visitSave(customerId, projectId, type, "", result, Int(visitTime), contactArray,flats,flons,address), t: LoginModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
             if self.addBlock != nil {
                 self.addBlock!()
@@ -234,13 +236,9 @@ class NewlyBuildVisitController: UIViewController {
     //MARK: - Action Handle
     func configLocationManager() {
         locationManager.delegate = self
-        
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        
         locationManager.pausesLocationUpdatesAutomatically = false
-        
         locationManager.locationTimeout = defaultLocationTimeout
-
         locationManager.reGeocodeTimeout = defaultReGeocodeTimeout
     }
     
@@ -295,6 +293,14 @@ class NewlyBuildVisitController: UIViewController {
 //
 //                    NSLog("%d---------%d",self!.lats,self!.lons)
                     
+                    let lat = location.coordinate.latitude
+                    let lats = String(format: "%.4f", lat)
+                    
+                    let lon = location.coordinate.longitude
+                    let lons = String(format: "%.4f", lon)
+                    self!.flats = Float(lats) as! Float
+                    self!.flons = Float(lons) as! Float
+
                 }
             }
             
@@ -326,11 +332,11 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
             }
             return cell
         }
-//        else if section == 6 {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitLocationCell", for: indexPath) as! NewlyBuildVisitLocationCell
-//            cell.addressStr = seleStrArray[section]
-//            return cell
-//        }
+        else if section == 6 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitLocationCell", for: indexPath) as! NewlyBuildVisitLocationCell
+            cell.addressStr = seleStrArray[section]
+            return cell
+        }
         else  {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewlyBuildVisitSeleCell", for: indexPath) as! NewlyBuildVisitSeleCell
             cell.data = (titleArray[section], placeholderArray[section])
@@ -359,7 +365,6 @@ extension NewlyBuildVisitController: UITableViewDelegate, UITableViewDataSource 
         case 0: seleCustomerHandle()
         case 1, 2: seleOtherHandle(section: section)
         case 3: seleModelHandle()
-//        case 4: seleTimeHandle()
         case 4: seleTimeHandle(section:section)
         case 6: reGeocodeAction()
         case 7: break

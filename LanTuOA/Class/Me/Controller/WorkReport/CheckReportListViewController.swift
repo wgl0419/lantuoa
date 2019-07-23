@@ -69,7 +69,7 @@ class CheckReportListViewController: UIViewController {
                 })
                 tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
                     tableView.mj_header.isHidden = true
-                    self?.CheckReportList(isMore: false,notRead: self!.isNotRead,processId: self!.processId,commitUser: self!.refreshArr,startTime: self!.startTime,endTime: self!.endTime)
+                    self?.CheckReportList(isMore: true,notRead: self!.isNotRead,processId: self!.processId,commitUser: self!.refreshArr,startTime: self!.startTime,endTime: self!.endTime)
                 })
                 if headItmeArr.count == 0 {
                     tableView.tableHeaderView = headView
@@ -125,9 +125,10 @@ class CheckReportListViewController: UIViewController {
         let newPage = isMore ? oldPage + 1 : 1
         _ = APIService.shared.getData(.WorkReporCheckList(newPage,10,notRead,processId,commitUser as! [String],startTime,endTime), t: NotifyCheckListModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
-            let data = result.data
+            
+//            let data = result.data
             if isMore {
-                for model in data {
+                for model in result.data {
                     self.data.append(model)
                 }
                 self.tableView.mj_footer.endRefreshing()
@@ -135,7 +136,7 @@ class CheckReportListViewController: UIViewController {
                 self.page += 1
             } else {
                 self.page = 1
-                self.data = data
+                self.data = result.data
                 self.tableView.mj_header.endRefreshing()
                 self.tableView.mj_footer.isHidden = false
             }
@@ -170,11 +171,13 @@ class CheckReportListViewController: UIViewController {
     
     // MARK: - Api
     ///设置已读
-    func CheckListHaveRead(index:Int){
+    func CheckListHaveRead(index:Int,id:Int){
         MBProgressHUD.showWait("")
-        _ = APIService.shared.getData(.WorkReporCheckListHaveRead(index), t: unreadValueModel.self, successHandle: { (result) in
+        
+        _ = APIService.shared.getData(.WorkReporCheckListHaveRead(id), t: unreadValueModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
-            self.CheckReportList(isMore: false, notRead: self.isNotRead,processId: self.processId,commitUser: self.refreshArr,startTime: self.startTime,endTime: self.endTime)
+//            self.CheckReportList(isMore: false, notRead: self.isNotRead,processId: self.processId,commitUser: self.refreshArr,startTime: self.startTime,endTime: self.endTime)
+            self.data[index].status = 2
             self.tableView.reloadData()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "设置失败")
@@ -220,17 +223,11 @@ extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSourc
             }else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportListCell", for: indexPath) as! CheckReportListCell
                 cell.data = (data[indexPath.row], false)
-                cell.haveReadBlock = {[weak self] index in
-                    self!.CheckListHaveRead(index: index!)
-                }
                 return cell
             }
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "CheckReportListCell", for: indexPath) as! CheckReportListCell
             cell.data = (data[indexPath.row], false)
-            cell.haveReadBlock = {[weak self] index in
-                self!.CheckListHaveRead(index: index!)
-            }
             return cell
         }
         
@@ -238,22 +235,27 @@ extension CheckReportListViewController:UITableViewDelegate,UITableViewDataSourc
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
+            
             if headItmeArr.count > 0 {
                 
             }else{
+                
                 if data[indexPath.row].status == 1 {
-                    CheckListHaveRead(index: indexPath.row)
+                    CheckListHaveRead(index: indexPath.row,id: data[indexPath.row].id)
                 }
                 let vc = CheckReportDetailsViewController()
                 vc.checkListId = data[indexPath.row].id
+                
                 navigationController?.pushViewController(vc, animated: true)
             }
         }else{
+            
             if data[indexPath.row].status == 1 {
-                CheckListHaveRead(index: indexPath.row)
+                CheckListHaveRead(index: indexPath.row,id: data[indexPath.row].id)
             }
             let vc = CheckReportDetailsViewController()
             vc.checkListId = data[indexPath.row].id
+            
             navigationController?.pushViewController(vc, animated: true)
         }
 

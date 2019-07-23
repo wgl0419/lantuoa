@@ -121,7 +121,7 @@ extension WorkReportViewController: UICollectionViewDelegate, UICollectionViewDa
         let vc = CheckReportContentController()
         vc.processName = data[indexPath.row].name ?? ""
         vc.processId = data[indexPath.row].id
-        vc.pricessType = data[indexPath.row].type
+//        vc.pricessType = data[indexPath.row].type
         vc.canUpload = data[indexPath.row].canUpload
         navigationController?.pushViewController(vc, animated: true)
         ///把抄送人那一栏改成接收人

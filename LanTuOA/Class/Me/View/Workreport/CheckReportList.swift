@@ -15,6 +15,7 @@ class CheckReportListCell: UITableViewCell {
         didSet {
             checkListData = data.0
             let isCheck = data.1
+//            titleLabel.removeFromSuperview()
             initSubViews()
             titleLabel.text = checkListData.title
             titleLabel.textColor = UIColor(hex: "#FF7744")
@@ -72,11 +73,6 @@ class CheckReportListCell: UITableViewCell {
             commentsLabel.text = "评论（\(checkListData.commentCnt)）"
         }
     }
-    /// 拒绝回调
-    var haveReadBlock: ((Int?) -> ())?
-    /// 同意回调
-    var agreeBlock: (() -> ())?
-    
     /// 白色背景
     private var whiteView: UIView!
     /// 标题
@@ -202,15 +198,6 @@ class CheckReportListCell: UITableViewCell {
                 view.layer.cornerRadius = 5
                 view.layer.masksToBounds = true
             })
-        haveRead = UIButton().taxi.adhere(toSuperView: whiteView)
-            .taxi.layout(snapKitMaker: { (make) in
-                make.trailing.equalToSuperview()
-                make.top.equalToSuperview()
-                make.width.height.equalTo(60)
-            })
-            .taxi.config({ (button) in
-                button.addTarget(self, action: #selector(haveReadAction), for: .touchUpInside)
-            })
     }
     
     
@@ -268,37 +255,6 @@ class CheckReportListCell: UITableViewCell {
             return date.customTimeStr(customStr: "yyyy年MM月dd日 HH:mm")
         }
     }
-    
-    // MARK: - 按钮点击
-    /// 点击拒绝
-    @objc private func refuseClick() {
-//        if data.0.processType == 1 || data.0.processType == 2 {
-//            let view = SeleVisitModelView(title: "拒绝原因", content: ["已存在项目/客户", "名字不合理", "其它原因"])
-//            view.didBlock = { [weak self] (seleIndex) in
-//                if self?.refuseBlock != nil {
-//                    self?.refuseBlock!(seleIndex)
-//                }
-//            }
-//            view.show()
-//        } else {
-//            if refuseBlock != nil {
-//                refuseBlock!(nil)
-//            }
-//        }
-    }
-    
-    /// 点击同意
-    @objc private func agreeClick() {
-        if agreeBlock != nil {
-            agreeBlock!()
-        }
-    }
-    
-    ///点击消除已读
-    @objc private func haveReadAction(){
-//        if haveReadBlock != nil {
-//            haveReadBlock!(checkListData.id)
-//        }
-    }
+
 }
 

@@ -43,11 +43,13 @@ class FillInApplyController: UIViewController {
     /// 客户id
     private var customerId = -1
     /// 客户id数组
-    private var customerIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+//    private var customerIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+    private var customerIdArray:Array = [[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1]]
     /// 项目id
     private var projectId = -1
     /// 项目id数组
-    private var projectIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+//    private var projectIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+    private var projectIdArray:Array = [[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1]]
     /// 图片数据
     private var imageArray = [[UIImage]]()
     /// 图片信息数据
@@ -243,10 +245,16 @@ class FillInApplyController: UIViewController {
         for model in choicesData {
             contentArray.append(model.name ?? "")
         }
-        let view = SeleVisitModelView(title: "选择拜访方式", content: contentArray)
+        var model1 = data[section]
+        var str : String = ""
+        if model1.type == 8 {
+            model1 = model1.children[row]
+        }
+        str = model1.title!
+        let view = SeleVisitModelView(title: "选择\(str)方式", content: contentArray)
         view.didBlock = { [weak self] (seleIndex) in
             self?.seleStrArray[section][row] = contentArray[seleIndex]
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
         view.show()
@@ -270,7 +278,8 @@ class FillInApplyController: UIViewController {
             }
             if seleStr.count > 0 { seleStr.remove(at: seleStr.startIndex) }
             self?.seleStrArray[section][row] = seleStr
-            self?.tableView.reloadData()
+//            self?.tableView.reloadData()
+            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -288,7 +297,8 @@ class FillInApplyController: UIViewController {
             let position = self?.projectPosition ?? 0
             self?.customerId = customerArray.first?.0 ?? -1
             self?.customerIdArray.remove(at: section)
-            self?.customerIdArray.insert(self?.customerId ?? -1, at: section)
+//            self?.customerIdArray.insert([self?.customerId ?? -1], at: [section][row])
+            self?.customerIdArray[section][row] = self?.customerId ?? -1
             self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
             // 重置数据 -> 防止出现选择项目后 修改客户
             //            self?.projectId = -1
@@ -315,7 +325,8 @@ class FillInApplyController: UIViewController {
         vc.seleBlock = { [weak self] (customerArray) in
             self?.projectId = customerArray.first?.0 ?? -1
             self?.projectIdArray.remove(at: section)
-            self?.projectIdArray.insert(self?.projectId ?? -1, at: section)
+//            self?.projectIdArray.insert([self?.projectId ?? -1], at: [section][row])
+            self?.projectIdArray[section][row] = self?.projectId ?? -1
             self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
             self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
@@ -969,9 +980,26 @@ class FillInApplyController: UIViewController {
         if model.type == 3 { // 时间
             contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd"))"
         } else if model.type == 6 { // 客户
-            contentStr = "\(customerIdArray[index])"
+            contentStr = "\(customerIdArray[index][0])"
         } else if model.type == 7 { // 项目
-            contentStr = "\(projectIdArray[index])"
+            contentStr = "\(projectIdArray[index][0])"
+        }else if model.type == 11 {
+            contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm"))"
+        }else if model.type == 1 {
+            contentStr = str
+        }
+        return contentStr
+    }
+    
+    /// 获取提交时的data部分的数据处理
+    private func typeProcessDataHnadle(_ model: ProcessParamsData, str: String ,index:Int,row:Int) -> String {
+        var contentStr = str
+        if model.type == 3 { // 时间
+            contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd"))"
+        } else if model.type == 6 { // 客户
+            contentStr = "\(customerIdArray[index][row])"
+        } else if model.type == 7 { // 项目
+            contentStr = "\(projectIdArray[index][row])"
         }else if model.type == 11 {
             contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm"))"
         }else if model.type == 1 {
@@ -997,6 +1025,8 @@ class FillInApplyController: UIViewController {
         }
         return images
     }
+    
+    
     
     ///type == 8获取提交时的处理图片问题
     private func typeProcessDataHnadleImage(_ model: ProcessParamsData, str: String ,index:Int,row:Int) -> Array<Any> {
@@ -1134,7 +1164,6 @@ class FillInApplyController: UIViewController {
                 var contentStr = seleStrArray[index][0]
                 contentStr = processDataHnadle(model, str: contentStr,index:[index][0])
                 dataDic.updateValue(contentStr, forKey: model.name ?? "")
-                
             }else if model.type == 9 {
                 dataDic.updateValue(processDataHnadleImage(model, str: "", index: index), forKey: model.name ?? "")
             }else if model.type == 10 {
@@ -1151,9 +1180,11 @@ class FillInApplyController: UIViewController {
                     let smallModel = children[childrenIndex]
                     
                     if smallModel.type < 8 {
-                        var contentStr = seleStrArray[index][0]
-                        contentStr = processDataHnadle(smallModel, str: contentStr,index:[index][0])
+                        
+                        var contentStr = seleStrArray[index][childrenIndex]
+                        contentStr = typeProcessDataHnadle(smallModel, str: contentStr,index:index,row: childrenIndex)
                         dic.updateValue(contentStr, forKey: smallModel.name ?? "")
+
                     }else if smallModel.type == 9 {
                         dic.updateValue(typeProcessDataHnadleImage(smallModel , str: "", index: index,row: childrenIndex), forKey: smallModel.name ?? "")
                         

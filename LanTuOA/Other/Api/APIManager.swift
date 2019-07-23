@@ -61,7 +61,7 @@ enum APIManager {
     
     
     // MARK: - 拜访
-    case visitSave(Int, Int, Int, String, String, Int, Array<Int>) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级   contact:联系人id数组)
+    case visitSave(Int, Int, Int, String, String, Int, Array<Int> ,Float ,Float,String) // 新增拜访 (customerId:客户id  projectId:项目id  type:拜访方式，1.面谈，2.电话沟通，3.网络聊天  content:拜访内容  result:拜访结果  visitTime:拜访时间，时间戳，秒级   contact:联系人id数组,纬度，经度，详细地址)
     case visitList(String, Int?, Int?, Int, Int, Int, Int?, Int?, Int?) // 拜访查询 (name:关键词，客户名称/项目名称  startTime:开始时间，秒级  endTime:结束时间，秒级  queryType:1.全部，2.只看自己，3.工作组，4.接手  page:页码  limit:一页几条数据  customerId:客户id   projectId:项目id     createdUser: 用户id)
     case visitDetail(Int) // 拜访详情
     case visitCommentCreate(Int, [Int], [Int], String) // 评论拜访
@@ -372,9 +372,13 @@ extension APIManager: TargetType {
         case let .customerUpdateDevelop(_, userId, endTime): // 设置开发客户
             params = ["userId": userId, "endTime": endTime]
             
-            
-        case let .visitSave(customerId, projectId, type, content, result, visitTime, contact): // 新增拜访
+        case let .visitSave(customerId, projectId, type, content, result, visitTime, contact, latitude, longitude, address): // 新增拜访
             params = ["customerId": customerId, "projectId": projectId, "type": type, "content": content, "result": result, "visitTime": visitTime, "contact": contact]
+            
+            if latitude != 0.0 { params["latitude"] = latitude }
+            if longitude != 0.0 { params["longitude"] = longitude }
+            if address != nil { params["address"] = address }
+            
         case let .visitList(name, startTime, endTime, queryType, page, limit, customerId, projectId, createdUser): // 拜访查询
             params = ["name": name, "queryType": queryType, "page": page, "limit": limit]
             if startTime != nil { params["startTime"] = startTime! }
@@ -501,7 +505,9 @@ extension APIManager: TargetType {
             if contractId != 0 {params["contractId"] = contractId }
             
         case let .WorkReporCheckList(page,limit,notRead,processId,commitUser,startTime,endTime): //查看汇报列表
+            
             params = ["page":page,"limit":limit,"notRead":notRead]
+            
             if startTime != 0 { params["startTime"] = startTime }
             if endTime != 0 { params["endTime"] = endTime }
             if processId > 0 { params["processId"] = processId }

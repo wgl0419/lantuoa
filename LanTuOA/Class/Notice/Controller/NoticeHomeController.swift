@@ -432,11 +432,12 @@ class NoticeHomeController: UIViewController {
     
     // MARK: - Api
     ///设置已读
-    func notifyCheckHaveRead(id:Int){
+    func notifyCheckHaveRead(id:Int,index:Int,model:NotifyListData){
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.notifyCheckHaveRead(id), t: unreadValueModel.self, successHandle: { (result) in
             MBProgressHUD.dismiss()
-            self.notifyList(isMore: false)
+//            self.notifyList(isMore: false)
+            self.systemData[index].status = 1
             self.systemTableView.reloadData()
         }, errorHandle: { (error) in
             MBProgressHUD.showError(error ?? "设置失败")
@@ -503,13 +504,14 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
             }
             navigationController?.pushViewController(vc, animated: true)
         } else {
-
+            
             let model = systemData[indexPath.row]
             if model.type != "1" {
                 if model.status == 0 {
-                    notifyCheckHaveRead(id: model.id)
+                    notifyCheckHaveRead(id: model.id,index:indexPath.row,model: model)
                 }
             }
+            
             switch model.type {
             case "1": break // 系统通知 无跳转
             case "2": // 审批通知 -> 审批详情
@@ -536,10 +538,16 @@ extension NoticeHomeController: UITableViewDelegate, UITableViewDataSource {
                 vc.contractId = systemData[indexPath.row].checkId
                 navigationController?.pushViewController(vc, animated: true)
             case "7"://汇报
-                let vc = CheckReportDetailsViewController()
-                vc.checkListId = systemData[indexPath.row].checkId
-                navigationController?.pushViewController(vc, animated: true)
-                
+                        MBProgressHUD.showWait("")
+                        _ = APIService.shared.getData(.WorkReporCheckListHaveRead(systemData[indexPath.row].checkId), t: unreadValueModel.self, successHandle: { (result) in
+                            MBProgressHUD.dismiss()
+                            let vc = CheckReportDetailsViewController()
+                            vc.checkListId = self.systemData[indexPath.row].checkId
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        }, errorHandle: { (error) in
+                            MBProgressHUD.showError(error ?? "设置失败")
+                        })
+
             case "8"://公告
                 _ = APIService.shared.getData(.AnnouncementDetails(systemData[indexPath.row].checkId), t: AnnouncementNoticeModel.self, successHandle: { (result) in
                     self.announcementData = result.data

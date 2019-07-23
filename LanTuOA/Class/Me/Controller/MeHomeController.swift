@@ -60,7 +60,9 @@ class MeHomeController: UIViewController {
         tableView = UITableView().taxi.adhere(toSuperView: view) // 主要显示数据的tableview
             .taxi.layout(snapKitMaker: { (make) in
                 if #available(iOS 9.0, *) {
-                    make.edges.equalToSuperview()
+//                    make.edges.equalToSuperview()
+                    make.top.left.right.equalToSuperview()
+                    make.bottom.equalToSuperview().offset(-TabbarH)
                 } else {
                     make.top.left.right.equalToSuperview()
                     make.bottom.equalToSuperview().offset(-TabbarH)

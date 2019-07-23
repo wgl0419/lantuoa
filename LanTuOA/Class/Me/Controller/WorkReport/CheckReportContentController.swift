@@ -37,16 +37,20 @@ class CheckReportContentController: UIViewController {
     private var moneyBackData = [(Float, Int)]()
     /// 选中内容
     private var seleStrArray = [[String]]()
+    ///选中的经纬度
+    private var latitudeArr = [[String]]()
     /// 项目所在section
     private var projectPosition = -1
     /// 客户id
     private var customerId = -1
     /// 客户id数组
-    private var customerIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+//    private var customerIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+    private var customerIdArray:Array = [[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1]]
     /// 项目id
     private var projectId = -1
     /// 项目id数组
-    private var projectIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+//    private var projectIdArray:Array = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+    private var projectIdArray:Array = [[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1],[-1]]
     /// 图片数据
     private var imageArray = [[UIImage]]()
     /// 图片信息数据
@@ -177,7 +181,6 @@ class CheckReportContentController: UIViewController {
                         let  mode = model.children[ind]
                         let seleArray = seleStrArray[index][ind]
                         if mode.isNecessary == 1 && seleArray.count == 0 {
-                            
                             isEnabled = false
                             break
                         }
@@ -186,18 +189,12 @@ class CheckReportContentController: UIViewController {
                     let seleArray = seleStrArray[index]
                     for str in seleArray {
                         if model.isNecessary == 1 && str.count == 0 {
-                            
                             isEnabled = false
                             break
                         }
                     }
                 }
             }
-            
-            if isEnabled && pricessType == 5 {
-                isEnabled = contractData.count > 0 && moneyBackData.count > 0
-            }
-            
             if isEnabled {
                 submissionBtn.backgroundColor = UIColor(hex: "#2E4695")
                 submissionBtn.isEnabled = true
@@ -256,10 +253,10 @@ class CheckReportContentController: UIViewController {
             
             //修改label显示内容
             if let location = location {
+                let row = indexPath.row
+                let section = indexPath.section
                 if let regeocode = regeocode {
                     let str = regeocode.formattedAddress
-                    let row = indexPath.row
-                    let section = indexPath.section
                     self!.seleStrArray[section][row] = str!
                     self!.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .fade)
                     self?.confirmHandle()
@@ -271,7 +268,7 @@ class CheckReportContentController: UIViewController {
                     let lon = location.coordinate.longitude
                     let lons = String(format: "%.4f", lon)
                     self!.addStr = ";\(lats);\(lons)"
-                    
+                    self!.latitudeArr[section][row] = self!.addStr
                 }
             }
             
@@ -323,10 +320,18 @@ class CheckReportContentController: UIViewController {
         for model in choicesData {
             contentArray.append(model.name ?? "")
         }
-        let view = SeleVisitModelView(title: "选择拜访方式", content: contentArray)
+        
+        var model1 = data[section]
+        var str : String = ""
+        if model1.type == 8 {
+            model1 = model1.children[row]
+            
+        }
+        str = model1.title!
+        let view = SeleVisitModelView(title: "选择\(str)方式", content: contentArray)
         view.didBlock = { [weak self] (seleIndex) in
             self?.seleStrArray[section][row] = contentArray[seleIndex]
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
         view.show()
@@ -358,63 +363,27 @@ class CheckReportContentController: UIViewController {
     
     /// 选择客户
     private func seleCustomerHandle(indexPath: IndexPath) {
-//        let vc = NewlyBuildVisitSeleController()
-//        vc.isAdd = false
-//        vc.type = .customer
-//        let row = indexPath.row
-//        let section = indexPath.section
-//        vc.seleBlock = { [weak self] (customerArray) in
-//            //            if self?.customerId != customerArray.first?.0 ?? -1 {
-//            let position = self?.projectPosition ?? 0
-//            self?.customerId = customerArray.first?.0 ?? -1
-//            self?.customerIdArray.remove(at: section)
-//            self?.customerIdArray.insert(self?.customerId ?? -1, at: section)
-//            self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
-//            // 重置数据 -> 防止出现选择项目后 修改客户
-//            self?.projectId = -1
-//            if position != -1 {
-//                self?.seleStrArray[position][0] = ""
-//                self?.tableView.reloadRows(at: [IndexPath(row: row, section: position)], with: .none)
-//            }
-//            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
-//            self?.confirmHandle()
+
         let vc = NewlyBuildVisitSeleController()
         vc.isAdd = false
         vc.type = .customer
         let row = indexPath.row
         let section = indexPath.section
         vc.seleBlock = { [weak self] (customerArray) in
-            //            if self?.customerId != customerArray.first?.0 ?? -1 {
-//            let position = self?.projectPosition ?? 0
+
             self?.customerId = customerArray.first?.0 ?? -1
             self?.customerIdArray.remove(at: section)
-            self?.customerIdArray.insert(self?.customerId ?? -1, at: section)
+//            self?.customerIdArray.insert(self?.customerId ?? -1, at: section)
+            self?.customerIdArray[section][row] = self?.customerId ?? -1
             self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
             self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
-        //        }
         navigationController?.pushViewController(vc, animated: true)
     }
     
     /// 选择项目
     private func seleProjectHandle(indexPath: IndexPath) {
-        
-//        let row = indexPath.row
-//        let section = indexPath.section
-//        let customerName = seleStrArray[projectPosition][0]
-//        let vc = NewlyBuildVisitSeleController()
-//        vc.type = .project(customerId, customerName)
-//        vc.isAdd = false
-//
-//        vc.seleBlock = { [weak self] (customerArray) in
-//            self?.projectId = customerArray.first?.0 ?? -1
-//            self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
-//            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
-//            self?.confirmHandle()
-//        }
-//        navigationController?.pushViewController(vc, animated: true)
-        
         let row = indexPath.row
         let section = indexPath.section
         let customerName = seleStrArray[projectPosition][0]
@@ -425,10 +394,10 @@ class CheckReportContentController: UIViewController {
         vc.seleBlock = { [weak self] (customerArray) in
             self?.projectId = customerArray.first?.0 ?? -1
             self?.projectIdArray.remove(at: section)
-            self?.projectIdArray.insert(self?.projectId ?? -1, at: section)
+//            self?.projectIdArray.insert(self?.projectId ?? -1, at: section)
+            self?.projectIdArray[section][row] = self?.projectId ?? -1
             self?.seleStrArray[section][row] = customerArray.first?.1 ?? ""
             self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
-            
             
             self?.confirmHandle()
         }
@@ -457,17 +426,10 @@ class CheckReportContentController: UIViewController {
 
                 }
                 seleStrArray.append(array)
-//                let pricesCounts = pricessType == 5 ? seleStrArray.count + 3 : seleStrArray.count + 4
-//                for ind in 0..<pricesCounts {
-//                    typeimageArray.append([[]])
-//                    typePHArray.append([[]])
-//                    typefileArray.append([[]])
-//                    typeuploadImageIds.append([[]])
-//                    typeuploadFileIds.append([[]])
-//                }
-                
+                latitudeArr.append(array)
             }else{
                 seleStrArray.append([""])
+                latitudeArr.append([""])
                 imageArray.append([])
                 PHArray.append([])
                 fileArray.append([])
@@ -479,6 +441,7 @@ class CheckReportContentController: UIViewController {
         let pricesCount = pricessType == 5 ? seleStrArray.count + 3 : seleStrArray.count + 4
         for ind in 0..<pricesCount {
             seleStrArray.append([""])
+            latitudeArr.append([""])
             imageArray.append([])
             PHArray.append([])
             fileArray.append([])
@@ -779,7 +742,6 @@ class CheckReportContentController: UIViewController {
             self?.reloadImageCell()
         }
         return cell
-        
     }
     
     /// 合同人员cell
@@ -838,7 +800,6 @@ class CheckReportContentController: UIViewController {
         let albumAction = UIAlertAction(title: "从手机相册选择", style: .default) { _ in
             self.changeImage(IndexPath: indexPath,indexPath: -1)
         }
-        
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         alert.addAction(action)
         alert.addAction(albumAction)
@@ -1078,15 +1039,32 @@ class CheckReportContentController: UIViewController {
         if model.type == 3 { // 时间
             contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd"))"
         } else if model.type == 6 { // 客户
-            contentStr = "\(customerIdArray[index])"
+            contentStr = "\(customerIdArray[index][0])"
         } else if model.type == 7 { // 项目
-            contentStr = "\(projectIdArray[index])"
+            contentStr = "\(projectIdArray[index][0])"
         }else if model.type == 11 {
             contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm"))"
         }else if model.type == 1 {
             contentStr = str
         }else if model.type == 12 {
-            contentStr = str + addStr
+            contentStr = str + latitudeArr[index][0]
+        }
+        return contentStr
+    }
+    
+    /// 获取提交时的data部分的数据处理
+    private func typeProcessDataHnadle(_ model: ProcessParamsData, str: String ,index:Int,row:Int) -> String {
+        var contentStr = str
+        if model.type == 3 { // 时间
+            contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd"))"
+        } else if model.type == 6 { // 客户
+            contentStr = "\(customerIdArray[index][row])"
+        } else if model.type == 7 { // 项目
+            contentStr = "\(projectIdArray[index][row])"
+        }else if model.type == 11 {
+            contentStr = "\(contentStr.getTimeStamp(customStr: "yyyy-MM-dd HH:mm"))"
+        }else if model.type == 1 {
+            contentStr = str
         }
         return contentStr
     }
@@ -1266,8 +1244,8 @@ class CheckReportContentController: UIViewController {
                     let smallModel = children[childrenIndex]
                     
                     if smallModel.type < 8 {
-                        var contentStr = seleStrArray[index][0]
-                        contentStr = processDataHnadle(smallModel, str: contentStr,index:[index][0])
+                        var contentStr = seleStrArray[index][childrenIndex]
+                        contentStr = typeProcessDataHnadle(smallModel, str: contentStr,index:index,row: childrenIndex)
                         dic.updateValue(contentStr, forKey: smallModel.name ?? "")
                     }else if smallModel.type == 9 {
                         dic.updateValue(typeProcessDataHnadleImage(smallModel , str: "", index: index,row: childrenIndex), forKey: smallModel.name ?? "")
@@ -1280,8 +1258,8 @@ class CheckReportContentController: UIViewController {
                         contentStr = processDataHnadle(smallModel, str: contentStr,index:[index][childrenIndex])
                         dic.updateValue(contentStr, forKey: smallModel.name ?? "")
                     }else if smallModel.type == 12 {
-                        var contentStr = seleStrArray[index][0]
-                        contentStr = processDataHnadle(smallModel, str: contentStr,index:[index][0])
+                        var contentStr = seleStrArray[index][childrenIndex]
+                        contentStr = contentStr + latitudeArr[index][childrenIndex]
                         dic.updateValue(contentStr, forKey: smallModel.name ?? "")
                     }
                     
@@ -1368,25 +1346,6 @@ class CheckReportContentController: UIViewController {
     // MARK: - 按钮点击
     /// 点击提交
     @objc private func submissionClick() {
-        if pricessType == 5 {
-            // 剩余的业绩百分比和提成百分比
-            var achievemenhtsPercentage = 100
-            var royaltyPercentage = 100
-            for model in contractData {
-                achievemenhtsPercentage -= Int(model.1) ?? 0
-                royaltyPercentage -= Int(model.2) ?? 0
-            }
-            
-            if achievemenhtsPercentage != 0 {
-                MBProgressHUD.showError("业绩比例未分配完全")
-                return
-            } else if royaltyPercentage != 0 {
-                MBProgressHUD.showError("提成比例未分配完全")
-                return
-            }
-        }
-        //        let indexpath = NSIndexPath()
-        //        uploadGetKey(indexPath: indexpath.section)
         processCommit()
     }
 }
@@ -1443,17 +1402,6 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
                     typefileArray[indexPath.section].append([])
                     typeuploadImageIds[indexPath.section].append([])
                     typeuploadFileIds[indexPath.section].append([])
-
-//                    let pricesCount = pricessType == 5 ? 3 : 4
-//                    for ind in 0..<pricesCount {
-//                        typeimageArray[indexPath.section].append([])
-//                        typePHArray[indexPath.section].append([])
-//                        typefileArray[indexPath.section].append([])
-//                        typeuploadImageIds[indexPath.section].append([])
-//                        typeuploadFileIds[indexPath.section].append([])
-//                    }
-                
-
             }
             switch model.type {
             case 1: // 1.文本
@@ -1562,7 +1510,6 @@ extension CheckReportContentController: UITableViewDelegate, UITableViewDataSour
             initCompleteBlock(indexPath: indexPath)
             configLocationManager()
             reGeocodeAction(indexPath: indexPath)
-//            NSLog("type == 12")
         default: break
         }
     }

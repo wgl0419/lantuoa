@@ -84,6 +84,7 @@ class VisitDetailsController: UIViewController {
                 tableView.register(ToExamineCommentNameCell.self, forCellReuseIdentifier: "ToExamineCommentNameCell")
                 tableView.register(ToExamineImagesCell.self, forCellReuseIdentifier: "ToExamineImagesCell")
                 tableView.register(ToExamineEnclosureCell.self, forCellReuseIdentifier: "ToExamineEnclosureCell")
+                tableView.register(WorkreportLocationCell.self, forCellReuseIdentifier: "WorkreportLocationCell")
             })
     }
     
@@ -119,8 +120,6 @@ class VisitDetailsController: UIViewController {
     // MARK: - Api
     /// 项目详情
     private func visitDetail() {
-        
-        
         MBProgressHUD.showWait("")
         _ = APIService.shared.getData(.visitDetail(visitListId), t: VisitDetailModel.self, successHandle: { (result) in
             self.visitListData = result.data
@@ -160,17 +159,17 @@ class VisitDetailsController: UIViewController {
 extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if visitListData != nil {
-            return 3 + visitCommentData.count
+            return 4 + visitCommentData.count
         } else {
             return 0
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section < 3 {
+        if section < 4 {
             return 1
         } else {
-            let commentsModel = visitCommentData[section - 3].commentsFiles
+            let commentsModel = visitCommentData[section - 4].commentsFiles
             let imageArray = commentsModel.filter { (model) -> Bool in
                 return model.fileType == 1
             }
@@ -192,15 +191,23 @@ extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "VisitDetailsCell", for: indexPath) as! VisitDetailsCell
             let type: VisitDetailsCell.visitType = section == 1 ? .details : .result
             cell.visitListData = (visitListData, type)
+            //            cell.backgroundColor = UIColor.red
             return cell
-        } else {
-            let commentsModel = visitCommentData[section - 3].commentsFiles
+        }else if section == 3 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "WorkreportLocationCell", for: indexPath) as! WorkreportLocationCell
+            cell.addressStr = visitListData.address
+            cell.titleStr = "所在位置"
+            cell.isLine = false
+            return cell
+        }
+        else {
+            let commentsModel = visitCommentData[section - 4].commentsFiles
             let imageArray = commentsModel.filter { (model) -> Bool in
                 return model.fileType == 1
             }
             if row == 0 { // 名称
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineCommentNameCell", for: indexPath) as! ToExamineCommentNameCell
-                cell.data = visitCommentData[section - 3]
+                cell.data = visitCommentData[section - 4]
                 return cell
             } else if imageArray.count > 0 && row == 1 {//图片
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ToExamineImagesCell", for: indexPath) as! ToExamineImagesCell
@@ -222,12 +229,13 @@ extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section < 2 || section == 2 + visitCommentData.count {
+        if section < 3 || section == 3 + visitCommentData.count {
             let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
             footerView.backgroundColor = .clear
             return footerView
-        } else if section == 2 {
+        } else if section == 3 {
             let footerView = UIView(frame: CGRect(x: 0, y: 0, width: ScreenWidth, height: 10))
             footerView.backgroundColor = .clear
             _ = UILabel().taxi.adhere(toSuperView: footerView) // 评论
@@ -247,9 +255,9 @@ extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section < 2 || section == 2 + visitCommentData.count {
+        if section < 3 || section == 3 + visitCommentData.count {
             return 10
-        } else if section == 2 {
+        } else if section == 3 {
             return visitCommentData.count > 0 ? 40 : 0.01
         } else {
             return 0.01
@@ -258,9 +266,9 @@ extension VisitDetailsController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = indexPath.section
-        if section >= 3 {
+        if section > 3 {
             let row = indexPath.row
-            let commentsModel = visitCommentData[section - 3].commentsFiles
+            let commentsModel = visitCommentData[section - 4].commentsFiles
             let imageArray = commentsModel.filter { (model) -> Bool in
                 return model.fileType == 1
             }

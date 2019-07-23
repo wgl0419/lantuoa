@@ -48,8 +48,10 @@ class CheckReportDetailsViewController: UIViewController {
         super.viewDidLoad()
         initSubViews()
         notifyCheckDetail()
+//        notifyCheckHaveRead()
         notifyCheckUserList()
         notifyCheckCommentList()
+        
     }
     // MARK: - 自定义私有方法
     /// 初始化子控件
@@ -374,6 +376,8 @@ class CheckReportDetailsViewController: UIViewController {
         }
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+
 }
 
 extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewDataSource {

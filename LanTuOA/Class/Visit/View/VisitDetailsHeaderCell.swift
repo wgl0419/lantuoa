@@ -15,7 +15,7 @@ class VisitDetailsHeaderCell: UITableViewCell {
         didSet {
             if let data = data {
                 projectNameLabel.text = data.projectName
-                customerNameLabel.text = data.address
+                customerNameLabel.text = data.customerAddress
                 projectAddressLabel.text = data.projectAddress
             }
         }
