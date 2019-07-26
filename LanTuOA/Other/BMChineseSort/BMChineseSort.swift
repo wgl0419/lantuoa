@@ -357,7 +357,6 @@ extension BMChineseSort : BMChineseSortProtocol{
         }
     }
     
-    
     // 打印
     private func logMsg(_ msg:String) -> Void {
         if self.logEable == true {

@@ -91,7 +91,7 @@ enum APIManager {
     case notifyCheckHaveRead(Int) //设置点击单条已读数据
     
     // MARK: - 工作交接
-    case workExtendList(String, Int?) // 下级员工列表
+    case workExtendList(String, Int?,Int,Int) // 下级员工列表
     
     // MARK: - 部门
     case departments(Int?) // 部门列表  (parent:父部门id)
@@ -342,7 +342,7 @@ extension APIManager: TargetType {
             if type != nil { params["type"] = type }
             if industry != nil { params["industry"] = industry }
             
-            
+//             "page": page, "limit": limit
         case let .projectSave(name, customerId, address): // 新增项目
             params = ["name": name, "customerId": customerId, "address": address]
         case let .projectUpdate(name, id, manageUser, isLock, address): // 修改项目
@@ -427,8 +427,8 @@ extension APIManager: TargetType {
         case .departments(let parent): // 部门列表
             params = [:]
             if parent != nil { params["parent"] = parent! }
-        case let .workExtendList(name, status): // 下级员工列表
-            params = ["name": name]
+        case let .workExtendList(name, status, page ,limit): // 下级员工列表
+            params = ["name": name,"page": page, "limit": limit]
             if status != nil { params["status"] = status! }
         case .workExtendListPerson(let userId): // 员工工作列表
             params = ["userId": userId]

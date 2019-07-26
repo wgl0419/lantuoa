@@ -71,7 +71,6 @@ class HomePageController: UIViewController {
         if data.count == 0 {
             view.noDataImageView?.image = UIImage(named: "lostData")
             view.isNoData = true
-            
             let str = "数据加载失败！点击重新加载"
             let attriMuStr = NSMutableAttributedString(string: str)
             attriMuStr.changeFont(str: str, font: UIFont.medium(size: 14))
@@ -192,7 +191,6 @@ class HomePageController: UIViewController {
     /// 获取是否弹出公告
     private func checkAnnouncement() {
         _ = APIService.shared.getData(.checkAnnouncement, t: AnnouncementModel.self, successHandle: { (result) in
-            
             self.announcementData = result.data
             if self.announcementData.count > 0 {
                 UIApplication.shared.keyWindow?.endEditing(true)
@@ -201,10 +199,8 @@ class HomePageController: UIViewController {
                 announcement.data = self.announcementData[0]
                 UIApplication.shared.delegate?.window??.addSubview(announcement)
             }
-            
         }, errorHandle: nil)
     }
-    
 }
 
 extension HomePageController: UITableViewDelegate, UITableViewDataSource {
@@ -289,6 +285,7 @@ extension HomePageController: UITableViewDelegate, UITableViewDataSource {
     
     ///处理合计
     private func richText(title:String,content:String) -> NSMutableAttributedString{
+        
         let attrs1 = [NSAttributedString.Key.font : UIFont.regular(size: 12), NSAttributedString.Key.foregroundColor : UIColor(hex: "#999999")]
         
         let attrs2 = [NSAttributedString.Key.font : UIFont.regular(size: 12), NSAttributedString.Key.foregroundColor : UIColor(hex: "#FF7744")]
