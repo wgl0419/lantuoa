@@ -44,7 +44,6 @@ class HistoryAnnouncementController: UIViewController {
                 tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [weak self] in
                     self?.checkAnnouncement(isMore: false)
                     tableView.mj_footer.isHidden = true
-//                    tableView.mj_header.isHidden = true
                 })
                 tableView.mj_footer = MJRefreshBackNormalFooter(refreshingBlock: { [weak self] in
                     self?.checkAnnouncement(isMore: true)

@@ -212,10 +212,11 @@ class FillInApplyController: UIViewController {
         }
         let titleStr = data[section].type != 8 ? data[section].title : data[section].children[row].name
         let ejectView = SeleTimeEjectView(timeStamp: timeStamp, titleStr: titleStr ?? "")
+//        let ejectView = SeleTimeEjectView(timeStamp: timeStamp, titleStr: "")
         ejectView.determineBlock = { [weak self] (timeStamp) in
             let timeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).customTimeStr(customStr: "yyyy-MM-dd")
             self?.seleStrArray[section][row] = timeStr
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
         ejectView.show()
@@ -230,7 +231,7 @@ class FillInApplyController: UIViewController {
         //         回调显示方法
         dataPicker.backDate = { [weak self] date in
             self?.seleStrArray[section][row] = date
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
         UIApplication.shared.delegate?.window??.addSubview(dataPicker)
@@ -368,10 +369,16 @@ class FillInApplyController: UIViewController {
                 fileArray.append([])
                 uploadImageIds.append([])
                 uploadFileIds.append([])
+                
+                typeimageArray.append([[]])
+                typePHArray.append([[]])
+                typefileArray.append([[]])
+                typeuploadImageIds.append([[]])
+                typeuploadFileIds.append([[]])
             }
-            
         }
         let pricesCount = pricessType == 5 ? 3 : 4
+//        let pricesCount = 25
         for ind in 0..<pricesCount {
             seleStrArray.append([""])
             imageArray.append([])
@@ -614,7 +621,6 @@ class FillInApplyController: UIViewController {
                     vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
                 }
-                
                 let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
                 alert.addAction(action)
                 alert.addAction(albumAction)

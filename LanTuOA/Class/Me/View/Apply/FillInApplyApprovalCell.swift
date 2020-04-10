@@ -59,6 +59,7 @@ class FillInApplyApprovalCell: UITableViewCell {
     // MARK: - 自定义私有方法
     /// 初始化子控件
     private func initSubViews() {
+        
         titleLabel = UILabel().taxi.adhere(toSuperView: contentView) // 标题
             .taxi.layout(snapKitMaker: { (make) in
                 make.left.equalToSuperview().offset(15)

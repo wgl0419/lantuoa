@@ -28,7 +28,6 @@ class ToExamineController: UIViewController {
     /// tableview
     private var tableViewArray = [UITableView]()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubViews()

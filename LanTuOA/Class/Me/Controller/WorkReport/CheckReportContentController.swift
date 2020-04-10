@@ -290,7 +290,7 @@ class CheckReportContentController: UIViewController {
         ejectView.determineBlock = { [weak self] (timeStamp) in
             let timeStr = Date(timeIntervalSince1970: TimeInterval(timeStamp)).customTimeStr(customStr: "yyyy-MM-dd")
             self?.seleStrArray[section][row] = timeStr
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
         ejectView.show()
@@ -305,7 +305,7 @@ class CheckReportContentController: UIViewController {
         //         回调显示方法
         dataPicker.backDate = { [weak self] date in
             self?.seleStrArray[section][row] = date
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: section)], with: .none)
+            self?.tableView.reloadRows(at: [IndexPath(row: row, section: section)], with: .none)
             self?.confirmHandle()
         }
         UIApplication.shared.delegate?.window??.addSubview(dataPicker)

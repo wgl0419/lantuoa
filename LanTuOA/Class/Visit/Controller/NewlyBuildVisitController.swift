@@ -378,6 +378,7 @@ extension NewlyBuildVisitController: AMapLocationManagerDelegate {
     
     func amapLocationManager(_ manager: AMapLocationManager!, doRequireLocationAuth locationManager: CLLocationManager!) {
         locationManager.requestAlwaysAuthorization()
+        
     }
 }
 

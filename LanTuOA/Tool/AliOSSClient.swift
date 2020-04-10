@@ -59,6 +59,7 @@ class AliOSSClient: NSObject {
     
     /// 下载
     func download(url: String, path: String, isCache: Bool, result: @escaping ((Data?) -> ())) {
+        
         let enclosurePath = getCachesPath(path)
         let data = try? Data(contentsOf: URL(fileURLWithPath: enclosurePath))
         if data != nil {

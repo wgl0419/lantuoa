@@ -432,6 +432,8 @@ extension CheckReportDetailsViewController: UITableViewDelegate, UITableViewData
                 cell.titleStr = totalData[row].title
                 cell.isApproval = true
                 let imageValue = totalData[row].fileArr
+                
+                
                 var img = [NotifyCheckListValue]()
                 for value in imageValue {
                     img.append(value)

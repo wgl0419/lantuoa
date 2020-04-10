@@ -110,7 +110,9 @@ class ToExamineImagesCollectionCell: UICollectionViewCell {
                 let objectName = data.objectName ?? ""
                 let fileName = data.fileName ?? ""
                 let path = isApproval ? "/Approval/\(data.fileId)/" + fileName : "/Visit/\(data.fileId)/" + fileName
+
                 AliOSSClient.shared.download(url: objectName, path: path, isCache: true) { (data) in
+
                     var defaultImage = UIImage(named: "image_default")
                     if data != nil {
                         defaultImage = UIImage(data: data!) ?? defaultImage
